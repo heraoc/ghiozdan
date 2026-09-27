@@ -6,11 +6,12 @@ import type { Grade } from './data';
  *   #/                              pagina de start
  *   #/clasa-6/istorie               pagina materiei
  *   #/clasa-6/istorie/ibn-battuta   pagina lecției
+ *   #/clasa-6/istorie/ibn-battuta/test   pagina lecției, derulată la test
  */
 export type Route =
   | { page: 'home' }
   | { page: 'subject'; grade: Grade; subject: string }
-  | { page: 'lesson'; grade: Grade; subject: string; lesson: string }
+  | { page: 'lesson'; grade: Grade; subject: string; lesson: string; toTest: boolean }
   | { page: 'notFound'; grade?: Grade };
 
 export function parseRoute(hash: string): Route {
@@ -24,7 +25,9 @@ export function parseRoute(hash: string): Route {
   if (parts.length === 1) return { page: 'home' };
   if (parts[1] === 'teste') return { page: 'notFound', grade };
   if (parts.length === 2) return { page: 'subject', grade, subject: parts[1] };
-  if (parts.length === 3) return { page: 'lesson', grade, subject: parts[1], lesson: parts[2] };
+  if (parts.length === 3 || (parts.length === 4 && parts[3] === 'test')) {
+    return { page: 'lesson', grade, subject: parts[1], lesson: parts[2], toTest: parts.length === 4 };
+  }
   return { page: 'notFound', grade };
 }
 

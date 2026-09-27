@@ -38,7 +38,12 @@ export function App() {
       {route.page === 'home' && <Home grade={grade} query={query} />}
       {route.page === 'subject' && <SubjectPage grade={route.grade} slug={route.subject} />}
       {route.page === 'lesson' && (
-        <LessonPage grade={route.grade} subjectSlug={route.subject} lessonSlug={route.lesson} />
+        <LessonPage
+          grade={route.grade}
+          subjectSlug={route.subject}
+          lessonSlug={route.lesson}
+          toTest={route.toTest}
+        />
       )}
       {route.page === 'notFound' && <NotFound />}
     </div>

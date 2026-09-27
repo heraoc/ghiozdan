@@ -1,5 +1,6 @@
 // Conținutul site-ului. Fiecare text are variantă în română (ro) și germană (de).
 
+import { ibnBattutaTest } from './content/ibn-battuta-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -32,6 +33,17 @@ export interface Lesson {
   summary: Text;
   /** Pagina interactivă a lecției, din folderul public/. Primește ?lang=ro|de. */
   src: string;
+  /** Testul de la finalul lecției (opțional). */
+  test?: { questions: Question[]; minutes: number };
+}
+
+export interface Question {
+  q: Text;
+  options: Text[];
+  /** Indexul variantei corecte din options. */
+  correct: number;
+  /** Explicația afișată după răspuns. */
+  explain: Text;
 }
 
 export interface Subject {
@@ -50,8 +62,7 @@ export interface Test {
   title: Text;
   questions: number;
   minutes: number;
-  /** 0 = testul n-a fost dat încă */
-  stars: 0 | 1 | 2 | 3;
+  href: string;
 }
 
 const SUBJECT_NAMES: Record<SubjectKey, [slug: string, name: Text]> = {
@@ -105,6 +116,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Fast 30 Jahre unterwegs, von Tanger bis nach China und Mali. Folge der Route auf der Karte, Station für Station.',
         },
         src: 'lectii/clasa-6/istorie/ibn-battuta.html',
+        test: { questions: ibnBattutaTest, minutes: 5 },
       },
     ],
   },
@@ -112,7 +124,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
 
 type TestRow = [SubjectKey, Text, questions: number, minutes: number];
 
-/** Teste-exemplu (provizorii), încă nedate: 0 steluțe. */
+/** Teste-exemplu (provizorii); duc deocamdată la „în curând”. */
 const TESTS: Record<Grade, TestRow[]> = {
   3: [
     ['mat', { ro: 'Adunarea și scăderea până la 1000', de: 'Addition und Subtraktion bis 1000' }, 10, 15],
@@ -139,21 +151,34 @@ export function getSubjects(grade: Grade): Subject[] {
   });
 }
 
+/** Testele clasei: întâi cele reale (de la finalul lecțiilor), apoi exemplele. */
 export function getTests(grade: Grade): Test[] {
   const subjects = getSubjects(grade);
-  return TESTS[grade].map(([key, title, questions, minutes], i) => ({
+  const real = subjects.flatMap((subject) =>
+    subject.lessons.flatMap((l) =>
+      l.test
+        ? [
+            {
+              id: `${subject.slug}-${l.slug}`,
+              subject,
+              title: l.title,
+              questions: l.test.questions.length,
+              minutes: l.test.minutes,
+              href: lessonTestHref(grade, subject, l),
+            },
+          ]
+        : [],
+    ),
+  );
+  const examples = TESTS[grade].map(([key, title, questions, minutes], i) => ({
     id: `${grade}-${i}`,
     subject: subjects.find((s) => s.key === key)!,
     title,
     questions,
     minutes,
-    stars: 0,
+    href: `#/clasa-${grade}/teste/${grade}-${i}`,
   }));
-}
-
-/** Steluțele adunate din toate testele clasei. */
-export function totalStars(grade: Grade) {
-  return getTests(grade).reduce((sum, t) => sum + t.stars, 0);
+  return [...real, ...examples];
 }
 
 export function getSubject(grade: Grade, slug: string) {
@@ -164,4 +189,5 @@ export function getSubject(grade: Grade, slug: string) {
 export const homeHref = '#/';
 export const subjectHref = (grade: Grade, s: Subject) => `#/clasa-${grade}/${s.slug}`;
 export const lessonHref = (grade: Grade, s: Subject, l: Lesson) => `#/clasa-${grade}/${s.slug}/${l.slug}`;
-export const testHref = (grade: Grade, t: Test) => `#/clasa-${grade}/teste/${t.id}`;
+/** Pagina lecției, derulată direct la testul de la final. */
+export const lessonTestHref = (grade: Grade, s: Subject, l: Lesson) => `${lessonHref(grade, s, l)}/test`;

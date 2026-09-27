@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { SubjectCard } from '../components/SubjectCard';
 import { TestCard } from '../components/TestCard';
-import { config, getSubjects, getTests, subjectHref, testHref, totalStars, type Grade } from '../data';
+import { config, getSubjects, getTests, subjectHref, type Grade } from '../data';
 import { useLang } from '../i18n';
 import { matches } from '../search';
 
@@ -27,7 +27,6 @@ export function Home({ grade, query }: { grade: Grade; query: string }) {
     [grade, query],
   );
   const label = t.gradeLabel(grade);
-  const stars = totalStars(grade);
   const [before, gradeText, after] = t.youAreIn(grade);
   const tabs: [Tab, string][] = [
     ['materii', t.subjectsTab],
@@ -49,11 +48,6 @@ export function Home({ grade, query }: { grade: Grade; query: string }) {
             <strong>{gradeText}</strong>
             {after} {t.whatToday}
           </p>
-        </div>
-        <div className="stats">
-          <span>
-            <strong>{stars}</strong> {t.starsWord(stars)}
-          </span>
         </div>
       </div>
 
@@ -98,7 +92,7 @@ export function Home({ grade, query }: { grade: Grade; query: string }) {
             {tests.length ? (
               <div className="test-grid">
                 {tests.map((x) => (
-                  <TestCard key={x.id} test={x} href={testHref(grade, x)} />
+                  <TestCard key={x.id} test={x} />
                 ))}
               </div>
             ) : (
