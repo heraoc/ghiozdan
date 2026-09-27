@@ -141,7 +141,7 @@ button {
   cursor: pointer;
 }
 
-.grade-switch {
+.switch {
   display: flex;
   background: #fff;
   border-radius: 10px;
@@ -149,7 +149,7 @@ button {
   gap: 4px;
 }
 
-.grade-btn {
+.switch-btn {
   border: 0;
   cursor: pointer;
   font-size: 13px;
@@ -160,7 +160,7 @@ button {
   color: var(--brand);
 }
 
-.grade-btn[aria-pressed='true'] {
+.switch-btn[aria-pressed='true'] {
   background: var(--brand);
   color: #fff;
 }
@@ -427,5 +427,22 @@ button {
   }
   .subject-card:hover {
     transform: none;
+  }
+}
+
+/* Pe ecrane înguste, avatarul stă pe același rând cu logo-ul. */
+@media (max-width: 640px) {
+  .brand {
+    order: -2;
+    flex: 1 1 auto;
+  }
+  .avatar {
+    order: -1;
+  }
+  .header {
+    gap: 12px 10px;
+  }
+  .switch-btn {
+    padding: 8px 11px;
   }
 }

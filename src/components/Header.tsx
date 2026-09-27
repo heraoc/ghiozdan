@@ -1,4 +1,5 @@
 import { GRADES, type Grade } from '../data';
+import { LANGS, useLang } from '../i18n';
 import { Avatar } from './Avatar';
 
 interface Props {
@@ -9,13 +10,14 @@ interface Props {
 }
 
 export function Header({ grade, onGradeChange, query, onQueryChange }: Props) {
+  const { lang, setLang, t } = useLang();
   return (
     <header className="header">
-      <a className="brand" href="#" aria-label="Ghiozdan, pagina de start">
+      <a className="brand" href="#" aria-label={t.home}>
         <span className="brand-mark">G</span>
         <span className="brand-text">
           <span className="brand-name">GHIOZDAN</span>
-          <span className="brand-tagline">ÎNVĂȚĂM ÎMPREUNĂ</span>
+          <span className="brand-tagline">{t.tagline}</span>
         </span>
       </a>
 
@@ -28,21 +30,36 @@ export function Header({ grade, onGradeChange, query, onQueryChange }: Props) {
           type="search"
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
-          placeholder="Caută o lecție sau o materie"
-          aria-label="Caută o lecție sau o materie"
+          placeholder={t.search}
+          aria-label={t.search}
         />
       </label>
 
-      <div className="grade-switch" role="group" aria-label="Alege clasa">
+      <div className="switch" role="group" aria-label={t.chooseGrade}>
         {GRADES.map((g) => (
           <button
             key={g}
             type="button"
-            className="grade-btn"
+            className="switch-btn"
             aria-pressed={g === grade}
             onClick={() => onGradeChange(g)}
           >
-            {g === 3 ? 'Clasa a 3-a' : 'Clasa a 6-a'}
+            {t.gradeButton(g)}
+          </button>
+        ))}
+      </div>
+
+      <div className="switch" role="group" aria-label={t.chooseLang}>
+        {LANGS.map((l) => (
+          <button
+            key={l}
+            type="button"
+            className="switch-btn"
+            lang={l}
+            aria-pressed={l === lang}
+            onClick={() => setLang(l)}
+          >
+            {l.toUpperCase()}
           </button>
         ))}
       </div>

@@ -2,39 +2,37 @@ import { useMemo, useState } from 'react';
 import { Header } from '../components/Header';
 import { SubjectCard } from '../components/SubjectCard';
 import { TestCard } from '../components/TestCard';
-import {
-  config,
-  getSubjects,
-  getTests,
-  gradeLabel,
-  STARS,
-  subjectHref,
-  testHref,
-  type Grade,
-} from '../data';
+import { config, getSubjects, getTests, subjectHref, testHref, totalStars, type Grade } from '../data';
+import { useLang } from '../i18n';
 import { matches } from '../search';
 
 type Tab = 'materii' | 'teste';
 
-const TABS: [Tab, string][] = [
-  ['materii', 'Materii'],
-  ['teste', 'Teste'],
-];
-
 export function Home() {
+  const { t } = useLang();
   const [grade, setGrade] = useState<Grade>(config.defaultGrade);
   const [tab, setTab] = useState<Tab>('materii');
   const [query, setQuery] = useState('');
 
+  // Căutarea găsește textele în ambele limbi.
   const subjects = useMemo(
-    () => getSubjects(grade).filter((s) => matches(query, s.name)),
+    () => getSubjects(grade).filter((s) => matches(query, s.name.ro, s.name.de)),
     [grade, query],
   );
   const tests = useMemo(
-    () => getTests(grade).filter((t) => matches(query, t.title, t.subject.name)),
+    () =>
+      getTests(grade).filter((x) =>
+        matches(query, x.title.ro, x.title.de, x.subject.name.ro, x.subject.name.de),
+      ),
     [grade, query],
   );
-  const label = gradeLabel(grade);
+  const label = t.gradeLabel(grade);
+  const stars = totalStars(grade);
+  const [before, gradeText, after] = t.youAreIn(grade);
+  const tabs: [Tab, string][] = [
+    ['materii', t.subjectsTab],
+    ['teste', t.testsTab],
+  ];
 
   return (
     <div className="page">
@@ -44,21 +42,26 @@ export function Home() {
         <div className="intro">
           <div>
             <h1 className="greeting">
-              Bună, <span className="greeting-name">{config.studentName}!<Underline /></span>
+              {t.hello},{' '}
+              <span className="greeting-name">
+                {config.studentName[grade]}!<Underline />
+              </span>
             </h1>
             <p className="intro-text">
-              Ești în <strong>{label}</strong>. Ce învățăm astăzi?
+              {before}
+              <strong>{gradeText}</strong>
+              {after} {t.whatToday}
             </p>
           </div>
           <div className="stats">
             <span>
-              <strong>{STARS[grade]}</strong> steluțe
+              <strong>{stars}</strong> {t.starsWord(stars)}
             </span>
           </div>
         </div>
 
         <nav className="tabs" role="tablist">
-          {TABS.map(([key, text]) => (
+          {tabs.map(([key, text]) => (
             <button
               key={key}
               type="button"
@@ -77,7 +80,9 @@ export function Home() {
         <section id="tab-panel" role="tabpanel" aria-labelledby={`tab-${tab}`}>
           {tab === 'materii' ? (
             <>
-              <h2 className="section-title">Toate materiile · {label}</h2>
+              <h2 className="section-title">
+                {t.allSubjects} · {label}
+              </h2>
               {subjects.length ? (
                 <div className="subject-grid">
                   {subjects.map((s) => (
@@ -85,20 +90,22 @@ export function Home() {
                   ))}
                 </div>
               ) : (
-                <Empty query={query} />
+                <p className="empty">{t.empty(query.trim())}</p>
               )}
             </>
           ) : (
             <>
-              <h2 className="section-title">Teste · {label}</h2>
+              <h2 className="section-title">
+                {t.tests} · {label}
+              </h2>
               {tests.length ? (
                 <div className="test-grid">
-                  {tests.map((t) => (
-                    <TestCard key={t.id} test={t} href={testHref(grade, t)} />
+                  {tests.map((x) => (
+                    <TestCard key={x.id} test={x} href={testHref(grade, x)} />
                   ))}
                 </div>
               ) : (
-                <Empty query={query} />
+                <p className="empty">{t.empty(query.trim())}</p>
               )}
             </>
           )}
@@ -120,8 +127,4 @@ function Underline() {
       />
     </svg>
   );
-}
-
-function Empty({ query }: { query: string }) {
-  return <p className="empty">Nu am găsit nimic pentru „{query.trim()}”. Încearcă alt cuvânt.</p>;
 }

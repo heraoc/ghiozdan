@@ -1,37 +1,42 @@
-// Conținut provizoriu (exemple inventate), preluat din prototipul Claude Design.
-// Se înlocuiește cu conținutul real când e gata.
+// Conținutul site-ului. Fiecare text are variantă în română (ro) și germană (de).
+
+import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
 
 export const GRADES: Grade[] = [3, 6];
 
 export const config = {
-  studentName: 'Maria',
+  /** Numele elevului din mesajul de întâmpinare, în funcție de clasă. */
+  studentName: { 3: 'Augusta', 6: 'Smaranda' } as Record<Grade, string>,
   defaultGrade: 3 as Grade,
 };
-
-type PaletteKey = keyof typeof PALETTE;
 
 const PALETTE = {
   mat: { color: '#2f80ed', soft: '#e7f0fd' },
   rom: { color: '#e5673d', soft: '#fdece5' },
+  ger: { color: '#8b5cf6', soft: '#f0eafe' },
   sti: { color: '#27a36f', soft: '#e3f5ec' },
-  eng: { color: '#8b5cf6', soft: '#f0eafe' },
-  muz: { color: '#d9469a', soft: '#fbe8f2' },
-  art: { color: '#e0a100', soft: '#fdf4d6' },
   bio: { color: '#27a36f', soft: '#e3f5ec' },
   fiz: { color: '#e0a100', soft: '#fdf4d6' },
-  ist: { color: '#e5673d', soft: '#fdece5' },
+  ist: { color: '#d9469a', soft: '#fbe8f2' },
   geo: { color: '#1f8a78', soft: '#e1f3ef' },
-  inf: { color: '#5b6cf0', soft: '#eaecfd' },
+  tic: { color: '#5b6cf0', soft: '#eaecfd' },
 };
 
-export interface Subject {
-  key: PaletteKey;
+export type SubjectKey = keyof typeof PALETTE;
+
+export interface Lesson {
   slug: string;
-  name: string;
+  title: Text;
+}
+
+export interface Subject {
+  key: SubjectKey;
+  slug: string;
+  name: Text;
   glyph: string;
-  lessons: number;
+  lessons: Lesson[];
   color: string;
   soft: string;
 }
@@ -39,85 +44,98 @@ export interface Subject {
 export interface Test {
   id: string;
   subject: Subject;
-  title: string;
+  title: Text;
   questions: number;
   minutes: number;
   /** 0 = testul n-a fost dat încă */
   stars: 0 | 1 | 2 | 3;
 }
 
-type SubjectRow = [PaletteKey, string, string, string, number];
-type TestRow = [PaletteKey, string, number, number, Test['stars']];
+const SUBJECT_NAMES: Record<SubjectKey, [slug: string, name: Text]> = {
+  mat: ['matematica', { ro: 'Matematică', de: 'Mathematik' }],
+  rom: ['limba-romana', { ro: 'Limba română', de: 'Rumänisch' }],
+  ger: ['limba-germana', { ro: 'Limba germană', de: 'Deutsch' }],
+  sti: ['stiintele-naturii', { ro: 'Științele naturii', de: 'Naturwissenschaften' }],
+  bio: ['biologie', { ro: 'Biologie', de: 'Biologie' }],
+  fiz: ['fizica', { ro: 'Fizică', de: 'Physik' }],
+  ist: ['istorie', { ro: 'Istorie', de: 'Geschichte' }],
+  geo: ['geografie', { ro: 'Geografie', de: 'Geografie' }],
+  tic: ['tic', { ro: 'TIC', de: 'IKT' }],
+};
 
-const SUBJECT_ROWS: Record<Grade, SubjectRow[]> = {
+/** Materiile fiecărei clase, în ordinea afișării, cu iconița lor. */
+const SUBJECTS: Record<Grade, [SubjectKey, glyph: string][]> = {
   3: [
-    ['mat', 'matematica', 'Matematică', '1+2', 24],
-    ['rom', 'limba-romana', 'Limba română', 'Aa', 30],
-    ['sti', 'stiinte', 'Științe', '✿', 16],
-    ['eng', 'engleza', 'Engleză', 'Hi', 18],
-    ['muz', 'muzica', 'Muzică', '♪', 10],
-    ['art', 'arte', 'Arte', '✎', 12],
+    ['mat', '1+2'],
+    ['rom', 'Aa'],
+    ['ger', 'Ää'],
+    ['sti', '✿'],
   ],
   6: [
-    ['mat', 'matematica', 'Matematică', 'x²', 36],
-    ['rom', 'limba-romana', 'Limba română', 'Aa', 34],
-    ['bio', 'biologie', 'Biologie', '✿', 22],
-    ['fiz', 'fizica', 'Fizică', '⚡', 20],
-    ['ist', 'istorie', 'Istorie', 'Ⅵ', 18],
-    ['geo', 'geografie', 'Geografie', '◎', 20],
-    ['eng', 'engleza', 'Engleză', 'Hi', 24],
-    ['inf', 'informatica', 'Informatică', '</>', 16],
+    ['mat', 'x²'],
+    ['rom', 'Aa'],
+    ['ger', 'Ää'],
+    ['ist', 'Ⅵ'],
+    ['fiz', '⚡'],
+    ['geo', '◎'],
+    ['bio', '✿'],
+    ['tic', '</>'],
   ],
 };
 
-const TEST_ROWS: Record<Grade, TestRow[]> = {
-  3: [
-    ['mat', 'Adunarea și scăderea până la 1000', 10, 15, 3],
-    ['mat', 'Înmulțirea până la 100', 12, 20, 2],
-    ['rom', 'Substantivul', 10, 15, 0],
-    ['sti', 'Ciclul apei', 8, 10, 3],
-    ['eng', 'Colors and numbers', 10, 10, 1],
-    ['rom', 'Semnele de punctuație', 8, 10, 0],
-  ],
-  6: [
-    ['mat', 'Fracții ordinare', 12, 25, 2],
-    ['mat', 'Unghiuri', 10, 20, 0],
-    ['rom', 'Verbul', 12, 20, 3],
-    ['bio', 'Celula', 10, 15, 1],
-    ['ist', 'Grecia antică', 10, 15, 0],
-    ['geo', 'Continente și oceane', 12, 15, 2],
-    ['fiz', 'Mărimi fizice', 10, 20, 0],
-    ['eng', 'Present Simple', 10, 15, 3],
-  ],
+/**
+ * Lecțiile fiecărei materii. Momentan nu există niciuna; numărul de lecții
+ * de pe carduri se calculează automat din această listă.
+ */
+const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
+  3: {},
+  6: {},
 };
 
-export const STARS: Record<Grade, number> = { 3: 46, 6: 81 };
+type TestRow = [SubjectKey, Text, questions: number, minutes: number];
 
-export function gradeLabel(grade: Grade) {
-  return grade === 3 ? 'clasa a 3-a' : 'clasa a 6-a';
-}
+/** Teste-exemplu (provizorii), încă nedate: 0 steluțe. */
+const TESTS: Record<Grade, TestRow[]> = {
+  3: [
+    ['mat', { ro: 'Adunarea și scăderea până la 1000', de: 'Addition und Subtraktion bis 1000' }, 10, 15],
+    ['mat', { ro: 'Înmulțirea până la 100', de: 'Multiplikation bis 100' }, 12, 20],
+    ['rom', { ro: 'Substantivul', de: 'Das Substantiv' }, 10, 15],
+    ['sti', { ro: 'Ciclul apei', de: 'Der Wasserkreislauf' }, 8, 10],
+    ['rom', { ro: 'Semnele de punctuație', de: 'Die Satzzeichen' }, 8, 10],
+  ],
+  6: [
+    ['mat', { ro: 'Fracții ordinare', de: 'Gewöhnliche Brüche' }, 12, 25],
+    ['mat', { ro: 'Unghiuri', de: 'Winkel' }, 10, 20],
+    ['rom', { ro: 'Verbul', de: 'Das Verb' }, 12, 20],
+    ['bio', { ro: 'Celula', de: 'Die Zelle' }, 10, 15],
+    ['ist', { ro: 'Grecia antică', de: 'Das antike Griechenland' }, 10, 15],
+    ['geo', { ro: 'Continente și oceane', de: 'Kontinente und Ozeane' }, 12, 15],
+    ['fiz', { ro: 'Mărimi fizice', de: 'Physikalische Größen' }, 10, 20],
+  ],
+};
 
 export function getSubjects(grade: Grade): Subject[] {
-  return SUBJECT_ROWS[grade].map(([key, slug, name, glyph, lessons]) => ({
-    key,
-    slug,
-    name,
-    glyph,
-    lessons,
-    ...PALETTE[key],
-  }));
+  return SUBJECTS[grade].map(([key, glyph]) => {
+    const [slug, name] = SUBJECT_NAMES[key];
+    return { key, slug, name, glyph, lessons: LESSONS[grade][key] ?? [], ...PALETTE[key] };
+  });
 }
 
 export function getTests(grade: Grade): Test[] {
   const subjects = getSubjects(grade);
-  return TEST_ROWS[grade].map(([key, title, questions, minutes, stars], i) => ({
+  return TESTS[grade].map(([key, title, questions, minutes], i) => ({
     id: `${grade}-${i}`,
     subject: subjects.find((s) => s.key === key)!,
     title,
     questions,
     minutes,
-    stars,
+    stars: 0,
   }));
+}
+
+/** Steluțele adunate din toate testele clasei. */
+export function totalStars(grade: Grade) {
+  return getTests(grade).reduce((sum, t) => sum + t.stars, 0);
 }
 
 /** Linkuri pregătite pentru paginile interioare. */
