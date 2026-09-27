@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f4faf8;font-family:'Lexend',system-ui,sans-serif;color:#1d2b2a}
+a{color:#1f8a78;text-decoration:none}a:hover{color:#156b5c}
+*{box-sizing:border-box}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#f4faf8;">
+  <header style="background:linear-gradient(90deg,#1f8a78,#3fb39c);padding:14px clamp(16px,4vw,48px);display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-radius:0 0 28px 28px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:#ffe45c;display:grid;place-items:center;font-weight:700;color:#1f8a78;font-size:18px;">G</div>
+      <div style="display:flex;flex-direction:column;line-height:1;">
+        <span style="color:#fff;font-weight:700;font-size:20px;letter-spacing:.5px;">GHIOZDAN</span>
+        <span style="color:#ffe45c;font-size:9px;letter-spacing:1.5px;margin-top:3px;">ÎNVĂȚĂM ÎMPREUNĂ</span>
+      </div>
+    </div>
+    <div style="flex:1 1 220px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.18);border-radius:10px;padding:10px 14px;color:#e6f6f2;font-size:13px;min-width:180px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+      <span>Caută o lecție sau o materie</span>
+    </div>
+    <div style="display:flex;background:#fff;border-radius:10px;padding:4px;gap:4px;">
+      <sc-for list="{{ grades }}" as="g" hint-placeholder-count="2">
+        <button onClick="{{ g.pick }}" style="border:0;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:7px;background:{{ g.bg }};color:{{ g.fg }};">{{ g.label }}</button>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:40px;height:40px;border-radius:10px;background:#fff;display:grid;place-items:center;overflow:hidden;">
+        <svg width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="#ffe9a8"></rect><circle cx="20" cy="17" r="8" fill="#f2b98d"></circle><path d="M11 15c0-7 18-7 18 0c-3-3-15-3-18 0z" fill="#6b3f2a"></path><circle cx="17" cy="17" r="1.1" fill="#1d2b2a"></circle><circle cx="23" cy="17" r="1.1" fill="#1d2b2a"></circle><path d="M17 20.5q3 2.5 6 0" stroke="#1d2b2a" stroke-width="1.2" fill="none" stroke-linecap="round"></path><path d="M6 40c2-9 26-9 28 0z" fill="#3fb39c"></path></svg>
+      </div>
+    </div>
+  </header>
+
+  <main style="max-width:1200px;margin:0 auto;padding:40px clamp(16px,4vw,48px) 80px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;">
+      <div>
+        <h1 style="margin:0;font-size:clamp(28px,4vw,40px);font-weight:700;color:#1f8a78;">Bună, <span style="position:relative;display:inline-block;">{{ name }}!<svg style="position:absolute;left:-4px;bottom:-10px;width:calc(100% + 8px);height:14px;" viewBox="0 0 100 14" preserveAspectRatio="none"><path d="M2 9C30 3 70 3 98 7M8 12C40 8 70 8 94 11" stroke="#ffe45c" stroke-width="3.5" fill="none" stroke-linecap="round"></path></svg></span></h1>
+        <p style="margin:18px 0 0;color:#5f7572;font-size:15px;">Ești în <strong style="color:#1d2b2a;">{{ gradeLabel }}</strong>. Ce învățăm astăzi?</p>
+      </div>
+      <div style="display:flex;gap:24px;background:#fff;border:1px solid #e3efec;border-radius:12px;padding:12px 18px;font-size:13px;color:#8aa09c;">
+        <span style="white-space:nowrap;"><strong style="color:#1f8a78;font-size:16px;">{{ stars }}</strong> steluțe</span>
+      </div>
+    </div>
+
+    <nav style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:36px;border-bottom:2px solid #e3efec;">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="2">
+        <button onClick="{{ t.pick }}" style="background:none;border:0;cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;padding:14px 8px;margin-bottom:-2px;color:{{ t.fg }};border-bottom:3px solid {{ t.line }};">{{ t.label }}</button>
+      </sc-for>
+    </nav>
+
+    <sc-if value="{{ showSubjects }}" hint-placeholder-val="{{ true }}">
+      <h2 style="margin:32px 0 16px;font-size:15px;font-weight:500;color:#3fb39c;">Toate materiile · {{ gradeLabel }}</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:20px;">
+        <sc-for list="{{ subjects }}" as="s" hint-placeholder-count="6">
+          <a href="#" style="background:#fff;border-radius:18px;padding:26px 18px 22px;display:flex;flex-direction:column;align-items:center;gap:16px;color:#1d2b2a;box-shadow:0 8px 30px rgba(31,138,120,.06);transition:transform .15s;" style-hover="transform:translateY(-4px);box-shadow:0 14px 34px rgba(31,138,120,.14);">
+            <div style="width:84px;height:84px;border-radius:24px;background:{{ s.soft }};display:grid;place-items:center;color:{{ s.color }};font-family:'Caveat',cursive;font-size:40px;font-weight:700;">{{ s.glyph }}</div>
+            <div style="text-align:center;">
+              <div style="font-weight:600;font-size:16px;">{{ s.name }}</div>
+              <div style="font-size:12px;color:#8aa09c;margin-top:4px;">{{ s.count }} lecții</div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showTests }}" hint-placeholder-val="{{ false }}">
+      <h2 style="margin:32px 0 16px;font-size:15px;font-weight:500;color:#3fb39c;">Teste · {{ gradeLabel }}</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;">
+        <sc-for list="{{ tests }}" as="t" hint-placeholder-count="6">
+          <div style="background:#fff;border-radius:18px;padding:22px;box-shadow:0 8px 30px rgba(31,138,120,.06);display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div style="width:52px;height:52px;flex:none;border-radius:16px;background:{{ t.soft }};color:{{ t.color }};display:grid;place-items:center;font-family:'Caveat',cursive;font-size:26px;font-weight:700;">{{ t.glyph }}</div>
+              <div style="display:flex;flex-direction:column;gap:4px;min-width:0;">
+                <span style="font-size:12px;font-weight:500;color:{{ t.color }};">{{ t.subject }}</span>
+                <span style="font-weight:600;font-size:16px;line-height:1.25;text-wrap:pretty;">{{ t.title }}</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:18px;font-size:13px;color:#8aa09c;">
+              <span style="white-space:nowrap;">{{ t.questions }} întrebări</span>
+              <span style="white-space:nowrap;">{{ t.minutes }} minute</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #eef4f2;padding-top:14px;">
+              <span style="font-size:15px;letter-spacing:2px;color:#f5c400;">{{ t.starsText }}</span>
+              <a href="#" style="font-weight:600;font-size:14px;color:#1f8a78;white-space:nowrap;">{{ t.cta }} →</a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;studentName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Maria&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;defaultGrade&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;a 3-a&quot;,&quot;a 6-a&quot;],&quot;default&quot;:&quot;a 3-a&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const PAL = {
+  mat:{color:'#2f80ed',soft:'#e7f0fd'}, rom:{color:'#e5673d',soft:'#fdece5'}, sti:{color:'#27a36f',soft:'#e3f5ec'},
+  eng:{color:'#8b5cf6',soft:'#f0eafe'}, muz:{color:'#d9469a',soft:'#fbe8f2'}, art:{color:'#e0a100',soft:'#fdf4d6'},
+  bio:{color:'#27a36f',soft:'#e3f5ec'}, fiz:{color:'#e0a100',soft:'#fdf4d6'}, ist:{color:'#e5673d',soft:'#fdece5'},
+  geo:{color:'#1f8a78',soft:'#e1f3ef'}, inf:{color:'#5b6cf0',soft:'#eaecfd'}
+};
+const DATA = {
+  3:{
+    subjects:[['mat','Matematică','1+2',24],['rom','Limba română','Aa',30],['sti','Științe','✿',16],['eng','Engleză','Hi',18],['muz','Muzică','♪',10],['art','Arte','✎',12]],
+    active:[['mat','Înmulțirea până la 100',60,'9/15','14/20'],['rom','Substantivul',35,'4/12','7/18'],['sti','Ciclul apei',80,'8/10','12/14']]
+  },
+  6:{
+    subjects:[['mat','Matematică','x²',36],['rom','Limba română','Aa',34],['bio','Biologie','✿',22],['fiz','Fizică','⚡',20],['ist','Istorie','Ⅵ',18],['geo','Geografie','◎',20],['eng','Engleză','Hi',24],['inf','Informatică','</>',16]],
+    active:[['mat','Fracții ordinare',50,'8/16','12/20'],['ist','Grecia antică',30,'3/10','5/15'],['geo','Continente și oceane',70,'7/10','11/16']]
+  }
+};
+const TESTS = {
+  3:[['mat','Adunarea și scăderea până la 1000',10,15,3],['mat','Înmulțirea până la 100',12,20,2],['rom','Substantivul',10,15,0],['sti','Ciclul apei',8,10,3],['eng','Colors and numbers',10,10,1],['rom','Semnele de punctuație',8,10,0]],
+  6:[['mat','Fracții ordinare',12,25,2],['mat','Unghiuri',10,20,0],['rom','Verbul',12,20,3],['bio','Celula',10,15,1],['ist','Grecia antică',10,15,0],['geo','Continente și oceane',12,15,2],['fiz','Mărimi fizice',10,20,0],['eng','Present Simple',10,15,3]]
+};
+class Component extends DCLogic {
+  state = { grade: null, tab: 'materii' };
+  renderVals() {
+    const grade = this.state.grade ?? (this.props.defaultGrade === 'a 6-a' ? 6 : 3);
+    const d = DATA[grade], tab = this.state.tab;
+    const grades = [3,6].map(g => ({ label: g===3?'Clasa a 3-a':'Clasa a 6-a', bg: g===grade?'#1f8a78':'transparent', fg: g===grade?'#fff':'#1f8a78', pick: () => this.setState({grade:g}) }));
+    const tabs = [['materii','Materii'],['teste','Teste']].map(([k,l]) => ({ label:l, fg: k===tab?'#1f8a78':'#9bb0ac', line: k===tab?'#1f8a78':'transparent', pick: () => this.setState({tab:k}) }));
+    return {
+      name: this.props.studentName ?? 'Maria',
+      gradeLabel: grade===3?'clasa a 3-a':'clasa a 6-a',
+      stars: grade===3?46:81,
+      grades, tabs,
+      showSubjects: tab==='materii',
+      showTests: tab==='teste',
+      subjects: d.subjects.map(([k,name,glyph,count]) => ({ ...PAL[k], name, glyph, count })),
+      tests: TESTS[grade].map(([k,title,questions,minutes,st]) => { const s = d.subjects.find(x=>x[0]===k); return { ...PAL[k], subject: s[1], glyph: s[2], title, questions, minutes, starsText: '★'.repeat(st) + '☆'.repeat(3-st), cta: st ? 'Reia testul' : 'Începe testul' }; })
+    };
+  }
+}
+</script>
+</body>
+</html>
