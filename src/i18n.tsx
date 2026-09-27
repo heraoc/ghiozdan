@@ -28,9 +28,6 @@ const messages = {
     chooseLang: 'Alege limba',
     gradeButton: (g: Grade) => `Clasa a ${g}-a`,
     gradeLabel: (g: Grade) => `clasa a ${g}-a`,
-    /** [text înainte, clasa (îngroșată), text după] */
-    youAreIn: (g: Grade) => ['Ești în ', `clasa a ${g}-a`, '.'],
-    hello: 'Bună',
     whatToday: 'Ce învățăm astăzi?',
     subjectsTab: 'Materii',
     testsTab: 'Teste',
@@ -64,8 +61,6 @@ const messages = {
     chooseLang: 'Sprache wählen',
     gradeButton: (g: Grade) => `${g}. Klasse`,
     gradeLabel: (g: Grade) => `${g}. Klasse`,
-    youAreIn: (g: Grade) => ['Du bist in der ', `${g}. Klasse`, '.'],
-    hello: 'Hallo',
     whatToday: 'Was lernen wir heute?',
     subjectsTab: 'Fächer',
     testsTab: 'Tests',

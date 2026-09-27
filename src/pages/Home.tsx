@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { SubjectCard } from '../components/SubjectCard';
 import { TestCard } from '../components/TestCard';
-import { config, getSubjects, getTests, subjectHref, type Grade } from '../data';
+import { getSubjects, getTests, subjectHref, type Grade } from '../data';
 import { useLang } from '../i18n';
 import { matches } from '../search';
 
@@ -27,7 +27,6 @@ export function Home({ grade, query }: { grade: Grade; query: string }) {
     [grade, query],
   );
   const label = t.gradeLabel(grade);
-  const [before, gradeText, after] = t.youAreIn(grade);
   const tabs: [Tab, string][] = [
     ['materii', t.subjectsTab],
     ['teste', t.testsTab],
@@ -38,16 +37,12 @@ export function Home({ grade, query }: { grade: Grade; query: string }) {
       <div className="intro">
         <div>
           <h1 className="greeting">
-            {t.hello},{' '}
             <span className="greeting-name">
-              {config.studentName[grade]}!<Underline />
+              {t.gradeButton(grade)}
+              <Underline />
             </span>
           </h1>
-          <p className="intro-text">
-            {before}
-            <strong>{gradeText}</strong>
-            {after} {t.whatToday}
-          </p>
+          <p className="intro-text">{t.whatToday}</p>
         </div>
       </div>
 

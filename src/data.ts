@@ -8,8 +8,6 @@ export type Grade = 3 | 6;
 export const GRADES: Grade[] = [3, 6];
 
 export const config = {
-  /** Numele elevului din mesajul de întâmpinare, în funcție de clasă. */
-  studentName: { 3: 'Augusta', 6: 'Smaranda' } as Record<Grade, string>,
   defaultGrade: 3 as Grade,
 };
 
