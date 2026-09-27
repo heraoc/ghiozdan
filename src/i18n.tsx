@@ -45,6 +45,11 @@ const messages = {
     retakeTest: 'Reia testul',
     empty: (q: string) => `Nu am găsit nimic pentru „${q}”. Încearcă alt cuvânt.`,
     title: 'Ghiozdan · Învățăm împreună',
+    backHome: 'Pagina de start',
+    openLesson: 'Deschide lecția',
+    noLessons: 'Încă nu sunt lecții la această materie. Revino curând!',
+    fullscreen: 'Deschide pe tot ecranul',
+    soon: 'Pagina aceasta va fi disponibilă în curând.',
   },
   de: {
     tagline: 'WIR LERNEN ZUSAMMEN',
@@ -70,6 +75,11 @@ const messages = {
     retakeTest: 'Test wiederholen',
     empty: (q: string) => `Wir haben nichts zu „${q}“ gefunden. Versuche ein anderes Wort.`,
     title: 'Ghiozdan · Wir lernen zusammen',
+    backHome: 'Startseite',
+    openLesson: 'Lektion öffnen',
+    noLessons: 'Für dieses Fach gibt es noch keine Lektionen. Schau bald wieder vorbei!',
+    fullscreen: 'Im Vollbild öffnen',
+    soon: 'Diese Seite ist bald verfügbar.',
   },
 } satisfies Record<Lang, unknown>;
 

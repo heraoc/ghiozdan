@@ -29,6 +29,9 @@ export type SubjectKey = keyof typeof PALETTE;
 export interface Lesson {
   slug: string;
   title: Text;
+  summary: Text;
+  /** Pagina interactivă a lecției, din folderul public/. Primește ?lang=ro|de. */
+  src: string;
 }
 
 export interface Subject {
@@ -89,7 +92,22 @@ const SUBJECTS: Record<Grade, [SubjectKey, glyph: string][]> = {
  */
 const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
   3: {},
-  6: {},
+  6: {
+    ist: [
+      {
+        slug: 'ibn-battuta',
+        title: {
+          ro: 'Călătoriile lui Ibn Battuta (1325–1354)',
+          de: 'Die Reisen des Ibn Battuta (1325–1354)',
+        },
+        summary: {
+          ro: 'Aproape 30 de ani pe drum, din Tanger până în China și Mali. Parcurge traseul pe hartă, oprire cu oprire.',
+          de: 'Fast 30 Jahre unterwegs, von Tanger bis nach China und Mali. Folge der Route auf der Karte, Station für Station.',
+        },
+        src: 'lectii/clasa-6/istorie/ibn-battuta.html',
+      },
+    ],
+  },
 };
 
 type TestRow = [SubjectKey, Text, questions: number, minutes: number];
@@ -138,6 +156,12 @@ export function totalStars(grade: Grade) {
   return getTests(grade).reduce((sum, t) => sum + t.stars, 0);
 }
 
-/** Linkuri pregătite pentru paginile interioare. */
+export function getSubject(grade: Grade, slug: string) {
+  return getSubjects(grade).find((s) => s.slug === slug);
+}
+
+/** Linkuri către paginile interioare (rutare prin # în adresă). */
+export const homeHref = '#/';
 export const subjectHref = (grade: Grade, s: Subject) => `#/clasa-${grade}/${s.slug}`;
+export const lessonHref = (grade: Grade, s: Subject, l: Lesson) => `#/clasa-${grade}/${s.slug}/${l.slug}`;
 export const testHref = (grade: Grade, t: Test) => `#/clasa-${grade}/teste/${t.id}`;

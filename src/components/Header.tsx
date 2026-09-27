@@ -1,4 +1,4 @@
-import { GRADES, type Grade } from '../data';
+import { GRADES, homeHref, type Grade } from '../data';
 import { LANGS, useLang } from '../i18n';
 import { Avatar } from './Avatar';
 
@@ -13,7 +13,7 @@ export function Header({ grade, onGradeChange, query, onQueryChange }: Props) {
   const { lang, setLang, t } = useLang();
   return (
     <header className="header">
-      <a className="brand" href="#" aria-label={t.home}>
+      <a className="brand" href={homeHref} aria-label={t.home}>
         <span className="brand-mark">G</span>
         <span className="brand-text">
           <span className="brand-name">GHIOZDAN</span>
