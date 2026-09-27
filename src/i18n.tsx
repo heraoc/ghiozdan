@@ -1,13 +1,12 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { Grade } from './data';
+import { loadPref, savePref } from './storage';
 
 export type Lang = 'ro' | 'de';
 export const LANGS: Lang[] = ['ro', 'de'];
 
 /** Text disponibil în ambele limbi ale site-ului. */
 export type Text = Record<Lang, string>;
-
-const STORAGE_KEY = 'ghiozdan.lang';
 
 type PluralForms = Partial<Record<Intl.LDMLPluralRule, string>> & { other: string };
 
@@ -84,27 +83,13 @@ interface LangContextValue {
 
 const LangContext = createContext<LangContextValue | null>(null);
 
-function initialLang(): Lang {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'ro' || saved === 'de') return saved;
-  } catch {
-    // localStorage indisponibil (mod privat etc.)
-  }
-  return 'ro';
-}
-
 export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>(initialLang);
+  const [lang, setLang] = useState<Lang>(() => loadPref('lang', LANGS, 'ro'));
 
   useEffect(() => {
     document.documentElement.lang = lang;
     document.title = messages[lang].title;
-    try {
-      localStorage.setItem(STORAGE_KEY, lang);
-    } catch {
-      // ignorăm
-    }
+    savePref('lang', lang);
   }, [lang]);
 
   return <LangContext.Provider value={{ lang, setLang, t: messages[lang] }}>{children}</LangContext.Provider>;

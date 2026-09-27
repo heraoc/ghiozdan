@@ -1,18 +1,22 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Header } from '../components/Header';
 import { SubjectCard } from '../components/SubjectCard';
 import { TestCard } from '../components/TestCard';
-import { config, getSubjects, getTests, subjectHref, testHref, totalStars, type Grade } from '../data';
+import { config, getSubjects, GRADES, getTests, subjectHref, testHref, totalStars, type Grade } from '../data';
 import { useLang } from '../i18n';
 import { matches } from '../search';
+import { loadPref, savePref } from '../storage';
 
 type Tab = 'materii' | 'teste';
 
 export function Home() {
   const { t } = useLang();
-  const [grade, setGrade] = useState<Grade>(config.defaultGrade);
+  // Clasa aleasă ultima dată pe acest dispozitiv se redeschide la următoarea vizită.
+  const [grade, setGrade] = useState<Grade>(() => loadPref('grade', GRADES, config.defaultGrade));
   const [tab, setTab] = useState<Tab>('materii');
   const [query, setQuery] = useState('');
+
+  useEffect(() => savePref('grade', grade), [grade]);
 
   // Căutarea găsește textele în ambele limbi.
   const subjects = useMemo(
