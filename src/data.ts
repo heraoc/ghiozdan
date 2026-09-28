@@ -1,6 +1,7 @@
 // Conținutul site-ului. Fiecare text are variantă în română (ro) și germană (de).
 
 import { ibnBattutaTest } from './content/ibn-battuta-test';
+import { mariExploratoriTest } from './content/mari-exploratori-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -31,8 +32,11 @@ export interface Lesson {
   slug: string;
   title: Text;
   summary: Text;
-  /** Pagina interactivă a lecției, din folderul public/. Primește ?lang=ro|de. */
-  src: string;
+  /**
+   * Pagina interactivă a lecției, din folderul public/. O singură pagină primește ?lang=ro|de;
+   * altfel, câte o pagină pentru fiecare limbă.
+   */
+  src: string | Text;
   /** Testul de la finalul lecției (opțional). */
   test?: { questions: Question[]; minutes: number };
 }
@@ -120,6 +124,22 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/istorie/ibn-battuta.html',
         test: { questions: ibnBattutaTest, minutes: 5 },
+      },
+      {
+        slug: 'mari-exploratori',
+        title: {
+          ro: 'Mari exploratori (1487–1597)',
+          de: 'Große Entdecker (1487–1597)',
+        },
+        summary: {
+          ro: 'De la Diaz la Barents: șase navigatori care au găsit drumuri noi pe mare. Urmărește-le traseele pe harta lumii.',
+          de: 'Von Diaz bis Barents: sechs Seefahrer, die neue Seewege fanden. Verfolge ihre Routen auf der Weltkarte.',
+        },
+        src: {
+          ro: 'lectii/clasa-6/istorie/mari-exploratori.html',
+          de: 'lectii/clasa-6/istorie/mari-exploratori.de.html',
+        },
+        test: { questions: mariExploratoriTest, minutes: 5 },
       },
     ],
   },

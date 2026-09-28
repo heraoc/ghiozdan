@@ -31,7 +31,8 @@ export function LessonPage({ grade, subjectSlug, lessonSlug, toTest }: Props) {
 
   if (!subject || !lesson) return <NotFound />;
 
-  const src = `${import.meta.env.BASE_URL}${lesson.src}?lang=${lang}`;
+  const file = typeof lesson.src === 'string' ? lesson.src : lesson.src[lang];
+  const src = `${import.meta.env.BASE_URL}${file}?lang=${lang}`;
   const tint = { '--c': subject.color, '--soft': subject.soft } as CSSProperties;
   return (
     <main className="main main-wide" style={tint}>
@@ -80,7 +81,9 @@ function LessonFrame({ src, title, height, onHeight }: FrameProps) {
     const onLoad = () => {
       const doc = frame.contentDocument;
       if (!doc) return; // altă origine: rămâne înălțimea implicită
-      const fit = () => onHeight(doc.documentElement.scrollHeight);
+      // Măsurăm body, nu documentElement: scrollHeight-ul acestuia nu scade sub înălțimea cadrului,
+      // așa că, după ce conținutul se strânge (de exemplu când se încarcă fonturile), cadrul n-ar mai scădea.
+      const fit = () => onHeight(doc.body.scrollHeight);
       observer = new ResizeObserver(fit);
       observer.observe(doc.body);
       fit();
