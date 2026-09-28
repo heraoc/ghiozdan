@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Organismul unei plante superioare</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Der Organismus einer höheren Pflanze';
+})();
+</script>
+<style>
+:root{
+  --paper:#f5f7f0; --card:#ffffff; --ink:#1c2a22; --muted:#56655b; --rule:#dde4d6; --sheet:#eef3e6;
+  --accent:#27a36f; --accent-soft:#e3f5ec;
+  --xy:#c8472d; --xy-soft:#f3b9a8; --ph:#3b5bdb; --ph-soft:#bccaf6;
+  --zs:#a8743f; --zn:#9cc265; --zc:#9d95d8;
+  --veg:#27a36f; --rep:#d9467a;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.term{font-style:italic;color:var(--muted);font-weight:400}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.hint{font-size:14px;color:var(--muted)}
+
+/* grupe de plante */
+.groups{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.group{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px 14px 16px;display:grid;gap:6px;align-content:start}
+.group h3{font-size:21px}
+.group .ex{font-size:14px;color:var(--muted)}
+.group.sup{border-color:var(--accent);box-shadow:inset 0 3px 0 var(--accent)}
+.group .tag{justify-self:start;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;background:var(--accent-soft);color:#17744d;border-radius:99px;padding:4px 8px}
+.evo{display:flex;align-items:center;gap:10px;margin:10px 0 0;color:var(--muted);font-size:14px}
+.evo::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,var(--rule),var(--accent));margin-right:6px}
+.evo b{order:2;color:var(--accent);font-size:18px;line-height:1}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember p{max-width:80ch}
+
+/* tabelul cu organe */
+.tbl-wrap{overflow-x:auto;margin-top:18px}
+table.organs{border-collapse:separate;border-spacing:4px;min-width:560px;width:100%;table-layout:fixed}
+table.organs th:first-child{width:22%}
+table.organs th{font:700 14px/1.2 var(--body);text-align:center;padding:6px 4px;color:var(--muted)}
+table.organs th:first-child,table.organs td:first-child{text-align:left}
+table.organs td:first-child{font-weight:700;padding-right:10px}
+table.organs td.c{padding:0}
+.cell{width:100%;height:42px;border:1.5px solid var(--rule);background:var(--card);border-radius:8px;cursor:pointer;font-size:22px;font-weight:800;line-height:1;color:var(--ink)}
+.cell:hover{border-color:var(--muted)}
+.cell.ok{border-color:#27a36f;background:#e6f6ee}
+.cell.bad{border-color:#d64545;background:#fdeaea}
+.cell.sol-g{background:#dff0cf;border-color:#7cb24a}
+.cell.sol-b{background:#dbe3fb;border-color:#5b77e0}
+.cell.sol-o{background:#fde3cc;border-color:#e8883a}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.result{font-weight:700}
+.sol-legend{display:none;gap:6px 18px;flex-wrap:wrap;margin-top:12px;font-size:15px}
+.sol-legend.show{display:flex}
+.sol-legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px}
+
+/* planta */
+.plant-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px;align-items:start}
+.plant-box{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:10px}
+.plant-box svg{display:block;width:100%;height:auto}
+.organ{cursor:pointer;transition:opacity .2s}
+svg.picked .organ:not(.on){opacity:.28}
+.plbl{font:700 15px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.plbl.small{font-size:13px;font-weight:500;fill:var(--muted)}
+.organ-picker{display:grid;gap:12px}
+.organ-picker > div:not(.info) > h3{font-size:15px;font-family:var(--body);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{border:1.5px solid var(--c);background:transparent;border-radius:99px;padding:6px 14px;cursor:pointer;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--c);color:#fff}
+.veg{--c:var(--veg)} .rep{--c:var(--rep)}
+.info{border-left:4px solid var(--c,var(--rule));min-height:160px}
+.info h3{font-size:26px}
+.info .kind{font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.info p{margin-top:8px}
+
+/* zone */
+.zones3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.zone{border-radius:10px;padding:14px 16px;border:1px solid var(--rule);background:var(--card);border-top:6px solid var(--z)}
+.zone h3{font-size:20px}
+.zone p{font-size:15.5px;margin-top:4px}
+
+/* secțiuni transversale */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tab{border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:7px 16px;cursor:pointer;font-weight:700}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.xs{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+.xs-fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px;position:sticky;top:8px}
+.xs-fig svg{display:block;width:100%;height:auto}
+.xs-fig svg:not(.cur){display:none}
+.mode{display:inline-flex;border:1.5px solid var(--rule);border-radius:99px;overflow:hidden;margin-bottom:10px}
+.mode button{border:0;background:transparent;padding:6px 14px;cursor:pointer;font-weight:700;font-size:15px}
+.mode button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+[data-k]{cursor:pointer;transition:opacity .2s}
+svg.sel [data-k]:not(.hi){opacity:.22}
+svg.zones [data-z="s"] *{fill:var(--zs)!important;stroke:#6e4a26!important}
+svg.zones [data-z="n"] *{fill:var(--zn)!important;stroke:#5c7f35!important}
+svg.zones [data-z="c"] *{fill:var(--zc)!important;stroke:#5d54a3!important}
+svg.zones [data-z] .hair{fill:none!important;stroke:var(--zs)!important}
+svg.zones .deco{display:none}
+.lbl{font:800 15px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.lbl.w{font-weight:500;font-size:14px}
+.lead-line{stroke:var(--ink);stroke-width:1.2;pointer-events:none}
+.legend{display:grid;gap:4px}
+.legend button{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:8px;padding:6px 8px;cursor:pointer}
+.legend button:hover{background:var(--sheet)}
+.legend button[aria-pressed="true"]{border-color:var(--ink);background:var(--sheet)}
+.legend .num{font:800 15px/1 var(--display);display:inline-grid;place-items:center;height:28px;border-radius:7px;background:var(--z);color:#fff}
+.legend .sub{padding-left:22px}
+.legend .sub .num{height:24px;font-size:13px}
+.legend .name{font-weight:700;line-height:1.2}
+.legend .name .term{display:block;font-size:14px}
+.desc{margin-top:10px;min-height:110px;border:0;border-left:4px solid var(--z,var(--rule));background:var(--sheet)}
+.desc h3{font-size:20px}
+.desc p{margin-top:4px}
+.zone-key{display:none;gap:6px 14px;flex-wrap:wrap;font-size:14px;margin:0 0 8px}
+.zone-key.show{display:flex}
+.zone-key i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px}
+
+/* seva */
+.flow-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px;align-items:start}
+.flow-box{background:linear-gradient(#eaf4fb 0 68%,transparent 68%);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.flow-box svg{display:block;width:100%;height:auto}
+.toggle{border:1.5px solid var(--c);background:transparent;border-radius:99px;padding:6px 14px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+.toggle i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.toggle[aria-pressed="true"]{background:var(--c);color:#fff}
+.toggle[aria-pressed="true"] i{background:#fff}
+.sap{display:grid;gap:12px}
+.sap .card{border-left:4px solid var(--c)}
+.sap h3{font-size:20px;color:var(--c)}
+.sap p{margin-top:4px}
+.sap-xy{--c:var(--xy)} .sap-ph{--c:var(--ph)}
+.fl{font:700 18px var(--body);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+
+/* ce mâncăm */
+.eat{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.food{background:var(--card);border:1.5px solid var(--rule);border-radius:10px;padding:12px 14px;display:grid;gap:8px;align-content:start}
+.food h3{font-size:19px;font-family:var(--body);font-weight:700}
+.food h3 .term{font-size:14px}
+.food .opts{display:flex;flex-wrap:wrap;gap:5px}
+.food .opts button{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:3px 10px;font-size:14px;cursor:pointer}
+.food .opts button:hover{border-color:var(--muted)}
+.food .opts button.wrong{border-color:#d64545;color:#b02e2e;text-decoration:line-through}
+.food .opts button.right{border-color:#27a36f;background:#27a36f;color:#fff}
+.food.done{border-color:#27a36f}
+.food .why{font-size:14.5px;color:var(--muted)}
+.score{font-weight:700;margin-top:10px}
+
+/* bine de știut + glosar */
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fact h3{font-size:20px;margin-bottom:4px}
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .xs-fig{position:static}
+  .groups{grid-template-columns:1fr 1fr}
+  .plant-grid,.xs,.flow-grid,.facts{grid-template-columns:1fr}
+  .zones3{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Biologie · Clasa a 6-a</span><span class="de">Biologie · Klasse 6</span></p>
+  <h1><span class="ro">Organismul unei plante superioare</span><span class="de">Der Organismus einer höheren Pflanze</span></h1>
+  <p class="lead">
+    <span class="ro">Plantele trăiesc aproape peste tot pe Pământ: în păduri, pe câmpii, chiar și în apă. De-a lungul evoluției au apărut plante tot mai complexe, cu țesuturi și organe noi. Descoperă din ce e alcătuită o plantă cu flori și cum lucrează organele ei împreună.</span>
+    <span class="de">Pflanzen leben fast überall auf der Erde: im Wald, auf Wiesen, sogar im Wasser. Im Lauf der Evolution entstanden immer komplexere Pflanzen mit neuen Geweben und Organen. Entdecke, woraus eine Blütenpflanze besteht und wie ihre Organe zusammenarbeiten.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Au toate plantele aceleași organe?</span><span class="de">Haben alle Pflanzen die gleichen Organe?</span></li>
+        <li><span class="ro">De ce au plantele nevoie de organe?</span><span class="de">Warum brauchen Pflanzen Organe?</span></li>
+        <li><span class="ro">Din ce țesuturi e alcătuit fiecare organ?</span><span class="de">Aus welchen Geweben besteht jedes Organ?</span></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- 1. Grupele de plante -->
+<section class="block" aria-labelledby="t-groups">
+  <h2 class="section-title" id="t-groups"><span class="step">1</span><span class="ro">Patru grupe de plante</span><span class="de">Vier Pflanzengruppen</span></h2>
+  <p class="section-sub"><span class="ro">Anul trecut ai învățat patru grupe de plante. Ele sunt așezate aici de la cele mai simple la cele mai complexe.</span><span class="de">Letztes Jahr hast du vier Pflanzengruppen kennengelernt. Hier stehen sie von den einfachsten bis zu den komplexesten.</span></p>
+  <div class="groups">
+    <div class="group">
+      <h3><span class="ro">Mușchi</span><span class="de">Moose</span></h3>
+      <p><span class="ro">Nu au rădăcini adevărate, ci rizoizi. Au tulpinițe și frunzulițe simple. Se înmulțesc prin spori.</span><span class="de">Sie haben keine echten Wurzeln, sondern Rhizoide, dazu einfache Stämmchen und Blättchen. Sie vermehren sich durch Sporen.</span></p>
+      <p class="ex"><span class="ro">ex.: mușchiul de pământ</span><span class="de">z. B. Frauenhaarmoos</span></p>
+    </div>
+    <div class="group">
+      <h3><span class="ro">Ferigi</span><span class="de">Farne</span></h3>
+      <p><span class="ro">Au rădăcini, o tulpină (adesea sub pământ) și frunze mari. Se înmulțesc tot prin spori.</span><span class="de">Sie haben Wurzeln, einen Stängel (oft unter der Erde) und große Blätter. Auch sie vermehren sich durch Sporen.</span></p>
+      <p class="ex"><span class="ro">ex.: feriga</span><span class="de">z. B. Wurmfarn</span></p>
+    </div>
+    <div class="group sup">
+      <span class="tag"><span class="ro">plantă superioară</span><span class="de">höhere Pflanze</span></span>
+      <h3><span class="ro">Gimnosperme</span><span class="de">Gymnospermen</span></h3>
+      <p><span class="ro">Au semințe „goale”, așezate pe solzii conurilor. Conurile țin locul florilor.</span><span class="de">Ihre Samen liegen „nackt“ auf den Schuppen der Zapfen. Die Zapfen entsprechen den Blüten.</span></p>
+      <p class="ex"><span class="ro">ex.: molidul, pinul, bradul</span><span class="de">z. B. Fichte, Kiefer, Tanne</span></p>
+    </div>
+    <div class="group sup">
+      <span class="tag"><span class="ro">plantă superioară</span><span class="de">höhere Pflanze</span></span>
+      <h3><span class="ro">Angiosperme</span><span class="de">Angiospermen</span></h3>
+      <p><span class="ro">Au flori, iar semințele lor sunt închise într-un fruct.</span><span class="de">Sie haben Blüten, und ihre Samen sind von einer Frucht umschlossen.</span></p>
+      <p class="ex"><span class="ro">ex.: ardeiul, mărul, grâul</span><span class="de">z. B. Paprika, Apfelbaum, Weizen</span></p>
+    </div>
+  </div>
+  <p class="evo"><span class="ro">tot mai complexe</span><span class="de">immer komplexer</span><b>→</b></p>
+
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro">Gimnospermele și angiospermele sunt cele mai evoluate plante. De aceea se numesc <strong>plante superioare</strong>. Sunt mai complexe decât mușchii și ferigile.</span><span class="de">Gymnospermen und Angiospermen sind die am höchsten entwickelten Pflanzen. Deshalb heißen sie auch <strong>höhere Pflanzen</strong>. Sie sind komplexer gebaut als Moose und Farne.</span></p>
+    <p><span class="ro">La gimnosperme apar <strong>conurile</strong>, care țin locul florilor, și <strong>semințele</strong>. Angiospermele au <strong>flori</strong> foarte variate, adaptate la diferite feluri de <strong>polenizare</strong>. Tot la ele apare <strong>fructul</strong>, organul care protejează semințele.</span><span class="de">Bei den Gymnospermen erscheinen <strong>Zapfen</strong>, die den Blüten entsprechen, und <strong>Samen</strong>. Angiospermen haben sehr vielfältige <strong>Blüten</strong>, die an verschiedene Arten der <strong>Bestäubung</strong> angepasst sind. Bei ihnen erscheint auch die <strong>Frucht</strong>, ein Organ, das die Samen schützt.</span></p>
+  </div>
+
+  <h3 style="margin-top:28px;font-size:22px"><span class="ro">Exercițiu: ce organe are fiecare grupă?</span><span class="de">Übung: Welche Organe hat jede Gruppe?</span></h3>
+  <p class="hint"><span class="ro">Apasă pe căsuțe ca să bifezi organele pe care le are fiecare grupă, apoi verifică.</span><span class="de">Tippe auf die Kästchen, um die Organe jeder Gruppe anzukreuzen, und prüfe dann.</span></p>
+  <div class="tbl-wrap">
+    <table class="organs" id="organ-table">
+      <thead><tr>
+        <th><span class="ro">Organ</span><span class="de">Organ</span></th>
+        <th><span class="ro">Mușchi</span><span class="de">Moose</span></th>
+        <th><span class="ro">Ferigi</span><span class="de">Farne</span></th>
+        <th><span class="ro">Gimnosperme</span><span class="de">Gymnospermen</span></th>
+        <th><span class="ro">Angiosperme</span><span class="de">Angiospermen</span></th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div class="actions">
+    <button class="btn" type="button" id="tbl-check"><span class="ro">Verifică</span><span class="de">Prüfen</span></button>
+    <button class="btn ghost" type="button" id="tbl-solve"><span class="ro">Arată soluția</span><span class="de">Lösung zeigen</span></button>
+    <button class="btn ghost" type="button" id="tbl-reset"><span class="ro">De la capăt</span><span class="de">Neu anfangen</span></button>
+    <span class="result" id="tbl-result" aria-live="polite"></span>
+  </div>
+  <div class="sol-legend" id="sol-legend">
+    <span><i style="background:#dff0cf;border:1.5px solid #7cb24a"></i><span class="ro">comune ferigilor, gimnospermelor și angiospermelor</span><span class="de">gemeinsam bei Farnen, Gymnospermen und Angiospermen</span></span>
+    <span><i style="background:#dbe3fb;border:1.5px solid #5b77e0"></i><span class="ro">comune gimnospermelor și angiospermelor</span><span class="de">gemeinsam bei Gymnospermen und Angiospermen</span></span>
+    <span><i style="background:#fde3cc;border:1.5px solid #e8883a"></i><span class="ro">numai la angiosperme</span><span class="de">nur bei Angiospermen</span></span>
+    <p style="flex-basis:100%;margin-top:4px"><strong><span class="ro">Concluzie:</span><span class="de">Schlussfolgerung:</span></strong> <span class="ro">cu cât o grupă e mai evoluată, cu atât are mai multe organe și mai variate. Mușchii au doar rizoizi, tulpinițe și frunzulițe, nu organe adevărate.</span><span class="de">Je höher entwickelt eine Gruppe ist, desto mehr und verschiedenere Organe hat sie. Moose haben nur Rhizoide, Stämmchen und Blättchen, keine echten Organe.</span></p>
+  </div>
+</section>
+
+<!-- 2. Organele plantei -->
+<section class="block" aria-labelledby="t-organs">
+  <h2 class="section-title" id="t-organs"><span class="step">2</span><span class="ro">Organele unei angiosperme</span><span class="de">Die Organe einer Angiosperme</span></h2>
+  <p class="section-sub"><span class="ro">Ardeiul este o angiospermă. Apasă pe un organ din desen sau din listă ca să afli ce rol are.</span><span class="de">Die Paprika ist eine Angiosperme. Tippe auf ein Organ in der Zeichnung oder in der Liste, um seine Aufgabe zu erfahren.</span></p>
+  <div class="plant-grid">
+    <div class="plant-box">
+      <svg id="plant" viewBox="0 0 400 480" role="img" aria-label="Planta de ardei și organele ei"></svg>
+    </div>
+    <div class="organ-picker">
+      <div>
+        <h3 style="color:var(--veg)"><span class="ro">Organe vegetative</span><span class="de">Vegetative Organe</span></h3>
+        <p class="hint"><span class="ro">hrănesc planta și o țin în viață</span><span class="de">ernähren die Pflanze und halten sie am Leben</span></p>
+        <div class="chips" id="chips-veg"></div>
+      </div>
+      <div>
+        <h3 style="color:var(--rep)"><span class="ro">Organe de reproducere</span><span class="de">Fortpflanzungsorgane</span></h3>
+        <p class="hint"><span class="ro">ajută la formarea de plante noi</span><span class="de">sorgen für neue Pflanzen</span></p>
+        <div class="chips" id="chips-rep"></div>
+      </div>
+      <div class="card info" id="organ-info" aria-live="polite">
+        <p class="muted"><span class="ro">Alege un organ.</span><span class="de">Wähle ein Organ.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Cele trei zone -->
+<section class="block" aria-labelledby="t-zones">
+  <h2 class="section-title" id="t-zones"><span class="step">3</span><span class="ro">Trei zone în fiecare organ</span><span class="de">Drei Zonen in jedem Organ</span></h2>
+  <p class="section-sub"><span class="ro">Plantele sunt alcătuite din celule, grupate în <strong>țesuturi</strong>. Țesuturile formează <strong>organe</strong>, fiecare cu rolul lui. Toate organele unei plante superioare au trei zone. În fiecare organ predomină zona potrivită rolului său.</span><span class="de">Pflanzen bestehen aus Zellen, die zu <strong>Geweben</strong> zusammengefasst sind. Gewebe bilden <strong>Organe</strong> mit bestimmten Aufgaben. Alle Organe einer höheren Pflanze haben drei Zonen. In jedem Organ überwiegt die Zone, die zu seiner Aufgabe passt.</span></p>
+  <div class="zones3">
+    <div class="zone" style="--z:var(--zs)">
+      <h3><span class="ro">Zona de protecție</span><span class="de">Schutzzone</span></h3>
+      <p><span class="ro">formată din epidermă (țesut de apărare)</span><span class="de">besteht aus der Epidermis (Schutzgewebe)</span></p>
+    </div>
+    <div class="zone" style="--z:var(--zn)">
+      <h3><span class="ro">Zona de nutriție</span><span class="de">Ernährungszone</span></h3>
+      <p><span class="ro">din țesut care hrănește planta; poate avea și țesut de susținere</span><span class="de">aus Gewebe mit Ernährungsfunktion; kann auch Stützgewebe haben</span></p>
+    </div>
+    <div class="zone" style="--z:var(--zc)">
+      <h3><span class="ro">Zona de conducere</span><span class="de">Leitungszone</span></h3>
+      <p><span class="ro">mai ales din țesut conducător, dar și din țesut de susținere și de nutriție</span><span class="de">vor allem aus Leitgewebe, aber auch aus Stütz- und Ernährungsgewebe</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Secțiuni transversale -->
+<section class="block" aria-labelledby="t-xs">
+  <h2 class="section-title" id="t-xs"><span class="step">4</span><span class="ro">Privim în interior: secțiuni transversale</span><span class="de">Ein Blick ins Innere: Querschnitte</span></h2>
+  <p class="section-sub"><span class="ro">Așa arată organele vegetative dacă le tai de-a curmezișul și le privești la microscop. Numerele sunt cele din caiet. Apasă pe un țesut sau pe un nume din listă. Cu butonul „Zone” vezi cele trei zone colorate.</span><span class="de">So sehen die vegetativen Organe aus, wenn man sie quer durchschneidet und unter dem Mikroskop betrachtet. Die Nummern sind die aus dem Heft. Tippe auf ein Gewebe oder auf einen Namen in der Liste. Mit „Zonen“ siehst du die drei Zonen farbig.</span></p>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" type="button" data-sec="leaf" aria-selected="true"><span class="ro">① Frunza</span><span class="de">① Blatt</span></button>
+    <button class="tab" role="tab" type="button" data-sec="stem" aria-selected="false"><span class="ro">② Tulpina</span><span class="de">② Stängel</span></button>
+    <button class="tab" role="tab" type="button" data-sec="root" aria-selected="false"><span class="ro">③ Rădăcina</span><span class="de">③ Wurzel</span></button>
+  </div>
+  <div class="xs">
+    <div class="xs-fig">
+      <div class="mode" role="group">
+        <button type="button" data-mode="tissue" aria-pressed="true"><span class="ro">Țesuturi</span><span class="de">Gewebe</span></button>
+        <button type="button" data-mode="zones" aria-pressed="false"><span class="ro">Zone</span><span class="de">Zonen</span></button>
+      </div>
+      <div class="zone-key" id="zone-key">
+        <span><i style="background:var(--zs)"></i><span class="ro">protecție</span><span class="de">Schutzzone</span></span>
+        <span><i style="background:var(--zn)"></i><span class="ro">nutriție</span><span class="de">Ernährungszone</span></span>
+        <span><i style="background:var(--zc)"></i><span class="ro">conducere</span><span class="de">Leitungszone</span></span>
+      </div>
+      <svg id="xs-leaf" class="cur" viewBox="0 0 600 330" role="img" aria-label="Secțiune transversală prin frunză"></svg>
+      <svg id="xs-stem" viewBox="0 0 520 440" role="img" aria-label="Secțiune transversală prin tulpină"></svg>
+      <svg id="xs-root" viewBox="0 0 520 440" role="img" aria-label="Secțiune transversală prin rădăcină"></svg>
+      <div class="card desc" id="xs-desc" aria-live="polite"></div>
+    </div>
+    <div class="legend" id="xs-legend"></div>
+  </div>
+</section>
+
+<!-- 5. Drumul sevei -->
+<section class="block" aria-labelledby="t-flow">
+  <h2 class="section-title" id="t-flow"><span class="step">5</span><span class="ro">Drumul sevei prin plantă</span><span class="de">Der Weg der Nährlösungen durch die Pflanze</span></h2>
+  <p class="section-sub"><span class="ro">Organele lucrează împreună. Rădăcina trimite în sus apă și săruri minerale, iar frunzele trimit hrana în toată planta. Pornește sau oprește fiecare flux.</span><span class="de">Die Organe arbeiten zusammen. Die Wurzel schickt Wasser und Mineralstoffe nach oben, die Blätter schicken Nahrung in die ganze Pflanze. Schalte jeden Strom ein oder aus.</span></p>
+  <div class="flow-grid">
+    <div class="flow-box"><svg id="flow" viewBox="0 0 560 440" role="img" aria-label="Circulația sevei brute și a sevei elaborate prin plantă"></svg></div>
+    <div class="sap">
+      <div class="actions" style="margin-top:0">
+        <button class="toggle sap-xy" type="button" data-flow="xy" aria-pressed="true"><i></i><span class="ro">Seva brută</span><span class="de">Mineralsalzlösung</span></button>
+        <button class="toggle sap-ph" type="button" data-flow="ph" aria-pressed="true"><i></i><span class="ro">Seva elaborată</span><span class="de">Organische Nährlösung</span></button>
+        <button class="btn ghost" type="button" id="flow-play"><span class="ro">Pauză</span><span class="de">Pause</span></button>
+      </div>
+      <div class="card sap-xy">
+        <h3><span class="ro">Seva brută</span><span class="de">Mineralsalzlösung</span></h3>
+        <p><span class="ro">Rădăcina absoarbe din sol apa și sărurile minerale. Împreună formează <strong>seva brută</strong>, care urcă prin <strong>vasele lemnoase</strong> ale tulpinii până în frunze.</span><span class="de">Die Wurzel nimmt Wasser und Mineralstoffe aus dem Boden auf. Zusammen bilden sie die <strong>Mineralsalzlösung</strong>, die durch die <strong>Holzgefäße</strong> des Stängels bis in die Blätter steigt.</span></p>
+      </div>
+      <div class="card sap-ph">
+        <h3><span class="ro">Seva elaborată</span><span class="de">Organische Nährlösung</span></h3>
+        <p><span class="ro">În frunze, cu ajutorul luminii, planta își face hrana din apă și dioxid de carbon: aceasta este <strong>fotosinteza</strong>. Hrana dizolvată în apă formează <strong>seva elaborată</strong>, care ajunge prin <strong>vasele liberiene</strong> în fiecare celulă: în tulpină, în rădăcină și în fructe.</span><span class="de">In den Blättern stellt die Pflanze mit Hilfe des Lichts aus Wasser und Kohlenstoffdioxid ihre Nahrung her: Das ist die <strong>Fotosynthese</strong>. Die in Wasser gelöste Nahrung bildet die <strong>organische Nährlösung</strong>. Sie gelangt über die <strong>Siebröhren</strong> in jede Zelle: in den Stängel, in die Wurzel und in die Früchte.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Ce mâncăm -->
+<section class="block" aria-labelledby="t-eat">
+  <h2 class="section-title" id="t-eat"><span class="step">6</span><span class="ro">Ce organ mâncăm?</span><span class="de">Welches Organ essen wir?</span></h2>
+  <p class="section-sub"><span class="ro">Din multe plante folosim doar un anumit organ. Alege, pentru fiecare plantă, organul pe care îl mâncăm.</span><span class="de">Von vielen Pflanzen nutzen wir nur ein bestimmtes Organ. Wähle für jede Pflanze das Organ, das wir essen.</span></p>
+  <div class="eat" id="eat"></div>
+  <p class="score" id="eat-score" aria-live="polite"></p>
+</section>
+
+<!-- 7. Bine de știut -->
+<section class="block" aria-labelledby="t-facts">
+  <h2 class="section-title" id="t-facts"><span class="ro">Bine de știut</span><span class="de">Wissenswertes</span></h2>
+  <div class="facts" style="margin-top:14px">
+    <div class="card fact">
+      <h3><span class="ro">Celulele „vorbesc” între ele</span><span class="de">Zellen „sprechen“ miteinander</span></h3>
+      <p><span class="ro">Toate celulele unei plante pot comunica între ele, direct sau prin alte celule. De exemplu, celulele frunzei pot „anunța” rădăcina cât de bine sunt hrănite. Atunci rădăcina absoarbe mai multă sau mai puțină apă și săruri minerale.</span><span class="de">Alle Zellen einer Pflanze können direkt oder über andere Zellen miteinander kommunizieren. Zum Beispiel können Blattzellen die Wurzel über ihren Ernährungszustand „informieren“. Dann nimmt die Wurzel mehr oder weniger Wasser und Mineralstoffe auf.</span></p>
+    </div>
+    <div class="card fact">
+      <h3><span class="ro">Organe care și-au schimbat rolul</span><span class="de">Organe mit neuen Aufgaben</span></h3>
+      <p><span class="ro">După mediul în care trăiesc, unele plante au organe transformate, care preiau alte roluri. Cartoful, ceapa și laleaua au tulpini subterane care depozitează hrană. Acestea rămân iarna în sol, ferite de îngheț. Hrana din ele ajută la creșterea unei plante noi în primăvară.</span><span class="de">Je nach Umwelt haben manche Pflanzen veränderte Organe, die andere Aufgaben übernehmen. Kartoffel, Zwiebel und Tulpe haben unterirdische Stängel, die Nährstoffe speichern. Sie bleiben im Winter frostgeschützt im Boden. Die gespeicherten Stoffe helfen im Frühjahr beim Wachsen einer neuen Pflanze.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Dicționar -->
+<section class="block" aria-labelledby="t-gloss">
+  <h2 class="section-title" id="t-gloss"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <p class="section-sub"><span class="ro">Cuvintele-cheie ale lecției, în română și în germană.</span><span class="de">Die wichtigsten Wörter der Lektion, auf Rumänisch und auf Deutsch.</span></p>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<footer class="foot">
+  <p><span class="ro">Surse: manualul de Biologie pentru clasa a 6-a (Editura Art Klett), lecția „Der Organismus einer höheren Pflanze”, p. 18–19, și notițele din caiet („Die innere Struktur der vegetativen Organe einer höheren Pflanze”, 23.09). Desenele sunt schematice și nu păstrează proporțiile reale.</span><span class="de">Quellen: Biologie-Lehrbuch für Klasse 6 (Editura Art Klett), Lektion „Der Organismus einer höheren Pflanze“, S. 18–19, und die Heftnotizen („Die innere Struktur der vegetativen Organe einer höheren Pflanze“, 23.09.). Die Zeichnungen sind schematisch und nicht maßstabsgetreu.</span></p>
+</footer>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function el(tag, a, parent) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+var seed = 11;
+function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+function bi(o) { return '<span class="ro">' + o.ro + '</span><span class="de">' + o.de + '</span>'; }
+function other(o) { return L === 'ro' ? o.de : o.ro; }
+
+/* ---------- 1. Tabelul cu organe ---------- */
+var ORGANS = [
+  { ro: 'Rădăcină', de: 'Wurzel', has: [0, 1, 1, 1], sol: 'g' },
+  { ro: 'Tulpină', de: 'Stängel', has: [0, 1, 1, 1], sol: 'g' },
+  { ro: 'Frunză', de: 'Blatt', has: [0, 1, 1, 1], sol: 'g' },
+  { ro: 'Floare', de: 'Blüte', has: [0, 0, 0, 1], sol: 'o' },
+  { ro: 'Fruct', de: 'Frucht', has: [0, 0, 0, 1], sol: 'o' },
+  { ro: 'Sămânță', de: 'Samen', has: [0, 0, 1, 1], sol: 'b' }
+];
+var tbody = document.querySelector('#organ-table tbody');
+ORGANS.forEach(function (o, r) {
+  var tr = h('tr');
+  tr.appendChild(h('td', '', bi(o)));
+  for (var c = 0; c < 4; c++) {
+    var td = h('td', 'c');
+    var b = h('button', 'cell');
+    b.type = 'button'; b.dataset.r = r; b.dataset.c = c; b.setAttribute('aria-pressed', 'false');
+    b.setAttribute('aria-label', o[L]);
+    b.addEventListener('click', function () {
+      var on = this.getAttribute('aria-pressed') !== 'true';
+      this.setAttribute('aria-pressed', on); this.textContent = on ? '✓' : '';
+      this.classList.remove('ok', 'bad', 'sol-g', 'sol-b', 'sol-o');
+      document.getElementById('tbl-result').textContent = '';
+    });
+    td.appendChild(b); tr.appendChild(td);
+  }
+  tbody.appendChild(tr);
+});
+var cells = [].slice.call(document.querySelectorAll('.cell'));
+document.getElementById('tbl-check').addEventListener('click', function () {
+  var right = 0;
+  cells.forEach(function (b) {
+    var want = ORGANS[b.dataset.r].has[b.dataset.c] === 1, got = b.getAttribute('aria-pressed') === 'true';
+    b.classList.remove('sol-g', 'sol-b', 'sol-o');
+    b.classList.toggle('ok', want === got); b.classList.toggle('bad', want !== got);
+    if (want === got) right++;
+  });
+  document.getElementById('tbl-result').textContent = right === cells.length
+    ? (L === 'ro' ? 'Perfect! Toate cele 24 de căsuțe sunt corecte.' : 'Perfekt! Alle 24 Kästchen stimmen.')
+    : (L === 'ro' ? right + ' din 24 corecte. Căsuțele roșii mai trebuie schimbate.' : right + ' von 24 richtig. Die roten Kästchen musst du noch ändern.');
+});
+document.getElementById('tbl-solve').addEventListener('click', function () {
+  cells.forEach(function (b) {
+    var o = ORGANS[b.dataset.r], want = o.has[b.dataset.c] === 1;
+    b.setAttribute('aria-pressed', want); b.textContent = want ? '✓' : '';
+    b.classList.remove('ok', 'bad', 'sol-g', 'sol-b', 'sol-o');
+    if (want) b.classList.add('sol-' + o.sol);
+  });
+  document.getElementById('sol-legend').classList.add('show');
+  document.getElementById('tbl-result').textContent = '';
+});
+document.getElementById('tbl-reset').addEventListener('click', function () {
+  cells.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); b.textContent = ''; b.className = 'cell'; });
+  document.getElementById('sol-legend').classList.remove('show');
+  document.getElementById('tbl-result').textContent = '';
+});
+
+/* ---------- 2. Planta de ardei ---------- */
+var PLANT = {
+  root: { kind: 'veg', ro: 'Rădăcina', de: 'Die Wurzel',
+    t: { ro: 'Fixează planta în sol și absoarbe apa și sărurile minerale. Împreună, ele formează seva brută, care urcă prin vasele lemnoase spre restul plantei.',
+         de: 'Sie verankert die Pflanze im Boden und nimmt Wasser und Mineralstoffe auf. Zusammen bilden sie die Mineralsalzlösung, die durch die Holzgefäße in die ganze Pflanze steigt.' } },
+  stem: { kind: 'veg', ro: 'Tulpina', de: 'Der Stängel',
+    t: { ro: 'Conduce seva brută în sus și seva elaborată în toată planta. Susține ramurile, frunzele, florile și fructele.',
+         de: 'Er leitet die Mineralsalzlösung und die organische Nährlösung und stützt Zweige, Blätter und Fortpflanzungsorgane.' } },
+  leaf: { kind: 'veg', ro: 'Frunza', de: 'Das Blatt',
+    t: { ro: 'Produce hrana plantei prin fotosinteză. Hrana, împreună cu apa, formează seva elaborată, care ajunge prin vasele liberiene în fiecare celulă a plantei.',
+         de: 'Es stellt durch Fotosynthese die Nahrung der Pflanze her. Zusammen mit Wasser bildet sie die organische Nährlösung, die über die Siebröhren in jede Zelle der Pflanze gelangt.' } },
+  flower: { kind: 'rep', ro: 'Floarea', de: 'Die Blüte',
+    t: { ro: 'Este organ de reproducere. Atrage animalele polenizatoare, de exemplu albinele, care duc polenul de la o floare la alta.',
+         de: 'Sie ist ein Fortpflanzungsorgan. Sie lockt bestäubende Tiere wie Bienen an, die den Pollen von einer Blüte zur anderen tragen.' } },
+  fruit: { kind: 'rep', ro: 'Fructul', de: 'Die Frucht',
+    t: { ro: 'Protejează semințele până se coc. Ajută la răspândirea lor și astfel la înmulțirea speciei.',
+         de: 'Sie schützt die Samen bis zur Reife. Sie trägt zu ihrer Verbreitung und damit zum Fortbestand der Art bei.' } },
+  seed: { kind: 'rep', ro: 'Sămânța', de: 'Der Samen',
+    t: { ro: 'Conține o plantă mică (embrionul) și substanțe de rezervă. Acestea o hrănesc la încolțire, până îi apar primele frunze.',
+         de: 'Er enthält eine kleine Pflanze (den Keimling) und Nährstoffspeicher. Diese ernähren sie bei der Keimung, bis die ersten Blätter erscheinen.' } }
+};
+var KIND = { veg: { ro: 'organ vegetativ', de: 'vegetatives Organ' }, rep: { ro: 'organ de reproducere', de: 'Fortpflanzungsorgan' } };
+var plant = document.getElementById('plant');
+if (L === 'de') {
+  plant.setAttribute('aria-label', 'Die Paprikapflanze und ihre Organe');
+  document.getElementById('xs-leaf').setAttribute('aria-label', 'Querschnitt durch das Blatt');
+  document.getElementById('xs-stem').setAttribute('aria-label', 'Querschnitt durch den Stängel');
+  document.getElementById('xs-root').setAttribute('aria-label', 'Querschnitt durch die Wurzel');
+  document.getElementById('flow').setAttribute('aria-label', 'Der Weg der Mineralsalzlösung und der organischen Nährlösung durch die Pflanze');
+}
+function organG(k) { return el('g', { 'class': 'organ', 'data-organ': k }, plant); }
+function leafPath(x, y, ang, len, w) {
+  var g = el('g', { transform: 'translate(' + x + ' ' + y + ') rotate(' + ang + ')' });
+  el('path', { d: 'M0,0 Q' + len * .45 + ',' + (-w) + ' ' + len + ',0 Q' + len * .45 + ',' + w + ' 0,0Z', fill: '#5eaa47', stroke: '#3d7a2c', 'stroke-width': 1.5 }, g);
+  el('path', { d: 'M2,0 L' + (len - 6) + ',0', stroke: '#3d7a2c', 'stroke-width': 1.2, fill: 'none' }, g);
+  return g;
+}
+function pepper(x, y, s, parent) {
+  var g = el('g', { transform: 'translate(' + x + ' ' + y + ') scale(' + s + ')' }, parent);
+  el('path', { d: 'M0,4 C-16,6 -20,26 -16,44 C-13,58 -6,66 0,64 C6,66 13,58 16,44 C20,26 16,6 0,4Z', fill: '#d8342b', stroke: '#9b1f18', 'stroke-width': 1.5 }, g);
+  el('path', { d: 'M-8,16 C-10,28 -9,40 -6,50', stroke: '#f47a6c', 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round' }, g);
+  el('path', { d: 'M-10,6 C-5,0 5,0 10,6 C5,9 -5,9 -10,6Z', fill: '#3d7a2c' }, g);
+  el('path', { d: 'M0,2 C0,-6 3,-10 6,-14', stroke: '#3d7a2c', 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round' }, g);
+  return g;
+}
+function flower(x, y, parent) {
+  var g = el('g', { transform: 'translate(' + x + ' ' + y + ')' }, parent);
+  for (var i = 0; i < 5; i++) {
+    var a = i * 72 * Math.PI / 180;
+    el('ellipse', { cx: Math.sin(a) * 7, cy: -Math.cos(a) * 7, rx: 5, ry: 7, transform: 'rotate(' + (i * 72) + ' ' + Math.sin(a) * 7 + ' ' + (-Math.cos(a) * 7) + ')', fill: '#fff', stroke: '#b9b9b9', 'stroke-width': 1 }, g);
+  }
+  el('circle', { cx: 0, cy: 0, r: 3.5, fill: '#f2c230' }, g);
+  return g;
+}
+// sol
+el('rect', { x: 0, y: 300, width: 400, height: 180, fill: '#f1e6d2' }, plant);
+el('path', { d: 'M0,300 H400', stroke: '#b99b6b', 'stroke-width': 2 }, plant);
+// rădăcina
+var gR = organG('root');
+[['M200,300 C203,340 196,390 200,452', 5], ['M201,318 C180,330 160,350 128,372', 3], ['M200,330 C222,344 246,362 276,378', 3],
+ ['M199,360 C182,372 168,392 150,418', 2.5], ['M200,372 C218,388 232,404 248,430', 2.5], ['M160,346 C150,352 138,356 120,354', 2], ['M244,360 C256,362 268,360 284,352', 2],
+ ['M199,400 C188,410 180,424 176,444', 2], ['M200,410 C210,420 216,434 222,450', 2]].forEach(function (p) {
+  el('path', { d: p[0], stroke: '#a0703d', 'stroke-width': p[1], fill: 'none', 'stroke-linecap': 'round' }, gR);
+});
+el('path', { d: 'M120,300 H290 V460 H110Z', fill: 'transparent' }, gR);
+// tulpina
+var gS = organG('stem');
+[['M200,300 C198,240 203,170 200,62', 8], ['M200,214 C222,198 244,186 266,168', 5], ['M200,168 C178,150 158,140 132,124', 5], ['M200,118 C216,104 230,94 250,80', 4], ['M200,250 C184,240 172,232 160,218', 4]].forEach(function (p) {
+  el('path', { d: p[0], stroke: '#4e8a3a', 'stroke-width': p[1], fill: 'none', 'stroke-linecap': 'round' }, gS);
+  el('path', { d: p[0], stroke: 'transparent', 'stroke-width': 18, fill: 'none' }, gS);
+});
+// frunzele
+var gL = organG('leaf');
+[[200, 64, -110, 50, 14], [200, 64, -60, 48, 13], [266, 168, -20, 70, 20], [132, 124, 200, 70, 20], [250, 80, -15, 58, 16], [200, 150, 25, 64, 18],
+ [200, 196, 205, 66, 19], [160, 218, 190, 58, 17], [230, 190, 60, 54, 15], [168, 140, 250, 50, 14]].forEach(function (p) { gL.appendChild(leafPath(p[0], p[1], p[2], p[3], p[4])); });
+// florile
+var gF = organG('flower');
+[[250, 76], [132, 120], [214, 58], [284, 160]].forEach(function (p) { flower(p[0], p[1], gF); });
+// fructele
+var gFr = organG('fruit');
+pepper(236, 206, 1, gFr); pepper(152, 150, .9, gFr); pepper(176, 236, .85, gFr);
+// sămânța: fructul secționat, în colț
+var gSe = organG('seed');
+el('circle', { cx: 330, cy: 400, r: 58, fill: '#fff', stroke: '#b9b9b9', 'stroke-width': 1.5, 'stroke-dasharray': '4 4' }, gSe);
+var cut = el('g', { transform: 'translate(330 372)' }, gSe);
+el('path', { d: 'M0,0 C-26,2 -32,34 -26,60 C-22,76 -10,84 0,82 C10,84 22,76 26,60 C32,34 26,2 0,0Z', fill: '#d8342b', stroke: '#9b1f18', 'stroke-width': 1.5 }, cut);
+el('path', { d: 'M0,7 C-20,9 -24,36 -19,58 C-16,70 -8,76 0,75 C8,76 16,70 19,58 C24,36 20,9 0,7Z', fill: '#fbe3cf' }, cut);
+el('path', { d: 'M-8,12 C-6,26 -4,36 0,44 C4,36 6,26 8,12 C3,9 -3,9 -8,12Z', fill: '#f6f1d8', stroke: '#d9c98f' }, cut);
+[[-7, 18], [7, 18], [-9, 27], [9, 27], [-6, 35], [6, 35], [0, 22], [-3, 42], [3, 42], [-12, 22], [12, 22]].forEach(function (s) {
+  el('ellipse', { cx: s[0], cy: s[1], rx: 3.2, ry: 2.2, fill: '#f4e7a1', stroke: '#b8a24a', 'stroke-width': .8 }, cut);
+});
+el('path', { d: 'M-10,1 C-5,-5 5,-5 10,1', fill: '#3d7a2c' }, cut);
+// etichete
+function plbl(x, y, o, anchor, cls) {
+  var t = el('text', { x: x, y: y, 'text-anchor': anchor || 'start', 'class': 'plbl' + (cls ? ' ' + cls : '') }, plant);
+  el('tspan', { 'class': 'ro' }, t).textContent = o.ro;
+  el('tspan', { 'class': 'de' }, t).textContent = o.de;
+  return t;
+}
+plbl(286, 150, { ro: 'floare', de: 'Blüte' });
+plbl(62, 118, { ro: 'floare', de: 'Blüte' }, 'start');
+plbl(302, 64, { ro: 'frunză', de: 'Blatt' });
+plbl(258, 240, { ro: 'fruct', de: 'Frucht' });
+plbl(206, 280, { ro: 'tulpină', de: 'Stängel' });
+plbl(60, 400, { ro: 'rădăcină', de: 'Wurzel' });
+plbl(330, 478, { ro: 'fruct secționat', de: 'aufgeschnittene Frucht' }, 'middle', 'small');
+plbl(372, 352, { ro: 'semințe', de: 'Samen' }, 'middle');
+
+var info = document.getElementById('organ-info');
+var chipsBy = {};
+function pickOrgan(k) {
+  plant.classList.add('picked');
+  [].forEach.call(plant.querySelectorAll('.organ'), function (g) { g.classList.toggle('on', g.dataset.organ === k); });
+  Object.keys(chipsBy).forEach(function (c) { chipsBy[c].setAttribute('aria-pressed', c === k); });
+  var o = PLANT[k];
+  info.className = 'card info ' + o.kind;
+  info.innerHTML = '<p class="kind">' + KIND[o.kind][L] + '</p><h3>' + o[L] + ' <span class="term">· ' + other(o) + '</span></h3><p>' + o.t[L] + '</p>';
+}
+Object.keys(PLANT).forEach(function (k) {
+  var o = PLANT[k], b = h('button', 'chip ' + o.kind, o[L]);
+  b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+  b.addEventListener('click', function () { pickOrgan(k); });
+  chipsBy[k] = b;
+  document.getElementById(o.kind === 'veg' ? 'chips-veg' : 'chips-rep').appendChild(b);
+});
+[].forEach.call(plant.querySelectorAll('.organ'), function (g) { g.addEventListener('click', function () { pickOrgan(g.dataset.organ); }); });
+
+/* ---------- 4. Secțiunile transversale ---------- */
+var XY = { ro: 'Lemnul (vasele lemnoase)', de: 'Holzgewebe (Holzgefäße)',
+  d: { ro: 'Tuburi lungi, cu pereți groși. Conduc seva brută, adică apa cu săruri minerale, de la rădăcină în sus.',
+       de: 'Lange Röhren mit dicken Wänden. Sie leiten die Mineralsalzlösung, also Wasser mit Mineralstoffen, von der Wurzel nach oben.' } };
+var PH = { ro: 'Liberul (vasele liberiene)', de: 'Bastgewebe (Siebröhren)',
+  d: { ro: 'Tuburi cu pereții despărțitori găuriți ca o sită. Duc seva elaborată, adică hrana făcută în frunze, la toate celulele plantei.',
+       de: 'Röhren mit siebartig durchlöcherten Querwänden. Sie verteilen die organische Nährlösung, also die in den Blättern gebildete Nahrung, an alle Zellen der Pflanze.' } };
+var SECTIONS = {
+  leaf: [
+    { k: '1', z: 's', ro: 'Țesut de apărare (epiderma)', de: 'Schutzgewebe (Epidermis)',
+      d: { ro: 'Un singur strat de celule lipite strâns, transparente, fără cloroplaste. La exterior are un strat subțire de ceară (cuticula), care împiedică pierderea apei.',
+           de: 'Eine einzige Schicht dicht aneinanderliegender, durchsichtiger Zellen ohne Chloroplasten. Außen liegt eine dünne Wachsschicht (Kutikula), die vor Wasserverlust schützt.' } },
+    { k: '1a', sub: 1, z: 's', ro: 'Epiderma superioară', de: 'obere Epidermis',
+      d: { ro: 'Acoperă fața de sus a frunzei, cea bătută de soare.', de: 'Sie bedeckt die Oberseite des Blattes, die der Sonne zugewandt ist.' } },
+    { k: '1b', sub: 1, z: 's', ro: 'Epiderma inferioară', de: 'untere Epidermis',
+      d: { ro: 'Acoperă fața de jos a frunzei. Aici se află cele mai multe stomate.', de: 'Sie bedeckt die Unterseite des Blattes. Hier liegen die meisten Spaltöffnungen.' } },
+    { k: 'st', sub: 1, z: 's', lbl: '•', ro: 'Stomatele', de: 'Spaltöffnungen',
+      d: { ro: 'Mici deschideri, fiecare mărginită de două celule în formă de boabă de fasole. Prin ele intră dioxidul de carbon și ies oxigenul și vaporii de apă. Se pot deschide și închide.',
+           de: 'Kleine Öffnungen, jeweils von zwei bohnenförmigen Schließzellen umgeben. Durch sie gelangt Kohlenstoffdioxid hinein, Sauerstoff und Wasserdampf gehen hinaus. Sie können sich öffnen und schließen.' } },
+    { k: '2', z: 'n', ro: 'Țesut fundamental (asimilator)', de: 'Grundgewebe',
+      d: { ro: 'Umple frunza între cele două epiderme. Celulele lui au multe cloroplaste, în care are loc fotosinteza.',
+           de: 'Es füllt das Blatt zwischen den beiden Epidermen aus. Seine Zellen enthalten viele Chloroplasten, in denen die Fotosynthese stattfindet.' } },
+    { k: '2a', sub: 1, z: 'n', ro: 'Țesut palisadic', de: 'Palisadengewebe',
+      d: { ro: 'Celule alungite, așezate una lângă alta ca parii unui gard. Au cele mai multe cloroplaste: aici se face cea mai mare parte a fotosintezei.',
+           de: 'Lange Zellen, die wie die Pfähle eines Zauns nebeneinanderstehen. Sie haben die meisten Chloroplasten: Hier findet der größte Teil der Fotosynthese statt.' } },
+    { k: '2b', sub: 1, z: 'n', ro: 'Țesut lacunar', de: 'Schwammgewebe',
+      d: { ro: 'Celule rotunjite, cu spații pline cu aer între ele, ca un burete. Prin aceste spații circulă gazele care intră și ies prin stomate.',
+           de: 'Rundliche Zellen mit luftgefüllten Zwischenräumen, wie ein Schwamm. Durch diese Räume strömen die Gase, die durch die Spaltöffnungen ein- und austreten.' } },
+    { k: '3', z: 'c', ro: 'Nervura', de: 'Blattader',
+      d: { ro: 'Un mănunchi de vase care străbate frunza. Aduce apă și săruri minerale și duce hrana făcută în frunză spre restul plantei.',
+           de: 'Ein Bündel von Leitungsbahnen, das das Blatt durchzieht. Es bringt Wasser und Mineralstoffe und transportiert die im Blatt gebildete Nahrung in die übrige Pflanze.' } },
+    { k: '3a', sub: 1, z: 'c', ro: XY.ro, de: XY.de, d: { ro: XY.d.ro + ' În frunză, lemnul stă spre fața de sus.', de: XY.d.de + ' Im Blatt liegt das Holzgewebe zur Oberseite hin.' } },
+    { k: '3b', sub: 1, z: 'c', ro: PH.ro, de: PH.de, d: { ro: PH.d.ro + ' În frunză, liberul stă spre fața de jos.', de: PH.d.de + ' Im Blatt liegt das Bastgewebe zur Unterseite hin.' } }
+  ],
+  stem: [
+    { k: '1', z: 's', ro: 'Țesut de apărare (epiderma)', de: 'Schutzgewebe (Epidermis)',
+      d: { ro: 'Stratul exterior al tulpinii. O apără de pierderea apei, de răni și de microbi.', de: 'Die äußere Schicht des Stängels. Sie schützt vor Wasserverlust, Verletzungen und Krankheitserregern.' } },
+    { k: '2', z: 'n', ro: 'Scoarța (zona de nutriție)', de: 'Rinde (Ernährungszone)',
+      d: { ro: 'Celule vii de țesut fundamental. La tulpinile verzi au cloroplaste și fac fotosinteză. Pot depozita substanțe de rezervă și dau tărie tulpinii.',
+           de: 'Lebende Zellen aus Grundgewebe. In grünen Stängeln haben sie Chloroplasten und betreiben Fotosynthese. Sie können Reservestoffe speichern und geben dem Stängel Festigkeit.' } },
+    { k: '3', z: 'c', ro: 'Țesut conducător', de: 'Leitgewebe',
+      d: { ro: 'Fasciculele conducătoare sunt așezate în cerc. Fiecare are liberul spre exterior și lemnul spre interior.',
+           de: 'Die Leitbündel sind im Kreis angeordnet. Jedes hat das Bastgewebe außen und das Holzgewebe innen.' } },
+    { k: '3a', sub: 1, z: 'c', ro: XY.ro, de: XY.de, d: XY.d },
+    { k: '3b', sub: 1, z: 'c', ro: PH.ro, de: PH.de, d: PH.d },
+    { k: '4', z: 'c', ro: 'Cilindrul central', de: 'Zentralzylinder',
+      d: { ro: 'Partea din mijloc a tulpinii. Cuprinde fasciculele conducătoare și măduva.', de: 'Der mittlere Teil des Stängels. Er umfasst die Leitbündel und das Mark.' } },
+    { k: '5', z: 'c', ro: 'Măduva', de: 'Mark',
+      d: { ro: 'Celule mari, cu pereți subțiri, în centrul tulpinii. Depozitează apă și substanțe de rezervă.', de: 'Große, dünnwandige Zellen in der Mitte des Stängels. Sie speichern Wasser und Reservestoffe.' } }
+  ],
+  root: [
+    { k: '1', z: 's', ro: 'Țesut de apărare (rizoderma)', de: 'Schutzgewebe (Wurzelhaut)',
+      d: { ro: 'Stratul exterior al rădăcinii tinere. Spre deosebire de epiderma frunzei, nu are strat de ceară, ca apa să poată intra.',
+           de: 'Die äußere Schicht der jungen Wurzel. Anders als die Blattepidermis hat sie keine Wachsschicht, damit Wasser eindringen kann.' } },
+    { k: '1a', sub: 1, z: 's', ro: 'Perișorii absorbanți', de: 'Wurzelhaare',
+      d: { ro: 'Prelungiri foarte subțiri ale celulelor rizodermei. Măresc mult suprafața prin care rădăcina absoarbe apa și sărurile minerale din sol.',
+           de: 'Sehr dünne Ausstülpungen der Zellen der Wurzelhaut. Sie vergrößern die Fläche stark, über die die Wurzel Wasser und Mineralstoffe aus dem Boden aufnimmt.' } },
+    { k: '2', z: 'n', ro: 'Scoarța (țesut fundamental)', de: 'Rinde (Grundgewebe)',
+      d: { ro: 'Multe straturi de celule mari. Conduc apa spre centru și depozitează substanțe de rezervă, de exemplu amidon.',
+           de: 'Viele Schichten großer Zellen. Sie leiten das Wasser zur Mitte und speichern Reservestoffe, zum Beispiel Stärke.' } },
+    { k: '3', z: 'c', ro: 'Țesut conducător', de: 'Leitgewebe',
+      d: { ro: 'În rădăcină, lemnul și liberul alternează: lemnul formează o stea, iar liberul stă între brațele ei.',
+           de: 'In der Wurzel wechseln sich Holz- und Bastgewebe ab: Das Holzgewebe bildet einen Stern, das Bastgewebe liegt zwischen seinen Armen.' } },
+    { k: '3a', sub: 1, z: 'c', ro: XY.ro, de: XY.de, d: XY.d },
+    { k: '3b', sub: 1, z: 'c', ro: PH.ro, de: PH.de, d: PH.d },
+    { k: '4', z: 'c', ro: 'Cilindrul central', de: 'Zentralzylinder',
+      d: { ro: 'Mijlocul rădăcinii, cu vasele conducătoare. De aici, seva brută pornește în sus spre tulpină.', de: 'Die Mitte der Wurzel mit den Leitungsbahnen. Von hier steigt die Mineralsalzlösung in den Stängel.' } },
+    { k: '5', z: 'c', ro: 'Măduva', de: 'Mark',
+      d: { ro: 'O zonă mică de celule chiar în centrul rădăcinii.', de: 'Ein kleiner Bereich aus Zellen genau in der Mitte der Wurzel.' } }
+  ]
+};
+var ZC = { s: 'var(--zs)', n: 'var(--zn)', c: 'var(--zc)' };
+function part(parent, p, z, k) { return el('g', { 'data-p': p, 'data-z': z, 'data-k': k }, parent); }
+function label(svg, x1, y1, x2, y2, txt, anchor) {
+  el('path', { d: 'M' + x1 + ',' + y1 + ' L' + x2 + ',' + y2, 'class': 'lead-line' }, svg);
+  el('circle', { cx: x1, cy: y1, r: 2.2, fill: '#1c2a22', 'pointer-events': 'none' }, svg);
+  var t = el('text', { x: x2 + (anchor === 'end' ? -6 : 6), y: y2 + 5, 'text-anchor': anchor || 'start', 'class': 'lbl' }, svg);
+  t.textContent = txt;
+  return t;
+}
+function polar(c, a, r) { var t = a * Math.PI / 180; return [c[0] + r * Math.sin(t), c[1] - r * Math.cos(t)]; }
+
+// frunza
+(function () {
+  var svg = document.getElementById('xs-leaf'), X0 = 20, W = 500, cw = 25, n = 20, B = { x: 390, y: 198, r: 42 }, ST = [130, 270];
+  el('rect', { x: X0, y: 48, width: W, height: 206, fill: '#fbfcf5' }, svg);
+  var up = part(svg, '1 1a', 's', '1a');
+  for (var i = 0; i < n; i++) el('rect', { x: X0 + i * cw, y: 30, width: cw, height: 18, fill: '#f4ead3', stroke: '#8b6b3d', 'stroke-width': 1.2 }, up);
+  el('rect', { x: X0, y: 26, width: W, height: 4, fill: '#d9b870', stroke: 'none' }, up);
+  var pal = part(svg, '2 2a', 'n', '2a');
+  for (i = 0; i < n; i++) {
+    el('rect', { x: X0 + i * cw + 2, y: 50, width: cw - 4, height: 88, rx: 9, fill: '#d6e9a8', stroke: '#5f8a33', 'stroke-width': 1.2 }, pal);
+    for (var j = 0; j < 6; j++) el('ellipse', { cx: X0 + i * cw + (j % 2 ? cw - 8 : 8), cy: 60 + j * 13.5, rx: 3.2, ry: 4.4, fill: '#3f8f35', 'class': 'deco' }, pal);
+  }
+  var spo = part(svg, '2 2b', 'n', '2b');
+  for (var r = 0; r < 4; r++) {
+    for (var x = X0 + 16 + (r % 2) * 16; x < X0 + W - 12; x += 32) {
+      var cx = x + (rnd() - .5) * 8, cy = 160 + r * 26 + (rnd() - .5) * 8, rad = 11 + rnd() * 3;
+      if (Math.hypot(cx - B.x, cy - B.y) < B.r + rad + 8) continue;
+      if (ST.some(function (s) { return Math.abs(cx - s) < 24 && cy > 208; })) continue;
+      if (cy + rad > 250) continue;
+      el('ellipse', { cx: cx, cy: cy, rx: rad + 2, ry: rad, fill: '#e2f0c4', stroke: '#6f9a44', 'stroke-width': 1.2 }, spo);
+      el('circle', { cx: cx - 4, cy: cy - 3, r: 2.6, fill: '#4f9a3a', 'class': 'deco' }, spo);
+      el('circle', { cx: cx + 5, cy: cy + 3, r: 2.6, fill: '#4f9a3a', 'class': 'deco' }, spo);
+    }
+  }
+  var sh = part(svg, '3', 'c', '3');
+  el('circle', { cx: B.x, cy: B.y, r: B.r + 7, fill: '#eef3dc', stroke: '#8b82c9', 'stroke-width': 1.5 }, sh);
+  var xy = part(svg, '3 3a', 'c', '3a');
+  el('path', { d: 'M' + (B.x - B.r) + ',' + B.y + ' A' + B.r + ',' + B.r + ' 0 0 1 ' + (B.x + B.r) + ',' + B.y + 'Z', fill: '#f3b9a8', stroke: '#c8472d', 'stroke-width': 1.5 }, xy);
+  [[-22, -10, 7], [-6, -14, 8], [12, -12, 7], [26, -8, 5], [-4, -30, 6], [14, -28, 5], [-20, -26, 5]].forEach(function (v) {
+    el('circle', { cx: B.x + v[0], cy: B.y + v[1], r: v[2], fill: '#fff4f0', stroke: '#c8472d', 'stroke-width': 2.4, 'class': 'deco' }, xy);
+  });
+  var ph = part(svg, '3 3b', 'c', '3b');
+  el('path', { d: 'M' + (B.x - B.r) + ',' + B.y + ' A' + B.r + ',' + B.r + ' 0 0 0 ' + (B.x + B.r) + ',' + B.y + 'Z', fill: '#bccaf6', stroke: '#3b5bdb', 'stroke-width': 1.5 }, ph);
+  for (i = 0; i < 12; i++) el('circle', { cx: B.x - 28 + (i % 6) * 11, cy: B.y + 12 + Math.floor(i / 6) * 11, r: 4, fill: '#e3e9fd', stroke: '#3b5bdb', 'stroke-width': 1, 'class': 'deco' }, ph);
+  var lo = part(svg, '1 1b', 's', '1b');
+  for (i = 0; i < n; i++) {
+    var x0 = X0 + i * cw;
+    if (ST.some(function (s) { return x0 + cw > s - 14 && x0 < s + 14; })) continue;
+    el('rect', { x: x0, y: 254, width: cw, height: 16, fill: '#f4ead3', stroke: '#8b6b3d', 'stroke-width': 1.2 }, lo);
+  }
+  el('rect', { x: X0, y: 270, width: W, height: 3, fill: '#d9b870' }, lo);
+  var st = part(svg, '1 1b st', 's', 'st');
+  ST.forEach(function (s) {
+    el('ellipse', { cx: s - 6, cy: 262, rx: 6.5, ry: 9, fill: '#b5d98a', stroke: '#5f8a33', 'stroke-width': 1.4 }, st);
+    el('ellipse', { cx: s + 6, cy: 262, rx: 6.5, ry: 9, fill: '#b5d98a', stroke: '#5f8a33', 'stroke-width': 1.4 }, st);
+    el('rect', { x: s - 30, y: 254, width: 60, height: 20, fill: 'transparent' }, st);
+  });
+  label(svg, 516, 38, 536, 38, '1a');
+  label(svg, 508, 94, 536, 94, '2a');
+  label(svg, B.x + 18, B.y - 22, 536, 164, '3a');
+  label(svg, B.x + 18, B.y + 20, 536, 214, '3b');
+  label(svg, 500, 236, 536, 244, '2b');
+  label(svg, 516, 262, 536, 276, '1b');
+  label(svg, ST[0], 272, 200, 302, '');
+  var tS = label(svg, ST[1], 272, 200, 302, '');
+  tS.setAttribute('x', 200); tS.setAttribute('y', 322); tS.setAttribute('text-anchor', 'middle'); tS.setAttribute('class', 'lbl w');
+  el('tspan', { 'class': 'ro' }, tS).textContent = 'stomate';
+  el('tspan', { 'class': 'de' }, tS).textContent = 'Spaltöffnungen';
+})();
+
+// tulpina
+(function () {
+  var svg = document.getElementById('xs-stem'), C = [230, 220];
+  var ep = part(svg, '1', 's', '1');
+  el('circle', { cx: C[0], cy: C[1], r: 190, fill: '#f1e3c8', stroke: '#8b6b3d', 'stroke-width': 2 }, ep);
+  for (var a = 0; a < 360; a += 5) { var p1 = polar(C, a, 182), p2 = polar(C, a, 190); el('path', { d: 'M' + p1 + 'L' + p2, stroke: '#a8865a', 'stroke-width': 1, 'class': 'deco' }, ep); }
+  var co = part(svg, '2', 'n', '2');
+  el('circle', { cx: C[0], cy: C[1], r: 182, fill: '#e6f1cf', stroke: '#6f9a44', 'stroke-width': 1.5 }, co);
+  [[168, 9, true], [149, 9.5, false], [130, 9, false]].forEach(function (ring) {
+    var cnt = Math.floor(2 * Math.PI * ring[0] / 21);
+    for (var i = 0; i < cnt; i++) {
+      var p = polar(C, i * 360 / cnt + (ring[0] % 2) * 5, ring[0]);
+      el('circle', { cx: p[0], cy: p[1], r: ring[1], fill: '#d9eab6', stroke: '#8fb46a', 'stroke-width': 1 }, co);
+      if (ring[2]) el('circle', { cx: p[0], cy: p[1], r: 2.6, fill: '#4f9a3a', 'class': 'deco' }, co);
+    }
+  });
+  var cc = part(svg, '4', 'c', '4');
+  el('circle', { cx: C[0], cy: C[1], r: 116, fill: '#f3effb', stroke: '#7b6fc0', 'stroke-width': 2 }, cc);
+  var pi = part(svg, '4 5', 'c', '5');
+  el('circle', { cx: C[0], cy: C[1], r: 62, fill: '#fbf6e6', stroke: '#c9b88a', 'stroke-width': 1.5 }, pi);
+  for (var y = -48; y <= 48; y += 19) for (var x = -52 + (Math.abs(y / 19) % 2) * 11; x <= 52; x += 22) {
+    if (Math.hypot(x, y) < 50) el('circle', { cx: C[0] + x, cy: C[1] + y, r: 10.5, fill: '#fffaf0', stroke: '#d6c79d', 'stroke-width': 1 }, pi);
+  }
+  var gX = part(svg, '3 3a 4', 'c', '3a'), gP = part(svg, '3 3b 4', 'c', '3b');
+  for (var b = 0; b < 10; b++) {
+    var ang = b * 36, rot = 'rotate(' + ang + ' ' + C[0] + ' ' + C[1] + ')';
+    var px = el('g', { transform: rot }, gP);
+    el('ellipse', { cx: C[0], cy: C[1] - 100, rx: 14, ry: 10, fill: '#bccaf6', stroke: '#3b5bdb', 'stroke-width': 1.4 }, px);
+    var xx = el('g', { transform: rot }, gX);
+    el('ellipse', { cx: C[0], cy: C[1] - 80, rx: 13, ry: 12, fill: '#f3b9a8', stroke: '#c8472d', 'stroke-width': 1.4 }, xx);
+    [[-5, -84, 4], [5, -84, 4], [0, -75, 4.5]].forEach(function (v) { el('circle', { cx: C[0] + v[0], cy: C[1] + v[1], r: v[2], fill: '#fff4f0', stroke: '#c8472d', 'stroke-width': 1.8, 'class': 'deco' }, xx); });
+  }
+  var L1 = polar(C, 42, 188), L2 = polar(C, 58, 156), L3 = polar(C, 72, 100), L4 = polar(C, 108, 80), L5 = polar(C, 135, 112), L6 = polar(C, 160, 30);
+  label(svg, L1[0], L1[1], 450, 48, '1');
+  label(svg, L2[0], L2[1], 450, 118, '2');
+  label(svg, L3[0], L3[1], 450, 188, '3b');
+  label(svg, L4[0], L4[1], 450, 252, '3a');
+  label(svg, L5[0], L5[1], 450, 320, '4');
+  label(svg, L6[0], L6[1], 450, 392, '5');
+})();
+
+// rădăcina
+(function () {
+  var svg = document.getElementById('xs-root'), C = [230, 220];
+  var hairs = part(svg, '1 1a', 's', '1a');
+  for (var a = 4; a < 360; a += 13) {
+    var len = 22 + rnd() * 20, bend = (rnd() - .5) * 16;
+    var p1 = polar(C, a, 148), p2 = polar(C, a + bend / 6, 148 + len * .55), p3 = polar(C, a + bend / 4, 148 + len);
+    el('path', { d: 'M' + p1 + ' Q' + p2 + ' ' + p3, stroke: '#c98a4a', 'stroke-width': 4.5, fill: 'none', 'stroke-linecap': 'round', 'class': 'hair' }, hairs);
+  }
+  var rh = part(svg, '1', 's', '1');
+  el('circle', { cx: C[0], cy: C[1], r: 150, fill: '#f1e3c8', stroke: '#8b6b3d', 'stroke-width': 2 }, rh);
+  for (a = 0; a < 360; a += 6) { var q1 = polar(C, a, 143), q2 = polar(C, a, 150); el('path', { d: 'M' + q1 + 'L' + q2, stroke: '#a8865a', 'stroke-width': 1, 'class': 'deco' }, rh); }
+  var co = part(svg, '2', 'n', '2');
+  el('circle', { cx: C[0], cy: C[1], r: 143, fill: '#eef3dc', stroke: '#6f9a44', 'stroke-width': 1.5 }, co);
+  [[129, 11], [106, 11], [84, 10], [66, 7.5]].forEach(function (ring) {
+    var cnt = Math.floor(2 * Math.PI * ring[0] / (ring[1] * 2.3));
+    for (var i = 0; i < cnt; i++) {
+      var p = polar(C, i * 360 / cnt + ring[0] % 7, ring[0]);
+      el('circle', { cx: p[0], cy: p[1], r: ring[1], fill: '#f6f8ea', stroke: '#9cb87a', 'stroke-width': 1 }, co);
+      if (ring[1] > 10) el('circle', { cx: p[0] + 2, cy: p[1] + 2, r: 2.2, fill: '#b9aed1', 'class': 'deco' }, co);
+    }
+  });
+  var cc = part(svg, '4', 'c', '4');
+  el('circle', { cx: C[0], cy: C[1], r: 56, fill: '#f3effb', stroke: '#7b6fc0', 'stroke-width': 2 }, cc);
+  var gX = part(svg, '3 3a 4', 'c', '3a');
+  [0, 90, 180, 270].forEach(function (ang) {
+    var g = el('g', { transform: 'rotate(' + ang + ' ' + C[0] + ' ' + C[1] + ')' }, gX);
+    el('rect', { x: C[0] - 8, y: C[1] - 48, width: 16, height: 38, rx: 8, fill: '#f3b9a8', stroke: '#c8472d', 'stroke-width': 1.4 }, g);
+    [[-40, 5], [-28, 4], [-18, 3.4]].forEach(function (v) { el('circle', { cx: C[0], cy: C[1] + v[0], r: v[1], fill: '#fff4f0', stroke: '#c8472d', 'stroke-width': 1.6, 'class': 'deco' }, g); });
+  });
+  var gP = part(svg, '3 3b 4', 'c', '3b');
+  [45, 135, 225, 315].forEach(function (ang) {
+    var p = polar(C, ang, 34);
+    el('ellipse', { cx: p[0], cy: p[1], rx: 11, ry: 8, transform: 'rotate(' + (ang + 90) + ' ' + p[0] + ' ' + p[1] + ')', fill: '#bccaf6', stroke: '#3b5bdb', 'stroke-width': 1.4 }, gP);
+  });
+  var pi = part(svg, '4 5', 'c', '5');
+  el('circle', { cx: C[0], cy: C[1], r: 10, fill: '#fbf6e6', stroke: '#c9b88a', 'stroke-width': 1.5 }, pi);
+  var L1 = polar(C, 28, 176), L2 = polar(C, 50, 150), L3 = polar(C, 70, 112), L4 = polar(C, 90, 34), L5 = polar(C, 135, 36), L6 = polar(C, 160, 54), L7 = polar(C, 190, 6);
+  label(svg, L1[0], L1[1], 450, 40, '1a');
+  label(svg, L2[0], L2[1], 450, 104, '1');
+  label(svg, L3[0], L3[1], 450, 164, '2');
+  label(svg, L4[0], L4[1], 450, 222, '3a');
+  label(svg, L5[0], L5[1], 450, 280, '3b');
+  label(svg, L6[0], L6[1], 450, 336, '4');
+  label(svg, L7[0], L7[1], 450, 396, '5');
+})();
+
+var curSec = 'leaf', curPart = null, legend = document.getElementById('xs-legend'), desc = document.getElementById('xs-desc');
+function showDesc(p) {
+  if (!p) {
+    desc.style.removeProperty('--z');
+    desc.innerHTML = '<p class="muted">' + (L === 'ro' ? 'Alege un țesut din desen sau din listă.' : 'Wähle ein Gewebe in der Zeichnung oder in der Liste.') + '</p>';
+    return;
+  }
+  desc.style.setProperty('--z', ZC[p.z]);
+  desc.innerHTML = '<h3>' + (p.lbl || p.k) + '. ' + p[L] + ' <span class="term">· ' + other(p) + '</span></h3><p>' + p.d[L] + '</p>';
+}
+function selectPart(k) {
+  var svg = document.getElementById('xs-' + curSec);
+  curPart = curPart === k ? null : k;
+  svg.classList.toggle('sel', !!curPart);
+  [].forEach.call(svg.querySelectorAll('[data-k]'), function (g) { g.classList.toggle('hi', !!curPart && g.dataset.p.split(' ').indexOf(curPart) >= 0); });
+  [].forEach.call(legend.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', b.dataset.k === curPart); });
+  showDesc(curPart && SECTIONS[curSec].filter(function (p) { return p.k === curPart; })[0]);
+}
+function showSection(sec) {
+  var old = document.getElementById('xs-' + curSec);
+  old.classList.remove('sel'); [].forEach.call(old.querySelectorAll('.hi'), function (g) { g.classList.remove('hi'); });
+  curSec = sec; curPart = null;
+  [].forEach.call(document.querySelectorAll('.xs-fig svg'), function (s) { s.classList.toggle('cur', s.id === 'xs-' + sec); });
+  [].forEach.call(document.querySelectorAll('.tab'), function (t) { t.setAttribute('aria-selected', t.dataset.sec === sec); });
+  legend.innerHTML = '';
+  SECTIONS[sec].forEach(function (p) {
+    var b = h('button', p.sub ? 'sub' : '', '<span class="num">' + (p.lbl || p.k) + '</span><span class="name">' + p[L] + '<span class="term">' + other(p) + '</span></span>');
+    b.type = 'button'; b.dataset.k = p.k; b.setAttribute('aria-pressed', 'false'); b.style.setProperty('--z', ZC[p.z]);
+    b.addEventListener('click', function () { selectPart(p.k); });
+    legend.appendChild(b);
+  });
+  showDesc(null);
+}
+[].forEach.call(document.querySelectorAll('.tab'), function (t) { t.addEventListener('click', function () { showSection(t.dataset.sec); }); });
+['leaf', 'stem', 'root'].forEach(function (sec) {
+  document.getElementById('xs-' + sec).addEventListener('click', function (e) {
+    var g = e.target.closest('[data-k]');
+    if (g) selectPart(g.dataset.k);
+  });
+});
+[].forEach.call(document.querySelectorAll('.mode button'), function (b) {
+  b.addEventListener('click', function () {
+    var zones = b.dataset.mode === 'zones';
+    [].forEach.call(document.querySelectorAll('.mode button'), function (x) { x.setAttribute('aria-pressed', x === b); });
+    [].forEach.call(document.querySelectorAll('.xs-fig svg'), function (s) { s.classList.toggle('zones', zones); });
+    document.getElementById('zone-key').classList.toggle('show', zones);
+  });
+});
+showSection('leaf');
+
+/* ---------- 5. Drumul sevei ---------- */
+(function () {
+  var svg = document.getElementById('flow');
+  el('rect', { x: 0, y: 300, width: 560, height: 140, fill: '#efe3cf' }, svg);
+  el('path', { d: 'M0,300 H560', stroke: '#b99b6b', 'stroke-width': 2 }, svg);
+  // soarele
+  var sun = el('g', { transform: 'translate(64 58)' }, svg);
+  for (var i = 0; i < 12; i++) { var a = i * 30 * Math.PI / 180; el('path', { d: 'M' + 32 * Math.cos(a) + ',' + 32 * Math.sin(a) + ' L' + 44 * Math.cos(a) + ',' + 44 * Math.sin(a), stroke: '#f2b705', 'stroke-width': 3, 'stroke-linecap': 'round' }, sun); }
+  el('circle', { r: 26, fill: '#ffd23f', stroke: '#f2b705', 'stroke-width': 2 }, sun);
+  el('path', { d: 'M104,86 L168,112', stroke: '#f2b705', 'stroke-width': 2.5, 'stroke-dasharray': '6 5', 'marker-end': 'url(#arr-sun)' }, svg);
+  var defs = el('defs', {}, svg);
+  function marker(id, color) { var m = el('marker', { id: id, viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, defs); el('path', { d: 'M0,0 L10,5 L0,10z', fill: color }, m); }
+  marker('arr-sun', '#f2b705'); marker('arr-gas', '#56655b');
+  // rădăcini, tulpină, frunze, fruct
+  ['M280,300 C282,340 276,380 280,425', 'M280,320 C250,340 225,360 200,400', 'M280,330 C310,350 335,370 360,395', 'M232,352 C222,352 210,350 196,344', 'M322,356 C334,356 344,352 356,344'].forEach(function (d, i) {
+    el('path', { d: d, stroke: '#a0703d', 'stroke-width': i < 3 ? 5 : 3, fill: 'none', 'stroke-linecap': 'round' }, svg);
+  });
+  el('path', { d: 'M280,300 C278,240 282,160 280,70', stroke: '#4e8a3a', 'stroke-width': 12, fill: 'none', 'stroke-linecap': 'round' }, svg);
+  el('path', { d: 'M280,228 C292,232 304,238 314,244', stroke: '#4e8a3a', 'stroke-width': 5, fill: 'none', 'stroke-linecap': 'round' }, svg);
+  svg.appendChild(leafPath(280, 110, -22, 112, 30));
+  svg.appendChild(leafPath(280, 150, 202, 118, 32));
+  svg.appendChild(leafPath(280, 72, -95, 40, 12));
+  pepper(318, 240, 1.2, svg);
+  // mici semne: gaze, apă
+  function tag(x, y, txt, color, anchor) { var t = el('text', { x: x, y: y, 'class': 'fl', fill: color, 'text-anchor': anchor || 'middle' }, svg); t.innerHTML = txt; return t; }
+  el('path', { d: 'M112,176 L166,146', stroke: '#56655b', 'stroke-width': 2, 'marker-end': 'url(#arr-gas)' }, svg);
+  tag(98, 194, 'CO₂', '#56655b');
+  el('path', { d: 'M392,98 L446,80', stroke: '#56655b', 'stroke-width': 2, 'marker-end': 'url(#arr-gas)' }, svg);
+  tag(470, 84, 'O₂', '#56655b');
+  var tl = tag(128, 124, '', '#b98900', 'middle');
+  el('tspan', { 'class': 'ro' }, tl).textContent = 'lumină';
+  el('tspan', { 'class': 'de' }, tl).textContent = 'Licht';
+  [[176, 380], [190, 404], [372, 384], [262, 430], [300, 426]].forEach(function (p) { el('path', { d: 'M' + p[0] + ',' + (p[1] - 7) + ' C' + (p[0] + 5) + ',' + p[1] + ' ' + (p[0] + 4) + ',' + (p[1] + 5) + ' ' + p[0] + ',' + (p[1] + 5) + ' C' + (p[0] - 4) + ',' + (p[1] + 5) + ' ' + (p[0] - 5) + ',' + p[1] + ' ' + p[0] + ',' + (p[1] - 7) + 'Z', fill: '#6fb6e8' }, svg); });
+  var tw = tag(60, 332, '', '#2f6f9f', 'start');
+  el('tspan', { 'class': 'ro', x: 20, dy: 0 }, tw).textContent = 'apă + săruri';
+  el('tspan', { 'class': 'ro', x: 20, dy: 21 }, tw).textContent = 'minerale';
+  el('tspan', { 'class': 'de', x: 20, dy: 0 }, tw).textContent = 'Wasser +';
+  el('tspan', { 'class': 'de', x: 20, dy: 21 }, tw).textContent = 'Mineralstoffe';
+  var tx = tag(266, 250, '', '#c8472d', 'end');
+  el('tspan', { 'class': 'ro' }, tx).textContent = 'seva brută';
+  el('tspan', { 'class': 'de' }, tx).textContent = 'Mineralsalzlösung';
+  var tp = tag(294, 196, '', '#3b5bdb', 'start');
+  el('tspan', { 'class': 'ro' }, tp).textContent = 'seva elaborată';
+  el('tspan', { 'class': 'de', x: 294, dy: 0 }, tp).textContent = 'organische';
+  el('tspan', { 'class': 'de', x: 294, dy: 20 }, tp).textContent = 'Nährlösung';
+
+  var FLOWS = {
+    xy: { color: '#c8472d', paths: ['M200,398 C225,360 250,340 276,322 L276,112 C300,104 330,94 384,70', 'M358,393 C335,370 310,350 276,334 L276,152 C250,142 220,128 170,110', 'M280,422 C276,380 276,340 276,300 L276,74'] },
+    ph: { color: '#3b5bdb', paths: ['M384,76 C330,98 305,108 284,116 L284,318 C308,346 333,366 356,390', 'M170,116 C220,132 250,146 284,156 L284,226 C296,232 304,238 316,250 L318,272', 'M170,116 C220,132 250,146 284,156 L284,330 C284,360 283,390 281,420'] }
+  };
+  var dots = [];
+  Object.keys(FLOWS).forEach(function (k) {
+    var f = FLOWS[k], g = el('g', { 'data-flow': k }, svg);
+    f.g = g;
+    f.paths.forEach(function (d) {
+      var p = el('path', { d: d, fill: 'none', stroke: f.color, 'stroke-opacity': .22, 'stroke-width': 3 }, g);
+      var len = p.getTotalLength(), n = Math.round(len / 34);
+      for (var i = 0; i < n; i++) dots.push({ p: p, len: len, off: i * len / n, c: el('circle', { r: 4.2, fill: f.color, stroke: '#fff', 'stroke-width': 1.2 }, g) });
+    });
+  });
+  var playing = !window.matchMedia('(prefers-reduced-motion: reduce)').matches, t0 = performance.now(), tAcc = 0;
+  function place(t) {
+    dots.forEach(function (d) { var pt = d.p.getPointAtLength((d.off + t * 38) % d.len); d.c.setAttribute('cx', pt.x); d.c.setAttribute('cy', pt.y); });
+  }
+  function frame(now) { if (!playing) return; place(tAcc + (now - t0) / 1000); requestAnimationFrame(frame); }
+  var btn = document.getElementById('flow-play');
+  function setBtn() { btn.innerHTML = playing ? '<span class="ro">Pauză</span><span class="de">Pause</span>' : '<span class="ro">Pornește</span><span class="de">Start</span>'; }
+  btn.addEventListener('click', function () {
+    if (playing) { tAcc += (performance.now() - t0) / 1000; playing = false; }
+    else { playing = true; t0 = performance.now(); requestAnimationFrame(frame); }
+    setBtn();
+  });
+  place(0); setBtn();
+  if (playing) requestAnimationFrame(frame);
+  [].forEach.call(document.querySelectorAll('.toggle[data-flow]'), function (b) {
+    b.addEventListener('click', function () {
+      var on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      FLOWS[b.dataset.flow].g.style.display = on ? '' : 'none';
+    });
+  });
+})();
+
+/* ---------- 6. Ce organ mâncăm? ---------- */
+var OPTS = ['root', 'stem', 'leaf', 'flower', 'fruit', 'seed'];
+var OPT_N = { root: { ro: 'rădăcina', de: 'Wurzel' }, stem: { ro: 'tulpina', de: 'Stängel' }, leaf: { ro: 'frunza', de: 'Blatt' }, flower: { ro: 'floarea', de: 'Blüte' }, fruit: { ro: 'fructul', de: 'Frucht' }, seed: { ro: 'sămânța', de: 'Samen' } };
+var FOODS = [
+  { ro: 'Ridiche', de: 'Rettich', a: 'root', w: { ro: 'Partea groasă, iute, este rădăcina.', de: 'Der dicke, scharfe Teil ist die Wurzel.' } },
+  { ro: 'Castravete', de: 'Gurke', a: 'fruit', w: { ro: 'Castravetele crește din floare și are semințe în interior, deci e un fruct.', de: 'Die Gurke wächst aus der Blüte und hat innen Samen, also ist sie eine Frucht.' } },
+  { ro: 'Broccoli', de: 'Brokkoli', a: 'flower', w: { ro: 'Mâncăm mulți boboci de flori, încă neînfloriți.', de: 'Wir essen viele Blütenknospen, die noch nicht aufgeblüht sind.' } },
+  { ro: 'Gulie', de: 'Kohlrabi', a: 'stem', w: { ro: 'Gulia este o tulpină îngroșată, crescută deasupra solului.', de: 'Der Kohlrabi ist ein verdickter Stängel über der Erde.' } },
+  { ro: 'Nucă', de: 'Walnuss', a: 'seed', w: { ro: 'Miezul nucii este sămânța, cu multe substanțe de rezervă.', de: 'Der Kern der Walnuss ist der Samen mit vielen Nährstoffen.' } },
+  { ro: 'Țelină', de: 'Sellerie', a: 'root', w: { ro: 'Țelina „de rădăcină” este o rădăcină groasă. La țelina de frunze, mâncăm cozile frunzelor.', de: 'Knollensellerie ist eine dicke Wurzel. Beim Staudensellerie essen wir die Blattstiele.' } },
+  { ro: 'Salată', de: 'Salat', a: 'leaf', w: { ro: 'Din salată mâncăm frunzele.', de: 'Vom Salat essen wir die Blätter.' } },
+  { ro: 'Dovleac', de: 'Kürbis', a: 'fruit', w: { ro: 'Dovleacul crește din floare și are semințe (semințele de dovleac), deci e un fruct.', de: 'Der Kürbis wächst aus der Blüte und hat Samen (Kürbiskerne), also ist er eine Frucht.' } },
+  { ro: 'Porumb', de: 'Mais', a: 'seed', w: { ro: 'Boabele de pe știulete sunt semințele porumbului.', de: 'Die Körner am Kolben sind die Samen des Maises.' } },
+  { ro: 'Grâu', de: 'Weizen', a: 'seed', w: { ro: 'Din boabele de grâu, adică din semințe, se face făina.', de: 'Aus den Weizenkörnern, also den Samen, wird Mehl gemacht.' } }
+];
+var eat = document.getElementById('eat'), solved = 0;
+function eatScore() {
+  document.getElementById('eat-score').textContent = solved === FOODS.length
+    ? (L === 'ro' ? 'Bravo! Ai găsit toate cele 10 organe.' : 'Super! Du hast alle 10 Organe gefunden.')
+    : (L === 'ro' ? 'Rezolvate: ' + solved + ' din ' + FOODS.length : 'Gelöst: ' + solved + ' von ' + FOODS.length);
+}
+FOODS.forEach(function (f) {
+  var card = h('div', 'food', '<h3>' + f[L] + ' <span class="term">· ' + other(f) + '</span></h3>');
+  var opts = h('div', 'opts'), why = h('p', 'why');
+  OPTS.forEach(function (k) {
+    var b = h('button', '', OPT_N[k][L]); b.type = 'button';
+    b.addEventListener('click', function () {
+      if (card.classList.contains('done')) return;
+      if (k === f.a) {
+        b.classList.add('right'); card.classList.add('done'); why.textContent = f.w[L]; solved++; eatScore();
+      } else {
+        b.classList.add('wrong'); why.textContent = L === 'ro' ? 'Nu chiar. Mai încearcă!' : 'Nicht ganz. Versuch es noch einmal!';
+      }
+    });
+    opts.appendChild(b);
+  });
+  card.appendChild(opts); card.appendChild(why); eat.appendChild(card);
+});
+eatScore();
+
+/* ---------- 8. Dicționar ---------- */
+[['plantă superioară', 'höhere Pflanze'], ['organ vegetativ', 'vegetatives Organ'], ['organ de reproducere', 'Fortpflanzungsorgan'],
+ ['rădăcină', 'die Wurzel'], ['tulpină', 'der Stängel'], ['frunză', 'das Blatt'], ['floare', 'die Blüte'], ['fruct', 'die Frucht'],
+ ['sămânță', 'der Samen'], ['con', 'der Zapfen'], ['polenizare', 'die Bestäubung'], ['fotosinteză', 'die Fotosynthese'],
+ ['celulă', 'die Zelle'], ['țesut', 'das Gewebe'], ['țesut de apărare', 'das Schutzgewebe'], ['țesut fundamental', 'das Grundgewebe'],
+ ['țesut palisadic', 'das Palisadengewebe'], ['țesut lacunar', 'das Schwammgewebe'], ['țesut conducător', 'das Leitgewebe'],
+ ['lemn (vase lemnoase)', 'das Holzgewebe (Holzgefäße)'], ['liber (vase liberiene)', 'das Bastgewebe (Siebröhren)'], ['epidermă', 'die Epidermis'],
+ ['stomată', 'die Spaltöffnung'], ['nervură', 'die Blattader'], ['cilindru central', 'der Zentralzylinder'], ['măduvă', 'das Mark'],
+ ['perișori absorbanți', 'die Wurzelhaare'], ['seva brută', 'die Mineralsalzlösung'], ['seva elaborată', 'die organische Nährlösung'],
+ ['mușchi', 'die Moose'], ['ferigi', 'die Farne'], ['gimnosperme', 'die Gymnospermen'], ['angiosperme', 'die Angiospermen']
+].forEach(function (p) {
+  var d = h('div'); d.appendChild(h('dt', '', p[0])); d.appendChild(h('dd', '', p[1]));
+  document.getElementById('gloss').appendChild(d);
+});
+})();
+</script>
+</body>
+</html>

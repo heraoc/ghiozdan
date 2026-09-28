@@ -2,6 +2,7 @@
 
 import { ibnBattutaTest } from './content/ibn-battuta-test';
 import { mariExploratoriTest } from './content/mari-exploratori-test';
+import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -111,6 +112,21 @@ const SUBJECTS: Record<Grade, [SubjectKey, glyph: string][]> = {
 const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
   3: {},
   6: {
+    bio: [
+      {
+        slug: 'organismul-plantei',
+        title: {
+          ro: 'Organismul unei plante superioare',
+          de: 'Der Organismus einer höheren Pflanze',
+        },
+        summary: {
+          ro: 'Organele unei plante cu flori, țesuturile din frunză, tulpină și rădăcină și drumul sevei prin plantă.',
+          de: 'Die Organe einer Blütenpflanze, die Gewebe in Blatt, Stängel und Wurzel und der Weg der Nährlösungen durch die Pflanze.',
+        },
+        src: 'lectii/clasa-6/biologie/organismul-plantei.html',
+        test: { questions: organismulPlanteiTest, minutes: 8 },
+      },
+    ],
     ist: [
       {
         slug: 'ibn-battuta',
