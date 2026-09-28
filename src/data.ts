@@ -2,6 +2,7 @@
 
 import { ibnBattutaTest } from './content/ibn-battuta-test';
 import { mariExploratoriTest } from './content/mari-exploratori-test';
+import { organismulOmuluiTest } from './content/organismul-omului-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import type { Text } from './i18n';
 
@@ -125,6 +126,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/biologie/organismul-plantei.html',
         test: { questions: organismulPlanteiTest, minutes: 8 },
+      },
+      {
+        slug: 'organismul-omului',
+        title: {
+          ro: 'Organismul unui mamifer și al omului',
+          de: 'Der Organismus eines Säugetiers und des Menschen',
+        },
+        summary: {
+          ro: 'De la celulă la organism: țesuturile, organele și cele zece sisteme de organe ale omului, văzute pe corp.',
+          de: 'Von der Zelle zum Organismus: Gewebe, Organe und die zehn Organsysteme des Menschen, am Körper gezeigt.',
+        },
+        src: 'lectii/clasa-6/biologie/organismul-omului.html',
+        test: { questions: organismulOmuluiTest, minutes: 8 },
       },
     ],
     ist: [
