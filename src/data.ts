@@ -13,6 +13,8 @@ export const config = {
 
 const PALETTE = {
   mat: { color: '#2f80ed', soft: '#e7f0fd' },
+  alg: { color: '#2f80ed', soft: '#e7f0fd' },
+  gmt: { color: '#d64545', soft: '#fbe8e8' },
   rom: { color: '#e5673d', soft: '#fdece5' },
   ger: { color: '#8b5cf6', soft: '#f0eafe' },
   sti: { color: '#27a36f', soft: '#e3f5ec' },
@@ -65,6 +67,8 @@ export interface Test {
 
 const SUBJECT_NAMES: Record<SubjectKey, [slug: string, name: Text]> = {
   mat: ['matematica', { ro: 'Matematică', de: 'Mathematik' }],
+  alg: ['algebra', { ro: 'Algebră', de: 'Algebra' }],
+  gmt: ['geometrie', { ro: 'Geometrie', de: 'Geometrie' }],
   rom: ['limba-romana', { ro: 'Limba română', de: 'Rumänisch' }],
   ger: ['limba-germana', { ro: 'Limba germană', de: 'Deutsch' }],
   sti: ['stiintele-naturii', { ro: 'Științele naturii', de: 'Naturwissenschaften' }],
@@ -84,7 +88,8 @@ const SUBJECTS: Record<Grade, [SubjectKey, glyph: string][]> = {
     ['sti', '✿'],
   ],
   6: [
-    ['mat', 'x²'],
+    ['alg', 'x²'],
+    ['gmt', '△'],
     ['rom', 'Aa'],
     ['ger', 'Ää'],
     ['ist', 'Ⅵ'],
@@ -132,8 +137,8 @@ const TESTS: Record<Grade, TestRow[]> = {
     ['rom', { ro: 'Semnele de punctuație', de: 'Die Satzzeichen' }, 8, 10],
   ],
   6: [
-    ['mat', { ro: 'Fracții ordinare', de: 'Gewöhnliche Brüche' }, 12, 25],
-    ['mat', { ro: 'Unghiuri', de: 'Winkel' }, 10, 20],
+    ['alg', { ro: 'Fracții ordinare', de: 'Gewöhnliche Brüche' }, 12, 25],
+    ['gmt', { ro: 'Unghiuri', de: 'Winkel' }, 10, 20],
     ['rom', { ro: 'Verbul', de: 'Das Verb' }, 12, 20],
     ['bio', { ro: 'Celula', de: 'Die Zelle' }, 10, 15],
     ['ist', { ro: 'Grecia antică', de: 'Das antike Griechenland' }, 10, 15],
