@@ -1,0 +1,1014 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Înmulțirea numerelor naturale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Die Multiplikation natürlicher Zahlen';
+})();
+</script>
+<style>
+:root{
+  --paper:#f4f7fc; --card:#ffffff; --ink:#1b2440; --muted:#56607a; --rule:#dbe2f0; --sheet:#eaf0fb;
+  --accent:#2f80ed; --accent-soft:#e7f0fd;
+  --f1:#d62f2f; --f2:#0f9d58; --prod:#1f2a5a;
+  --lav:#d9d8ec; --lav-ink:#5a2a86; --navy:#1f3a8a;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:18px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:800 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.f1{color:var(--f1);font-weight:800} .f2{color:var(--f2);font-weight:800} .pr{color:var(--prod);font-weight:800}
+.op{color:var(--muted);padding:0 .12em}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:66ch;font-size:20px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:56px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:70ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 17px/1 var(--display);margin-right:10px;vertical-align:4px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:16px 18px}
+.hint{font-size:15px;color:var(--muted)}
+.lab{background:var(--lav);border-radius:14px;padding:16px;box-shadow:0 3px 10px rgba(31,42,90,.12)}
+.lab.plain{background:var(--card);border:1px solid var(--rule);box-shadow:none}
+
+/* butoane, pași */
+.ctrls{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin-bottom:12px}
+.stepper{display:inline-flex;align-items:center;gap:8px;background:#fff;border-radius:99px;padding:4px 6px 4px 14px;border:1.5px solid var(--rule)}
+.stepper .sl{font-weight:700;font-size:15px;margin-right:2px}
+.stepper button{width:34px;height:34px;border-radius:50%;border:0;background:var(--accent);color:#fff;font:800 22px/1 var(--body);cursor:pointer}
+.stepper button:disabled{background:#c4cbe0;cursor:default}
+.stepper output{min-width:1.5ch;text-align:center;font:800 24px/1 var(--display)}
+.stepper.red output{color:var(--f1)} .stepper.green output{color:var(--f2)}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--rule);background:#fff;border-radius:99px;min-width:40px;padding:5px 12px;cursor:pointer;font-weight:800}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.tabs{display:inline-flex;border:1.5px solid var(--ink);border-radius:99px;overflow:hidden;background:#fff}
+.tabs button{border:0;background:transparent;padding:7px 16px;cursor:pointer;font-weight:800}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.stepnav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+
+/* 1. axa numerelor */
+.nl-wrap{background:#fff;border-radius:10px;padding:6px 4px}
+.nl-wrap svg{display:block;width:100%;height:auto}
+.hop{fill:none;stroke:#2b3350;stroke-width:2.2;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .55s ease forwards}
+.pop{opacity:0;animation:fadein .3s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadein{to{opacity:1}}
+.eq-flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:14px}
+.eq-flow > div{background:#fff;border-radius:8px;padding:8px 14px;font-size:24px;font-weight:500}
+.eq-say{background:#fde3e3!important;font-style:italic}
+.eq-prod{display:grid;gap:6px;padding:0!important;background:transparent!important}
+.eq-prod > div{background:#fff;border-radius:8px;padding:6px 14px;font-weight:700}
+.arr{font-size:30px;color:#1ea7f2;font-weight:800;line-height:1}
+.eq-keys{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px}
+.pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border-radius:99px;padding:4px 14px 4px 5px;font-weight:700;font-size:16px}
+.pill i{display:inline-block;width:20px;height:20px;border-radius:50%}
+.tip{margin-top:10px;font-size:16px}
+
+/* Reține */
+.retine{margin-top:18px}
+.retine .tab{display:inline-block;background:var(--navy);color:#fff;font:800 19px/1 var(--display);padding:9px 34px 9px 16px;clip-path:polygon(0 0,84% 0,100% 100%,0 100%)}
+.retine .body{background:var(--lav);color:var(--lav-ink);border-radius:0 10px 10px 10px;padding:14px 18px;box-shadow:0 3px 10px rgba(31,42,90,.12);display:grid;gap:6px}
+.retine ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+
+/* 2. tabla */
+.tbl-grid{display:grid;grid-template-columns:minmax(210px,250px) minmax(0,1fr);gap:18px;align-items:start}
+.tbl-left{display:grid;gap:12px}
+.plist{border-radius:10px;padding:12px 14px;background:var(--pc,#fff09a);display:grid;gap:2px}
+.plist h3{font-size:20px;margin-bottom:4px}
+.plist button{display:flex;gap:.45em;align-items:baseline;border:0;background:transparent;text-align:left;padding:1px 4px;border-radius:6px;cursor:pointer;font-size:21px;font-weight:500;font-variant-numeric:tabular-nums}
+.plist button:hover,.plist button.act{background:rgba(255,255,255,.7)}
+.plist .num{display:inline-block;min-width:1.4ch;text-align:right}
+.plist .res{margin-left:auto;font-weight:800}
+.tbl-note{background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:10px 14px;font-size:16.5px;min-height:3.4em}
+.tbl-right{min-width:0}
+.tbl-scroll{overflow-x:auto}
+table.mt{border-collapse:collapse;margin:0 auto}
+table.mt th,table.mt td{border:1px solid #6c7288;padding:0;text-align:center}
+table.mt th{font-weight:800;background:var(--hc,#fff);font-size:19px;height:40px;min-width:40px;padding:0 2px}
+table.mt th.corner{color:var(--f1);font-size:22px}
+.mc{display:block;width:100%;height:40px;min-width:40px;border:0;background:var(--bg,#fff);cursor:pointer;font-size:19px;font-variant-numeric:tabular-nums;position:relative}
+.mc.cross{background-image:linear-gradient(rgba(47,128,237,.13),rgba(47,128,237,.13))}
+.mc.hi{background:var(--bg)}
+.mc.diag{filter:saturate(1.6) brightness(.93);font-weight:800}
+.mc.act{outline:3px solid var(--ink);outline-offset:-3px;z-index:2;font-weight:800}
+.mc.mir{outline:3px dashed var(--ink);outline-offset:-3px;z-index:1}
+.mc.q{color:transparent}
+.mc.q::after{content:"?";color:var(--muted);position:absolute;inset:0;display:grid;place-items:center}
+.probe{margin-top:12px;display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:10px 16px}
+.probe .big{font:800 30px/1.1 var(--display);white-space:nowrap}
+.probe svg{display:block}
+.probe .sub{font-size:16px;color:var(--muted);max-width:32ch}
+
+/* antrenament */
+.drill{margin-top:18px;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;display:grid;gap:12px}
+.drill h3{font-size:22px}
+.drill .qrow{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.drill .qtext{font:800 38px/1 var(--display);white-space:nowrap}
+input.ans,input.dans{width:4.6ch;font:800 26px/1 var(--display);text-align:center;border:2px solid var(--ink);border-radius:8px;padding:6px 4px;background:#fff;color:var(--ink)}
+input.ans.ok,input.dans.ok{border-color:#27a36f;background:#e6f6ee}
+input.ans.bad,input.dans.bad{border-color:#d64545;background:#fdeaea}
+.dots{display:flex;gap:6px}
+.dots i{width:18px;height:18px;border-radius:50%;background:#dfe4f1}
+.dots i.ok{background:#27a36f} .dots i.bad{background:#d64545} .dots i.cur{box-shadow:0 0 0 3px var(--accent)}
+.fb{font-weight:800;min-height:1.6em}
+.fb.ok{color:#1b8a5a} .fb.bad{color:#c03434}
+
+/* 3. creioanele */
+.story{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px 16px;margin-bottom:12px;display:grid;gap:4px}
+.story .qq{font-weight:800}
+.pen-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.pen-box{background:#fff;border-radius:12px;padding:8px;border:1px solid var(--rule)}
+.pen-box svg{display:block;width:100%;height:auto}
+.pc{transition:opacity .25s,filter .25s}
+svg.dim .pc:not(.hl){opacity:.2}
+.pc.hl{filter:drop-shadow(0 0 3px #2f80ed) drop-shadow(0 0 1px #2f80ed)}
+.nm{font:800 15px var(--body);fill:var(--ink)}
+.sol{display:grid;gap:8px}
+.sol .line{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;background:#fff;border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:8px;padding:8px 12px;animation:fadein .3s ease both;opacity:0}
+.sol .line.cur{background:#fff9d6;border-left-color:#e0a100}
+.sol .eqn{font:800 26px/1.1 var(--display);white-space:nowrap}
+.sol .what{font-size:16px;color:var(--muted)}
+.identity{margin-top:12px;background:#f9d9e5;border-radius:10px;padding:10px 16px;font:800 28px/1.2 var(--display);text-align:center}
+.identity small{display:block;font:500 16px/1.4 var(--body);color:var(--muted);margin-top:2px}
+.same{margin-top:8px;font-weight:800;color:#1b8a5a;text-align:center}
+
+/* exerciții */
+.ex{margin-top:18px;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 18px}
+.ex h3{font-size:21px;margin-bottom:8px}
+.ex ol{margin:0;padding-left:1.6em;display:grid;gap:10px}
+.ex li{font-size:24px;font-weight:500;line-height:1.7}
+.ex li.wp{font-size:19px}
+.ex .actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.ex .res{font-weight:800}
+
+/* 4-5. rotunde, două cifre */
+.blocks-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;align-items:start}
+.bl-box{background:#fff;border-radius:12px;padding:14px;border:1px solid var(--rule);min-height:220px;display:grid;gap:14px;align-content:start}
+.groups{display:flex;flex-wrap:wrap;gap:10px 8px;align-items:center}
+.grp{display:grid;gap:4px;justify-items:center}
+.grp .cap{font-weight:800;font-size:16px}
+.grp .box{display:flex;gap:4px;align-items:flex-end;background:#f2f6fe;border:2px dashed #b6c6ea;border-radius:8px;padding:6px 8px;min-height:72px}
+.rod{width:16px;height:62px;border-radius:2px;background:repeating-linear-gradient(to bottom,var(--rc,#3b82f6) 0 5.2px,#fff 5.2px 6.2px);border:1px solid rgba(0,0,0,.25);transition:transform .25s,opacity .25s,box-shadow .25s}
+.cube{width:15px;height:15px;border-radius:2px;background:var(--cc,#f59f00);border:1px solid rgba(0,0,0,.25);transition:transform .25s,opacity .25s,box-shadow .25s}
+.cubes{display:grid;grid-template-columns:repeat(3,15px);gap:3px;align-content:end}
+.plus{font:800 26px/1 var(--display);color:var(--muted)}
+.result-row{border-top:2px dashed var(--rule);padding-top:10px;display:grid;gap:6px}
+.result-row .cap{font-weight:800;font-size:17px}
+.rods-line{display:flex;flex-wrap:wrap;gap:3px}
+.dimmed{opacity:.2}
+.glow{box-shadow:0 0 0 3px rgba(47,128,237,.9)}
+.chain{display:grid;gap:6px}
+.chain .line{background:#fff;border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:8px;padding:7px 14px;font:800 26px/1.15 var(--display);animation:fadein .3s ease both;opacity:0}
+.chain .line.cur{background:#fff9d6;border-left-color:#e0a100}
+.chain .line small{display:block;font:500 15.5px/1.35 var(--body);color:var(--muted);margin-top:2px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:#e3f5ec;color:#17744d;font-weight:800;font-size:14px;border-radius:99px;padding:3px 12px}
+.badge.warn{background:#fdf0d5;color:#8a5a00}
+
+.vert{justify-self:center;display:grid;grid-template-columns:44px 64px 64px;font:800 44px/1.15 var(--display);text-align:center;margin:4px 0}
+.vert > div{padding:0 2px;min-height:1.15em}
+.vert .sg{color:var(--muted);text-align:left}
+.vert .rule{grid-column:1/-1;min-height:0;padding:0;height:3px;background:var(--ink);margin:4px 0;border-radius:2px}
+.vert .d1{color:var(--f1)} .vert .d2{color:var(--f2)} .vert .out{color:var(--prod)}
+.vert .flash{background:#fff2a8;border-radius:8px}
+.vert .hideit{visibility:hidden}
+.vert-lab{justify-self:center;display:grid;grid-template-columns:44px 64px 64px;font:800 13px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center}
+.decomp{font:800 24px/1.3 var(--display);text-align:center;background:#f9d9e5;border-radius:10px;padding:8px 12px}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:800}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:800 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:860px){
+  .tbl-grid,.pen-grid,.blocks-grid{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+  .mc,table.mt th{min-width:30px;font-size:16px}
+}
+@media (max-width:520px){
+  body{font-size:17px}
+  .eq-flow > div{font-size:19px}
+  .mc,table.mt th{min-width:26px;height:36px;font-size:14px}
+  .vert{font-size:38px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+  .hop{stroke-dashoffset:0;animation:none}
+  .pop,.sol .line,.chain .line{opacity:1;animation:none}
+}
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Matematică · Clasa a 3-a · Unitatea 3</span><span class="de">Mathematik · Klasse 3 · Einheit 3</span></p>
+  <h1><span class="ro">Înmulțirea numerelor naturale</span><span class="de">Die Multiplikation natürlicher Zahlen</span></h1>
+  <p class="lead">
+    <span class="ro">Când adunăm de mai multe ori același număr, putem scrie mai scurt cu o înmulțire. Descoperă cum funcționează înmulțirea, cum o folosim când un factor este o sumă sau o diferență și cum calculăm 20 × 3 sau 14 × 2.</span>
+    <span class="de">Wenn wir dieselbe Zahl mehrmals addieren, geht es kürzer mit einer Multiplikation. Entdecke, wie sie funktioniert, wie man rechnet, wenn ein Faktor eine Summe oder eine Differenz ist, und wie man 20 × 3 oder 14 × 2 berechnet.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Cum putem scrie mai scurt 3 + 3 + 3 + 3?</span><span class="de">Wie können wir 3 + 3 + 3 + 3 kürzer schreiben?</span></li>
+        <li><span class="ro">Ce se întâmplă când înmulțim cu 0? Dar cu 1?</span><span class="de">Was passiert, wenn wir mit 0 multiplizieren? Und mit 1?</span></li>
+        <li><span class="ro">Cum calculăm 20 × 3 fără să adunăm de fiecare dată?</span><span class="de">Wie rechnen wir 20 × 3, ohne jedes Mal zu addieren?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Adunare repetată</span><span class="de">Wiederholte Addition</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Tabla înmulțirii</span><span class="de">Das Einmaleins</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Sumă sau diferență</span><span class="de">Summe oder Differenz</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Numere rotunde</span><span class="de">Runde Zahlen</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Două cifre × o cifră</span><span class="de">Zweistellig × einstellig</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Rezumat</span><span class="de">Zusammenfassung</span></a>
+  </nav>
+</header>
+
+<!-- 1. Adunare repetată -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Înmulțirea este o adunare repetată</span><span class="de">Multiplikation ist wiederholte Addition</span></h2>
+  <p class="section-sub"><span class="ro">Alege de câte ori și ce număr se repetă. Sărituri egale pe axa numerelor: iată ce înseamnă „de 4 ori câte 3”.</span><span class="de">Wähle, wie oft und welche Zahl sich wiederholt. Gleich große Sprünge am Zahlenstrahl: so sieht „4 Mal je 3“ aus.</span></p>
+  <div class="lab">
+    <div class="ctrls" id="nl-ctrls"></div>
+    <div class="nl-wrap"><svg id="nl-svg" viewBox="0 0 980 230" role="img" aria-label="Axa numerelor cu sărituri egale"></svg></div>
+    <div id="nl-eq"></div>
+  </div>
+  <div class="retine">
+    <span class="tab"><span class="ro">Reține</span><span class="de">Merke</span></span>
+    <div class="body">
+      <p class="ro">Înmulțirea este o adunare repetată de numere egale: 3 + 3 + 3 + 3 = 4 · 3 = 12. Numerele care se înmulțesc se numesc <b>factori</b>, iar rezultatul se numește <b>produs</b>. Semnul înmulțirii poate fi × sau punctul ·.</p>
+      <p class="de">Die Multiplikation ist eine wiederholte Addition gleicher Zahlen: 3 + 3 + 3 + 3 = 4 · 3 = 12. Die Zahlen, die multipliziert werden, heißen <b>Faktoren</b>, das Ergebnis heißt <b>Produkt</b>. Das Malzeichen kann × oder ein Punkt · sein.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Tabla înmulțirii -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Tabla înmulțirii</span><span class="de">Das Einmaleins</span></h2>
+  <p class="section-sub"><span class="ro">Alege o înmulțire și vezi linia și coloana ei în tabel. Atinge orice căsuță ca să vezi ce înseamnă. Cauți produsul? Găsește-l la întâlnirea dintre rând și coloană.</span><span class="de">Wähle eine Malreihe und sieh ihre Zeile und Spalte in der Tafel. Tippe auf ein Feld, um zu sehen, was es bedeutet. Das Produkt steht dort, wo sich Zeile und Spalte treffen.</span></p>
+  <div class="lab plain">
+    <div class="ctrls">
+      <span class="hint"><span class="ro">Înmulțirea cu:</span><span class="de">Malreihe mit:</span></span>
+      <div class="chips" id="tbl-chips" role="group" aria-label="Alege înmulțirea"></div>
+      <button class="btn ghost" id="tbl-hide" type="button" aria-pressed="false"></button>
+    </div>
+    <div class="tbl-grid">
+      <div class="tbl-left">
+        <div class="plist" id="plist"></div>
+        <div class="tbl-note" id="tbl-note"></div>
+      </div>
+      <div class="tbl-right">
+        <div class="tbl-scroll"><table class="mt" id="mt"></table></div>
+        <div class="probe" id="probe" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="drill" id="drill">
+    <h3><span class="ro">Antrenează-te</span><span class="de">Trainiere</span></h3>
+    <div class="ctrls" style="margin:0">
+      <button class="btn" type="button" id="dr-n"></button>
+      <button class="btn ghost" type="button" id="dr-all"></button>
+    </div>
+    <div id="dr-body"></div>
+  </div>
+
+  <div class="retine">
+    <span class="tab"><span class="ro">Reține</span><span class="de">Merke</span></span>
+    <div class="body">
+      <ul class="ro">
+        <li>Orice număr înmulțit cu <b>0</b> dă <b>0</b>: 7 × 0 = 0.</li>
+        <li>Orice număr înmulțit cu <b>1</b> rămâne <b>același număr</b>: 7 × 1 = 7.</li>
+        <li>Ordinea factorilor nu schimbă produsul: 3 × 7 = 7 × 3 = 21. Tabelul este simetric!</li>
+      </ul>
+      <ul class="de">
+        <li>Jede Zahl mal <b>0</b> ergibt <b>0</b>: 7 × 0 = 0.</li>
+        <li>Jede Zahl mal <b>1</b> bleibt <b>dieselbe Zahl</b>: 7 × 1 = 7.</li>
+        <li>Die Reihenfolge der Faktoren ändert das Produkt nicht: 3 × 7 = 7 × 3 = 21. Die Tafel ist symmetrisch!</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Factor sumă / diferență -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Când un factor este o sumă sau o diferență</span><span class="de">Wenn ein Faktor eine Summe oder Differenz ist</span></h2>
+  <p class="section-sub"><span class="ro">Aceeași problemă se poate rezolva în două feluri și rezultatul e mereu același. Schimbă numerele, alege rezolvarea și apasă „Pasul următor”.</span><span class="de">Dieselbe Aufgabe lässt sich auf zwei Arten lösen, und das Ergebnis ist immer gleich. Ändere die Zahlen, wähle den Lösungsweg und tippe auf „Nächster Schritt“.</span></p>
+  <div class="lab plain">
+    <div class="ctrls">
+      <div class="tabs" id="pen-mode" role="group"></div>
+      <div id="pen-steppers" class="ctrls" style="margin:0"></div>
+    </div>
+    <div class="story" id="pen-story"></div>
+    <div class="pen-grid">
+      <div class="pen-box"><svg id="pen-svg" role="img" aria-label="Creioanele copiilor"></svg></div>
+      <div>
+        <div class="tabs" id="pen-sol" role="group" style="margin-bottom:10px"></div>
+        <div class="sol" id="pen-lines"></div>
+        <div class="stepnav">
+          <button class="btn ghost" type="button" id="pen-prev"></button>
+          <button class="btn" type="button" id="pen-next"></button>
+        </div>
+      </div>
+    </div>
+    <div class="identity" id="pen-id"></div>
+    <div class="same" id="pen-same"></div>
+  </div>
+  <div class="ex" id="ex3"></div>
+  <div class="retine">
+    <span class="tab"><span class="ro">Reține</span><span class="de">Merke</span></span>
+    <div class="body">
+      <p class="ro">Pentru a înmulți un număr natural cu o <b>sumă</b>, înmulțim numărul cu suma efectuată <b>sau</b> înmulțim acel număr cu fiecare termen al sumei, iar rezultatele le adunăm.<br><span class="pr">2 × (4 + 3) = 2 × 4 + 2 × 3</span></p>
+      <p class="ro">Pentru a înmulți un număr natural cu o <b>diferență</b>, înmulțim numărul cu diferența efectuată <b>sau</b> înmulțim acel număr cu fiecare termen al diferenței, iar rezultatele le scădem.<br><span class="pr">2 × (4 − 3) = 2 × 4 − 2 × 3</span></p>
+      <p class="de">Um eine natürliche Zahl mit einer <b>Summe</b> zu multiplizieren, multiplizieren wir die Zahl mit der ausgerechneten Summe <b>oder</b> mit jedem Summanden einzeln und addieren die Ergebnisse.<br><span class="pr">2 × (4 + 3) = 2 × 4 + 2 × 3</span></p>
+      <p class="de">Um eine natürliche Zahl mit einer <b>Differenz</b> zu multiplizieren, multiplizieren wir die Zahl mit der ausgerechneten Differenz <b>oder</b> mit jedem Glied der Differenz einzeln und subtrahieren die Ergebnisse.<br><span class="pr">2 × (4 − 3) = 2 × 4 − 2 × 3</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Numere rotunde -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">20 × 3 = ?  Înmulțirea numerelor rotunde</span><span class="de">20 × 3 = ?  Runde Zahlen multiplizieren</span></h2>
+  <p class="section-sub"><span class="ro">Un baston înseamnă o zece (10). Numărul 20 are 2 zeci, deci 2 bastoane. Există două drumuri către același rezultat.</span><span class="de">Ein Stab steht für einen Zehner (10). Die Zahl 20 hat 2 Zehner, also 2 Stäbe. Es gibt zwei Wege zum selben Ergebnis.</span></p>
+  <div class="lab plain">
+    <div class="ctrls">
+      <div class="tabs" id="rd-mode" role="group"></div>
+      <div id="rd-steppers" class="ctrls" style="margin:0"></div>
+    </div>
+    <div class="blocks-grid">
+      <div class="bl-box" id="rd-vis"></div>
+      <div>
+        <div class="chain" id="rd-chain"></div>
+        <div class="stepnav">
+          <button class="btn ghost" type="button" id="rd-prev"></button>
+          <button class="btn" type="button" id="rd-next"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="retine">
+    <span class="tab"><span class="ro">Reține</span><span class="de">Merke</span></span>
+    <div class="body">
+      <p class="ro">Putem calcula 20 × 3 adunând: 20 + 20 + 20 = 60, sau înmulțind zecile: 2 zeci × 3 = 6 zeci, adică 6 × 10 = 60.</p>
+      <p class="de">Wir können 20 × 3 durch Addieren rechnen: 20 + 20 + 20 = 60, oder mit den Zehnern: 2 Zehner × 3 = 6 Zehner, also 6 × 10 = 60.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Două cifre × o cifră -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Un număr de două cifre înmulțit cu unul de o cifră</span><span class="de">Zweistellige Zahl mal einstellige Zahl</span></h2>
+  <p class="section-sub"><span class="ro">Fără trecere peste ordin: înmulțim, pe rând, al doilea factor cu unitățile și apoi cu zecile primului factor. Alege numerele și urmărește pașii.</span><span class="de">Ohne Überschreiten der Stelle: Wir multiplizieren den zweiten Faktor nacheinander mit den Einern und dann mit den Zehnern des ersten Faktors. Wähle die Zahlen und folge den Schritten.</span></p>
+  <div class="lab plain">
+    <div class="ctrls" id="td-steppers"></div>
+    <div class="blocks-grid">
+      <div class="bl-box" id="td-vis"></div>
+      <div style="display:grid;gap:10px">
+        <div id="td-vert"></div>
+        <div class="chain" id="td-chain"></div>
+        <div class="stepnav">
+          <button class="btn ghost" type="button" id="td-prev"></button>
+          <button class="btn" type="button" id="td-next"></button>
+        </div>
+      </div>
+    </div>
+    <div class="decomp" id="td-decomp" style="margin-top:12px"></div>
+    <p class="tip hint"><span class="ro"><span class="badge">✓ fără trecere peste ordin</span> Aici alegem doar cifre pentru care niciun rezultat parțial nu depășește 9. Cazul cu trecere peste ordin îl vei învăța la lecția următoare.</span><span class="de"><span class="badge">✓ ohne Überschreiten der Stelle</span> Hier wählen wir nur Ziffern, bei denen kein Teilergebnis größer als 9 wird. Den Fall mit Überschreiten lernst du in der nächsten Lektion.</span></p>
+  </div>
+  <div class="ex" id="ex5"></div>
+  <div class="retine">
+    <span class="tab"><span class="ro">Reține</span><span class="de">Merke</span></span>
+    <div class="body">
+      <p class="ro">La înmulțirea unui număr natural de două sau trei cifre cu un număr natural de o cifră, înmulțim, pe rând, numărul ce reprezintă al doilea factor cu numerele ce reprezintă fiecare ordin din primul factor: întâi unitățile, apoi zecile (apoi sutele).</p>
+      <p class="de">Beim Multiplizieren einer zwei- oder dreistelligen Zahl mit einer einstelligen Zahl multiplizieren wir den zweiten Faktor nacheinander mit den Zahlen jeder Stelle des ersten Faktors: zuerst die Einer, dann die Zehner (dann die Hunderter).</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Rezumat -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Rezumat și glosar</span><span class="de">Zusammenfassung und Glossar</span></h2>
+  <div class="lab plain" style="margin-top:14px">
+    <div class="ro" style="display:grid;gap:8px">
+      <p><span class="f1">Factor 1</span> · <span class="f2">factor 2</span> = <span class="pr">produs</span>. Înmulțirea este adunare repetată: <span class="f1">4</span> · <span class="f2">3</span> = 3 + 3 + 3 + 3 = <span class="pr">12</span>.</p>
+      <p>Înmulțirea cu <b>0</b> dă <b>0</b>; înmulțirea cu <b>1</b> nu schimbă numărul; ordinea factorilor nu schimbă produsul.</p>
+      <p>Cu o <b>sumă</b> sau o <b>diferență</b>: <span class="pr">n × (a ± b) = n × a ± n × b</span>.</p>
+      <p><span class="pr">20 × 3 = 2 × 3 × 10 = 60</span> și <span class="pr">14 × 2 = 10 × 2 + 4 × 2 = 28</span>.</p>
+    </div>
+    <div class="de" style="display:grid;gap:8px">
+      <p><span class="f1">Faktor 1</span> · <span class="f2">Faktor 2</span> = <span class="pr">Produkt</span>. Multiplikation ist wiederholte Addition: <span class="f1">4</span> · <span class="f2">3</span> = 3 + 3 + 3 + 3 = <span class="pr">12</span>.</p>
+      <p>Mal <b>0</b> ergibt <b>0</b>; mal <b>1</b> ändert die Zahl nicht; die Reihenfolge der Faktoren ändert das Produkt nicht.</p>
+      <p>Mit einer <b>Summe</b> oder <b>Differenz</b>: <span class="pr">n × (a ± b) = n × a ± n × b</span>.</p>
+      <p><span class="pr">20 × 3 = 2 × 3 × 10 = 60</span> und <span class="pr">14 × 2 = 10 × 2 + 4 × 2 = 28</span>.</p>
+    </div>
+  </div>
+  <h3 style="margin:26px 0 10px;font-size:22px"><span class="ro">Cuvinte noi</span><span class="de">Neue Wörter</span></h3>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După manualul de Matematică, clasa a 3-a, Unitatea 3. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Mathematikbuch der 3. Klasse, Einheit 3. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function rint(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = rint(0, i), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+var F1 = function (s) { return '<span class="f1">' + s + '</span>'; };
+var F2 = function (s) { return '<span class="f2">' + s + '</span>'; };
+var PR = function (s) { return '<span class="pr">' + s + '</span>'; };
+var OP = function (s) { return '<span class="op">' + s + '</span>'; };
+var TIMES = OP('×'), PLUS = OP('+'), MINUS = OP('−'), EQ = OP('=');
+
+/** Buton „−  n  +” cu limite; range() schimbă limitele din mers. */
+function Stepper(host, label, min, max, val, cb, cls) {
+  var st = { min: min, max: max, val: val };
+  var w = h('div', 'stepper' + (cls ? ' ' + cls : ''));
+  w.appendChild(h('span', 'sl', label));
+  var dec = h('button', '', '−'), out = h('output'), inc = h('button', '', '+');
+  dec.type = inc.type = 'button';
+  dec.setAttribute('aria-label', tx('mai puțin', 'weniger'));
+  inc.setAttribute('aria-label', tx('mai mult', 'mehr'));
+  w.appendChild(dec); w.appendChild(out); w.appendChild(inc);
+  host.appendChild(w);
+  function render() { out.textContent = st.val; dec.disabled = st.val <= st.min; inc.disabled = st.val >= st.max; }
+  dec.onclick = function () { if (st.val > st.min) { st.val--; render(); cb(st.val); } };
+  inc.onclick = function () { if (st.val < st.max) { st.val++; render(); cb(st.val); } };
+  st.set = function (v) { st.val = Math.max(st.min, Math.min(st.max, v)); render(); };
+  st.range = function (a, b) { st.min = a; st.max = b; st.set(st.val); };
+  render();
+  return st;
+}
+/** Grup de butoane exclusive (tab-uri). */
+function Tabs(host, items, cur, cb) {
+  host.innerHTML = '';
+  var btns = items.map(function (it) {
+    var b = h('button', '', it[1]); b.type = 'button';
+    b.setAttribute('aria-pressed', it[0] === cur ? 'true' : 'false');
+    b.onclick = function () { btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); cb(it[0]); };
+    host.appendChild(b); return b;
+  });
+}
+/** Exerciții cu {} = câmp de răspuns. items: [{q, a:[...], wp}] */
+function Exercises(host, title, items) {
+  host.innerHTML = '<h3>' + title + '</h3>';
+  var ol = h('ol'), inputs = [];
+  items.forEach(function (it, i) {
+    var li = h('li', it.wp ? 'wp' : '');
+    var parts = it.q.split('{}'), ai = 0;
+    li.appendChild(h('span', '', parts[0]));
+    for (var p = 1; p < parts.length; p++) {
+      var inp = h('input', 'dans'); inp.type = 'text'; inp.inputMode = 'numeric'; inp.autocomplete = 'off';
+      inp.setAttribute('aria-label', tx('răspuns', 'Antwort'));
+      inp.dataset.a = it.a[ai++];
+      inputs.push(inp);
+      li.appendChild(inp); li.appendChild(h('span', '', parts[p]));
+    }
+    ol.appendChild(li);
+  });
+  host.appendChild(ol);
+  var act = h('div', 'actions'), chk = h('button', 'btn', tx('Verifică', 'Prüfen')), rev = h('button', 'btn ghost', tx('Arată răspunsurile', 'Lösungen zeigen')), res = h('span', 'res');
+  chk.type = rev.type = 'button';
+  act.appendChild(chk); act.appendChild(rev); act.appendChild(res); host.appendChild(act);
+  chk.onclick = function () {
+    var ok = 0, empty = 0;
+    inputs.forEach(function (i) {
+      i.classList.remove('ok', 'bad');
+      if (i.value.trim() === '') { empty++; return; }
+      if (i.value.trim() === i.dataset.a) { i.classList.add('ok'); ok++; } else i.classList.add('bad');
+    });
+    res.textContent = ok + ' / ' + inputs.length + ' ' + tx('corecte', 'richtig') + (ok === inputs.length ? ' 🎉' : (empty ? '' : ' — ' + tx('mai încearcă', 'versuch es nochmal')));
+  };
+  rev.onclick = function () { inputs.forEach(function (i) { i.value = i.dataset.a; i.classList.remove('bad'); i.classList.add('ok'); }); res.textContent = ''; };
+  inputs.forEach(function (i) { i.addEventListener('keydown', function (e) { if (e.key === 'Enter') chk.click(); }); });
+}
+
+/* ================= 1. Adunare repetată pe axa numerelor ================= */
+(function () {
+  var n = 4, k = 3;
+  var svg = $('#nl-svg'), eq = $('#nl-eq'), ctrls = $('#nl-ctrls');
+  var sn = Stepper(ctrls, tx('De câte ori (factor 1)', 'Wie oft (Faktor 1)'), 1, 6, n, function (v) { n = v; draw(); }, 'red');
+  var sk = Stepper(ctrls, tx('Ce număr se repetă (factor 2)', 'Welche Zahl (Faktor 2)'), 1, 6, k, function (v) { k = v; draw(); }, 'green');
+  var rp = h('button', 'btn ghost', '▶ ' + tx('Repetă', 'Nochmal')); rp.type = 'button'; rp.onclick = draw; ctrls.appendChild(rp);
+
+  function draw() {
+    svg.innerHTML = '';
+    var total = n * k, max = Math.max(15, total + 1);
+    var x0 = 40, x1 = 930, u = (x1 - x0) / max, ly = 156;
+    var lstep = max <= 20 ? 1 : (max <= 30 ? 2 : 3);
+    // axa
+    el('line', { x1: x0 - 10, y1: ly, x2: 962, y2: ly, stroke: '#1b2440', 'stroke-width': 2.4 }, svg);
+    el('polygon', { points: '962,' + (ly - 6) + ' 976,' + ly + ' 962,' + (ly + 6), fill: '#1b2440' }, svg);
+    for (var i = 0; i <= max; i++) {
+      var x = x0 + i * u, major = (i % k === 0 && i <= total);
+      el('line', { x1: x, y1: ly - (major ? 14 : 8), x2: x, y2: ly + (major ? 14 : 8), stroke: '#1b2440', 'stroke-width': major ? 2.4 : 1.6 }, svg);
+      if (i % lstep === 0 || i === total) {
+        var t = el('text', { x: x, y: ly + 42, 'text-anchor': 'middle', 'font-size': i === total ? 28 : 21, 'font-weight': (major ? 800 : 500), fill: i === total ? '#1f2a5a' : (major ? '#0f9d58' : '#56607a'), 'font-family': 'Alegreya Sans, sans-serif' }, svg);
+        t.textContent = i;
+      }
+    }
+    // sărituri
+    var fs = Math.max(15, Math.min(26, k * u * 0.7));
+    for (var j = 0; j < n; j++) {
+      var xa = x0 + j * k * u, xb = xa + k * u, mid = (xa + xb) / 2, dl = (j * 0.6) + 's';
+      var ay = ly - 4, peak = Math.min(62, 22 + k * u * 0.42);
+      var p = el('path', { class: 'hop', d: 'M' + xa + ' ' + ay + ' Q' + mid + ' ' + (ay - 2 * peak) + ' ' + xb + ' ' + ay, pathLength: 1 }, svg);
+      p.style.animationDelay = dl;
+      var ang = Math.atan2(2 * peak, xb - mid), s = 10;
+      var bx = xb - s * Math.cos(ang), by = ay - s * Math.sin(ang), nx = Math.sin(ang) * 5, ny = Math.cos(ang) * 5;
+      var ah = el('polygon', { class: 'pop', points: xb + ',' + ay + ' ' + (bx + nx) + ',' + (by + ny) + ' ' + (bx - nx) + ',' + (by - ny), fill: '#1b2440' }, svg);
+      ah.style.animationDelay = (j * 0.6 + 0.45) + 's';
+      var tk = el('text', { class: 'pop', x: mid, y: ay - peak - 10, 'text-anchor': 'middle', 'font-size': fs, 'font-weight': 800, fill: '#0f9d58', 'font-family': 'Alegreya Sans, sans-serif' }, svg);
+      tk.textContent = k; tk.style.animationDelay = (j * 0.6 + 0.3) + 's';
+      var bd = el('circle', { class: 'pop', cx: mid, cy: ay - peak * 0.55, r: 11, fill: '#d62f2f' }, svg);
+      bd.style.animationDelay = (j * 0.6 + 0.3) + 's';
+      var bt = el('text', { class: 'pop', x: mid, y: ay - peak * 0.55 + 5, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 800, fill: '#fff', 'font-family': 'Alegreya Sans, sans-serif' }, svg);
+      bt.textContent = j + 1; bt.style.animationDelay = (j * 0.6 + 0.3) + 's';
+      if (j < n - 1 && k * u > 26) {
+        var pl = el('text', { class: 'pop', x: xb, y: ay - peak - 10, 'text-anchor': 'middle', 'font-size': fs, fill: '#56607a', 'font-family': 'Alegreya Sans, sans-serif' }, svg);
+        pl.textContent = '+'; pl.style.animationDelay = (j * 0.6 + 0.4) + 's';
+      }
+    }
+    // ecuațiile
+    var terms = []; for (var q = 0; q < n; q++) terms.push(F2(k));
+    var sum = terms.join(' ' + PLUS + ' ') + (n === 1 ? '' : ' ' + EQ + ' ' + PR(total));
+    if (n === 1) sum = F2(k) + ' ' + EQ + ' ' + PR(total);
+    eq.innerHTML =
+      '<div class="eq-flow">' +
+        '<div>' + sum + '</div><span class="arr">➜</span>' +
+        '<div class="eq-say">' + tx('de ' + F1(n) + ' ori câte ' + F2(k), F1(n) + ' Mal je ' + F2(k)) + '</div><span class="arr">➜</span>' +
+        '<div class="eq-prod"><div>' + F1(n) + ' <span class="op">·</span> ' + F2(k) + ' ' + EQ + ' ' + PR(total) + '</div><div>' + F1(n) + ' ' + TIMES + ' ' + F2(k) + ' ' + EQ + ' ' + PR(total) + '</div></div>' +
+      '</div>' +
+      '<div class="eq-keys">' +
+        '<span class="pill"><i style="background:var(--f1)"></i>' + tx('factor 1 = de câte ori', 'Faktor 1 = wie oft') + '</span>' +
+        '<span class="pill"><i style="background:var(--f2)"></i>' + tx('factor 2 = numărul care se repetă', 'Faktor 2 = die wiederholte Zahl') + '</span>' +
+        '<span class="pill"><i style="background:var(--prod)"></i>' + tx('produs = rezultatul', 'Produkt = das Ergebnis') + '</span>' +
+      '</div>' +
+      '<p class="tip hint">' + tx('Semnul înmulțirii poate fi scris și printr-un punct.', 'Das Malzeichen kann auch als Punkt geschrieben werden.') + '</p>';
+  }
+  draw();
+})();
+
+/* ================= 2. Tabla înmulțirii ================= */
+var COL = ['#e4e4ee', '#bfe3f7', '#f9cfe0', '#fff09a', '#f9cfe0', '#c8ebd4', '#f9cfe0', '#d9d2f0', '#f9cfe0', '#efc9b6', '#f9cfe0'];
+var tableN = 3; // linia aleasă, folosită și de antrenament
+(function () {
+  var N = 3, ar = 3, ac = 4, hide = false, revealed = {};
+  var chips = $('#tbl-chips'), plist = $('#plist'), note = $('#tbl-note'), mt = $('#mt'), probe = $('#probe'), hideBtn = $('#tbl-hide');
+  var chipBtns = [];
+  for (var i = 0; i <= 10; i++) (function (i) {
+    var b = h('button', 'chip', i); b.type = 'button';
+    b.style.background = ''; b.onclick = function () { N = i; tableN = i; refresh(); updateDrillLabel(); };
+    chips.appendChild(b); chipBtns.push(b);
+  })(i);
+  var cells = {};
+  function build() {
+    mt.innerHTML = '';
+    var hr = h('tr'); hr.appendChild(h('th', 'corner', '×'));
+    for (var c = 0; c <= 10; c++) { var th = h('th', '', c); th.style.setProperty('--hc', COL[c]); hr.appendChild(th); }
+    mt.appendChild(hr);
+    for (var r = 0; r <= 10; r++) {
+      var tr = h('tr'), rh = h('th', '', r); rh.style.setProperty('--hc', COL[r]); tr.appendChild(rh);
+      for (var c2 = 0; c2 <= 10; c2++) {
+        var td = h('td'), b = h('button', 'mc', r * c2); b.type = 'button';
+        b.dataset.r = r; b.dataset.c = c2;
+        b.setAttribute('aria-label', r + ' × ' + c2);
+        b.onclick = b.onmouseenter = b.onfocus = (function (r, c2) { return function (e) { if (e.type === 'click') reveal(r, c2); setActive(r, c2); }; })(r, c2);
+        td.appendChild(b); tr.appendChild(td); cells[r + ',' + c2] = b;
+      }
+      mt.appendChild(tr);
+    }
+  }
+  function reveal(r, c) { if (hide) { revealed[r + ',' + c] = true; revealed[c + ',' + r] = true; refresh(); } }
+  function isQ(r, c) { return hide && !revealed[r + ',' + c]; }
+  function setActive(r, c) { ar = r; ac = c; refresh(); }
+  function dots(r, c) {
+    var s = 13, w = Math.max(1, c) * s + 2, hh = Math.max(1, r) * s + 2;
+    var svg = el('svg', { width: Math.max(c, 1) * s + 2, height: Math.max(r, 1) * s + 2, viewBox: '0 0 ' + w + ' ' + hh, 'aria-hidden': 'true' });
+    for (var y = 0; y < r; y++) for (var x = 0; x < c; x++) el('circle', { cx: x * s + s / 2 + 1, cy: y * s + s / 2 + 1, r: 4.6, fill: y % 2 ? '#2f80ed' : '#5b9cf2' }, svg);
+    return svg;
+  }
+  function refresh() {
+    chipBtns.forEach(function (b, i) { b.setAttribute('aria-pressed', i === N ? 'true' : 'false'); b.style.background = i === N ? '' : COL[i]; });
+    hideBtn.textContent = hide ? tx('Arată produsele', 'Produkte zeigen') : tx('Ascunde produsele', 'Produkte verstecken');
+    hideBtn.setAttribute('aria-pressed', hide ? 'true' : 'false');
+    // tabel
+    for (var r = 0; r <= 10; r++) for (var c = 0; c <= 10; c++) {
+      var b = cells[r + ',' + c], inLine = (r === N || c === N);
+      var cls = 'mc';
+      if (inLine) cls += ' hi'; else if (r === ar || c === ac) cls += ' cross';
+      if (r === N && c === N) cls += ' diag';
+      if (r === ar && c === ac) cls += ' act'; else if (r === ac && c === ar) cls += ' mir';
+      if (isQ(r, c)) cls += ' q';
+      b.className = cls;
+      b.style.setProperty('--bg', inLine ? COL[N] : '#fff');
+    }
+    // lista
+    plist.style.setProperty('--pc', COL[N]);
+    plist.innerHTML = '<h3>' + tx('Înmulțirea cu ', 'Malreihe mit ') + N + '</h3>';
+    for (var i = 0; i <= 10; i++) (function (i) {
+      var b = h('button', ar === N && ac === i ? 'act' : '', '<span class="num">' + N + '</span><span>×</span><span class="num">' + i + '</span><span>=</span><span class="res">' + (isQ(N, i) ? '?' : N * i) + '</span>');
+      b.type = 'button';
+      b.onclick = function () { reveal(N, i); setActive(N, i); };
+      b.onmouseenter = function () { setActive(N, i); };
+      plist.appendChild(b);
+    })(i);
+    // notă
+    var nt;
+    if (N === 0) nt = tx('<b>Înmulțirea cu 0:</b> orice număr înmulțit cu 0 dă 0. De 0 ori câte 5 înseamnă că nu avem nimic.', '<b>Malreihe mit 0:</b> jede Zahl mal 0 ergibt 0. 0 Mal je 5 heißt: wir haben nichts.');
+    else if (N === 1) nt = tx('<b>Înmulțirea cu 1:</b> orice număr înmulțit cu 1 rămâne același număr. Compară lista cu coloana numerelor!', '<b>Malreihe mit 1:</b> jede Zahl mal 1 bleibt dieselbe Zahl. Vergleiche die Liste mit den Zahlen der Spalte!');
+    else if (N === 10) nt = tx('<b>Înmulțirea cu 10:</b> punem un 0 la sfârșitul numărului. 7 × 10 = 70.', '<b>Malreihe mit 10:</b> wir hängen eine 0 an die Zahl an. 7 × 10 = 70.');
+    else if (N === 2) nt = tx('Rezultatele cresc din 2 în 2 și sunt toate numere pare.', 'Die Ergebnisse wachsen in Zweierschritten und sind alle gerade Zahlen.');
+    else if (N === 5) nt = tx('Rezultatele cresc din 5 în 5 și se termină mereu în 0 sau în 5.', 'Die Ergebnisse wachsen in Fünferschritten und enden immer auf 0 oder 5.');
+    else if (N === 9) nt = tx('Adună cifrele fiecărui rezultat (de la 9 × 1): 18 → 1 + 8 = 9, 27 → 2 + 7 = 9. Iese mereu 9!', 'Addiere die Ziffern jedes Ergebnisses (ab 9 × 1): 18 → 1 + 8 = 9, 27 → 2 + 7 = 9. Es kommt immer 9 heraus!');
+    else nt = tx('Rezultatele cresc din ' + N + ' în ' + N + ': 0, ' + N + ', ' + (2 * N) + ', ' + (3 * N) + '… La fel ca săriturile de pe axa numerelor!', 'Die Ergebnisse wachsen in ' + N + 'er-Schritten: 0, ' + N + ', ' + (2 * N) + ', ' + (3 * N) + '… Genau wie die Sprünge am Zahlenstrahl!');
+    note.innerHTML = nt;
+    // sonda
+    probe.innerHTML = '';
+    var q = isQ(ar, ac), prod = ar * ac;
+    var big = h('div', 'big', F1(ar) + ' ' + TIMES + ' ' + F2(ac) + ' ' + EQ + ' ' + (q ? '?' : PR(prod)));
+    probe.appendChild(big);
+    if (!q) probe.appendChild(dots(ar, ac));
+    var sub = h('div', 'sub', q ? tx('Atinge căsuța sau gândește-te: cât este?', 'Tippe auf das Feld oder rechne selbst: wie viel ist es?') :
+      (ar === ac ? tx('Aici rândul și coloana coincid: ' + ar + ' × ' + ac + '.', 'Hier treffen sich Zeile und Spalte: ' + ar + ' × ' + ac + '.') :
+        tx('Și ' + ac + ' × ' + ar + ' = ' + prod + '. Ordinea factorilor nu schimbă produsul (căsuța cu linie întreruptă).', 'Auch ' + ac + ' × ' + ar + ' = ' + prod + '. Die Reihenfolge der Faktoren ändert das Produkt nicht (Feld mit gestrichelter Linie).')));
+    probe.appendChild(sub);
+  }
+  hideBtn.onclick = function () { hide = !hide; revealed = {}; refresh(); };
+  build(); refresh();
+  window.__tblN = function () { return N; };
+})();
+
+/* ---- antrenament ---- */
+var updateDrillLabel;
+(function () {
+  var body = $('#dr-body'), bn = $('#dr-n'), ba = $('#dr-all');
+  updateDrillLabel = function () { bn.textContent = tx('Testează înmulțirea cu ' + tableN, 'Teste die Malreihe mit ' + tableN); };
+  ba.textContent = tx('Amestecat (0–10)', 'Gemischt (0–10)');
+  updateDrillLabel();
+  var qs, qi, score, res, state;
+  function start(mode) {
+    var bs = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).slice(0, 10);
+    qs = bs.map(function (b) {
+      var a = mode === 'all' ? rint(0, 10) : mode;
+      return Math.random() < .5 ? [a, b] : [b, a];
+    });
+    qi = 0; score = 0; res = []; state = 'ask'; show();
+  }
+  function show() {
+    body.innerHTML = '';
+    if (qi >= qs.length) {
+      var msg = score === 10 ? tx('Perfect! Ești un campion al înmulțirii! 🏆', 'Perfekt! Du bist ein Meister im Malnehmen! 🏆') : score >= 7 ? tx('Foarte bine! Mai exersează puțin. ⭐', 'Sehr gut! Übe noch ein bisschen. ⭐') : tx('Bun început! Privește din nou tabelul și încearcă iar. 💪', 'Guter Anfang! Sieh dir die Tafel nochmal an und versuche es erneut. 💪');
+      body.innerHTML = '<div class="qtext">' + score + ' / 10</div><p style="margin:8px 0">' + msg + '</p>';
+      var again = h('button', 'btn', tx('Încearcă din nou', 'Nochmal versuchen')); again.type = 'button';
+      again.onclick = function () { start(lastMode); }; body.appendChild(again); return;
+    }
+    var q = qs[qi], row = h('div', 'qrow');
+    row.appendChild(h('span', 'qtext', F1(q[0]) + ' ' + TIMES + ' ' + F2(q[1]) + ' ' + EQ));
+    var inp = h('input', 'ans'); inp.type = 'text'; inp.inputMode = 'numeric'; inp.autocomplete = 'off'; inp.setAttribute('aria-label', tx('răspuns', 'Antwort'));
+    var go = h('button', 'btn', tx('Verifică', 'Prüfen')); go.type = 'button';
+    row.appendChild(inp); row.appendChild(go); body.appendChild(row);
+    var fb = h('div', 'fb'); fb.setAttribute('aria-live', 'polite'); body.appendChild(fb);
+    var dots = h('div', 'dots'); for (var i = 0; i < 10; i++) dots.appendChild(h('i', i === qi ? 'cur' : (res[i] === 1 ? 'ok' : (res[i] === 0 ? 'bad' : '')))); body.appendChild(dots);
+    state = 'ask'; setTimeout(function () { try { inp.focus({ preventScroll: true }); } catch (e) { inp.focus(); } }, 0);
+    function act() {
+      if (state === 'shown') { qi++; show(); return; }
+      if (inp.value.trim() === '') return;
+      var right = parseInt(inp.value, 10) === q[0] * q[1];
+      res[qi] = right ? 1 : 0; if (right) score++;
+      inp.classList.add(right ? 'ok' : 'bad'); inp.readOnly = true;
+      fb.className = 'fb ' + (right ? 'ok' : 'bad');
+      fb.textContent = right ? tx('Corect! ✓', 'Richtig! ✓') : tx('Nu chiar. Răspunsul este ', 'Nicht ganz. Die Antwort ist ') + q[0] * q[1] + '.';
+      go.textContent = qi === 9 ? tx('Vezi rezultatul', 'Ergebnis ansehen') : tx('Următoarea', 'Weiter');
+      state = 'shown'; go.focus();
+    }
+    go.onclick = act;
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') act(); });
+  }
+  var lastMode = 'all';
+  bn.onclick = function () { lastMode = tableN; start(lastMode); };
+  ba.onclick = function () { lastMode = 'all'; start('all'); };
+  body.innerHTML = '<p class="hint">' + tx('10 întrebări. Scrie răspunsul și apasă Enter.', '10 Fragen. Schreibe die Antwort und drücke Enter.') + '</p>';
+})();
+
+/* ================= 3. Factor sumă / diferență ================= */
+(function () {
+  var mode = 'sum', sol = 1, step = 1;
+  var n = 2, a = 4, b = 3;
+  var NAMES = ['Mara', 'Vlad', 'Ana', 'Dan'];
+  var COLORS = ['#e5484d', '#f59f00', '#2fb344', '#3b82f6', '#a855f7', '#ec4899', '#14b8a6'];
+  var BLACK = '#2b2b2b';
+  var svg = $('#pen-svg'), story = $('#pen-story'), lines = $('#pen-lines'), idb = $('#pen-id'), same = $('#pen-same');
+  var stHost = $('#pen-steppers');
+  var sN = Stepper(stHost, tx('Copii', 'Kinder'), 2, 4, n, function (v) { n = v; changed(); });
+  var sA = Stepper(stHost, tx('Colorate', 'Bunte'), 3, 7, a, function (v) { a = v; if (mode === 'diff' && b >= a) { b = a - 1; } changed(); });
+  var sB = Stepper(stHost, tx('Negre', 'Schwarze'), 2, 6, b, function (v) { b = v; if (mode === 'diff' && b >= a) { a = b + 1; } changed(); });
+  function setMode(m) { mode = m; if (m === 'diff' && b >= a) b = a - 1; changed(); }
+  function modeTabs() {
+    Tabs($('#pen-mode'), [['sum', tx('Sumă  (a + b)', 'Summe  (a + b)')], ['diff', tx('Diferență  (a − b)', 'Differenz  (a − b)')]], mode, setMode);
+  }
+  function solTabs() { Tabs($('#pen-sol'), [[1, tx('Rezolvare 1', 'Lösung 1')], [2, tx('Rezolvare 2', 'Lösung 2')]], sol, function (s) { sol = s; step = 1; render(); }); }
+  var prev = $('#pen-prev'), next = $('#pen-next');
+  prev.textContent = '◀ ' + tx('Înapoi', 'Zurück'); next.textContent = tx('Pasul următor', 'Nächster Schritt') + ' ▶';
+  prev.onclick = function () { if (step > 1) { step--; render(); } };
+  next.onclick = function () { var m = stepsOf().length; if (step < m) { step++; render(); } };
+
+  function changed() { sN.set(n); sA.set(a); sB.set(b); step = 1; modeTabs(); render(); }
+
+  function names() {
+    var s = NAMES.slice(0, n);
+    return L === 'de' ? s.slice(0, -1).join(', ') + ' und ' + s[n - 1] : s.slice(0, -1).join(', ') + ' și ' + s[n - 1];
+  }
+  function steps() {
+    var s = a + b, d = a - b;
+    if (mode === 'sum') return sol === 1 ? [
+      { eq: F2(a) + ' ' + PLUS + ' ' + F1(b) + ' ' + EQ + ' ' + PR(s), what: tx('(creioane la fiecare copil)', '(Stifte bei jedem Kind)'), hl: function (c) { return c.child === 0; } },
+      { eq: n + ' ' + TIMES + ' ' + s + ' ' + EQ + ' ' + PR(n * s), what: tx('(creioane în total)', '(Stifte insgesamt)'), hl: function () { return true; } }
+    ] : [
+      { eq: n + ' ' + TIMES + ' ' + a + ' ' + EQ + ' ' + PR(n * a), what: tx('(creioane colorate)', '(bunte Stifte)'), hl: function (c) { return c.kind === 'c'; } },
+      { eq: n + ' ' + TIMES + ' ' + b + ' ' + EQ + ' ' + PR(n * b), what: tx('(creioane negre)', '(schwarze Stifte)'), hl: function (c) { return c.kind === 'b'; } },
+      { eq: PR(n * a) + ' ' + PLUS + ' ' + PR(n * b) + ' ' + EQ + ' ' + PR(n * a + n * b), what: tx('(creioane în total)', '(Stifte insgesamt)'), hl: function () { return true; } }
+    ];
+    return sol === 1 ? [
+      { eq: a + ' ' + MINUS + ' ' + b + ' ' + EQ + ' ' + PR(d), what: tx('(colorate în plus la un copil)', '(bunte Stifte mehr bei einem Kind)'), hl: function (c) { return c.child === 0 && c.kind === 'c' && c.idx >= b; } },
+      { eq: n + ' ' + TIMES + ' ' + d + ' ' + EQ + ' ' + PR(n * d), what: tx('(colorate în plus, în total)', '(bunte Stifte mehr, insgesamt)'), hl: function (c) { return c.kind === 'c' && c.idx >= b; } }
+    ] : [
+      { eq: n + ' ' + TIMES + ' ' + b + ' ' + EQ + ' ' + PR(n * b), what: tx('(creioane negre)', '(schwarze Stifte)'), hl: function (c) { return c.kind === 'b'; } },
+      { eq: n + ' ' + TIMES + ' ' + a + ' ' + EQ + ' ' + PR(n * a), what: tx('(creioane colorate)', '(bunte Stifte)'), hl: function (c) { return c.kind === 'c'; } },
+      { eq: PR(n * a) + ' ' + MINUS + ' ' + PR(n * b) + ' ' + EQ + ' ' + PR(n * a - n * b), what: tx('(colorate în plus)', '(bunte Stifte mehr)'), hl: function (c) { return c.kind === 'c' && c.idx >= b; } }
+    ];
+  }
+  function stepsOf() { return steps(); }
+
+  function pencil(x, y, color, sc, cls, meta) {
+    var g = el('g', { class: 'pc ' + cls, transform: 'translate(' + x + ',' + y + ') scale(' + sc + ')' }, svg);
+    el('rect', { x: 0, y: 0, width: 14, height: 46, rx: 2, fill: color }, g);
+    el('rect', { x: 0, y: 40, width: 14, height: 5, fill: '#b8bccb' }, g);
+    el('rect', { x: 0, y: 45, width: 14, height: 8, rx: 3, fill: '#e8a0b4' }, g);
+    el('polygon', { points: '0,0 14,0 7,-14', fill: '#f2cf9b' }, g);
+    el('polygon', { points: '4.4,-4.4 9.6,-4.4 7,-14', fill: color }, g);
+    g._m = meta; return g;
+  }
+  function render() {
+    var s = a + b, d = a - b, ST = steps(), cur = ST[step - 1];
+    // poveste
+    var hasNames = n === 2 ? names() : names();
+    var q1 = tx(hasNames + ' au fiecare în penar câte ' + F1(b) + ' creioane negre și ' + F2(a) + ' creioane colorate.',
+                hasNames + ' haben jeweils im Federmäppchen ' + F1(b) + ' schwarze und ' + F2(a) + ' bunte Stifte.');
+    var q2 = mode === 'sum' ? tx('Câte creioane au copiii în total?', 'Wie viele Stifte haben die Kinder insgesamt?')
+                            : tx('Cu cât este mai mare numărul creioanelor colorate decât numărul creioanelor negre, în total?', 'Um wie viel größer ist die Anzahl der bunten Stifte als die der schwarzen, insgesamt?');
+    story.innerHTML = '<p>' + q1 + '</p><p class="qq">' + q2 + '</p>';
+    // desen
+    svg.innerHTML = '';
+    var W = 116 + (mode === 'sum' ? a + b : a) * 30, rh = mode === 'sum' ? 92 : 150, H = n * rh + 8;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var all = [];
+    for (var c = 0; c < n; c++) {
+      var y0 = c * rh + 6;
+      el('circle', { cx: 42, cy: y0 + rh / 2 - 8, r: 20, fill: ['#fde3cc', '#dbe3fb', '#e3f5ec', '#f3e0f7'][c] }, svg);
+      var ini = el('text', { x: 42, y: y0 + rh / 2 - 1, 'text-anchor': 'middle', 'font-size': 20, 'font-weight': 800, class: 'nm' }, svg); ini.textContent = NAMES[c][0];
+      var nm = el('text', { x: 42, y: y0 + rh / 2 + 28, 'text-anchor': 'middle', class: 'nm', 'font-size': 13 }, svg); nm.textContent = NAMES[c];
+      var cnt = mode === 'sum' ? a + b : a;
+      el('rect', { x: 88, y: y0, width: cnt * 30 + 12, height: rh - 12, rx: 12, fill: '#fbf5e6', stroke: '#e6d9b8', 'stroke-width': 1.5 }, svg);
+      if (mode === 'sum') {
+        for (var i = 0; i < b; i++) all.push(pencil(102 + i * 30, y0 + 24, BLACK, 1, '', { child: c, kind: 'b', idx: i }));
+        for (var j = 0; j < a; j++) all.push(pencil(102 + (b + j) * 30, y0 + 24, COLORS[j % 7], 1, '', { child: c, kind: 'c', idx: j }));
+      } else {
+        for (var j2 = 0; j2 < a; j2++) {
+          var px = 102 + j2 * 30;
+          all.push(pencil(px, y0 + 22, COLORS[j2 % 7], .8, '', { child: c, kind: 'c', idx: j2 }));
+          if (j2 < b) {
+            all.push(pencil(px, y0 + 22 + 58, BLACK, .8, '', { child: c, kind: 'b', idx: j2 }));
+            el('line', { x1: px + 7, y1: y0 + 22 + 50, x2: px + 7, y2: y0 + 22 + 56, stroke: '#9aa3bd', 'stroke-width': 2, 'stroke-dasharray': '2 3' }, svg);
+          }
+        }
+      }
+    }
+    svg.setAttribute('class', 'dim');
+    all.forEach(function (g) { if (cur.hl(g._m)) g.classList.add('hl'); });
+    // pași
+    lines.innerHTML = '';
+    ST.forEach(function (S, i) {
+      if (i >= step) return;
+      var ln = h('div', 'line' + (i === step - 1 ? ' cur' : ''), '<span class="eqn">' + S.eq + '</span><span class="what">' + S.what + '</span>');
+      lines.appendChild(ln);
+    });
+    prev.disabled = step <= 1; next.disabled = step >= ST.length;
+    // identitatea și verificarea
+    var sign = mode === 'sum' ? '+' : '−';
+    idb.innerHTML = n + ' ' + TIMES + ' (' + a + ' ' + OP(sign) + ' ' + b + ') ' + EQ + ' ' + n + ' ' + TIMES + ' ' + a + ' ' + OP(sign) + ' ' + n + ' ' + TIMES + ' ' + b +
+      '<small>' + (mode === 'sum' ? tx('înmulțirea cu o sumă', 'Multiplikation mit einer Summe') : tx('înmulțirea cu o diferență', 'Multiplikation mit einer Differenz')) + '</small>';
+    var r1 = mode === 'sum' ? n * s : n * d;
+    same.innerHTML = '<span>' + n + ' × ' + (mode === 'sum' ? s : d) + ' = ' + r1 + '</span> &nbsp;|&nbsp; <span>' + n * a + ' ' + sign + ' ' + n * b + ' = ' + r1 + '</span> &nbsp; ✓ ' + tx('același rezultat!', 'dasselbe Ergebnis!');
+  }
+  changed(); solTabs();
+  Exercises($('#ex3'), tx('Exersează', 'Übe'), [
+    { q: '2 × (5 + 3) = 2 × 5 + 2 × {}', a: [3] },
+    { q: '3 × (4 + 6) = {}', a: [30] },
+    { q: '4 × (7 − 2) = 4 × 7 − 4 × {}', a: [2] },
+    { q: '5 × (9 − 4) = {}', a: [25] },
+    { wp: true, q: tx('Un caiet costă 3 lei, iar un pix costă 2 lei. Cât costă 4 caiete și 4 pixuri?  4 × (3 + 2) = {} lei', 'Ein Heft kostet 3 Lei, ein Stift kostet 2 Lei. Wie viel kosten 4 Hefte und 4 Stifte?  4 × (3 + 2) = {} Lei'), a: [20] }
+  ]);
+})();
+
+/* ================= 4. Numere rotunde ================= */
+(function () {
+  var t = 2, m = 3, meth = 1, step = 1;
+  var vis = $('#rd-vis'), chain = $('#rd-chain'), stHost = $('#rd-steppers');
+  var sT = Stepper(stHost, tx('Zeci', 'Zehner'), 1, 9, t, function (v) { t = v; step = 1; render(); });
+  var sM = Stepper(stHost, tx('Se repetă de', 'Wiederholt'), 2, 9, m, function (v) { m = v; step = 1; render(); }, 'red');
+  Tabs($('#rd-mode'), [[1, tx('Metoda 1: adunare', 'Weg 1: Addieren')], [2, tx('Metoda 2: zecile', 'Weg 2: Zehner')]], meth, function (v) { meth = v; step = 1; render(); });
+  var prev = $('#rd-prev'), next = $('#rd-next');
+  prev.textContent = '◀ ' + tx('Înapoi', 'Zurück'); next.textContent = tx('Pasul următor', 'Nächster Schritt') + ' ▶';
+  var GC = ['#3b82f6', '#e5484d', '#2fb344', '#f59f00', '#a855f7', '#14b8a6', '#ec4899', '#6366f1', '#84cc16'];
+  function lines() {
+    var A = t * 10, P = t * m, R = A * m;
+    var rep = [], i; for (i = 0; i < m; i++) rep.push(A);
+    if (meth === 1) return [
+      { eq: A + ' ' + TIMES + ' ' + m + ' ' + EQ + ' ' + m + ' ' + TIMES + ' ' + A, sm: tx('Ordinea factorilor nu contează.', 'Die Reihenfolge der Faktoren ist egal.') },
+      { eq: EQ + ' ' + rep.join(' ' + PLUS + ' '), sm: tx('Adunăm ' + A + ' de ' + m + ' ori.', 'Wir addieren ' + A + ' genau ' + m + ' Mal.') },
+      { eq: EQ + ' ' + PR(R), sm: '' }
+    ];
+    return [
+      { eq: A + ' ' + TIMES + ' ' + m + ' ' + EQ + ' ' + t + ' ' + TIMES + ' 10 ' + TIMES + ' ' + m, sm: tx(A + ' înseamnă ' + t + ' zeci, adică ' + t + ' × 10.', A + ' sind ' + t + ' Zehner, also ' + t + ' × 10.') },
+      { eq: EQ + ' ' + t + ' ' + TIMES + ' ' + m + ' ' + TIMES + ' 10', sm: tx('Schimbăm ordinea factorilor: întâi zecile.', 'Wir vertauschen die Faktoren: erst die Zehner.') },
+      { eq: EQ + ' ' + P + ' ' + TIMES + ' 10', sm: tx(t + ' × ' + m + ' = ' + P + ' zeci.', t + ' × ' + m + ' = ' + P + ' Zehner.') },
+      { eq: EQ + ' ' + PR(R), sm: P >= 10 ? tx(P + ' zeci = ' + Math.floor(P / 10) + ' sute și ' + (P % 10) + ' zeci.', P + ' Zehner = ' + Math.floor(P / 10) + ' Hunderter und ' + (P % 10) + ' Zehner.') : '' }
+    ];
+  }
+  function rods(n, color, cls) { var d = h('div', 'rods-line'); for (var i = 0; i < n; i++) { var r = h('span', 'rod ' + (cls || '')); r.style.setProperty('--rc', color); d.appendChild(r); } return d; }
+  function render() {
+    var A = t * 10, P = t * m, R = A * m, L2 = lines(), last = L2.length;
+    vis.innerHTML = '';
+    var gr = h('div', 'groups');
+    for (var g = 0; g < m; g++) {
+      var col = meth === 1 ? GC[g % 9] : '#3b82f6';
+      var grp = h('div', 'grp'), box = h('div', 'box');
+      for (var r = 0; r < t; r++) { var rd = h('span', 'rod'); rd.style.setProperty('--rc', col); box.appendChild(rd); }
+      grp.appendChild(box);
+      grp.appendChild(h('span', 'cap', meth === 1 ? A : t + ' ' + tx('zeci', 'Zehner')));
+      gr.appendChild(grp);
+      if (g < m - 1) gr.appendChild(h('span', 'plus', meth === 1 ? '+' : '·'));
+    }
+    vis.appendChild(gr);
+    var rr = h('div', 'result-row');
+    if (meth === 1) {
+      rr.appendChild(h('div', 'cap', tx('Toate la un loc:', 'Alle zusammen:')));
+      var ln = h('div', 'rods-line');
+      for (var g2 = 0; g2 < m; g2++) for (var r2 = 0; r2 < t; r2++) { var q = h('span', 'rod'); q.style.setProperty('--rc', GC[g2 % 9]); ln.appendChild(q); }
+      rr.appendChild(ln);
+      rr.appendChild(h('div', 'cap', (step >= last ? PR(R) : '?') + ' ' + tx('(' + P + ' zeci)', '(' + P + ' Zehner)')));
+    } else {
+      rr.appendChild(h('div', 'cap', tx('Numărăm zecile:', 'Wir zählen die Zehner:')));
+      rr.appendChild(rods(step >= 3 ? P : 0, '#3b82f6'));
+      rr.appendChild(h('div', 'cap', step >= 3 ? P + ' ' + tx('zeci', 'Zehner') + (step >= 4 ? ' = ' + PR(R) : '') : tx('Ce obținem dacă strângem toate bastoanele?', 'Was ergibt es, wenn wir alle Stäbe sammeln?')));
+    }
+    vis.appendChild(rr);
+    chain.innerHTML = '';
+    L2.forEach(function (Ln, i) { if (i < step) chain.appendChild(h('div', 'line' + (i === step - 1 ? ' cur' : ''), Ln.eq + (Ln.sm ? '<small>' + Ln.sm + '</small>' : ''))); });
+    prev.disabled = step <= 1; next.disabled = step >= last;
+  }
+  prev.onclick = function () { if (step > 1) { step--; render(); } };
+  next.onclick = function () { step++; render(); };
+  // la schimbarea metodei păstrăm numerele
+  render();
+})();
+
+/* ================= 5. Două cifre × o cifră ================= */
+(function () {
+  var m = 2, tn = 1, un = 4, step = 1;
+  var vis = $('#td-vis'), vert = $('#td-vert'), chain = $('#td-chain'), decomp = $('#td-decomp'), host = $('#td-steppers');
+  function lim() { return Math.floor(9 / m); }
+  var sm, st, su;
+  sm = Stepper(host, tx('Înmulțim cu', 'Mal'), 2, 4, m, function (v) { m = v; st.range(1, lim()); su.range(0, lim()); tn = st.val; un = su.val; step = 1; render(); }, 'green');
+  st = Stepper(host, tx('Zeci', 'Zehner'), 1, lim(), tn, function (v) { tn = v; step = 1; render(); }, 'red');
+  su = Stepper(host, tx('Unități', 'Einer'), 0, lim(), un, function (v) { un = v; step = 1; render(); }, 'red');
+  var prev = $('#td-prev'), next = $('#td-next');
+  prev.textContent = '◀ ' + tx('Înapoi', 'Zurück'); next.textContent = tx('Pasul următor', 'Nächster Schritt') + ' ▶';
+  prev.onclick = function () { if (step > 1) { step--; render(); } };
+  next.onclick = function () { if (step < 3) { step++; render(); } };
+  function render() {
+    var N = tn * 10 + un, pu = un * m, pt = tn * m, R = N * m;
+    // blocuri
+    vis.innerHTML = '';
+    var gr = h('div', 'groups');
+    for (var g = 0; g < m; g++) {
+      var grp = h('div', 'grp'), box = h('div', 'box');
+      var rw = h('div', 'rods-line'); rw.style.flexWrap = 'nowrap';
+      for (var r = 0; r < tn; r++) { var rd = h('span', 'rod' + (step === 2 ? ' glow' : (step === 1 ? ' dimmed' : ''))); rd.style.setProperty('--rc', '#3b82f6'); rw.appendChild(rd); }
+      var cb = h('div', 'cubes');
+      for (var c = 0; c < un; c++) { var cu = h('span', 'cube' + (step === 1 ? ' glow' : (step === 2 ? ' dimmed' : ''))); cb.appendChild(cu); }
+      box.appendChild(rw); box.appendChild(cb);
+      grp.appendChild(box); grp.appendChild(h('span', 'cap', N));
+      gr.appendChild(grp);
+      if (g < m - 1) gr.appendChild(h('span', 'plus', '+'));
+    }
+    vis.appendChild(gr);
+    vis.appendChild(h('div', 'hint', tx('Bastonul albastru = 1 zece (10). Cubulețul portocaliu = 1 unitate (1).', 'Blauer Stab = 1 Zehner (10). Oranger Würfel = 1 Einer (1).')));
+    // înmulțirea pe verticală
+    vert.innerHTML = '';
+    var lab = h('div', 'vert-lab', '<span></span><span>' + tx('zeci', 'Z') + '</span><span>' + tx('unități', 'E') + '</span>');
+    var v = h('div', 'vert');
+    v.appendChild(h('div', 'sg', '')); v.appendChild(h('div', 'd1' + (step === 2 ? ' flash' : ''), tn)); v.appendChild(h('div', 'd1' + (step === 1 ? ' flash' : ''), un));
+    v.appendChild(h('div', 'sg', '×')); v.appendChild(h('div', 'd2', '')); v.appendChild(h('div', 'd2', m));
+    v.appendChild(h('div', 'rule'));
+    v.appendChild(h('div', 'sg', '')); v.appendChild(h('div', 'out' + (step === 2 ? ' flash' : '') + (step < 2 ? ' hideit' : ''), pt)); v.appendChild(h('div', 'out' + (step === 1 ? ' flash' : '') + (step < 1 ? ' hideit' : ''), pu));
+    vert.appendChild(lab); vert.appendChild(v);
+    // pași
+    var S = [
+      tx('Înmulțim pe ' + F2(m) + ' cu ' + F1(un) + ' (unități) și scriem rezultatul în dreptul unităților: ' + m + ' × ' + un + ' = ' + PR(pu), 'Wir multiplizieren ' + F2(m) + ' mit ' + F1(un) + ' (Einer) und schreiben das Ergebnis unter die Einer: ' + m + ' × ' + un + ' = ' + PR(pu)),
+      tx('Înmulțim pe ' + F2(m) + ' cu ' + F1(tn) + ' (zeci) și scriem rezultatul în dreptul zecilor: ' + m + ' × ' + tn + ' = ' + PR(pt) + ' zeci', 'Wir multiplizieren ' + F2(m) + ' mit ' + F1(tn) + ' (Zehner) und schreiben das Ergebnis unter die Zehner: ' + m + ' × ' + tn + ' = ' + PR(pt) + ' Zehner'),
+      tx('Citim rezultatul: ' + N + ' × ' + m + ' = ' + PR(R), 'Wir lesen das Ergebnis ab: ' + N + ' × ' + m + ' = ' + PR(R))
+    ];
+    chain.innerHTML = '';
+    S.forEach(function (s, i) { if (i < step) chain.appendChild(h('div', 'line' + (i === step - 1 ? ' cur' : ''), '<small style="font-size:17px;color:var(--ink);margin:0">' + '<b>' + (i + 1) + '.</b> ' + s + '</small>')); });
+    prev.disabled = step <= 1; next.disabled = step >= 3;
+    decomp.innerHTML = step >= 3 ? N + ' ' + TIMES + ' ' + m + ' ' + EQ + ' (' + tn * 10 + ' ' + PLUS + ' ' + un + ') ' + TIMES + ' ' + m + ' ' + EQ + ' ' + tn * 10 + ' ' + TIMES + ' ' + m + ' ' + PLUS + ' ' + un + ' ' + TIMES + ' ' + m + ' ' + EQ + ' ' + tn * 10 * m + ' ' + PLUS + ' ' + pu + ' ' + EQ + ' ' + PR(R) : '<span class="hint" style="font-weight:500;font-family:var(--body);font-size:17px">' + tx('Termină cei trei pași ca să vezi legătura cu înmulțirea unei sume.', 'Gehe alle drei Schritte durch, dann siehst du die Verbindung zur Multiplikation mit einer Summe.') + '</span>';
+  }
+  render();
+  Exercises($('#ex5'), tx('Exersează', 'Übe'), [
+    { q: '21 × 3 = {}', a: [63] },
+    { q: '32 × 2 = {}', a: [64] },
+    { q: '13 × 3 = {}', a: [39] },
+    { q: '41 × 2 = {}', a: [82] },
+    { q: '30 × 3 = {}', a: [90] },
+    { q: '24 × 2 = 20 × 2 + 4 × 2 = {} + {} = {}', a: [40, 8, 48] }
+  ]);
+})();
+
+/* ================= 6. Glosar ================= */
+(function () {
+  var G = [
+    ['înmulțire', 'die Multiplikation'], ['adunare repetată', 'wiederholte Addition'],
+    ['factor', 'der Faktor'], ['produs', 'das Produkt'],
+    ['sumă', 'die Summe'], ['diferență', 'die Differenz'],
+    ['paranteze', 'die Klammern'], ['semnul înmulțirii (× sau ·)', 'das Malzeichen (× oder ·)'],
+    ['tabla înmulțirii', 'das Einmaleins'], ['zeci', 'die Zehner'],
+    ['unități', 'die Einer'], ['fără trecere peste ordin', 'ohne Überschreiten der Stelle']
+  ];
+  var dl = $('#gloss');
+  G.forEach(function (g) { dl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
+})();
+})();
+</script>
+</body>
+</html>

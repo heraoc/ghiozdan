@@ -1,6 +1,7 @@
 // Conținutul site-ului. Fiecare text are variantă în română (ro) și germană (de).
 
 import { ibnBattutaTest } from './content/ibn-battuta-test';
+import { inmultireaTest } from './content/inmultirea-test';
 import { mariExploratoriTest } from './content/mari-exploratori-test';
 import { organismulOmuluiTest } from './content/organismul-omului-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
@@ -111,7 +112,23 @@ const SUBJECTS: Record<Grade, [SubjectKey, glyph: string][]> = {
  * de pe carduri se calculează automat din această listă.
  */
 const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
-  3: {},
+  3: {
+    mat: [
+      {
+        slug: 'inmultirea',
+        title: {
+          ro: 'Înmulțirea numerelor naturale',
+          de: 'Die Multiplikation natürlicher Zahlen',
+        },
+        summary: {
+          ro: 'Înmulțirea ca adunare repetată, tabla înmulțirii, factor sumă sau diferență și numere de două cifre înmulțite cu o cifră.',
+          de: 'Multiplikation als wiederholte Addition, das Einmaleins, Summe oder Differenz als Faktor und zweistellige Zahlen mal einstellige.',
+        },
+        src: 'lectii/clasa-3/matematica/inmultirea.html',
+        test: { questions: inmultireaTest, minutes: 8 },
+      },
+    ],
+  },
   6: {
     bio: [
       {
