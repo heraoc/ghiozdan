@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Unitățile de măsură: lungime, arie, volum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Maßeinheiten: Länge, Fläche, Volumen';
+})();
+</script>
+<style>
+:root{
+  --paper:#f7f6f0; --card:#ffffff; --ink:#1f2530; --muted:#5a6270; --rule:#e2e0d6; --sheet:#f1efe6;
+  --accent:#c98a00; --accent-soft:#fdf2d4; --blue:#2f6fd6; --blue-soft:#e3edfc; --ok:#1f8a5b; --bad:#c23b3b;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+sup{font-size:.7em;line-height:0}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.term{font-style:italic;color:var(--muted);font-weight:400}
+.hint{font-size:14px;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tab{border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:6px 15px;cursor:pointer;font-weight:700}
+.tab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.num{font-variant-numeric:tabular-nums}
+
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+
+section.block{margin-top:56px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:70ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.story{background:#fffbea;border:1px solid #f0e2a8;border-radius:10px;padding:14px 18px}
+.story h3{font-size:19px;color:#8a6a00;margin-bottom:4px}
+
+/* 1. unități după corp */
+.body-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:22px;align-items:start}
+.body-fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:10px}
+.body-fig svg{display:block;width:100%;height:auto}
+.bu{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;opacity:0;transition:opacity .25s}
+.bu.on{opacity:1}
+.bu-end{fill:var(--accent);opacity:0;transition:opacity .25s}
+.bu-end.on{opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--accent);background:transparent;border-radius:99px;padding:5px 13px;cursor:pointer;font-weight:700}
+.chip[aria-pressed="true"]{background:var(--accent);color:#fff}
+.bu-info{margin-top:12px;border-left:4px solid var(--accent);min-height:120px}
+.bu-info h3{font-size:22px}
+.bu-info p{margin-top:6px}
+.bench{margin-top:16px}
+.bench svg{display:block;width:100%;height:auto}
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0;border-left:3px solid var(--accent);margin-left:8px}
+.timeline li{position:relative;padding:0 0 16px 20px}
+.timeline li::before{content:"";position:absolute;left:-9px;top:6px;width:15px;height:15px;border-radius:50%;background:var(--card);border:3px solid var(--accent)}
+.timeline b{font-family:var(--display);font-size:18px}
+.timeline p{margin-top:2px}
+
+/* 2. SI */
+.si{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.si div{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 12px}
+.si div.me{border:2px solid var(--accent);background:var(--accent-soft)}
+.si .u{font:800 26px/1 var(--display)}
+.si .q{font-weight:700;margin-top:4px;line-height:1.2}
+.si .q .term{display:block;font-size:13px}
+
+/* 3. prefixe și scara */
+.prefixes{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:6px}
+.pfx{border-radius:10px;padding:8px 10px;border:1px solid var(--rule);background:var(--card);text-align:center}
+.pfx.mul{background:#fff5dd;border-color:#efd8a0}
+.pfx.sub{background:var(--blue-soft);border-color:#bcd1f4}
+.pfx.base{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pfx b{font:800 22px/1.1 var(--display);display:block}
+.pfx span{font-size:14px;display:block}
+.pfx small{font-size:13px;color:var(--muted)}
+.pfx.base small{color:#d9dce3}
+.conv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.conv-in{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.conv-in input{width:150px;border:1.5px solid var(--ink);border-radius:8px;padding:6px 10px;font-size:20px;font-weight:700}
+.conv-in select{border:1.5px solid var(--ink);border-radius:8px;padding:7px 8px;font-weight:700;background:var(--card)}
+.stairs{display:grid;gap:0}
+.stair{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:10px;border:0;background:transparent;text-align:left;padding:0;cursor:pointer}
+.stair .box{border:1.5px solid var(--rule);background:var(--card);border-radius:8px;padding:6px 12px;display:flex;justify-content:space-between;gap:10px;align-items:baseline;transition:background .2s}
+.stair .u{font:800 18px var(--display)}
+.stair .v{font-weight:700;font-size:18px}
+.stair.src .box{background:var(--accent);border-color:var(--accent);color:#fff}
+.stair.base .u::after{content:" ●";color:var(--accent);font-size:12px}
+.stair.src.base .u::after{color:#fff}
+.arrowcell{display:grid;grid-template-columns:70px 1fr;gap:10px;height:22px;align-items:center}
+.arrowcell span{font:700 13px var(--body);color:var(--blue);text-align:right}
+.arrowcell i{height:100%;border-left:2px dashed #c9cfda;margin-left:22px}
+
+/* 4. puterile lui 10 */
+.scale{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:22px;align-items:center}
+.scale-pic{background:#0f1726;border-radius:14px;overflow:hidden;aspect-ratio:16/10;display:grid}
+.scale-pic svg{width:100%;height:100%}
+.scale-pic.light{background:#fdfbf4;border:1px solid var(--rule)}
+.scale-info .pow{font:800 44px/1 var(--display);color:var(--accent)}
+.scale-info h3{font-size:26px;margin-top:6px}
+.scale-info .val{font:700 22px var(--body);margin-top:4px}
+.scale-info p{margin-top:8px}
+.scale-info .ratio{margin-top:10px;font-size:15px;color:var(--muted)}
+.ruler{margin-top:16px;padding:0 16px}
+.ruler input{width:100%;accent-color:var(--accent)}
+.ruler-ticks{position:relative;height:20px;font-size:12px;color:var(--muted)}
+.ruler-ticks span{position:absolute;transform:translateX(-50%)}
+
+/* 5. aria */
+.area{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.area-fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px}
+.area-fig svg{display:block;width:100%;height:auto;cursor:zoom-in}
+.eq{font:700 20px var(--body)}
+.eq-list{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.eq-list li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;border-bottom:1px solid var(--rule);padding:6px 0}
+.eq-list li b{min-width:150px}
+.like{font-size:14.5px;color:var(--muted)}
+
+/* 6. volumul */
+.vol{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.vol-fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px}
+.vol-fig svg{display:block;width:100%;height:auto}
+.vol-fig input{width:100%;accent-color:var(--blue)}
+.big-count{font:800 30px var(--display)}
+.cmp{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:14px}
+.cmp div{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 12px}
+.cmp b{display:block;font:800 20px var(--display);color:var(--blue)}
+
+/* 7. instrumente */
+.tools{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.tool{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px;display:grid;gap:6px;align-content:start;text-align:center}
+.tool svg{width:100%;height:120px}
+.tool b{font-size:15px;line-height:1.2}
+.tool .term{font-size:13px}
+.lab{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:22px;align-items:start;margin-top:18px}
+.lab-fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px;display:flex;gap:10px;justify-content:center}
+.lab-fig svg{height:360px;width:auto}
+.ans{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ans input{width:110px;border:1.5px solid var(--ink);border-radius:8px;padding:6px 10px;font-size:18px;font-weight:700}
+.fb{min-height:26px;margin-top:8px;font-weight:700}
+.fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+
+/* 8. antrenament */
+.drill{display:grid;gap:10px;max-width:640px}
+.drill .qline{font:800 26px var(--display)}
+.drill .score{font-weight:700;color:var(--muted)}
+
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .body-grid,.conv,.scale,.area,.vol,.lab{grid-template-columns:1fr}
+  .tools{grid-template-columns:repeat(3,1fr)}
+  .gloss-head{max-width:none}
+}
+@media (max-width:480px){.tools{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Fizică · Clasa a 6-a</span><span class="de">Physik · Klasse 6</span></p>
+  <h1><span class="ro">Unitățile de măsură: lungime, arie, volum</span><span class="de">Maßeinheiten: Länge, Fläche, Volumen</span></h1>
+  <p class="lead">
+    <span class="ro">Ca să spunem cât de lung, cât de mare sau cât de încăpător este un corp, avem nevoie de unități de măsură pe care toată lumea le înțelege la fel. Vei vedea de unde vin, cum se trece de la una la alta și, mai ales, cât de mari sunt de fapt.</span>
+    <span class="de">Um zu sagen, wie lang, wie groß oder wie geräumig ein Körper ist, brauchen wir Maßeinheiten, die alle gleich verstehen. Du erfährst, woher sie kommen, wie man sie umrechnet und vor allem, wie groß sie wirklich sind.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">De ce nu putem măsura cu palma sau cu pasul?</span><span class="de">Warum können wir nicht mit der Hand oder mit Schritten messen?</span></li>
+        <li><span class="ro">Câți centimetri pătrați are un metru pătrat? 100? Mai mulți?</span><span class="de">Wie viele Quadratzentimeter hat ein Quadratmeter? 100? Mehr?</span></li>
+        <li><span class="ro">Câți litri de apă încap într-un cub cu latura de 1 m?</span><span class="de">Wie viele Liter Wasser passen in einen Würfel mit 1 m Kantenlänge?</span></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- 1. Istoria -->
+<section class="block" aria-labelledby="t-hist">
+  <h2 class="section-title" id="t-hist"><span class="step">1</span><span class="ro">Înainte de metru: oamenii măsurau cu propriul corp</span><span class="de">Vor dem Meter: Die Menschen maßen mit dem eigenen Körper</span></h2>
+  <p class="section-sub"><span class="ro">În Antichitate, oamenii au folosit ce aveau cel mai la îndemână: degetele, palma, cotul, piciorul, pasul. Apasă pe fiecare unitate ca s-o vezi pe corp.</span><span class="de">In der Antike nutzten die Menschen, was sie immer dabeihatten: Finger, Hand, Unterarm, Fuß, Schritt. Tippe auf jede Einheit, um sie am Körper zu sehen.</span></p>
+  <div class="body-grid">
+    <div class="body-fig"><svg id="bodyfig" viewBox="0 0 520 420" role="img" aria-label="Unități de măsură vechi luate după corpul omului"></svg></div>
+    <div>
+      <div class="chips" id="bu-chips"></div>
+      <div class="card bu-info" id="bu-info" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="card bench">
+    <h3 style="font-size:20px"><span class="ro">Problema: palmele nu sunt la fel</span><span class="de">Das Problem: Hände sind nicht gleich groß</span></h3>
+    <p class="muted" style="margin:4px 0 10px"><span class="ro">Aceeași bancă de 120 cm, măsurată cu palma unui copil și cu palma unui adult. Cine are dreptate?</span><span class="de">Dieselbe 120 cm lange Bank, gemessen mit der Hand eines Kindes und mit der eines Erwachsenen. Wer hat recht?</span></p>
+    <svg id="bench" viewBox="0 0 640 170" role="img" aria-label="Aceeași bancă măsurată cu palme diferite"></svg>
+    <p style="margin-top:8px"><span class="ro">Amândoi au măsurat corect, dar au obținut numere diferite. De aceea a fost nevoie de unități <strong>standard</strong>, aceleași pentru toată lumea.</span><span class="de">Beide haben richtig gemessen, aber verschiedene Zahlen erhalten. Deshalb brauchte man <strong>einheitliche</strong> Maße, die für alle gleich sind.</span></p>
+  </div>
+
+  <h3 style="margin:28px 0 12px;font-size:22px"><span class="ro">Pe scurt, istoria metrului</span><span class="de">Kurze Geschichte des Meters</span></h3>
+  <ol class="timeline" id="timeline"></ol>
+
+  <div class="story" style="margin-top:8px">
+    <h3><span class="ro">Știai că? O navă spațială pierdută din cauza unităților</span><span class="de">Wusstest du? Eine Raumsonde ging wegen der Einheiten verloren</span></h3>
+    <p><span class="ro">În 1999, sonda americană <em>Mars Climate Orbiter</em> s-a apropiat prea mult de planeta Marte și s-a distrus. O echipă de ingineri calculase în unități imperiale (livre), iar alta credea că numerele sunt în unități SI. Greșeala a costat 125 de milioane de dolari. De atunci, NASA lucrează numai în unități SI.</span><span class="de">1999 kam die amerikanische Sonde <em>Mars Climate Orbiter</em> dem Mars zu nahe und wurde zerstört. Ein Ingenieurteam hatte in imperialen Einheiten (Pfund) gerechnet, ein anderes hielt die Zahlen für SI-Einheiten. Der Fehler kostete 125 Millionen Dollar. Seitdem arbeitet die NASA nur noch mit SI-Einheiten.</span></p>
+  </div>
+</section>
+
+<!-- 2. SI -->
+<section class="block" aria-labelledby="t-si">
+  <h2 class="section-title" id="t-si"><span class="step">2</span><span class="ro">Sistemul Internațional de Unități (SI)</span><span class="de">Das Internationale Einheitensystem (SI)</span></h2>
+  <p class="section-sub"><span class="ro">Ca să existe o înțelegere în toată lumea, s-a stabilit Sistemul Internațional de Unități, pe scurt SI. El are 7 unități fundamentale, din care se obțin toate celelalte, numite unități derivate. Din 20 mai 2019, toate sunt definite prin constante ale naturii, cu valori exacte, care nu se schimbă niciodată.</span><span class="de">Damit man sich weltweit versteht, wurde das Internationale Einheitensystem, kurz SI, festgelegt. Es hat 7 Basiseinheiten, aus denen alle anderen, die abgeleiteten Einheiten, gebildet werden. Seit dem 20. Mai 2019 sind alle über Naturkonstanten mit exakten Werten definiert, die sich nie ändern.</span></p>
+  <div class="si" id="si"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro">Aria și volumul nu au unități fundamentale proprii. Ele se obțin din metru: <strong>m² = m · m</strong> și <strong>m³ = m · m · m</strong>. De aceea sunt <strong>unități derivate</strong>.</span><span class="de">Fläche und Volumen haben keine eigenen Basiseinheiten. Sie werden aus dem Meter gebildet: <strong>m² = m · m</strong> und <strong>m³ = m · m · m</strong>. Deshalb sind sie <strong>abgeleitete Einheiten</strong>.</span></p>
+  </div>
+</section>
+
+<!-- 3. Multipli și submultipli -->
+<section class="block" aria-labelledby="t-pfx">
+  <h2 class="section-title" id="t-pfx"><span class="step">3</span><span class="ro">Multipli și submultipli: prefixele</span><span class="de">Vielfache und Teile: die Vorsätze</span></h2>
+  <p class="section-sub"><span class="ro">Lungimea unui creion o dăm în centimetri, iar lungimea unei autostrăzi în kilometri. Pentru valori mai mari decât unitatea folosim <strong>multipli</strong>, iar pentru valori mai mici, <strong>submultipli</strong>. Îi recunoaștem după prefix: <em>kilo-</em> înseamnă de 1 000 de ori mai mare, <em>mili-</em> de 1 000 de ori mai mic.</span><span class="de">Die Länge eines Bleistifts geben wir in Zentimetern an, die einer Autobahn in Kilometern. Für Werte größer als die Einheit nutzen wir <strong>Vielfache</strong>, für kleinere <strong>Teile</strong>. Man erkennt sie am Vorsatz: <em>Kilo-</em> heißt 1 000-mal größer, <em>Milli-</em> 1 000-mal kleiner.</span></p>
+  <div class="prefixes" id="prefixes"></div>
+  <p class="hint" style="margin-top:8px"><span class="ro">Galben: multipli · albastru: submultipli · negru: unitatea de bază</span><span class="de">Gelb: Vielfache · Blau: Teile · Schwarz: Grundeinheit</span></p>
+
+  <h3 style="margin:28px 0 6px;font-size:22px"><span class="ro">Scara unităților: convertește orice</span><span class="de">Die Einheitentreppe: rechne alles um</span></h3>
+  <p class="muted" style="margin-bottom:12px"><span class="ro">Scrie un număr și alege unitatea, sau apasă pe o treaptă. La fiecare treaptă în jos înmulțești, la fiecare treaptă în sus împarți. Atenție: la arie și la volum, pasul nu mai e 10!</span><span class="de">Gib eine Zahl ein und wähle die Einheit, oder tippe auf eine Stufe. Bei jeder Stufe nach unten multiplizierst du, bei jeder Stufe nach oben teilst du. Achtung: Bei Fläche und Volumen ist der Schritt nicht mehr 10!</span></p>
+  <div class="tabs" role="tablist" id="conv-tabs"></div>
+  <div class="conv">
+    <div>
+      <div class="conv-in">
+        <input id="conv-val" type="text" inputmode="decimal" value="1" aria-label="valoare">
+        <select id="conv-unit" aria-label="unitate"></select>
+      </div>
+      <div class="card" style="margin-top:14px" id="conv-explain"></div>
+    </div>
+    <div class="stairs" id="stairs"></div>
+  </div>
+</section>
+
+<!-- 4. Puterile lui 10 -->
+<section class="block" aria-labelledby="t-scale">
+  <h2 class="section-title" id="t-scale"><span class="step">4</span><span class="ro">Călătorie prin lungimi: de la membrana celulei la Univers</span><span class="de">Reise durch die Längen: von der Zellmembran bis zum Universum</span></h2>
+  <p class="section-sub"><span class="ro">Trage de cursor. Fiecare oprire e de cel puțin 10 ori mai mare decât cea dinainte. Lungimile din natură se întind pe 36 de puteri ale lui 10!</span><span class="de">Zieh am Regler. Jede Station ist mindestens 10-mal größer als die vorige. Die Längen in der Natur reichen über 36 Zehnerpotenzen!</span></p>
+  <div class="scale">
+    <div class="scale-pic" id="scale-pic"></div>
+    <div class="scale-info" id="scale-info" aria-live="polite"></div>
+  </div>
+  <div class="ruler">
+    <input type="range" id="scale-range" min="0" max="14" value="5" step="1" aria-label="Oprire">
+    <div class="ruler-ticks" id="ruler-ticks"></div>
+  </div>
+  <div class="story" style="margin-top:16px">
+    <h3><span class="ro">Anul-lumină: o unitate pentru distanțe uriașe</span><span class="de">Das Lichtjahr: eine Einheit für riesige Entfernungen</span></h3>
+    <p><span class="ro">Anul-lumină este distanța parcursă de lumină într-un an: aproape 9 460 de miliarde de kilometri. Deși are „an” în nume, este o unitate de <strong>lungime</strong>, nu de timp! Raza Universului observabil este de aproximativ 46,5 miliarde de ani-lumină.</span><span class="de">Das Lichtjahr ist die Strecke, die das Licht in einem Jahr zurücklegt: fast 9 460 Milliarden Kilometer. Obwohl „Jahr“ im Namen steckt, ist es eine Einheit der <strong>Länge</strong>, nicht der Zeit! Der Radius des beobachtbaren Universums beträgt etwa 46,5 Milliarden Lichtjahre.</span></p>
+  </div>
+</section>
+
+<!-- 5. Aria -->
+<section class="block" aria-labelledby="t-area">
+  <h2 class="section-title" id="t-area"><span class="step">5</span><span class="ro">Aria: cât loc ocupă o suprafață</span><span class="de">Die Fläche: wie viel Platz eine Oberfläche einnimmt</span></h2>
+  <p class="section-sub"><span class="ro">Unitatea de arie în SI este metrul pătrat, [A]<sub>SI</sub> = m²: aria unui pătrat cu latura de 1 m. Apasă pe pătrat ca să-l mărești: vei vedea de ce 1 m² nu înseamnă 10 dm², ci 100 dm².</span><span class="de">Die SI-Einheit der Fläche ist der Quadratmeter, [A]<sub>SI</sub> = m²: die Fläche eines Quadrats mit 1 m Seitenlänge. Tippe auf das Quadrat, um hineinzuzoomen: Du siehst, warum 1 m² nicht 10 dm², sondern 100 dm² sind.</span></p>
+  <div class="area">
+    <div class="area-fig">
+      <svg id="area-svg" viewBox="0 0 320 340" role="img" aria-label="Un pătrat împărțit în 100 de pătrățele"></svg>
+      <div class="actions" style="justify-content:center">
+        <button class="btn ghost" type="button" id="area-out">−</button>
+        <span id="area-level" class="num" style="font-weight:700"></span>
+        <button class="btn" type="button" id="area-in">+</button>
+      </div>
+    </div>
+    <div>
+      <div class="card" id="area-info" aria-live="polite"></div>
+      <h3 style="margin:18px 0 8px;font-size:20px"><span class="ro">Multipli și submultipli ai metrului pătrat</span><span class="de">Vielfache und Teile des Quadratmeters</span></h3>
+      <ul class="eq-list" id="area-list"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Volumul -->
+<section class="block" aria-labelledby="t-vol">
+  <h2 class="section-title" id="t-vol"><span class="step">6</span><span class="ro">Volumul: cât spațiu ocupă un corp</span><span class="de">Das Volumen: wie viel Raum ein Körper einnimmt</span></h2>
+  <p class="section-sub"><span class="ro">Volumul este mărimea fizică ce arată cât spațiu ocupă un corp. Unitatea în SI este metrul cub, [V]<sub>SI</sub> = m³: volumul unui cub cu latura de 1 m. Umple cubul de 1 dm³ cu cubulețe de 1 cm³, strat cu strat.</span><span class="de">Das Volumen ist die physikalische Größe, die angibt, wie viel Raum ein Körper einnimmt. Die SI-Einheit ist der Kubikmeter, [V]<sub>SI</sub> = m³: das Volumen eines Würfels mit 1 m Kantenlänge. Füll den 1-dm³-Würfel Schicht für Schicht mit 1-cm³-Würfelchen.</span></p>
+  <div class="vol">
+    <div class="vol-fig">
+      <svg id="cube" viewBox="0 0 320 300" role="img" aria-label="Un cub de 1 dm³ umplut cu cubulețe de 1 cm³"></svg>
+      <label class="hint" for="layers"><span class="ro">Straturi de cubulețe</span><span class="de">Schichten aus Würfelchen</span></label>
+      <input type="range" id="layers" min="0" max="10" value="3">
+      <div class="actions"><button class="btn ghost" type="button" id="fill-all"><span class="ro">Umple tot</span><span class="de">Alles füllen</span></button></div>
+    </div>
+    <div>
+      <div class="card" id="vol-info" aria-live="polite"></div>
+      <div class="remember">
+        <h3><span class="ro">Litrul</span><span class="de">Der Liter</span></h3>
+        <p><span class="ro">Pentru lichide folosim de obicei <strong>litrul</strong>: <strong>1 L = 1 dm³</strong>. Iar <strong>1 mL = 1 cm³</strong>: un cubuleț de 1 cm conține exact un mililitru.</span><span class="de">Für Flüssigkeiten nutzt man meist den <strong>Liter</strong>: <strong>1 L = 1 dm³</strong>. Und <strong>1 mL = 1 cm³</strong>: Ein Würfelchen mit 1 cm Kantenlänge fasst genau einen Milliliter.</span></p>
+        <p><span class="ro">Volumul unui amestec de lichide este egal cu suma volumelor lichidelor amestecate.</span><span class="de">Das Volumen einer Mischung von Flüssigkeiten ist gleich der Summe der Volumen der Flüssigkeiten.</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="cmp" id="vol-cmp"></div>
+  <h3 style="margin:22px 0 8px;font-size:20px"><span class="ro">Multipli și submultipli ai metrului cub</span><span class="de">Vielfache und Teile des Kubikmeters</span></h3>
+  <ul class="eq-list" id="vol-list"></ul>
+</section>
+
+<!-- 7. Instrumente -->
+<section class="block" aria-labelledby="t-tools">
+  <h2 class="section-title" id="t-tools"><span class="step">7</span><span class="ro">Cum măsurăm volumul unui lichid</span><span class="de">Wie man das Volumen einer Flüssigkeit misst</span></h2>
+  <p class="section-sub"><span class="ro">Vasele gradate au pe perete o scară în mL (sau cm³) ori în L.</span><span class="de">Messgefäße haben an der Wand eine Skala in mL (oder cm³) bzw. in L.</span></p>
+  <div class="tools" id="tools"></div>
+
+  <div class="lab">
+    <div class="lab-fig"><svg id="cyl" viewBox="0 0 180 400" role="img" aria-label="Cilindru gradat"></svg></div>
+    <div>
+      <div class="tabs" role="tablist" id="lab-tabs">
+        <button class="tab" type="button" data-t="read" aria-selected="true"><span class="ro">Citește volumul</span><span class="de">Volumen ablesen</span></button>
+        <button class="tab" type="button" data-t="stone" aria-selected="false"><span class="ro">Volumul unei pietre</span><span class="de">Volumen eines Steins</span></button>
+      </div>
+      <div class="card" id="lab-card"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Antrenament -->
+<section class="block" aria-labelledby="t-drill">
+  <h2 class="section-title" id="t-drill"><span class="step">8</span><span class="ro">Antrenament: transformări</span><span class="de">Training: Umrechnen</span></h2>
+  <p class="section-sub"><span class="ro">Exerciții noi la fiecare apăsare. Scrie rezultatul (poți folosi virgula) și verifică.</span><span class="de">Bei jedem Tippen neue Aufgaben. Gib das Ergebnis ein (Komma ist erlaubt) und prüfe.</span></p>
+  <div class="card drill">
+    <div class="tabs" id="drill-tabs"></div>
+    <p class="qline num" id="drill-q"></p>
+    <div class="ans"><input id="drill-a" type="text" inputmode="decimal" aria-label="rezultat"><button class="btn" type="button" id="drill-check"><span class="ro">Verifică</span><span class="de">Prüfen</span></button><button class="btn ghost" type="button" id="drill-next"><span class="ro">Altul</span><span class="de">Neue Aufgabe</span></button></div>
+    <p class="fb" id="drill-fb" aria-live="polite"></p>
+    <p class="score" id="drill-score"></p>
+  </div>
+</section>
+
+<!-- 9. Dicționar -->
+<section class="block" aria-labelledby="t-gloss">
+  <h2 class="section-title" id="t-gloss"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <p class="section-sub"><span class="ro">Cuvintele-cheie ale lecției, în română și în germană.</span><span class="de">Die wichtigsten Wörter der Lektion, auf Rumänisch und auf Deutsch.</span></p>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<footer class="foot">
+  <p><span class="ro">Surse: manualul de Fizică pentru clasa a 6-a (capitolul despre unitățile de măsură). Desenele sunt schematice și nu păstrează proporțiile reale, cu excepția pătratelor și cuburilor din secțiunile 5 și 6. Valorile istorice ale unităților vechi sunt aproximative și difereau de la o regiune la alta.</span><span class="de">Quellen: Physik-Lehrbuch für Klasse 6 (Kapitel über Maßeinheiten). Die Zeichnungen sind schematisch und nicht maßstabsgetreu, außer den Quadraten und Würfeln in den Abschnitten 5 und 6. Die historischen Werte der alten Einheiten sind Näherungen und waren von Region zu Region verschieden.</span></p>
+</footer>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function el(tag, a, parent) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (parent) parent.appendChild(e); return e; }
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function $(id) { return document.getElementById(id); }
+function tx(o) { return o[L]; }
+function other(o) { return L === 'ro' ? o.de : o.ro; }
+var LOC = L === 'ro' ? 'ro-RO' : 'de-DE';
+
+/* numere: grupare cu spațiu, virgulă zecimală; foarte mari sau foarte mici în formă științifică */
+function sup(n) { return '<sup>' + String(n).replace('-', '−') + '</sup>'; }
+function fmt(x) {
+  if (x === 0) return '0';
+  var a = Math.abs(x);
+  if (a >= 1e10 || a < 1e-6) {
+    var e = Math.floor(Math.log10(a) + 1e-9), m = +(x / Math.pow(10, e)).toPrecision(6);
+    if (Math.abs(m) >= 10) { m /= 10; e++; }
+    return (m === 1 ? '' : m.toLocaleString(LOC, { maximumFractionDigits: 5 }) + ' × ') + '10' + sup(e);
+  }
+  var s = (+x.toPrecision(12)).toLocaleString(LOC, { maximumFractionDigits: 9 });
+  return s.replace(/\./g, ' ').replace(/ /g, ' ');
+}
+function parseNum(s) { s = String(s).trim().replace(/\s| /g, '').replace(',', '.'); if (!/^[-+]?\d*\.?\d+(e[-+]?\d+)?$/i.test(s)) return NaN; return parseFloat(s); }
+function pow10(e) { return e === 0 ? '1' : '10' + sup(e); }
+
+/* silueta de atlas din lecția de biologie: conturul din stânga, oglindit (viewBox 360 × 640) */
+function atlasPath() {
+  var S0 = [168, 88], SEG = [
+    [[168, 100], [166, 110], [160, 116]], [[148, 122], [126, 124], [114, 130]], [[102, 136], [96, 150], [95, 168]],
+    [[93, 198], [89, 228], [86, 258]], [[83, 290], [78, 322], [74, 348]], [[71, 360], [64, 372], [62, 388]],
+    [[60, 402], [63, 414], [70, 414]], [[78, 414], [82, 404], [83, 392]], [[84, 380], [86, 368], [88, 356]],
+    [[93, 330], [98, 300], [102, 272]], [[105, 246], [108, 222], [114, 196]], [[116, 190], [118, 188], [120, 188]],
+    [[122, 214], [124, 244], [128, 268]], [[131, 290], [126, 312], [124, 336]], [[121, 380], [124, 432], [132, 478]],
+    [[137, 510], [134, 550], [138, 588]], [[140, 604], [138, 614], [134, 620]], [[126, 626], [126, 636], [138, 637]],
+    [[150, 638], [162, 636], [163, 628]], [[163, 616], [160, 604], [162, 588]], [[165, 556], [166, 518], [166, 482]],
+    [[167, 446], [170, 412], [172, 384]], [[174, 372], [177, 364], [180, 362]]
+  ];
+  var M = function (x) { return 360 - x; };
+  var d = 'M' + S0 + SEG.map(function (q) { return ' C' + q[0] + ' ' + q[1] + ' ' + q[2]; }).join('');
+  for (var i = SEG.length - 1; i >= 0; i--) { var st = i ? SEG[i - 1][2] : S0; d += ' C' + [M(SEG[i][1][0]), SEG[i][1][1]] + ' ' + [M(SEG[i][0][0]), SEG[i][0][1]] + ' ' + [M(st[0]), st[1]]; }
+  return d + 'Z';
+}
+/* un om în stil de atlas, cu tălpile pe linia y, înalt de h pixeli */
+function atlasPerson(x, y, hgt) {
+  var k = hgt / 640;
+  return '<g transform="translate(' + (x - 180 * k) + ' ' + (y - 638 * k) + ') scale(' + k + ')"><path d="' + atlasPath() + '" fill="url(#skin)" stroke="#d0936f" stroke-width="2"/><ellipse cx="180" cy="58" rx="31" ry="39" fill="url(#skin)" stroke="#d0936f" stroke-width="2"/><rect x="166" y="84" width="28" height="20" fill="#f8cdb0"/></g>';
+}
+
+/* ---------- 1. Unități după corp ---------- */
+var BU = [
+  { k: 'finger', ro: 'Degetul', de: 'Der Finger', v: '≈ 1,9 cm', d: [[450, 32], [461, 32]],
+    t: { ro: 'Lățimea unui deget. În Egiptul antic era cea mai mică unitate de lungime.', de: 'Die Breite eines Fingers. Im alten Ägypten war sie die kleinste Längeneinheit.' } },
+  { k: 'palm', ro: 'Palma', de: 'Die Handbreite', v: '= 4 degete ≈ 7,5 cm', d: [[426, 126], [473, 126]],
+    t: { ro: 'Lățimea palmei, fără degetul mare: 4 degete puse unul lângă altul.', de: 'Die Breite der Hand ohne Daumen: 4 Finger nebeneinander.' } },
+  { k: 'cubit', ro: 'Cotul', de: 'Die Elle', v: '= 7 palme ≈ 52 cm', d: [[60, 174], [44, 270]],
+    t: { ro: 'Distanța de la cot până la vârful degetului mijlociu. Cu cotul regal s-au construit piramidele din Egipt. În multe orașe germane se mai văd pe zidurile primăriilor coți de fier, cu care negustorii își verificau măsurile de stofă.', de: 'Der Abstand vom Ellbogen bis zur Spitze des Mittelfingers. Mit der Königselle wurden die Pyramiden in Ägypten gebaut. In vielen deutschen Städten hängen an Rathäusern noch eiserne Ellen, mit denen Händler ihre Stoffmaße prüften.' } },
+  { k: 'foot', ro: 'Piciorul', de: 'Der Fuß', v: '≈ 29,6 cm (piciorul roman)', vde: '≈ 29,6 cm (römischer Fuß)', d: [[410, 236], [494, 236]],
+    t: { ro: 'Lungimea tălpii. Romanii îl împărțeau în 12 uncii; o uncie era cam cât lățimea degetului mare. Americanii folosesc și azi „foot” (30,48 cm).', de: 'Die Länge der Fußsohle. Die Römer teilten ihn in 12 Unzen; eine Unze war etwa so breit wie der Daumen. In den USA nutzt man den „Foot“ (30,48 cm) bis heute.' } },
+  { k: 'pace', ro: 'Pasul', de: 'Der Schritt', v: '≈ 1,48 m (pasul roman, dublu)', vde: '≈ 1,48 m (römischer Doppelschritt)', d: [[402, 401], [402, 337]],
+    t: { ro: 'Pasul roman se număra de la un călcâi până când același picior atingea din nou pământul, adică doi pași obișnuiți. 1 000 de pași făceau o milă (mille = o mie), cam 1,48 km.', de: 'Der römische Schritt wurde von einer Ferse bis zum erneuten Aufsetzen desselben Fußes gezählt, also zwei normale Schritte. 1 000 Schritte ergaben eine Meile (mille = tausend), etwa 1,48 km.' } },
+  { k: 'yard', ro: 'Yardul', de: 'Das Yard', v: '≈ 91 cm', d: [[117, 52], [292, 84]],
+    t: { ro: 'Acum aproximativ 900 de ani, regele Henric I al Angliei a hotărât ca yardul să fie distanța de la vârful nasului său până la vârful degetului mare, cu brațul întins. Negustorii de stofe măsurau așa pânza.', de: 'Vor etwa 900 Jahren bestimmte König Heinrich I. von England, dass ein Yard der Abstand von seiner Nasenspitze bis zur Spitze des Daumens bei ausgestrecktem Arm ist. So maßen Tuchhändler ihren Stoff.' } }
+];
+(function () {
+  var svg = $('bodyfig'), line = '#d0936f';
+  var defs = el('defs', {}, svg);
+  var gr = el('radialGradient', { id: 'skin', cx: '50%', cy: '30%', r: '75%' }, defs);
+  el('stop', { offset: '0', 'stop-color': '#fbd9bf' }, gr); el('stop', { offset: '1', 'stop-color': '#f1b995' }, gr);
+  var skin = 'url(#skin)';
+  var d = atlasPath();
+  var body = el('g', { transform: 'translate(0 6) scale(0.64)' }, svg);
+  // brațul întins pentru yard (apare doar la yard), sub corp
+  var arm = el('g', { 'class': 'yard-arm', style: 'display:none' }, body);
+  el('path', { d: 'M232,142 L330,142 L412,142', stroke: line, 'stroke-width': 27, fill: 'none', 'stroke-linecap': 'round' }, arm);
+  el('path', { d: 'M232,142 L330,142 L412,142', stroke: '#f5c7a4', 'stroke-width': 24, fill: 'none', 'stroke-linecap': 'round' }, arm);
+  el('path', { d: 'M410,130 C428,126 446,134 446,142 C446,152 428,156 410,154Z', fill: '#f5c7a4', stroke: line, 'stroke-width': 1.4 }, arm);
+  el('path', { d: 'M418,132 C420,120 428,114 434,118 C436,124 430,130 426,134', fill: '#f5c7a4', stroke: line, 'stroke-width': 1.4 }, arm);
+  el('path', { d: d, fill: skin, stroke: line, 'stroke-width': 1.4, 'stroke-linejoin': 'round' }, body);
+  el('ellipse', { cx: 180, cy: 58, rx: 31, ry: 39, fill: skin, stroke: line, 'stroke-width': 1.4 }, body);
+  el('rect', { x: 166, y: 84, width: 28, height: 20, fill: '#f8cdb0' }, body);
+  [149, 211].forEach(function (x) { el('ellipse', { cx: x, cy: 62, rx: 5, ry: 10, fill: '#f5c7a4', stroke: line, 'stroke-width': 1.4 }, body); });
+  var sh = { stroke: line, 'stroke-width': 1.1, fill: 'none', 'stroke-linecap': 'round', opacity: .7 };
+  el('path', Object.assign({ d: 'M150,128 C160,132 170,132 178,130 M210,128 C200,132 190,132 182,130 M140,182 C152,192 166,190 176,184 M220,182 C208,192 194,190 184,184 M146,470 C150,476 158,476 162,470 M214,470 C210,476 202,476 198,470' }, sh), body);
+  el('path', { d: 'M180,60 C178,68 174,74 175,78 C178,80 183,80 186,78', stroke: line, 'stroke-width': 1.3, fill: 'none' }, body);
+  [168, 192].forEach(function (x) { el('circle', { cx: x, cy: 56, r: 2.6, fill: '#5a4030' }, body); });
+  el('path', { d: 'M172,88 C176,91 184,91 188,88', stroke: '#b86a4a', 'stroke-width': 1.4, fill: 'none', 'stroke-linecap': 'round' }, body);
+  BU.filter(function (u) { return u.k === 'yard'; })[0].arm = arm;
+  // casetele mărite: mâna, talpa, urmele pașilor
+  var bodyA = { fill: skin, stroke: line, 'stroke-width': 1.5, 'stroke-linejoin': 'round' };
+  function frame(y, hgt, ro, de) {
+    el('rect', { x: 386, y: y, width: 128, height: hgt, rx: 12, fill: '#fbf7ef', stroke: '#e2e0d6' }, svg);
+    var t = el('text', { x: 450, y: y + hgt - 8, 'text-anchor': 'middle', 'font-size': 11, fill: '#5a6270' }, svg); t.textContent = L === 'ro' ? ro : de;
+  }
+  frame(6, 148, 'mâna', 'die Hand'); frame(162, 100, 'talpa', 'die Fußsohle'); frame(270, 146, 'urmele pașilor', 'Fußspuren');
+  var hand = el('g', { transform: 'translate(450 80)' }, svg);
+  el('rect', Object.assign({ x: -40, y: 2, width: 11, height: 30, rx: 5.5, transform: 'rotate(-32 -34 17)' }, bodyA), hand);
+  [[-24, -36], [-12, -44], [0, -46], [12, -38]].forEach(function (f) { el('rect', Object.assign({ x: f[0], y: f[1], width: 11, height: 48 + f[1] + 44, rx: 5.5 }, bodyA), hand); });
+  el('rect', Object.assign({ x: -24, y: -4, width: 47, height: 42, rx: 9 }, bodyA), hand);
+  el('path', { d: 'M412,212 C410,198 430,194 450,198 C472,200 492,200 494,210 C494,222 472,222 452,222 C432,224 414,226 412,212Z', fill: skin, stroke: line, 'stroke-width': 1.5 }, svg);
+  [[484, 200, 4], [491, 206, 3], [493, 213, 2.6], [491, 219, 2.2]].forEach(function (c) { el('circle', { cx: c[0], cy: c[1], r: c[2], fill: skin, stroke: line }, svg); });
+  [[424, 388, 1], [458, 356, -1], [424, 324, 1], [458, 292, -1]].forEach(function (f) {
+    el('ellipse', { cx: f[0], cy: f[1], rx: 7, ry: 13, fill: '#c9b8a6', transform: 'rotate(' + (f[2] * 6) + ' ' + f[0] + ' ' + f[1] + ')' }, svg);
+  });
+  // marcaje
+  BU.forEach(function (u) {
+    var a = u.d[0], b = u.d[1];
+    u.line = el('path', { d: 'M' + a + ' L' + b, 'class': 'bu' }, svg);
+    u.e1 = el('circle', { cx: a[0], cy: a[1], r: 4, 'class': 'bu-end' }, svg);
+    u.e2 = el('circle', { cx: b[0], cy: b[1], r: 4, 'class': 'bu-end' }, svg);
+  });
+  var chips = $('bu-chips'), info = $('bu-info');
+  function pick(u) {
+    BU.forEach(function (x) { [x.line, x.e1, x.e2].forEach(function (n) { n.classList.toggle('on', x === u); }); x.btn.setAttribute('aria-pressed', x === u); if (x.arm) x.arm.style.display = x === u ? '' : 'none'; });
+    info.innerHTML = '<h3>' + u[L] + ' <span class="term">· ' + other(u) + '</span></h3><p class="eq num">' + (L === 'de' && u.vde ? u.vde : u.v) + '</p><p>' + u.t[L] + '</p>';
+  }
+  BU.forEach(function (u) { var b = h('button', 'chip', u[L]); b.type = 'button'; b.addEventListener('click', function () { pick(u); }); u.btn = b; chips.appendChild(b); });
+  pick(BU[2]);
+})();
+
+// banca măsurată cu palme diferite
+(function () {
+  var svg = $('bench'), x0 = 20, W = 500; // 120 cm → 500 px
+  function row(y, palm, color, who) {
+    el('rect', { x: x0, y: y, width: W, height: 16, rx: 3, fill: '#b98a57', stroke: '#8a6238' }, svg);
+    var n = Math.floor(120 / palm), pw = W * palm / 120;
+    for (var i = 0; i < n; i++) el('rect', { x: x0 + i * pw + 1, y: y - 22, width: pw - 2, height: 18, rx: 6, fill: color, 'fill-opacity': .85, stroke: '#fff' }, svg);
+    var t = el('text', { x: x0 + W + 8, y: y - 8, 'font-size': 15, 'font-weight': 700, fill: '#1f2530' }, svg);
+    t.textContent = n + (L === 'ro' ? ' palme' : ' Hände');
+    var w = el('text', { x: x0, y: y + 34, 'font-size': 13, fill: '#5a6270' }, svg);
+    w.textContent = who + ' (' + String(palm).replace('.', ',') + ' cm)';
+  }
+  row(46, 6, '#f2a65a', L === 'ro' ? 'palma unui copil' : 'Kinderhand');
+  row(122, 8.5, '#6aa7e8', L === 'ro' ? 'palma unui adult' : 'Erwachsenenhand');
+})();
+
+// istoria metrului
+[
+  { y: { ro: 'cca 3000 î.Hr.', de: 'um 3000 v. Chr.' }, t: { ro: 'În Egipt se folosesc degetul, palma și cotul. Cotul regal, de aproximativ 52 cm, era păstrat ca etalon de piatră.', de: 'In Ägypten nutzt man Finger, Handbreite und Elle. Die Königselle, etwa 52 cm, wurde als Maßstab aus Stein aufbewahrt.' } },
+  { y: { ro: 'Imperiul Roman', de: 'Römisches Reich' }, t: { ro: 'Romanii măsoară cu piciorul, uncia, pasul și mila (1 000 de pași). Drumurile romane aveau pietre de hotar la fiecare milă.', de: 'Die Römer messen mit Fuß, Unze, Schritt und Meile (1 000 Schritte). An römischen Straßen stand nach jeder Meile ein Meilenstein.' } },
+  { y: { ro: 'cca 1120', de: 'um 1120' }, t: { ro: 'În Anglia, regele Henric I fixează yardul. Mai târziu, prin legi, apar „unitățile imperiale”: țol, picior, yard, milă.', de: 'In England legt König Heinrich I. das Yard fest. Später entstehen durch Gesetze die „imperialen Einheiten“: Zoll, Fuß, Yard, Meile.' } },
+  { y: { ro: '1791–1799', de: '1791–1799' }, t: { ro: 'În Franța se inventează metrul: a zece-milioana parte din distanța de la Polul Nord la Ecuator. Doi astronomi au măsurat timp de șase ani distanța dintre Dunkerque și Barcelona ca să-l calculeze.', de: 'In Frankreich wird der Meter erfunden: der zehnmillionste Teil der Strecke vom Nordpol zum Äquator. Zwei Astronomen vermaßen sechs Jahre lang die Strecke von Dünkirchen nach Barcelona, um ihn zu berechnen.' } },
+  { y: { ro: '1864', de: '1864' }, t: { ro: 'În Principatele Unite ale Moldovei și Țării Românești, o lege din vremea lui Alexandru Ioan Cuza introduce sistemul metric. Până atunci se măsura în stânjeni, coți, palme și prăjini, care diferau de la o regiune la alta.', de: 'In den Vereinigten Fürstentümern Moldau und Walachei führt ein Gesetz unter Alexandru Ioan Cuza das metrische System ein. Vorher maß man in Klaftern, Ellen, Handbreiten und Ruten, die von Region zu Region verschieden waren.' } },
+  { y: { ro: '1875 și 1889', de: '1875 und 1889' }, t: { ro: '17 țări semnează Convenția Metrului. Din 1889, metrul este lungimea unei bare din platină și iridiu, păstrată lângă Paris.', de: '17 Staaten unterzeichnen die Meterkonvention. Ab 1889 ist der Meter die Länge eines Stabs aus Platin und Iridium, der bei Paris aufbewahrt wird.' } },
+  { y: { ro: '1960', de: '1960' }, t: { ro: 'Se naște Sistemul Internațional de Unități (SI).', de: 'Das Internationale Einheitensystem (SI) entsteht.' } },
+  { y: { ro: '1983', de: '1983' }, t: { ro: 'Metrul este definit prin viteza luminii: distanța parcursă de lumină în vid în 1/299 792 458 dintr-o secundă. Oricine îl poate reproduce, oriunde în lume.', de: 'Der Meter wird über die Lichtgeschwindigkeit definiert: die Strecke, die Licht im Vakuum in 1/299 792 458 Sekunde zurücklegt. Jeder kann ihn überall auf der Welt nachbilden.' } },
+  { y: { ro: '2019', de: '2019' }, t: { ro: 'Toate cele 7 unități fundamentale sunt definite prin constante universale cu valori exacte. Și kilogramul renunță la cilindrul-etalon de metal.', de: 'Alle 7 Basiseinheiten werden über Naturkonstanten mit exakten Werten definiert. Auch das Kilogramm braucht keinen Metallzylinder als Urkilogramm mehr.' } }
+].forEach(function (e) { $('timeline').appendChild(h('li', '', '<b>' + e.y[L] + '</b><p>' + e.t[L] + '</p>')); });
+
+/* ---------- 2. SI ---------- */
+[
+  ['m', { ro: 'lungimea', de: 'Länge' }, { ro: 'metru', de: 'Meter' }, 'l', true],
+  ['kg', { ro: 'masa', de: 'Masse' }, { ro: 'kilogram', de: 'Kilogramm' }, 'm'],
+  ['s', { ro: 'durata', de: 'Zeit' }, { ro: 'secundă', de: 'Sekunde' }, 't'],
+  ['A', { ro: 'intensitatea curentului electric', de: 'elektrische Stromstärke' }, { ro: 'amper', de: 'Ampere' }, 'I'],
+  ['K', { ro: 'temperatura', de: 'Temperatur' }, { ro: 'kelvin', de: 'Kelvin' }, 'T'],
+  ['mol', { ro: 'cantitatea de substanță', de: 'Stoffmenge' }, { ro: 'mol', de: 'Mol' }, 'ν'],
+  ['cd', { ro: 'intensitatea luminoasă', de: 'Lichtstärke' }, { ro: 'candelă', de: 'Candela' }, 'I<sub>v</sub>']
+].forEach(function (r) {
+  var d = h('div', r[4] ? 'me' : '', '<span class="u">' + r[0] + '</span><p class="q">' + r[2][L] + ' <span class="term">' + other(r[2]) + '</span></p><p class="hint">' + r[1][L] + ' (<i>' + r[3] + '</i>)</p>');
+  $('si').appendChild(d);
+});
+
+/* ---------- 3. Prefixe ---------- */
+[['giga', 'G', 9], ['mega', 'M', 6], ['kilo', 'k', 3], ['hecto', 'h', 2], ['deca', 'da', 1], ['', '', 0], ['deci', 'd', -1], ['centi', 'c', -2], ['mili', 'm', -3], ['micro', 'µ', -6], ['nano', 'n', -9]].forEach(function (p) {
+  var cls = p[2] > 0 ? 'mul' : p[2] < 0 ? 'sub' : 'base';
+  var nameDe = { giga: 'Giga', mega: 'Mega', kilo: 'Kilo', hecto: 'Hekto', deca: 'Deka', deci: 'Dezi', centi: 'Zenti', mili: 'Milli', micro: 'Mikro', nano: 'Nano' }[p[0]];
+  var name = p[2] === 0 ? (L === 'ro' ? 'metru' : 'Meter') : (L === 'ro' ? p[0] : nameDe) + '-';
+  var mult = p[2] === 0 ? '1' : fmt(Math.pow(10, p[2]));
+  $('prefixes').appendChild(h('div', 'pfx ' + cls, '<b>' + (p[1] || '') + 'm</b><span>' + name + '</span><small class="num">' + pow10(p[2]) + ' = ' + mult + '</small>'));
+});
+
+/* ---------- 3b. Scara unităților ---------- */
+var MODES = {
+  len: { ro: 'Lungime', de: 'Länge', step: 10, units: ['km', 'hm', 'dam', 'm', 'dm', 'cm', 'mm'], base: 3, exp: 1 },
+  area: { ro: 'Arie', de: 'Fläche', step: 100, units: ['km²', 'hm²', 'dam²', 'm²', 'dm²', 'cm²', 'mm²'], base: 3, exp: 2,
+    alias: { 'hm²': 'ha', 'dam²': 'a' } },
+  vol: { ro: 'Volum', de: 'Volumen', step: 1000, units: ['km³', 'hm³', 'dam³', 'm³', 'dm³', 'cm³', 'mm³'], base: 3, exp: 3,
+    alias: { 'dm³': 'L', 'cm³': 'mL' } },
+  cap: { ro: 'Litri', de: 'Liter', step: 10, units: ['hL', 'daL', 'L', 'dL', 'cL', 'mL'], base: 2, exp: 1 }
+};
+var cMode = 'len', cUnit = 3, cVal = 1;
+var convTabs = $('conv-tabs'), sel = $('conv-unit'), inp = $('conv-val'), stairs = $('stairs'), cExp = $('conv-explain');
+Object.keys(MODES).forEach(function (k) {
+  var b = h('button', 'tab', MODES[k][L]); b.type = 'button'; b.setAttribute('role', 'tab');
+  b.addEventListener('click', function () { cMode = k; cUnit = MODES[k].base; cVal = 1; inp.value = '1'; buildConv(); });
+  b.dataset.k = k; convTabs.appendChild(b);
+});
+function buildConv() {
+  var m = MODES[cMode];
+  [].forEach.call(convTabs.children, function (b) { b.setAttribute('aria-selected', b.dataset.k === cMode); });
+  sel.innerHTML = '';
+  m.units.forEach(function (u, i) { var o = h('option', '', u + (m.alias && m.alias[u] ? ' (' + m.alias[u] + ')' : '')); o.value = i; sel.appendChild(o); });
+  sel.value = cUnit;
+  renderConv();
+}
+function renderConv() {
+  var m = MODES[cMode];
+  stairs.innerHTML = '';
+  m.units.forEach(function (u, i) {
+    var v = cVal * Math.pow(m.step, i - cUnit);
+    var b = h('button', 'stair' + (i === cUnit ? ' src' : '') + (i === m.base ? ' base' : ''),
+      '<span></span><span class="box" style="margin-left:' + (i * 14) + 'px"><span class="u">' + u + (m.alias && m.alias[u] ? ' <small style="font-weight:500">= 1 ' + m.alias[u] + '</small>' : '') + '</span><span class="v num">' + (isNaN(cVal) ? '–' : fmt(v)) + '</span></span>');
+    b.type = 'button';
+    b.addEventListener('click', function () { cVal = isNaN(cVal) ? 1 : cVal * Math.pow(m.step, i - cUnit); cUnit = i; inp.value = String(+cVal.toPrecision(12)).replace('.', ','); sel.value = i; renderConv(); });
+    stairs.appendChild(b);
+    if (i < m.units.length - 1) {
+      var a = h('div', 'arrowcell', '<span>×' + fmt(m.step) + ' ↓<br>:' + fmt(m.step) + ' ↑</span><i></i>');
+      stairs.appendChild(a);
+    }
+  });
+  var why = {
+    len: { ro: 'La lungimi, două unități vecine diferă de <strong>10</strong> ori: 1 m = 10 dm = 100 cm = 1 000 mm.', de: 'Bei Längen unterscheiden sich benachbarte Einheiten um den Faktor <strong>10</strong>: 1 m = 10 dm = 100 cm = 1 000 mm.' },
+    area: { ro: 'La arii, pasul este <strong>100</strong>, pentru că se înmulțesc două lungimi: 1 m² = 10 dm × 10 dm = 100 dm². Hectarul (ha) și arul (a) sunt folosite pentru terenuri.', de: 'Bei Flächen ist der Schritt <strong>100</strong>, weil zwei Längen multipliziert werden: 1 m² = 10 dm × 10 dm = 100 dm². Hektar (ha) und Ar (a) nutzt man für Grundstücke.' },
+    vol: { ro: 'La volume, pasul este <strong>1 000</strong>, pentru că se înmulțesc trei lungimi: 1 m³ = 10 dm × 10 dm × 10 dm = 1 000 dm³.', de: 'Bei Volumen ist der Schritt <strong>1 000</strong>, weil drei Längen multipliziert werden: 1 m³ = 10 dm × 10 dm × 10 dm = 1 000 dm³.' },
+    cap: { ro: 'Litrul are prefixele obișnuite, cu pasul 10. Hectolitrul se folosește la vin sau la apă, mililitrul la medicamente.', de: 'Der Liter hat die üblichen Vorsätze mit dem Schritt 10. Hektoliter nutzt man bei Wein oder Wasser, Milliliter bei Medikamenten.' }
+  }[cMode];
+  cExp.innerHTML = '<p>' + why[L] + '</p>' + (isNaN(cVal) ? '<p class="fb bad">' + (L === 'ro' ? 'Scrie un număr, de exemplu 2,5.' : 'Gib eine Zahl ein, zum Beispiel 2,5.') + '</p>' : '');
+}
+inp.addEventListener('input', function () { cVal = parseNum(inp.value); renderConv(); });
+sel.addEventListener('change', function () { cUnit = +sel.value; renderConv(); });
+buildConv();
+
+/* ---------- 4. Puterile lui 10 ---------- */
+function svgWrap(inner, light) { return { s: '<svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet">' + inner + '</svg>', light: !!light }; }
+function stars(n, seed) { var s = '', r = seed || 7; for (var i = 0; i < n; i++) { r = (r * 16807) % 2147483647; var x = r % 320; r = (r * 16807) % 2147483647; var y = r % 200; s += '<circle cx="' + x + '" cy="' + y + '" r="' + (r % 3 ? .7 : 1.3) + '" fill="#fff" opacity="' + (.4 + (r % 5) / 8) + '"/>'; } return s; }
+function membrane() { var s = '<rect width="320" height="200" fill="#fde9ec"/><rect y="0" width="320" height="40" fill="#e5f1fb"/>'; for (var i = 0; i < 20; i++) { var x = 8 + i * 16; s += '<path d="M' + (x - 3) + ',60 q-3,12 0,24 q3,12 0,22 M' + (x + 3) + ',60 q3,12 0,24 q-3,12 0,22 M' + (x - 3) + ',114 q-3,12 0,22 q3,12 0,24 M' + (x + 3) + ',114 q3,12 0,22 q-3,12 0,24" stroke="#d6454f" stroke-width="1.6" fill="none"/><circle cx="' + x + '" cy="54" r="7" fill="#e8434f"/><circle cx="' + x + '" cy="166" r="7" fill="#e8434f"/>'; } return s + '<path d="M300,50 v120" stroke="#1f2530" stroke-width="2"/><path d="M294,50 h12 M294,170 h12" stroke="#1f2530" stroke-width="2"/><text x="296" y="190" font-size="13" text-anchor="end" fill="#1f2530">≈ 8 nm</text>'; }
+function bacteria() { var s = '<rect width="320" height="200" fill="#2a1f4a"/>'; [[90, 100, 30, 150, 36], [220, 70, -20, 90, 26], [240, 150, 60, 70, 22]].forEach(function (b) { s += '<g transform="translate(' + b[0] + ' ' + b[1] + ') rotate(' + b[2] + ')"><rect x="' + (-b[3] / 2) + '" y="' + (-b[4] / 2) + '" width="' + b[3] + '" height="' + b[4] + '" rx="' + b[4] / 2 + '" fill="#8b5cf6" stroke="#c4b5fd" stroke-width="2"/>'; for (var i = 0; i < 14; i++) { var x = -b[3] / 2 + 8 + i * (b[3] - 16) / 13; s += '<path d="M' + x + ',' + (-b[4] / 2) + ' l' + (i % 2 ? 3 : -3) + ',-7 M' + x + ',' + (b[4] / 2) + ' l' + (i % 2 ? -3 : 3) + ',7" stroke="#c4b5fd" stroke-width="1"/>'; } s += '</g>'; }); return s + '<text x="310" y="190" font-size="13" text-anchor="end" fill="#ddd">≈ 2 µm</text>'; }
+function hair() { return '<rect width="320" height="200" fill="#fdfbf4"/><rect x="20" y="130" width="280" height="30" fill="#f4e7c3" stroke="#b59b56"/><path d="M20,130 v30 M300,130 v30" stroke="#1f2530" stroke-width="2"/><text x="160" y="182" font-size="14" text-anchor="middle" fill="#1f2530">1 mm</text><path d="M150,10 C152,60 142,100 150,190" stroke="#3b2a1a" stroke-width="20" fill="none"/><text x="176" y="60" font-size="13" fill="#1f2530">' + (L === 'ro' ? 'fir de păr ≈ 0,07 mm' : 'Haar ≈ 0,07 mm') + '</text>'; }
+function ant() { return '<rect width="320" height="200" fill="#e8f3d8"/><g stroke="#5a1f10" stroke-width="3" fill="none" stroke-linecap="round"><path d="M130,110 l-20,30 M140,110 l-6,34 M150,112 l12,32 M130,104 l-24,-22 M142,104 l-4,-30 M152,106 l18,-24"/><path d="M204,96 q20,-30 40,-26 M206,100 q24,-16 44,-6"/></g><ellipse cx="96" cy="110" rx="36" ry="22" fill="#b33a1a"/><ellipse cx="146" cy="108" rx="22" ry="12" fill="#c8481f"/><circle cx="192" cy="104" r="16" fill="#b33a1a"/><path d="M60,176 h200" stroke="#1f2530" stroke-width="2"/><path d="M60,170 v12 M260,170 v12" stroke="#1f2530" stroke-width="2"/><text x="160" y="196" font-size="13" text-anchor="middle" fill="#1f2530">5 mm</text>'; }
+function pencil() { return '<rect width="320" height="200" fill="#fdfbf4"/><g transform="translate(40 80)"><rect width="190" height="30" fill="#f2c230" stroke="#b38a10"/><rect x="0" width="24" height="30" fill="#e7a0b0"/><rect x="20" width="10" height="30" fill="#bbb"/><path d="M190,0 L240,15 L190,30Z" fill="#f4dcb0" stroke="#b38a10"/><path d="M228,11 L240,15 L228,19Z" fill="#333"/></g><rect x="40" y="140" width="240" height="26" fill="#fff" stroke="#999"/>' + Array.apply(null, Array(11)).map(function (_, i) { return '<path d="M' + (40 + i * 24) + ',140 v' + (i % 5 ? 8 : 14) + '" stroke="#333"/><text x="' + (40 + i * 24) + '" y="178" font-size="10" text-anchor="middle">' + i + '</text>'; }).join('') + '<text x="288" y="160" font-size="12">cm</text>'; }
+function human() { return '<rect width="320" height="200" fill="#e9f1e3"/><rect y="180" width="320" height="20" fill="#9cb87a"/>' + atlasPerson(130, 182, 160) + atlasPerson(205, 182, 118) + '<path d="M60,22 v160" stroke="#1f2530" stroke-width="2"/><path d="M54,22 h12 M54,182 h12" stroke="#1f2530" stroke-width="2"/><text x="48" y="106" font-size="13" text-anchor="end" fill="#1f2530">1,8 m</text><text x="205" y="52" font-size="12" text-anchor="middle" fill="#1f2530">1,3 m</text>'; }
+function everest() { return '<rect width="320" height="200" fill="#bcd7f0"/><path d="M0,200 L90,110 L130,130 L190,40 L250,120 L320,90 L320,200Z" fill="#6c7a89"/><path d="M190,40 L214,72 L200,70 L190,84 L176,64 L168,70Z" fill="#fff"/><path d="M18,34 h40" stroke="#fff" stroke-width="3"/><path d="M30,30 l10,4 l-10,4 M40,34 l-6,-10 M40,34 l-6,10" stroke="#fff" stroke-width="2" fill="none"/><text x="64" y="38" font-size="12" fill="#1f2530">' + (L === 'ro' ? 'avion ≈ 10 km' : 'Flugzeug ≈ 10 km') + '</text><text x="196" y="30" font-size="13" fill="#1f2530">8 849 m</text>'; }
+function moon() { return '<rect width="320" height="200" fill="#05070d"/>' + stars(60, 3) + '<circle cx="160" cy="100" r="80" fill="#c9c9c4"/><circle cx="130" cy="80" r="14" fill="#a9a9a3"/><circle cx="190" cy="120" r="20" fill="#b2b2ac"/><circle cx="170" cy="62" r="9" fill="#a1a19b"/><circle cx="120" cy="130" r="8" fill="#a9a9a3"/>'; }
+function earth() { return '<rect width="320" height="200" fill="#05070d"/>' + stars(60, 5) + '<circle cx="160" cy="100" r="82" fill="#2f6fd6"/><path d="M110,60 q20,-20 40,0 q10,20 -10,30 q-20,10 -30,-10z M170,110 q30,-10 40,10 q0,30 -20,40 q-20,-10 -20,-50z M120,130 q10,-10 20,0 q0,14 -12,16z" fill="#5caa4a"/><ellipse cx="140" cy="44" rx="30" ry="6" fill="#fff" opacity=".7"/>'; }
+function lightsec() { return '<rect width="320" height="200" fill="#05070d"/>' + stars(40, 9) + '<circle cx="30" cy="100" r="14" fill="#2f6fd6"/><circle cx="300" cy="100" r="4" fill="#c9c9c4"/><path d="M44,100 H241" stroke="#ffe08a" stroke-width="3"/><path d="M241,92 v16" stroke="#ffe08a" stroke-width="2"/><text x="241" y="86" font-size="12" text-anchor="middle" fill="#ffe08a">1 s</text><text x="30" y="130" font-size="11" text-anchor="middle" fill="#ccc">' + (L === 'ro' ? 'Pământ' : 'Erde') + '</text><text x="300" y="130" font-size="11" text-anchor="middle" fill="#ccc">' + (L === 'ro' ? 'Luna' : 'Mond') + '</text>'; }
+function sun() { return '<rect width="320" height="200" fill="#05070d"/><defs><radialGradient id="sg"><stop offset="0" stop-color="#fff3b0"/><stop offset=".6" stop-color="#ff9a1f"/><stop offset="1" stop-color="#d9480f"/></radialGradient></defs><circle cx="150" cy="100" r="88" fill="url(#sg)"/><circle cx="276" cy="100" r="1.6" fill="#6fa8ff"/><text x="276" y="120" font-size="11" text-anchor="middle" fill="#ccc">' + (L === 'ro' ? 'Pământul' : 'die Erde') + '</text>'; }
+function orbit() { return '<rect width="320" height="200" fill="#05070d"/>' + stars(50, 11) + '<circle cx="40" cy="100" r="18" fill="#ffb02e"/><path d="M40,100 m250,0 a250,250 0 0,0 -40,-120" stroke="#555" fill="none" stroke-dasharray="3 4"/><circle cx="290" cy="100" r="5" fill="#2f6fd6"/><path d="M60,100 H282" stroke="#ffe08a" stroke-width="1.5" stroke-dasharray="6 4"/><text x="170" y="92" font-size="12" text-anchor="middle" fill="#ffe08a">8 min 20 s</text>'; }
+function lightyear() { return '<rect width="320" height="200" fill="#05070d"/>' + stars(120, 13) + '<circle cx="50" cy="120" r="6" fill="#ffd23f"/><circle cx="280" cy="70" r="4" fill="#ff8a6a"/><path d="M56,118 L276,72" stroke="#ffe08a" stroke-dasharray="4 4"/><text x="50" y="142" font-size="11" text-anchor="middle" fill="#ccc">' + (L === 'ro' ? 'Soarele' : 'Sonne') + '</text><text x="280" y="92" font-size="11" text-anchor="middle" fill="#ccc">Proxima</text><text x="166" y="86" font-size="12" text-anchor="middle" fill="#ffe08a">4,2 ' + (L === 'ro' ? 'ani-lumină' : 'Lichtjahre') + '</text>'; }
+function galaxy() { var s = '<rect width="320" height="200" fill="#070a1a"/>' + stars(60, 17), r = 3; for (var arm = 0; arm < 2; arm++) for (var i = 0; i < 160; i++) { r = (r * 16807) % 2147483647; var t = i / 160 * 3.2 * Math.PI, rad = 6 + i * .7, a = t + arm * Math.PI, jit = (r % 100) / 100 * 10 - 5; var x = 160 + (rad + jit) * Math.cos(a), y = 100 + (rad + jit) * Math.sin(a) * .55; s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (i % 7 ? 1 : 1.8) + '" fill="' + (i % 3 ? '#b8c6ff' : '#ffe3f1') + '" opacity=".85"/>'; } return s + '<ellipse cx="160" cy="100" rx="22" ry="12" fill="#fff6d8" opacity=".9"/><circle cx="208" cy="126" r="3" fill="#ffd23f"/><text x="214" y="146" font-size="11" fill="#ffd23f">' + (L === 'ro' ? 'Soarele e aici' : 'Hier ist die Sonne') + '</text>'; }
+function universe() { var s = '<rect width="320" height="200" fill="#04050c"/>', r = 21, pts = []; for (var i = 0; i < 70; i++) { r = (r * 16807) % 2147483647; var x = r % 320; r = (r * 16807) % 2147483647; pts.push([x, r % 200]); } pts.forEach(function (p, i) { var q = pts[(i * 7 + 3) % pts.length]; if (Math.hypot(p[0] - q[0], p[1] - q[1]) < 90) s += '<path d="M' + p + ' L' + q + '" stroke="#6d5bd0" stroke-opacity=".5"/>'; s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + (i % 4 ? 1.4 : 2.6) + '" fill="#d9d2ff"/>'; }); return s; }
+var STOPS = [
+  { e: -9, u: { ro: '1 nanometru (nm)', de: '1 Nanometer (nm)' }, v: '6 – 10 nm', n: { ro: 'grosimea membranei celulare', de: 'Dicke der Zellmembran' }, p: { ro: 'Membrana este un strat dublu de molecule care învelește fiecare celulă.', de: 'Die Membran ist eine doppelte Molekülschicht, die jede Zelle umhüllt.' }, f: membrane, light: true },
+  { e: -6, u: { ro: '1 micrometru (µm)', de: '1 Mikrometer (µm)' }, v: '1 – 10 µm', n: { ro: 'diametrul unei bacterii', de: 'Durchmesser eines Bakteriums' }, p: { ro: 'Globula roșie din lecția de biologie are cam 7 µm. Pe un milimetru ar încăpea aproape 150 una lângă alta.', de: 'Das rote Blutkörperchen aus der Biologiestunde misst etwa 7 µm. Auf einen Millimeter passen fast 150 nebeneinander.' }, f: bacteria },
+  { e: -4, u: { ro: '0,1 milimetri', de: '0,1 Millimeter' }, v: '≈ 0,07 mm', n: { ro: 'grosimea unui fir de păr', de: 'Dicke eines Haares' }, p: { ro: 'Cam cel mai subțire lucru pe care îl mai vezi cu ochiul liber.', de: 'Etwa das Dünnste, was du mit bloßem Auge noch sehen kannst.' }, f: hair, light: true },
+  { e: -3, u: { ro: '1 milimetru (mm)', de: '1 Millimeter (mm)' }, v: '5 mm', n: { ro: 'lungimea unei furnici roșii', de: 'Länge einer Roten Waldameise' }, p: { ro: 'Pe rigla ta, cele mai mici liniuțe sunt la 1 mm una de alta.', de: 'Auf deinem Lineal liegen die kleinsten Striche 1 mm auseinander.' }, f: ant, light: true },
+  { e: -1, u: { ro: '1 decimetru (dm)', de: '1 Dezimeter (dm)' }, v: '10 cm', n: { ro: 'un creion scurt', de: 'ein kurzer Bleistift' }, p: { ro: '1 dm = 10 cm, cam cât lățimea palmei tale.', de: '1 dm = 10 cm, etwa so breit wie deine Hand.' }, f: pencil, light: true },
+  { e: 0, u: { ro: '1 metru (m)', de: '1 Meter (m)' }, v: '1,5 – 2 m', n: { ro: 'înălțimea unui om adult', de: 'Größe eines erwachsenen Menschen' }, p: { ro: 'Unitatea de bază. Un pas mare al unui adult are cam 1 m.', de: 'Die Grundeinheit. Ein großer Schritt eines Erwachsenen misst etwa 1 m.' }, f: human, light: true },
+  { e: 4, u: { ro: '10 kilometri', de: '10 Kilometer' }, v: '8 849 m', n: { ro: 'Chomolungma (Everest), cel mai înalt munte de pe Pământ', de: 'Chomolungma (Mount Everest), der höchste Berg der Erde' }, p: { ro: 'Avioanele de pasageri zboară și mai sus, la aproximativ 10–11 km.', de: 'Passagierflugzeuge fliegen sogar noch höher, in etwa 10–11 km Höhe.' }, f: everest, light: true },
+  { e: 6, u: { ro: '1 megametru (Mm) = 1 000 km', de: '1 Megameter (Mm) = 1 000 km' }, v: '3 474 km', n: { ro: 'diametrul Lunii', de: 'Durchmesser des Mondes' }, p: { ro: 'Cam cât distanța de la București la Paris, în linie dreaptă.', de: 'Etwa so weit wie von Bukarest nach Paris, in Luftlinie.' }, f: moon },
+  { e: 7, u: { ro: '10 000 km', de: '10 000 km' }, v: '12 742 km', n: { ro: 'diametrul Pământului', de: 'Durchmesser der Erde' }, p: { ro: 'Ocolul Pământului pe la Ecuator are aproape 40 000 km, exact cum voiau francezii când au definit metrul.', de: 'Der Erdumfang am Äquator beträgt fast 40 000 km, genau wie die Franzosen es beim Festlegen des Meters wollten.' }, f: earth },
+  { e: 8, u: { ro: '100 Mm', de: '100 Mm' }, v: '300 Mm', n: { ro: 'distanța parcursă de lumină într-o secundă', de: 'Strecke, die das Licht in einer Sekunde zurücklegt' }, p: { ro: 'Adică 300 000 km. Într-o secundă, lumina ar ocoli Pământul de 7 ori și jumătate. Până la Lună ajunge în puțin peste o secundă.', de: 'Also 300 000 km. In einer Sekunde könnte das Licht die Erde siebeneinhalbmal umrunden. Bis zum Mond braucht es etwas mehr als eine Sekunde.' }, f: lightsec },
+  { e: 9, u: { ro: '1 gigametru (Gm) = 1 milion de km', de: '1 Gigameter (Gm) = 1 Million km' }, v: '1,39 Gm', n: { ro: 'diametrul Soarelui', de: 'Durchmesser der Sonne' }, p: { ro: 'Încap 109 Pământuri, puse unul lângă altul, pe diametrul Soarelui.', de: 'Auf den Durchmesser der Sonne passen 109 Erden nebeneinander.' }, f: sun },
+  { e: 11, u: { ro: '100 Gm', de: '100 Gm' }, v: '150 Gm', n: { ro: 'distanța de la Pământ la Soare', de: 'Entfernung Erde–Sonne' }, p: { ro: 'Lumina Soarelui ajunge la noi în aproximativ 8 minute și 20 de secunde.', de: 'Das Sonnenlicht erreicht uns nach etwa 8 Minuten und 20 Sekunden.' }, f: orbit },
+  { e: 16, u: { ro: '1 an-lumină ≈ 10¹⁶ m', de: '1 Lichtjahr ≈ 10¹⁶ m' }, v: '9 460 ' + (L === 'ro' ? 'miliarde de km' : 'Milliarden km'), n: { ro: 'un an-lumină', de: 'ein Lichtjahr' }, p: { ro: 'Cea mai apropiată stea după Soare, Proxima Centauri, este la 4,2 ani-lumină.', de: 'Der nächste Stern nach der Sonne, Proxima Centauri, ist 4,2 Lichtjahre entfernt.' }, f: lightyear },
+  { e: 21, u: { ro: '100 000 de ani-lumină', de: '100 000 Lichtjahre' }, v: '≈ 10²¹ m', n: { ro: 'diametrul galaxiei noastre, Calea Lactee', de: 'Durchmesser unserer Galaxie, der Milchstraße' }, p: { ro: 'Are între 100 și 400 de miliarde de stele. Soarele nostru este doar una dintre ele.', de: 'Sie hat 100 bis 400 Milliarden Sterne. Unsere Sonne ist nur einer davon.' }, f: galaxy },
+  { e: 27, u: { ro: '880 yottametri', de: '880 Yottameter' }, v: '≈ 8,8 × 10²⁶ m', n: { ro: 'diametrul Universului observabil', de: 'Durchmesser des beobachtbaren Universums' }, p: { ro: 'Universul observabil este partea din Univers pe care o putem vedea de pe Pământ sau cu telescoapele spațiale. Are cel puțin 2 000 de miliarde de galaxii. Limita lui vine de la viteza luminii, nu de la cât de bune sunt telescoapele.', de: 'Das beobachtbare Universum ist der Teil des Universums, den wir von der Erde oder mit Weltraumteleskopen sehen können. Es enthält mindestens 2 Billionen Galaxien. Seine Grenze kommt von der Lichtgeschwindigkeit, nicht von der Qualität der Teleskope.' }, f: universe }
+];
+var range = $('scale-range'), pic = $('scale-pic'), sinfo = $('scale-info');
+range.max = STOPS.length - 1;
+function showStop(i) {
+  var s = STOPS[i], prev = STOPS[i - 1];
+  pic.innerHTML = svgWrap(s.f(), s.light).s;
+  pic.classList.toggle('light', !!s.light);
+  var ratio = prev ? Math.pow(10, s.e - prev.e) : 0;
+  sinfo.innerHTML = '<p class="pow num">' + pow10(s.e) + ' m</p><h3>' + s.n[L] + '</h3><p class="val num">' + s.v + '</p><p>' + s.p[L] + '</p><p class="ratio"><strong>' + s.u[L] + '</strong>' +
+    (prev ? '<br>' + (L === 'ro' ? 'De ' + fmt(ratio) + ' de ori mai mare decât oprirea dinainte.' : fmt(ratio) + '-mal größer als die vorige Station.') : '') + '</p>';
+  range.setAttribute('aria-valuetext', s.n[L]);
+}
+var ticks = $('ruler-ticks');
+STOPS.forEach(function (s, i) { if (i % 2 === 0 || i === STOPS.length - 1) { var t = h('span', 'num', pow10(s.e)); t.style.left = (i / (STOPS.length - 1) * 100) + '%'; ticks.appendChild(t); } });
+range.addEventListener('input', function () { showStop(+range.value); });
+showStop(+range.value);
+
+/* ---------- 5. Aria ---------- */
+var AL = [
+  { big: 'm²', small: 'dm²', side: { ro: '1 m', de: '1 m' }, cell: { ro: '1 dm', de: '1 dm' }, like: { ro: '1 m² ≈ suprafața unei mese mici', de: '1 m² ≈ die Fläche eines kleinen Tisches' }, likeS: { ro: '1 dm² ≈ cât palma ta', de: '1 dm² ≈ so groß wie deine Hand' } },
+  { big: 'dm²', small: 'cm²', side: { ro: '1 dm', de: '1 dm' }, cell: { ro: '1 cm', de: '1 cm' }, like: { ro: '1 dm² ≈ cât palma ta', de: '1 dm² ≈ so groß wie deine Hand' }, likeS: { ro: '1 cm² ≈ unghia degetului mic', de: '1 cm² ≈ der Nagel des kleinen Fingers' } },
+  { big: 'cm²', small: 'mm²', side: { ro: '1 cm', de: '1 cm' }, cell: { ro: '1 mm', de: '1 mm' }, like: { ro: '1 cm² ≈ unghia degetului mic', de: '1 cm² ≈ der Nagel des kleinen Fingers' }, likeS: { ro: '1 mm² ≈ un vârf de creion', de: '1 mm² ≈ eine Bleistiftspitze' } }
+];
+var aLev = 0, aSvg = $('area-svg');
+var AC = ['#fbe3a3', '#bfe0c4', '#c7d6f6'];
+function drawArea() {
+  var a = AL[aLev], S = 260, x0 = 40, y0 = 20, c = S / 10;
+  aSvg.innerHTML = '';
+  el('rect', { x: x0, y: y0, width: S, height: S, fill: AC[aLev], stroke: '#1f2530', 'stroke-width': 2 }, aSvg);
+  for (var i = 1; i < 10; i++) {
+    el('path', { d: 'M' + (x0 + i * c) + ',' + y0 + ' v' + S + ' M' + x0 + ',' + (y0 + i * c) + ' h' + S, stroke: '#1f2530', 'stroke-opacity': .35 }, aSvg);
+  }
+  if (aLev < 2) el('rect', { x: x0, y: y0 + 9 * c, width: c, height: c, fill: AC[aLev + 1], stroke: '#1f2530', 'stroke-width': 2 }, aSvg);
+  el('path', { d: 'M' + x0 + ',' + (y0 + S + 16) + ' h' + S, stroke: '#1f2530', 'stroke-width': 1.5 }, aSvg);
+  var t = el('text', { x: x0 + S / 2, y: y0 + S + 34, 'text-anchor': 'middle', 'font-size': 15, 'font-weight': 700, fill: '#1f2530' }, aSvg);
+  t.textContent = a.side[L] + ' = 10 × ' + a.cell[L];
+  var t2 = el('text', { x: 24, y: y0 + S / 2, 'text-anchor': 'middle', 'font-size': 15, 'font-weight': 700, fill: '#1f2530', transform: 'rotate(-90 24 ' + (y0 + S / 2) + ')' }, aSvg);
+  t2.textContent = a.side[L];
+  $('area-level').textContent = '1 ' + a.big;
+  $('area-info').innerHTML = '<p class="eq num">1 ' + a.big + ' = 10 × 10 = <strong>100 ' + a.small + '</strong></p><p style="margin-top:6px">' + (L === 'ro' ? 'Latura este de 10 ori mai lungă, dar aria este de 10 × 10 = 100 de ori mai mare.' : 'Die Seite ist 10-mal so lang, die Fläche aber 10 × 10 = 100-mal so groß.') + '</p><p class="like" style="margin-top:6px">' + a.like[L] + ' · ' + a.likeS[L] + '</p>' +
+    (aLev === 0 ? '<p class="hint" style="margin-top:6px">' + (L === 'ro' ? 'Apasă pe pătrat sau pe + ca să intri în pătrățelul colorat.' : 'Tippe auf das Quadrat oder auf +, um in das farbige Kästchen zu zoomen.') + '</p>' : '') +
+    (aLev === 2 ? '<p style="margin-top:6px"><strong>' + (L === 'ro' ? 'Deci 1 m² = 100 dm² = 10 000 cm² = 1 000 000 mm²!' : 'Also 1 m² = 100 dm² = 10 000 cm² = 1 000 000 mm²!') + '</strong></p>' : '');
+  $('area-in').disabled = aLev === 2; $('area-out').disabled = aLev === 0;
+}
+$('area-in').addEventListener('click', function () { if (aLev < 2) { aLev++; drawArea(); } });
+$('area-out').addEventListener('click', function () { if (aLev > 0) { aLev--; drawArea(); } });
+aSvg.addEventListener('click', function () { aLev = (aLev + 1) % 3; drawArea(); });
+drawArea();
+[
+  ['km²', '1 000 000 m² = 10' + sup(6) + ' m²', { ro: 'suprafața unui oraș mic; România are 238 397 km²', de: 'Fläche einer kleinen Stadt; Deutschland hat 357 588 km²' }],
+  ['hm² = 1 ha', '10 000 m² = 10' + sup(4) + ' m²', { ro: 'hectarul, pentru câmpuri; un teren de fotbal are cam 0,7 ha', de: 'Hektar, für Felder; ein Fußballfeld hat etwa 0,7 ha' }],
+  ['dam² = 1 a', '100 m² = 10' + sup(2) + ' m²', { ro: 'arul, pentru grădini și terenuri de casă', de: 'Ar, für Gärten und Baugrundstücke' }],
+  ['m²', '10 dm × 10 dm', { ro: 'unitatea SI', de: 'SI-Einheit' }],
+  ['dm²', '0,01 m² = 10' + sup(-2) + ' m²', { ro: 'o foaie A4 are cam 6 dm²', de: 'ein A4-Blatt hat etwa 6 dm²' }],
+  ['cm²', '0,0001 m² = 10' + sup(-4) + ' m²', { ro: 'un timbru are cam 6 cm²', de: 'eine Briefmarke hat etwa 6 cm²' }],
+  ['mm²', '0,000001 m² = 10' + sup(-6) + ' m²', { ro: 'secțiunea unui fir de cupru dintr-un cablu', de: 'Querschnitt eines Kupferdrahts in einem Kabel' }]
+].forEach(function (r) { $('area-list').appendChild(h('li', 'num', '<b>1 ' + r[0] + '</b><span>= ' + r[1] + '</span><span class="like">' + r[2][L] + '</span>')); });
+
+/* ---------- 6. Volumul: cubul ---------- */
+(function () {
+  var svg = $('cube'), n = 10, s = 13, ox = 150, oy = 148;
+  // proiecție izometrică: x spre dreapta-jos, y spre stânga-jos, z în sus
+  function P(x, y, z) { return [ox + (x - y) * s * .87, oy + (x + y) * s * .5 - z * s]; }
+  function poly(pts, a) { return el('polygon', Object.assign({ points: pts.map(function (p) { return p.join(','); }).join(' ') }, a), svg); }
+  function draw(k) {
+    svg.innerHTML = '';
+    // cubul gol (muchiile din spate)
+    var back = { fill: 'none', stroke: '#9aa3b2', 'stroke-width': 1, 'stroke-dasharray': '3 3' };
+    poly([P(0, 0, n), P(n, 0, n), P(n, n, n), P(0, n, n)], back);
+    el('path', { d: 'M' + P(0, 0, 0) + ' L' + P(0, 0, n) + ' M' + P(0, 0, 0) + ' L' + P(n, 0, 0) + ' M' + P(0, 0, 0) + ' L' + P(0, n, 0), stroke: '#9aa3b2', 'stroke-dasharray': '3 3', fill: 'none' }, svg);
+    if (k > 0) {
+      // fețele pline până la înălțimea k, cu rețeaua de cubulețe
+      var top = poly([P(0, 0, k), P(n, 0, k), P(n, n, k), P(0, n, k)], { fill: '#9cc3f5', stroke: '#2f6fd6' });
+      poly([P(n, 0, 0), P(n, n, 0), P(n, n, k), P(n, 0, k)], { fill: '#5d93e6', stroke: '#2f6fd6' });
+      poly([P(0, n, 0), P(n, n, 0), P(n, n, k), P(0, n, k)], { fill: '#3f78d1', stroke: '#2f6fd6' });
+      var gl = { stroke: '#e8f0fd', 'stroke-width': .8, 'stroke-opacity': .8, fill: 'none' };
+      for (var i = 1; i < n; i++) {
+        el('path', Object.assign({ d: 'M' + P(i, 0, k) + ' L' + P(i, n, k) + ' M' + P(0, i, k) + ' L' + P(n, i, k) }, gl), svg);
+        el('path', Object.assign({ d: 'M' + P(n, i, 0) + ' L' + P(n, i, k) + ' M' + P(i, n, 0) + ' L' + P(i, n, k) }, gl), svg);
+      }
+      for (var z = 1; z < k; z++) el('path', Object.assign({ d: 'M' + P(n, 0, z) + ' L' + P(n, n, z) + ' L' + P(0, n, z) }, gl), svg);
+    }
+    // muchiile din față
+    el('path', { d: 'M' + P(n, 0, 0) + ' L' + P(n, n, 0) + ' L' + P(0, n, 0) + ' M' + P(n, n, 0) + ' L' + P(n, n, n) + ' M' + P(n, 0, 0) + ' L' + P(n, 0, n) + ' M' + P(0, n, 0) + ' L' + P(0, n, n) + ' M' + P(0, 0, n) + ' L' + P(n, 0, n) + ' L' + P(n, n, n) + ' L' + P(0, n, n) + 'Z', stroke: '#1f2530', 'stroke-width': 1.6, fill: 'none' }, svg);
+    var mid = P(n / 2, n, 0), lb = el('text', { x: mid[0] - 8, y: mid[1] + 26, 'text-anchor': 'middle', 'font-size': 13, 'font-weight': 700, fill: '#1f2530' }, svg); lb.textContent = '10 cm = 1 dm';
+    // un cubuleț de 1 cm³, alături, pentru comparație
+    var a0 = n + 1.6, a1 = n + 2.6;
+    poly([P(a0, 0, 1), P(a1, 0, 1), P(a1, 1, 1), P(a0, 1, 1)], { fill: '#f2c230', stroke: '#8a6a00' });
+    poly([P(a1, 0, 0), P(a1, 1, 0), P(a1, 1, 1), P(a1, 0, 1)], { fill: '#e0a100', stroke: '#8a6a00' });
+    poly([P(a0, 1, 0), P(a1, 1, 0), P(a1, 1, 1), P(a0, 1, 1)], { fill: '#c98a00', stroke: '#8a6a00' });
+    var cp = P(a1, 1, 0), lc = el('text', { x: cp[0] - 4, y: cp[1] + 20, 'font-size': 12, fill: '#1f2530', 'text-anchor': 'middle' }, svg); lc.textContent = '1 cm³';
+    var cnt = k * 100;
+    $('vol-info').innerHTML = '<p class="big-count num">' + fmt(cnt) + ' cm³</p><p>' + (L === 'ro' ? k + ' ' + (k === 1 ? 'strat' : 'straturi') + ' × 10 × 10 cubulețe = ' + fmt(cnt) + ' cubulețe de 1 cm³' : k + ' ' + (k === 1 ? 'Schicht' : 'Schichten') + ' × 10 × 10 Würfelchen = ' + fmt(cnt) + ' Würfelchen zu 1 cm³') + '</p>' +
+      (k === 10 ? '<p class="eq num" style="margin-top:8px">1 dm³ = 1 000 cm³ = 1 L</p><p style="margin-top:4px">' + (L === 'ro' ? 'Latura e de 10 ori mai mare, dar volumul e de 10 × 10 × 10 = 1 000 de ori mai mare! Cubul plin încape exact într-o cutie de lapte de 1 L.' : 'Die Kante ist 10-mal so lang, das Volumen aber 10 × 10 × 10 = 1 000-mal so groß! Der volle Würfel passt genau in eine 1-Liter-Milchpackung.') + '</p>' : '<p class="hint" style="margin-top:6px">' + (L === 'ro' ? 'Mută cursorul ca să adaugi straturi.' : 'Bewege den Regler, um Schichten hinzuzufügen.') + '</p>');
+  }
+  var lr = $('layers');
+  lr.addEventListener('input', function () { draw(+lr.value); });
+  $('fill-all').addEventListener('click', function () {
+    var k = +lr.value, tmr = setInterval(function () { if (k >= 10) { clearInterval(tmr); return; } k++; lr.value = k; draw(k); }, 160);
+  });
+  draw(+lr.value);
+})();
+[
+  ['5 mL', { ro: 'o linguriță', de: 'ein Teelöffel' }],
+  ['250 mL', { ro: 'o cană', de: 'eine Tasse' }],
+  ['1 L = 1 dm³', { ro: 'o cutie de lapte', de: 'eine Milchpackung' }],
+  ['150–200 L', { ro: 'o cadă plină', de: 'eine volle Badewanne' }],
+  ['1 m³ = 1 000 L', { ro: 'cam 5–6 căzi pline', de: 'etwa 5–6 volle Badewannen' }],
+  ['2 500 m³', { ro: 'un bazin olimpic de înot', de: 'ein olympisches Schwimmbecken' }]
+].forEach(function (c) { $('vol-cmp').appendChild(h('div', '', '<b class="num">' + c[0] + '</b>' + c[1][L])); });
+[
+  ['dam³', '1 000 m³ = 10' + sup(3) + ' m³', 'dm³', '0,001 m³ = 10' + sup(-3) + ' m³ = 1 L'],
+  ['hm³', '10' + sup(6) + ' m³', 'cm³', '10' + sup(-6) + ' m³ = 1 mL'],
+  ['km³', '10' + sup(9) + ' m³', 'mm³', '10' + sup(-9) + ' m³']
+].forEach(function (r) { $('vol-list').appendChild(h('li', 'num', '<b>1 ' + r[0] + '</b><span>= ' + r[1] + '</span><b style="margin-left:auto">1 ' + r[2] + '</b><span>= ' + r[3] + '</span>')); });
+
+/* ---------- 7. Instrumente ---------- */
+var TOOLS = [
+  { ro: 'Pahar Erlenmeyer', de: 'Erlenmeyerkolben', u: 'mL', svg: '<path d="M44,10 h20 v36 l26,56 q4,10 -6,10 h-48 q-10,0 -6,-10 l26,-56z" fill="#eef6fb" stroke="#6a7a8a" stroke-width="2"/><path d="M30,82 h48 l10,20 q4,10 -6,10 h-48 q-10,0 -6,-10z" fill="#7cc38a" opacity=".85"/><path d="M56,62 h8 M56,72 h12 M56,82 h8 M56,92 h12" stroke="#1f2530"/>' },
+  { ro: 'Cilindru gradat', de: 'Messzylinder', u: 'mL, cm³', svg: '<path d="M44,6 h24 v104 h-24z" fill="#eef6fb" stroke="#6a7a8a" stroke-width="2"/><path d="M44,60 h24 v50 h-24z" fill="#6ab8e8"/><path d="M32,112 h48" stroke="#6a7a8a" stroke-width="4"/>' + Array.apply(null, Array(10)).map(function (_, i) { return '<path d="M44,' + (16 + i * 10) + ' h' + (i % 2 ? 6 : 10) + '" stroke="#1f2530"/>'; }).join('') },
+  { ro: 'Flacon gradat', de: 'Messfläschchen', u: 'mL', svg: '<rect x="42" y="6" width="28" height="12" rx="3" fill="#dfe6ee" stroke="#6a7a8a"/><path d="M40,18 h32 v88 q0,8 -8,8 h-16 q-8,0 -8,-8z" fill="#eef6fb" stroke="#6a7a8a" stroke-width="2"/><rect x="40" y="46" width="20" height="44" fill="#d7dde3"/><path d="M60,52 h8 M60,68 h8 M60,84 h8" stroke="#1f2530"/>' },
+  { ro: 'Pipetă gradată', de: 'Messpipette', u: 'mL', svg: '<ellipse cx="56" cy="20" rx="12" ry="16" fill="#4f8ee8"/><path d="M50,34 h12 v70 l-6,12 l-6,-12z" fill="#eef6fb" stroke="#6a7a8a" stroke-width="2"/>' + Array.apply(null, Array(6)).map(function (_, i) { return '<path d="M50,' + (44 + i * 10) + ' h' + (i % 2 ? 5 : 8) + '" stroke="#1f2530"/>'; }).join('') },
+  { ro: 'Cană gradată', de: 'Messbecher', u: 'mL, L', svg: '<path d="M26,14 h56 l-6,100 h-44z" fill="#eef6fb" stroke="#6a7a8a" stroke-width="2"/><path d="M82,24 q20,0 20,24 q0,24 -24,26" fill="none" stroke="#6a7a8a" stroke-width="5"/><path d="M29,60 h50 l-3,54 h-44z" fill="#6ab8e8" opacity=".8"/>' + Array.apply(null, Array(8)).map(function (_, i) { return '<path d="M44,' + (30 + i * 10) + ' h' + (i % 2 ? 6 : 12) + '" stroke="#2f6fd6"/>'; }).join('') }
+];
+TOOLS.forEach(function (t) { $('tools').appendChild(h('div', 'tool', '<svg viewBox="0 0 112 120" aria-hidden="true">' + t.svg + '</svg><b>' + t[L] + '</b><span class="term">' + other(t) + '</span><span class="hint">' + (L === 'ro' ? 'gradat în ' : 'Skala in ') + t.u + '</span>')); });
+
+/* ---------- 7b. Laborator: cilindrul gradat ---------- */
+(function () {
+  var svg = $('cyl'), top = 30, bot = 350, vmax = 50, X = 60, W = 60;
+  function yOf(v) { return bot - (bot - top) * v / vmax; }
+  var mode = 'read', level = 0, stone = 0, v1 = 30, dropped = false;
+  function draw() {
+    svg.innerHTML = '';
+    var lv = mode === 'stone' ? (dropped ? v1 + stone : v1) : level;
+    var y = yOf(lv);
+    el('rect', { x: X, y: top - 16, width: W, height: bot - top + 16, fill: '#f3f8fc', stroke: '#6a7a8a', 'stroke-width': 2 }, svg);
+    el('path', { d: 'M' + X + ',' + (y - 4) + ' Q' + (X + W / 2) + ',' + (y + 5) + ' ' + (X + W) + ',' + (y - 4) + ' L' + (X + W) + ',' + bot + ' L' + X + ',' + bot + 'Z', fill: '#7ec3ee', 'fill-opacity': .85 }, svg);
+    if (mode === 'stone' && dropped) el('path', { d: 'M' + (X + 14) + ',' + (bot - 4) + ' q-4,-22 16,-26 q22,-2 20,20 q-2,8 -12,8 z', fill: '#7a6f65', stroke: '#4d443c' }, svg);
+    for (var v = 0; v <= vmax; v++) {
+      var yy = yOf(v), major = v % 10 === 0, mid = v % 5 === 0;
+      el('path', { d: 'M' + X + ',' + yy + ' h' + (major ? 22 : mid ? 15 : 9), stroke: '#1f2530', 'stroke-width': major ? 1.6 : 1 }, svg);
+      if (major) { var t = el('text', { x: X + 26, y: yy + 5, 'font-size': 13, 'font-weight': 700, fill: '#1f2530' }, svg); t.textContent = v; }
+    }
+    var u = el('text', { x: X + W / 2, y: top - 22, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 700 }, svg); u.textContent = 'mL';
+    el('rect', { x: X - 18, y: bot, width: W + 36, height: 8, rx: 3, fill: '#6a7a8a' }, svg);
+    // ochiul la nivelul lichidului
+    el('path', { d: 'M' + (X + W + 30) + ',' + (y + 1) + ' h-24', stroke: '#c98a00', 'stroke-width': 1.5, 'stroke-dasharray': '4 3' }, svg);
+    el('ellipse', { cx: X + W + 40, cy: y + 1, rx: 10, ry: 6, fill: '#fff', stroke: '#1f2530' }, svg);
+    el('circle', { cx: X + W + 36, cy: y + 1, r: 3, fill: '#1f2530' }, svg);
+  }
+  var card = $('lab-card');
+  function newRead() { level = 6 + Math.floor(Math.random() * 40); if (level % 5 === 0) level++; }
+  function renderCard() {
+    if (mode === 'read') {
+      card.innerHTML = '<p>' + (L === 'ro' ? 'Cât lichid este în cilindru? Fiecare liniuță mică înseamnă 1 mL.' : 'Wie viel Flüssigkeit ist im Zylinder? Jeder kleine Strich bedeutet 1 mL.') + '</p>' +
+        '<p class="hint" style="margin-top:6px">' + (L === 'ro' ? 'Suprafața apei este curbată în jos (se numește <strong>menisc</strong>). Citește la <strong>baza meniscului</strong>, cu ochiul la aceeași înălțime cu lichidul, nu de sus sau de jos.' : 'Die Wasseroberfläche ist nach unten gewölbt (sie heißt <strong>Meniskus</strong>). Lies am <strong>tiefsten Punkt des Meniskus</strong> ab, mit dem Auge auf Höhe der Flüssigkeit, nicht von oben oder unten.') + '</p>' +
+        '<div class="ans" style="margin-top:10px"><input id="rd-a" type="text" inputmode="decimal" aria-label="mL"><span>mL</span><button class="btn" type="button" id="rd-c">' + (L === 'ro' ? 'Verifică' : 'Prüfen') + '</button><button class="btn ghost" type="button" id="rd-n">' + (L === 'ro' ? 'Alt nivel' : 'Neuer Füllstand') + '</button></div><p class="fb" id="rd-fb" aria-live="polite"></p>';
+      $('rd-c').onclick = function () {
+        var a = parseNum($('rd-a').value), fb = $('rd-fb');
+        if (a === level) { fb.className = 'fb ok'; fb.textContent = (L === 'ro' ? 'Corect: ' : 'Richtig: ') + level + ' mL = ' + level + ' cm³.'; }
+        else { fb.className = 'fb bad'; fb.textContent = isNaN(a) ? (L === 'ro' ? 'Scrie un număr.' : 'Gib eine Zahl ein.') : (L === 'ro' ? 'Nu chiar. Numără liniuțele de la cel mai apropiat număr.' : 'Nicht ganz. Zähle die Striche ab der nächsten Zahl.'); }
+      };
+      $('rd-n').onclick = function () { newRead(); draw(); renderCard(); };
+    } else {
+      card.innerHTML = '<p>' + (L === 'ro' ? 'Cum afli volumul unei pietre, care are o formă neregulată? O scufunzi în apă și vezi cu cât urcă nivelul!' : 'Wie bestimmt man das Volumen eines unregelmäßig geformten Steins? Man taucht ihn ins Wasser und sieht, wie weit der Wasserstand steigt!') + '</p>' +
+        '<p class="eq num" style="margin-top:8px">V<sub>1</sub> = ' + v1 + ' mL' + (dropped ? ' → V<sub>2</sub> = ' + (v1 + stone) + ' mL' : '') + '</p>' +
+        (dropped ? '<p class="eq num" style="margin-top:4px">V<sub>' + (L === 'ro' ? 'piatră' : 'Stein') + '</sub> = V<sub>2</sub> − V<sub>1</sub> = ' + (v1 + stone) + ' − ' + v1 + ' = <strong>' + stone + ' cm³</strong></p><p class="hint" style="margin-top:4px">' + (L === 'ro' ? 'Piatra a împins deoparte exact atâta apă cât spațiu ocupă ea.' : 'Der Stein hat genau so viel Wasser verdrängt, wie er selbst Raum einnimmt.') + '</p>' : '') +
+        '<div class="actions"><button class="btn" type="button" id="st-d">' + (dropped ? (L === 'ro' ? 'Altă piatră' : 'Anderer Stein') : (L === 'ro' ? 'Scufundă piatra' : 'Stein eintauchen')) + '</button></div>';
+      $('st-d').onclick = function () { if (dropped) { dropped = false; stone = 0; } else { stone = 5 + Math.floor(Math.random() * 12); dropped = true; } draw(); renderCard(); };
+    }
+  }
+  [].forEach.call(document.querySelectorAll('#lab-tabs .tab'), function (b) {
+    b.addEventListener('click', function () {
+      mode = b.dataset.t; dropped = false;
+      [].forEach.call(document.querySelectorAll('#lab-tabs .tab'), function (x) { x.setAttribute('aria-selected', x === b); });
+      draw(); renderCard();
+    });
+  });
+  newRead(); draw(); renderCard();
+})();
+
+/* ---------- 8. Antrenament ---------- */
+(function () {
+  var KINDS = {
+    len: { ro: 'Lungime', de: 'Länge', m: MODES.len },
+    area: { ro: 'Arie', de: 'Fläche', m: MODES.area },
+    vol: { ro: 'Volum', de: 'Volumen', m: MODES.vol },
+    cap: { ro: 'Litri', de: 'Liter', m: MODES.cap, mixed: true }
+  };
+  var kind = 'len', q = null, right = 0, total = 0;
+  var tabs = $('drill-tabs');
+  Object.keys(KINDS).forEach(function (k) { var b = h('button', 'tab', KINDS[k][L]); b.type = 'button'; b.dataset.k = k; b.addEventListener('click', function () { kind = k; next(); }); tabs.appendChild(b); });
+  function nice() { var c = [1, 2, 3, 4, 5, 7, 12, 25, 0.5, 1.5, 2.5, 0.25, 45, 250, 3.2]; return c[Math.floor(Math.random() * c.length)]; }
+  function next() {
+    [].forEach.call(tabs.children, function (b) { b.setAttribute('aria-selected', b.dataset.k === kind); });
+    var m = KINDS[kind].m, n = m.units.length, i, j;
+    if (kind === 'cap' && Math.random() < .5) {
+      // litri ↔ unități cubice
+      var pairs = [['L', 'dm³', 1], ['mL', 'cm³', 1], ['L', 'cm³', 1000], ['m³', 'L', 1000], ['dm³', 'mL', 1000]], p = pairs[Math.floor(Math.random() * pairs.length)], v = nice();
+      q = { v: v, from: p[0], to: p[1], ans: v * p[2] };
+    } else {
+      do { i = Math.floor(Math.random() * n); j = Math.floor(Math.random() * n); } while (i === j || Math.abs(i - j) > (kind === 'len' || kind === 'cap' ? 3 : 2));
+      var v2 = nice();
+      q = { v: v2, from: m.units[i], to: m.units[j], ans: v2 * Math.pow(m.step, j - i) };
+    }
+    $('drill-q').innerHTML = fmt(q.v) + ' ' + q.from + ' = ? ' + q.to;
+    $('drill-a').value = ''; $('drill-fb').textContent = ''; $('drill-fb').className = 'fb';
+    score();
+  }
+  function score() { $('drill-score').textContent = total ? (L === 'ro' ? 'Corecte: ' + right + ' din ' + total : 'Richtig: ' + right + ' von ' + total) : ''; }
+  function check() {
+    var a = parseNum($('drill-a').value), fb = $('drill-fb');
+    if (isNaN(a)) { fb.className = 'fb bad'; fb.textContent = L === 'ro' ? 'Scrie un număr.' : 'Gib eine Zahl ein.'; return; }
+    total++;
+    if (Math.abs(a - q.ans) <= Math.abs(q.ans) * 1e-9) { right++; fb.className = 'fb ok'; fb.innerHTML = (L === 'ro' ? 'Corect! ' : 'Richtig! ') + fmt(q.v) + ' ' + q.from + ' = ' + fmt(q.ans) + ' ' + q.to; }
+    else { fb.className = 'fb bad'; fb.innerHTML = (L === 'ro' ? 'Nu. Răspunsul corect: ' : 'Nein. Richtig ist: ') + fmt(q.v) + ' ' + q.from + ' = ' + fmt(q.ans) + ' ' + q.to + '. ' + (L === 'ro' ? 'Folosește scara unităților de mai sus.' : 'Nutze die Einheitentreppe oben.'); }
+    score();
+  }
+  $('drill-check').addEventListener('click', check);
+  $('drill-a').addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
+  $('drill-next').addEventListener('click', next);
+  next();
+})();
+
+/* ---------- 9. Dicționar ---------- */
+[['unitate de măsură', 'die Maßeinheit'], ['mărime fizică', 'die physikalische Größe'], ['Sistemul Internațional (SI)', 'das Internationale Einheitensystem'], ['unitate fundamentală', 'die Basiseinheit'],
+ ['unitate derivată', 'die abgeleitete Einheit'], ['multiplu', 'das Vielfache'], ['submultiplu', 'der Teil (einer Einheit)'], ['prefix', 'der Vorsatz'],
+ ['lungime', 'die Länge'], ['metru', 'der Meter'], ['riglă', 'das Lineal'], ['aria', 'der Flächeninhalt'], ['metru pătrat', 'der Quadratmeter'], ['hectar / ar', 'das Hektar / das Ar'],
+ ['volum', 'das Volumen'], ['metru cub', 'der Kubikmeter'], ['litru / mililitru', 'der Liter / der Milliliter'], ['cilindru gradat', 'der Messzylinder'], ['pahar Erlenmeyer', 'der Erlenmeyerkolben'],
+ ['pipetă', 'die Pipette'], ['cană gradată', 'der Messbecher'], ['menisc', 'der Meniskus'], ['an-lumină', 'das Lichtjahr'], ['cot', 'die Elle'], ['palmă', 'die Handbreite'],
+ ['picior', 'der Fuß'], ['pas', 'der Schritt'], ['milă', 'die Meile'], ['etalon', 'das Normal (Urmeter)']
+].forEach(function (p) { var d = h('div'); d.appendChild(h('dt', '', p[0])); d.appendChild(h('dd', '', p[1])); $('gloss').appendChild(d); });
+})();
+</script>
+</body>
+</html>

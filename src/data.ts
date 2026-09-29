@@ -5,6 +5,7 @@ import { inmultireaTest } from './content/inmultirea-test';
 import { mariExploratoriTest } from './content/mari-exploratori-test';
 import { organismulOmuluiTest } from './content/organismul-omului-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
+import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -156,6 +157,21 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/biologie/organismul-omului.html',
         test: { questions: organismulOmuluiTest, minutes: 8 },
+      },
+    ],
+    fiz: [
+      {
+        slug: 'unitati-de-masura',
+        title: {
+          ro: 'Unitățile de măsură: lungime, arie, volum',
+          de: 'Maßeinheiten: Länge, Fläche, Volumen',
+        },
+        summary: {
+          ro: 'De la cot și palmă la metru, prefixele, o călătorie de la nanometri la Univers, metrul pătrat și litrul.',
+          de: 'Von Elle und Handbreite zum Meter, die Vorsätze, eine Reise von Nanometern bis zum Universum, Quadratmeter und Liter.',
+        },
+        src: 'lectii/clasa-6/fizica/unitati-de-masura.html',
+        test: { questions: unitatiDeMasuraTest, minutes: 8 },
       },
     ],
     ist: [
