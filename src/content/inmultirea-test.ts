@@ -38,40 +38,6 @@ export const inmultireaTest: Question[] = [
   },
   {
     q: {
-      ro: 'Cât este 7 × 0?',
-      de: 'Wie viel ist 7 × 0?',
-    },
-    options: [
-      { ro: '7', de: '7' },
-      { ro: '0', de: '0' },
-      { ro: '1', de: '1' },
-      { ro: '70', de: '70' },
-    ],
-    correct: 1,
-    explain: {
-      ro: 'Orice număr înmulțit cu 0 dă 0.',
-      de: 'Jede Zahl mal 0 ergibt 0.',
-    },
-  },
-  {
-    q: {
-      ro: 'Ce se întâmplă când înmulțim un număr cu 1?',
-      de: 'Was passiert, wenn wir eine Zahl mit 1 multiplizieren?',
-    },
-    options: [
-      { ro: 'se dublează', de: 'sie verdoppelt sich' },
-      { ro: 'rămâne același număr', de: 'sie bleibt dieselbe Zahl' },
-      { ro: 'devine 0', de: 'sie wird 0' },
-      { ro: 'crește cu 1', de: 'sie wird um 1 größer' },
-    ],
-    correct: 1,
-    explain: {
-      ro: 'Orice număr înmulțit cu 1 rămâne același număr: 9 × 1 = 9.',
-      de: 'Jede Zahl mal 1 bleibt dieselbe Zahl: 9 × 1 = 9.',
-    },
-  },
-  {
-    q: {
       ro: 'Doi copii au fiecare 5 creioane negre și 3 creioane colorate. Câte creioane au în total? 2 × (5 + 3) = ?',
       de: 'Zwei Kinder haben jeweils 5 schwarze und 3 bunte Stifte. Wie viele Stifte haben sie insgesamt? 2 × (5 + 3) = ?',
     },
@@ -89,19 +55,19 @@ export const inmultireaTest: Question[] = [
   },
   {
     q: {
-      ro: 'Cât este 3 × (8 − 5)?',
-      de: 'Wie viel ist 3 × (8 − 5)?',
+      ro: 'Cât este 4 × (6 + 3)?',
+      de: 'Wie viel ist 4 × (6 + 3)?',
     },
     options: [
+      { ro: '27', de: '27' },
+      { ro: '36', de: '36' },
+      { ro: '30', de: '30' },
       { ro: '9', de: '9' },
-      { ro: '39', de: '39' },
-      { ro: '19', de: '19' },
-      { ro: '15', de: '15' },
     ],
-    correct: 0,
+    correct: 1,
     explain: {
-      ro: '8 − 5 = 3, iar 3 × 3 = 9. Sau: 3 × 8 − 3 × 5 = 24 − 15 = 9.',
-      de: '8 − 5 = 3, und 3 × 3 = 9. Oder: 3 × 8 − 3 × 5 = 24 − 15 = 9.',
+      ro: '6 + 3 = 9, iar 4 × 9 = 36. Sau: 4 × 6 + 4 × 3 = 24 + 12 = 36.',
+      de: '6 + 3 = 9, und 4 × 9 = 36. Oder: 4 × 6 + 4 × 3 = 24 + 12 = 36.',
     },
   },
   {
@@ -111,9 +77,9 @@ export const inmultireaTest: Question[] = [
     },
     options: [
       { ro: '4 × (2 + 3) = 4 × 2 + 3', de: '4 × (2 + 3) = 4 × 2 + 3' },
-      { ro: '4 × (5 − 2) = 4 × 5 + 4 × 2', de: '4 × (5 − 2) = 4 × 5 + 4 × 2' },
+      { ro: '4 × (2 + 3) = 2 + 4 × 3', de: '4 × (2 + 3) = 2 + 4 × 3' },
       { ro: '4 × (2 + 3) = 4 × 2 + 4 × 3', de: '4 × (2 + 3) = 4 × 2 + 4 × 3' },
-      { ro: '4 × (5 − 2) = 4 × 5 − 2', de: '4 × (5 − 2) = 4 × 5 − 2' },
+      { ro: '4 × (2 + 3) = 4 + 2 × 3', de: '4 × (2 + 3) = 4 + 2 × 3' },
     ],
     correct: 2,
     explain: {

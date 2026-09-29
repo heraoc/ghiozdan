@@ -121,8 +121,8 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Die Multiplikation natürlicher Zahlen',
         },
         summary: {
-          ro: 'Înmulțirea ca adunare repetată, tabla înmulțirii, factor sumă sau diferență și numere de două cifre înmulțite cu o cifră.',
-          de: 'Multiplikation als wiederholte Addition, das Einmaleins, Summe oder Differenz als Faktor und zweistellige Zahlen mal einstellige.',
+          ro: 'Înmulțirea ca adunare repetată, înmulțirea cu o sumă și numere de două cifre înmulțite cu o cifră.',
+          de: 'Multiplikation als wiederholte Addition, Multiplikation mit einer Summe und zweistellige Zahlen mal einstellige.',
         },
         src: 'lectii/clasa-3/matematica/inmultirea.html',
         test: { questions: inmultireaTest, minutes: 8 },
