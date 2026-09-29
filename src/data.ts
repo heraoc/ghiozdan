@@ -89,7 +89,7 @@ const SUBJECT_NAMES: Record<SubjectKey, [slug: string, name: Text]> = {
 /** Materiile fiecărei clase, în ordinea afișării, cu iconița lor. */
 const SUBJECTS: Record<Grade, [SubjectKey, glyph: string][]> = {
   3: [
-    ['mat', '1+2'],
+    ['mat', '2×3'],
     ['rom', 'Aa'],
     ['ger', 'Ää'],
     ['sti', '✿'],
