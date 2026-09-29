@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ceasul și arcele de cerc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Die Uhr und die Kreisbögen';
+})();
+</script>
+<style>
+:root{
+  --paper:#f7f6f2; --card:#ffffff; --ink:#1f2430; --muted:#5a6170; --rule:#e2e0d8; --sheet:#f1efe8;
+  --accent:#d64545; --accent-soft:#fbe8e8; --hour:#e8871e; --hour-soft:#fde7cc; --min:#2f6fd6; --min-soft:#dfe9fb;
+  --ok:#1f8a5b; --bad:#c23b3b;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)} .hint{font-size:14px;color:var(--muted)}
+.term{font-style:italic;color:var(--muted);font-weight:400}
+.num{font-variant-numeric:tabular-nums}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:6px 15px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.sm{padding:4px 11px;font-size:15px}
+.actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px}
+.arc{position:relative;display:inline-block;padding-top:.15em}
+.arc::before{content:"";position:absolute;left:5%;right:5%;top:-.1em;height:.4em;border-top:1.6px solid currentColor;border-radius:50% 50% 0 0}
+
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+section.block{margin-top:56px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:70ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.story{background:#fffbea;border:1px solid #f0e2a8;border-radius:10px;padding:14px 18px}
+.story h3{font-size:19px;color:#8a6a00;margin-bottom:4px}
+
+/* ceasul */
+.clock-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.clock-box{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:12px;position:sticky;top:8px}
+.clock-box svg{display:block;width:100%;max-width:440px;margin:0 auto;height:auto;touch-action:none;user-select:none}
+.time{font:800 44px/1 var(--display);text-align:center}
+.time small{font:500 15px var(--body);color:var(--muted);display:block;margin-top:4px}
+.ctrl{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:10px}
+.ctrl input[type=range]{width:100%;accent-color:var(--accent);margin-top:6px}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.tg{border:1.5px solid var(--c);color:var(--c);background:transparent;border-radius:99px;padding:5px 12px;cursor:pointer;font-weight:700;font-size:15px}
+.tg[aria-pressed="true"]{background:var(--c);color:#fff}
+.calc{display:grid;gap:10px}
+.calc .row{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;border-left:4px solid var(--c);padding:6px 12px;background:var(--card);border-radius:0 8px 8px 0}
+.calc .row b{font-size:15px;color:var(--c)}
+.calc .f{font:700 19px var(--body)}
+.calc .f .muted{font-weight:500;font-size:15px}
+.result{background:var(--accent-soft);border:1px solid #f1c3c3;border-radius:10px;padding:12px 16px}
+.result .big{font:800 34px var(--display);color:var(--accent)}
+.kind{display:inline-block;font:700 12px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;background:var(--card);border:1px solid #f1c3c3;border-radius:99px;padding:4px 8px;margin-left:8px;vertical-align:6px}
+.speeds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.speed{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 12px;border-top:5px solid var(--c)}
+.speed b{font:800 24px var(--display);color:var(--c);display:block}
+.speed span{font-size:14.5px}
+
+/* arcul orar */
+.imag{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:24px;align-items:start}
+.imag svg{display:block;width:100%;max-width:320px;margin:0 auto;height:auto}
+.q{font:800 24px var(--display)}
+.ans{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.ans input[type=text]{width:110px;border:1.5px solid var(--ink);border-radius:8px;padding:6px 10px;font-size:18px;font-weight:700}
+.fb{min-height:26px;margin-top:8px;font-weight:700}
+.fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+.guess input[type=range]{width:100%;accent-color:var(--hour)}
+
+/* elementele cercului */
+.circ{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.circ-box{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:12px}
+.circ-box svg{display:block;width:100%;max-width:420px;margin:0 auto;height:auto;touch-action:none;user-select:none}
+.defs{display:grid;gap:8px}
+.def{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 14px;border-left:4px solid var(--c);cursor:pointer;text-align:left;display:block;width:100%}
+.def[aria-pressed="true"]{background:var(--sheet);box-shadow:inset 0 0 0 1.5px var(--c)}
+.def b{font-family:var(--display);font-size:19px}
+.def .term{font-size:14px}
+.def p{font-size:15.5px;margin-top:2px}
+.handle{cursor:grab}
+.handle:active{cursor:grabbing}
+
+/* exerciții */
+.ex{display:grid;gap:8px}
+.ex-row{display:grid;grid-template-columns:36px 90px 1fr;gap:10px;align-items:center;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:8px 12px}
+.ex-row .l{font:800 18px var(--display);color:var(--muted)}
+.ex-row .t{font:800 22px var(--display)}
+.ex-row .a{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ex-row input{width:90px;border:1.5px solid var(--ink);border-radius:8px;padding:4px 8px;font-weight:700}
+.ex-row .out{flex-basis:100%;font-size:15px}
+.ex-row.ok{border-color:var(--ok);background:#effaf4}
+.ex-row.bad{border-color:#f0b4b4}
+
+/* suprapuneri */
+.over{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.over button{border:1.5px solid var(--rule);background:var(--card);border-radius:8px;padding:4px 10px;cursor:pointer;font-weight:700}
+
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .clock-grid,.imag,.circ{grid-template-columns:1fr}
+  .clock-box{position:static}
+  .speeds{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+  .ex-row{grid-template-columns:30px 70px 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Geometrie · Clasa a 6-a</span><span class="de">Geometrie · Klasse 6</span></p>
+  <h1><span class="ro">Ceasul și arcele de cerc</span><span class="de">Die Uhr und die Kreisbögen</span></h1>
+  <p class="lead">
+    <span class="ro">Cadranul unui ceas este un cerc, iar acele lui „desenează” arce de cerc când se mișcă. Pornind de la ceas, învățăm ce este un arc, cum se măsoară în grade și cum aflăm unghiul dintre ace la orice oră.</span>
+    <span class="de">Das Zifferblatt einer Uhr ist ein Kreis, und ihre Zeiger „zeichnen“ beim Drehen Kreisbögen. Ausgehend von der Uhr lernen wir, was ein Kreisbogen ist, wie man ihn in Grad misst und wie man den Winkel zwischen den Zeigern zu jeder Uhrzeit bestimmt.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">La 3:00, acele fac un unghi drept. Dar la 3:15? Se suprapun?</span><span class="de">Um 3:00 bilden die Zeiger einen rechten Winkel. Und um 3:15? Liegen sie übereinander?</span></li>
+        <li><span class="ro">Ce drum face vârful acului orar într-o oră? Dar într-un sfert de oră?</span><span class="de">Welchen Weg legt die Spitze des Stundenzeigers in einer Stunde zurück? Und in einer Viertelstunde?</span></li>
+        <li><span class="ro">De câte ori se suprapun acele într-o jumătate de zi?</span><span class="de">Wie oft liegen die Zeiger in einem halben Tag übereinander?</span></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- 1. Ceasul -->
+<section class="block" aria-labelledby="t-clock">
+  <h2 class="section-title" id="t-clock"><span class="step">1</span><span class="ro">Ceasul: un cerc împărțit în grade</span><span class="de">Die Uhr: ein in Grad eingeteilter Kreis</span></h2>
+  <p class="section-sub"><span class="ro">Un cerc complet are 360°. Cele 12 ore împart cadranul în 12 arce egale, iar cele 60 de minute în 60 de arce egale. Trage de acul minutar (albastru) sau folosește butoanele și urmărește arcele desenate de ace.</span><span class="de">Ein ganzer Kreis hat 360°. Die 12 Stunden teilen das Zifferblatt in 12 gleiche Bögen, die 60 Minuten in 60 gleiche Bögen. Zieh am Minutenzeiger (blau) oder nutze die Tasten und beobachte die Bögen, die die Zeiger zeichnen.</span></p>
+  <div class="speeds">
+    <div class="speed" style="--c:var(--ink)"><b>360° : 12 = 30°</b><span><span class="ro">între două numere vecine de pe cadran</span><span class="de">zwischen zwei benachbarten Zahlen auf dem Zifferblatt</span></span></div>
+    <div class="speed" style="--c:var(--min)"><b>6° / min</b><span><span class="ro">minutarul: 360° într-o oră, deci 360° : 60</span><span class="de">Minutenzeiger: 360° pro Stunde, also 360° : 60</span></span></div>
+    <div class="speed" style="--c:var(--hour)"><b>0,5° / min</b><span><span class="ro">acul orar: 30° într-o oră, deci 30° : 60</span><span class="de">Stundenzeiger: 30° pro Stunde, also 30° : 60</span></span></div>
+  </div>
+  <div class="clock-grid" style="margin-top:16px">
+    <div class="clock-box">
+      <p class="time num" id="time"></p>
+      <svg id="clock" viewBox="0 0 400 400" role="img" aria-label="Ceas cu acele și arcele parcurse"></svg>
+      <div class="ctrl">
+        <button class="btn ghost sm" type="button" data-d="-60">−1 h</button>
+        <button class="btn ghost sm" type="button" data-d="-5">−5 min</button>
+        <button class="btn ghost sm" type="button" data-d="-1">−1 min</button>
+        <button class="btn ghost sm" type="button" data-d="1">+1 min</button>
+        <button class="btn ghost sm" type="button" data-d="5">+5 min</button>
+        <button class="btn ghost sm" type="button" data-d="60">+1 h</button>
+        <button class="btn sm" type="button" id="play"></button>
+        <input type="range" id="tslider" min="0" max="719" step="1" aria-label="ora">
+      </div>
+    </div>
+    <div>
+      <div class="toggles" id="toggles">
+        <button class="tg" type="button" data-k="hourArc" style="--c:var(--hour)" aria-pressed="true"><span class="ro">arcul acului orar</span><span class="de">Bogen des Stundenzeigers</span></button>
+        <button class="tg" type="button" data-k="minArc" style="--c:var(--min)" aria-pressed="false"><span class="ro">arcul minutarului</span><span class="de">Bogen des Minutenzeigers</span></button>
+        <button class="tg" type="button" data-k="angle" style="--c:var(--accent)" aria-pressed="true"><span class="ro">unghiul dintre ace</span><span class="de">Winkel zwischen den Zeigern</span></button>
+      </div>
+      <div class="calc" style="margin-top:12px" id="calc"></div>
+      <div class="remember">
+        <h3><span class="ro">Metoda, pe scurt</span><span class="de">Die Methode, kurz</span></h3>
+        <p><span class="ro">1. Minutarul, pornind de la 12: <strong>minute × 6°</strong>.<br>2. Acul orar, pornind de la 12: <strong>ore × 30° + minute × 0,5°</strong>.<br>3. Scazi unghiul mai mic din cel mai mare. Dacă ies mai mult de 180°, scazi rezultatul din 360°.</span><span class="de">1. Minutenzeiger, von 12 aus: <strong>Minuten × 6°</strong>.<br>2. Stundenzeiger, von 12 aus: <strong>Stunden × 30° + Minuten × 0,5°</strong>.<br>3. Den kleineren Winkel vom größeren abziehen. Sind es mehr als 180°, zieht man das Ergebnis von 360° ab.</span></p>
+        <p class="hint"><span class="ro">Greșeala cea mai des întâlnită: uităm că și acul orar se mișcă! La 3:15 el nu mai stă pe 3, ci a înaintat un sfert din drumul spre 4.</span><span class="de">Der häufigste Fehler: Man vergisst, dass sich auch der Stundenzeiger bewegt! Um 3:15 steht er nicht mehr auf der 3, sondern ist ein Viertel des Weges zur 4 weitergerückt.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Arcul parcurs de acul orar -->
+<section class="block" aria-labelledby="t-imag">
+  <h2 class="section-title" id="t-imag"><span class="step">2</span><span class="ro">Imaginează-ți arcul parcurs de acul orar</span><span class="de">Stell dir den Bogen des Stundenzeigers vor</span></h2>
+  <p class="section-sub"><span class="ro">Închide ochii și urmărește în gând vârful acului orar. Ce arc desenează între cele două ore? Întâi estimează cu cursorul, apoi calculează.</span><span class="de">Schließ die Augen und verfolge in Gedanken die Spitze des Stundenzeigers. Welchen Bogen zeichnet er zwischen den beiden Uhrzeiten? Schätze zuerst mit dem Regler, dann rechne.</span></p>
+  <div class="imag">
+    <svg id="mini" viewBox="0 0 300 300" role="img" aria-label="Arcul parcurs de acul orar"></svg>
+    <div class="card">
+      <p class="q num" id="im-q"></p>
+      <div class="guess" style="margin-top:10px">
+        <label class="hint" for="im-guess"><span class="ro">Estimarea ta (trage de cursor și privește arcul portocaliu):</span><span class="de">Deine Schätzung (zieh am Regler und schau auf den orangen Bogen):</span></label>
+        <input type="range" id="im-guess" min="0" max="360" step="0.5" value="0">
+        <p class="num" id="im-gv" style="font-weight:700"></p>
+      </div>
+      <div class="ans"><input type="text" id="im-a" inputmode="decimal" aria-label="grade"><span>°</span><button class="btn" type="button" id="im-c"><span class="ro">Verifică</span><span class="de">Prüfen</span></button><button class="btn ghost" type="button" id="im-show"><span class="ro">Arată arcul</span><span class="de">Bogen zeigen</span></button><button class="btn ghost" type="button" id="im-n"><span class="ro">Altul</span><span class="de">Neue Aufgabe</span></button></div>
+      <p class="fb" id="im-fb" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Cercul și arcele -->
+<section class="block" aria-labelledby="t-circ">
+  <h2 class="section-title" id="t-circ"><span class="step">3</span><span class="ro">Cercul și arcele de cerc</span><span class="de">Kreis und Kreisbögen</span></h2>
+  <p class="section-sub"><span class="ro">Să dăm nume lucrurilor pe care le-am văzut pe ceas. Trage de punctele A și B de pe cerc și apasă pe fiecare definiție ca s-o vezi pe desen.</span><span class="de">Geben wir den Dingen, die wir auf der Uhr gesehen haben, Namen. Zieh an den Punkten A und B auf dem Kreis und tippe auf jede Definition, um sie in der Zeichnung zu sehen.</span></p>
+  <div class="circ">
+    <div class="circ-box">
+      <svg id="circ" viewBox="0 0 400 400" role="img" aria-label="Cerc cu centrul O și punctele A și B"></svg>
+      <p class="num" id="circ-m" style="text-align:center;font-weight:700;margin-top:6px"></p>
+      <div class="actions" style="justify-content:center">
+        <button class="btn ghost sm" type="button" data-p="90"><span class="ro">unghi drept</span><span class="de">rechter Winkel</span></button>
+        <button class="btn ghost sm" type="button" data-p="180"><span class="ro">semicerc</span><span class="de">Halbkreis</span></button>
+        <button class="btn ghost sm" type="button" data-p="30"><span class="ro">o oră (30°)</span><span class="de">eine Stunde (30°)</span></button>
+      </div>
+    </div>
+    <div class="defs" id="defs"></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro">Măsura unui arc mic este egală cu măsura <strong>unghiului la centru</strong> corespunzător: m(<span class="arc">AB</span>) = m(∢AOB). Arcul mare are 360° minus arcul mic. Cercul întreg are <strong>360°</strong>, iar semicercul <strong>180°</strong>.</span><span class="de">Die Größe eines kleinen Bogens ist gleich der Größe des zugehörigen <strong>Mittelpunktswinkels</strong>: m(<span class="arc">AB</span>) = m(∢AOB). Der große Bogen hat 360° minus den kleinen Bogen. Der ganze Kreis hat <strong>360°</strong>, der Halbkreis <strong>180°</strong>.</span></p>
+    <p><span class="ro">Pe ceas: acele sunt <strong>raze</strong>, centrul ceasului este <strong>centrul cercului</strong>, iar unghiul dintre ace este un <strong>unghi la centru</strong>.</span><span class="de">Auf der Uhr: Die Zeiger sind <strong>Radien</strong>, die Mitte der Uhr ist der <strong>Mittelpunkt</strong>, und der Winkel zwischen den Zeigern ist ein <strong>Mittelpunktswinkel</strong>.</span></p>
+  </div>
+</section>
+
+<!-- 4. Exercițiile din caiet -->
+<section class="block" aria-labelledby="t-ex">
+  <h2 class="section-title" id="t-ex"><span class="step">4</span><span class="ro">Exercițiu: câte grade sunt între acele ceasului?</span><span class="de">Übung: Wie viel Grad liegen zwischen den Uhrzeigern?</span></h2>
+  <p class="section-sub"><span class="ro">Exercițiile din caiet. Scrie răspunsul (unghiul mic dintre ace) și verifică. Cu „Pe ceas” vezi ora pe ceasul de sus, cu toate calculele.</span><span class="de">Die Aufgaben aus dem Heft. Gib die Antwort ein (den kleineren Winkel zwischen den Zeigern) und prüfe. Mit „Auf der Uhr“ siehst du die Uhrzeit oben auf der Uhr, mit allen Rechnungen.</span></p>
+  <div class="ex" id="ex"></div>
+</section>
+
+<!-- 5. Provocare -->
+<section class="block" aria-labelledby="t-over">
+  <h2 class="section-title" id="t-over"><span class="step">5</span><span class="ro">Provocare: când se suprapun acele?</span><span class="de">Knobelaufgabe: Wann liegen die Zeiger übereinander?</span></h2>
+  <p class="section-sub"><span class="ro">La 12:00 acele sunt unul peste altul. Mulți cred că la 1:05 se suprapun din nou. Verifică pe ceas: la 1:05 acul orar a mai înaintat 2,5°, deci între ace sunt încă 2,5°!</span><span class="de">Um 12:00 liegen die Zeiger übereinander. Viele glauben, dass sie um 1:05 wieder übereinanderliegen. Prüf es auf der Uhr: Um 1:05 ist der Stundenzeiger schon 2,5° weiter, also liegen noch 2,5° zwischen den Zeigern!</span></p>
+  <div class="card">
+    <p><span class="ro">Minutarul face 6° pe minut, acul orar 0,5°. Deci minutarul „câștigă” <strong>5,5° pe minut</strong>. Ca să-l prindă din nou din urmă, trebuie să câștige un cerc întreg: 360° : 5,5° ≈ <strong>65 de minute și 27 de secunde</strong>.</span><span class="de">Der Minutenzeiger schafft 6° pro Minute, der Stundenzeiger 0,5°. Der Minutenzeiger „gewinnt“ also <strong>5,5° pro Minute</strong>. Um ihn wieder einzuholen, muss er einen ganzen Kreis gewinnen: 360° : 5,5° ≈ <strong>65 Minuten und 27 Sekunden</strong>.</span></p>
+    <p style="margin-top:8px"><span class="ro">De aceea, în 12 ore acele se suprapun doar de <strong>11 ori</strong>, nu de 12. Apasă pe o oră ca s-o vezi pe ceas:</span><span class="de">Deshalb liegen die Zeiger in 12 Stunden nur <strong>11-mal</strong> übereinander, nicht 12-mal. Tippe auf eine Uhrzeit, um sie auf der Uhr zu sehen:</span></p>
+    <div class="over" id="over"></div>
+  </div>
+  <div class="story" style="margin-top:14px">
+    <h3><span class="ro">Știai că? De ce are cercul 360°?</span><span class="de">Wusstest du? Warum hat der Kreis 360°?</span></h3>
+    <p><span class="ro">Babilonienii, acum aproape 4 000 de ani, numărau în baza 60 și socoteau anul de aproximativ 360 de zile. Numărul 360 se împarte exact la foarte multe numere: 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180. De aceea cadranul se împarte ușor în 12 ore și 60 de minute. Tot de la babilonieni ne-au rămas cele 60 de minute dintr-o oră și cele 60 de secunde dintr-un minut.</span><span class="de">Die Babylonier zählten vor fast 4 000 Jahren im Sechzigersystem und rechneten mit einem Jahr von etwa 360 Tagen. Die Zahl 360 lässt sich durch sehr viele Zahlen teilen: 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180. Deshalb lässt sich das Zifferblatt leicht in 12 Stunden und 60 Minuten teilen. Auch die 60 Minuten einer Stunde und die 60 Sekunden einer Minute stammen von den Babyloniern.</span></p>
+  </div>
+</section>
+
+<!-- 6. Dicționar -->
+<section class="block" aria-labelledby="t-gloss">
+  <h2 class="section-title" id="t-gloss"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <p class="section-sub"><span class="ro">Cuvintele-cheie ale lecției, în română și în germană.</span><span class="de">Die wichtigsten Wörter der Lektion, auf Rumänisch und auf Deutsch.</span></p>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<footer class="foot">
+  <p><span class="ro">Sursă: exercițiul din caiet „Câte grade sunt între acele unui ceasornic când acesta indică ora”. Ceasurile din lecție au doar ac orar și minutar; secundele nu sunt luate în calcul.</span><span class="de">Quelle: die Heftaufgabe „Wie viel Grad liegen zwischen den Zeigern einer Uhr bei der angegebenen Uhrzeit?“. Die Uhren in der Lektion haben nur Stunden- und Minutenzeiger; Sekunden werden nicht berücksichtigt.</span></p>
+</footer>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function el(tag, a, parent) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (parent) parent.appendChild(e); return e; }
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function $(id) { return document.getElementById(id); }
+function other(o) { return L === 'ro' ? o.de : o.ro; }
+function deg(x) { var r = Math.round(x * 100) / 100; return String(r).replace('.', ',') + '°'; }
+function num(x) { return String(Math.round(x * 100) / 100).replace('.', ','); }
+function parseNum(s) { s = String(s).trim().replace(/°/g, '').replace(/\s/g, '').replace(',', '.'); if (!/^[-+]?\d*\.?\d+$/.test(s)) return NaN; return parseFloat(s); }
+function pad(n) { return (n < 10 ? '0' : '') + n; }
+if (L === 'de') {
+  $('clock').setAttribute('aria-label', 'Uhr mit Zeigern und den überstrichenen Bögen');
+  $('mini').setAttribute('aria-label', 'Bogen, den der Stundenzeiger überstreicht');
+  $('circ').setAttribute('aria-label', 'Kreis mit Mittelpunkt O und den Punkten A und B');
+}
+
+/* geometrie: unghiurile se măsoară de la ora 12, în sensul acelor de ceasornic */
+function pt(c, r, a) { var t = a * Math.PI / 180; return [c[0] + r * Math.sin(t), c[1] - r * Math.cos(t)]; }
+function arcD(c, r, a1, a2) {
+  var d = a2 - a1; if (d <= 0) return '';
+  if (d >= 359.999) { var p = pt(c, r, a1), q = pt(c, r, a1 + 180); return 'M' + p + ' A' + r + ',' + r + ' 0 1,1 ' + q + ' A' + r + ',' + r + ' 0 1,1 ' + p; }
+  var s = pt(c, r, a1), e = pt(c, r, a2);
+  return 'M' + s + ' A' + r + ',' + r + ' 0 ' + (d > 180 ? 1 : 0) + ',1 ' + e;
+}
+function sectorD(c, r, a1, a2) { var d = arcD(c, r, a1, a2); return d ? 'M' + c + ' L' + d.slice(1) + ' Z' : ''; }
+function angles(t) { var hh = Math.floor(t / 60) % 12, mm = t % 60; return { h: hh, m: mm, ah: hh * 30 + mm * 0.5, am: mm * 6 }; }
+function between(t) { var a = angles(t), d = Math.abs(a.ah - a.am); return { a: a, d: d, small: d > 180 ? 360 - d : d }; }
+function kind(x) {
+  if (x === 0) return { ro: 'unghi nul', de: 'Nullwinkel' };
+  if (x < 90) return { ro: 'unghi ascuțit', de: 'spitzer Winkel' };
+  if (x === 90) return { ro: 'unghi drept', de: 'rechter Winkel' };
+  if (x < 180) return { ro: 'unghi obtuz', de: 'stumpfer Winkel' };
+  return { ro: 'unghi alungit', de: 'gestreckter Winkel' };
+}
+function dial(svg, c, r, big) {
+  el('circle', { cx: c[0], cy: c[1], r: r + (big ? 14 : 10), fill: '#fbfaf6', stroke: '#1f2430', 'stroke-width': big ? 4 : 3 }, svg);
+  for (var i = 0; i < 60; i++) {
+    var hr = i % 5 === 0, p = pt(c, r, i * 6), q = pt(c, r - (hr ? 14 : 6), i * 6);
+    if (big || hr) el('path', { d: 'M' + p + ' L' + q, stroke: '#1f2430', 'stroke-width': hr ? 3 : 1.2, 'stroke-linecap': 'round' }, svg);
+  }
+  for (i = 1; i <= 12; i++) { var n = pt(c, r - (big ? 34 : 26), i * 30), t = el('text', { x: n[0], y: n[1] + (big ? 8 : 6), 'text-anchor': 'middle', 'font-size': big ? 24 : 17, 'font-weight': 700, 'font-family': 'Alegreya, serif', fill: '#1f2430' }, svg); t.textContent = i; }
+}
+function hand(svg, c, len, w, color) { return el('path', { stroke: color, 'stroke-width': w, 'stroke-linecap': 'round' }, svg); }
+function setHand(p, c, len, a) { p.setAttribute('d', 'M' + pt(c, -len * .15, a) + ' L' + pt(c, len, a)); }
+
+/* ---------- 1. Ceasul mare ---------- */
+var C = [200, 200], R = 160, T = 3 * 60 + 15;
+var show = { hourArc: true, minArc: false, angle: true };
+var svg = $('clock');
+dial(svg, C, R, true);
+var gSector = el('path', { fill: '#d64545', 'fill-opacity': .14 }, svg);
+var gAngArc = el('path', { fill: 'none', stroke: '#d64545', 'stroke-width': 3 }, svg);
+var gAngTxt = el('text', { 'text-anchor': 'middle', 'font-size': 17, 'font-weight': 800, fill: '#d64545', 'paint-order': 'stroke', stroke: '#fbfaf6', 'stroke-width': 4 }, svg);
+var gMinArc = el('path', { fill: 'none', stroke: '#2f6fd6', 'stroke-width': 6, 'stroke-linecap': 'round', 'stroke-opacity': .55 }, svg);
+var gHourArc = el('path', { fill: 'none', stroke: '#e8871e', 'stroke-width': 9, 'stroke-linecap': 'round', 'stroke-opacity': .75 }, svg);
+var zero = el('path', { d: 'M' + C + ' L' + pt(C, R - 16, 0), stroke: '#1f2430', 'stroke-width': 1, 'stroke-dasharray': '4 4' }, svg);
+var hH = hand(svg, C, 92, 9, '#e8871e'), hM = hand(svg, C, 138, 6, '#2f6fd6');
+var hMgrab = el('path', { stroke: 'transparent', 'stroke-width': 30, 'stroke-linecap': 'round', 'class': 'handle' }, svg);
+el('circle', { cx: C[0], cy: C[1], r: 8, fill: '#1f2430' }, svg);
+function render() {
+  T = ((T % 720) + 720) % 720;
+  var b = between(T), a = b.a;
+  setHand(hH, C, 92, a.ah); setHand(hM, C, 138, a.am); setHand(hMgrab, C, 138, a.am);
+  gHourArc.setAttribute('d', show.hourArc ? arcD(C, 64, 0, a.ah) : '');
+  gMinArc.setAttribute('d', show.minArc ? arcD(C, R - 20, 0, a.am) : '');
+  var lo = Math.min(a.ah, a.am), hi = Math.max(a.ah, a.am), s1 = lo, s2 = hi;
+  if (hi - lo > 180) { s1 = hi; s2 = lo + 360; }
+  gSector.setAttribute('d', show.angle ? sectorD(C, 112, s1, s2) : '');
+  gAngArc.setAttribute('d', show.angle ? arcD(C, 44, s1, s2) : '');
+  var mid = pt(C, b.small < 30 ? 128 : 78, (s1 + s2) / 2);
+  gAngTxt.setAttribute('x', mid[0]); gAngTxt.setAttribute('y', mid[1] + 6);
+  gAngTxt.textContent = show.angle && b.small > 0 ? deg(b.small) : '';
+  var hh = a.h === 0 ? 12 : a.h;
+  $('time').innerHTML = hh + ':' + pad(a.m) + '<small>' + (L === 'ro' ? 'sau ' : 'oder ') + (hh === 12 ? 0 : hh + 12) + ':' + pad(a.m) + '</small>';
+  $('tslider').value = T;
+  var k = kind(b.small);
+  $('calc').innerHTML =
+    '<div class="row" style="--c:var(--min)"><b>' + (L === 'ro' ? 'minutarul' : 'Minutenzeiger') + '</b><p class="f num">' + a.m + ' × 6° = ' + deg(a.am) + ' <span class="muted">' + (L === 'ro' ? 'de la 12' : 'ab 12') + '</span></p></div>' +
+    '<div class="row" style="--c:var(--hour)"><b>' + (L === 'ro' ? 'acul orar' : 'Stundenzeiger') + '</b><p class="f num">' + a.h + ' × 30° + ' + a.m + ' × 0,5° = ' + deg(a.h * 30) + ' + ' + deg(a.m * .5) + ' = ' + deg(a.ah) + '</p></div>' +
+    '<div class="result"><p class="f num">|' + deg(a.ah) + ' − ' + deg(a.am) + '| = ' + deg(b.d) + (b.d > 180 ? ' → 360° − ' + deg(b.d) + ' = ' + deg(b.small) : '') + '</p><p class="big num">' + deg(b.small) + '<span class="kind">' + k[L] + '</span></p>' +
+    '<p class="hint">' + (L === 'ro' ? 'Arcul mare dintre ace are ' + deg(360 - b.small) + '.' : 'Der große Bogen zwischen den Zeigern hat ' + deg(360 - b.small) + '.') + '</p></div>';
+}
+[].forEach.call(document.querySelectorAll('.ctrl [data-d]'), function (b) { b.addEventListener('click', function () { T += +b.dataset.d; render(); }); });
+$('tslider').addEventListener('input', function () { T = +this.value; render(); });
+[].forEach.call(document.querySelectorAll('#toggles .tg'), function (b) {
+  b.addEventListener('click', function () { show[b.dataset.k] = !show[b.dataset.k]; b.setAttribute('aria-pressed', show[b.dataset.k]); render(); });
+});
+var playing = false, last = 0;
+function setPlay() { $('play').innerHTML = playing ? '<span class="ro">■ Oprește</span><span class="de">■ Stopp</span>' : '<span class="ro">▶ Pornește timpul</span><span class="de">▶ Zeit laufen lassen</span>'; }
+function tick(now) { if (!playing) return; if (now - last > 60) { T += 1; render(); last = now; } requestAnimationFrame(tick); }
+$('play').addEventListener('click', function () { playing = !playing; setPlay(); if (playing) requestAnimationFrame(tick); });
+setPlay();
+// trasul minutarului: la trecerea peste 12 se schimbă și ora
+(function () {
+  var drag = false;
+  function angleAt(e) { var r = svg.getBoundingClientRect(), x = (e.clientX - r.left) * 400 / r.width - C[0], y = (e.clientY - r.top) * 400 / r.height - C[1]; var a = Math.atan2(x, -y) * 180 / Math.PI; return (a + 360) % 360; }
+  hMgrab.addEventListener('pointerdown', function (e) { drag = true; svg.setPointerCapture(e.pointerId); playing = false; setPlay(); });
+  svg.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var m = Math.round(angleAt(e) / 6) % 60, m0 = T % 60, hrs = Math.floor(T / 60);
+    if (m0 > 45 && m < 15) hrs++; else if (m0 < 15 && m > 45) hrs--;
+    T = hrs * 60 + m; render();
+  });
+  ['pointerup', 'pointercancel'].forEach(function (ev) { svg.addEventListener(ev, function () { drag = false; }); });
+})();
+render();
+function showOnClock(t) { T = t; render(); $('t-clock').scrollIntoView({ behavior: 'smooth' }); }
+
+/* ---------- 2. Arcul acului orar ---------- */
+(function () {
+  var s = $('mini'), c = [150, 150], r = 110;
+  dial(s, c, r, false);
+  var gArc = el('path', { fill: 'none', stroke: '#e8871e', 'stroke-width': 10, 'stroke-linecap': 'round', 'stroke-opacity': .35 }, s);
+  var real = el('path', { fill: 'none', stroke: '#e8871e', 'stroke-width': 10, 'stroke-linecap': 'round' }, s);
+  var h0 = el('path', { stroke: '#9aa0ab', 'stroke-width': 7, 'stroke-linecap': 'round' }, s);
+  var h1 = el('path', { stroke: '#e8871e', 'stroke-width': 7, 'stroke-linecap': 'round' }, s);
+  el('circle', { cx: c[0], cy: c[1], r: 6, fill: '#1f2430' }, s);
+  var q = null, anim = null;
+  function fmtT(t) { var hh = Math.floor(t / 60) % 12; return (hh === 0 ? 12 : hh) + ':' + pad(t % 60); }
+  function next() {
+    var starts = [0, 15, 30, 45, 0, 0, 20, 10, 40];
+    var st = (1 + Math.floor(Math.random() * 11)) * 60 + starts[Math.floor(Math.random() * starts.length)];
+    var durs = [60, 90, 120, 150, 180, 45, 30, 20, 200, 75, 135, 240, 15, 10];
+    var du = durs[Math.floor(Math.random() * durs.length)];
+    q = { st: st, du: du, a0: angles(st).ah, ans: du * 0.5 };
+    $('im-q').innerHTML = (L === 'ro' ? 'Ce arc parcurge acul orar de la ' : 'Welchen Bogen überstreicht der Stundenzeiger von ') + fmtT(st) + (L === 'ro' ? ' până la ' : ' bis ') + fmtT(st + du) + '?';
+    $('im-a').value = ''; $('im-fb').textContent = ''; $('im-fb').className = 'fb';
+    $('im-guess').value = 0; guess(); real.setAttribute('d', ''); setHand(h1, c, 62, q.a0); setHand(h0, c, 62, q.a0);
+    if (anim) cancelAnimationFrame(anim);
+  }
+  function guess() {
+    var g = +$('im-guess').value;
+    gArc.setAttribute('d', q ? arcD(c, 84, q.a0, q.a0 + g) : '');
+    setHand(h1, c, 62, q.a0 + g);
+    $('im-gv').textContent = (L === 'ro' ? 'Estimare: ' : 'Schätzung: ') + deg(g);
+  }
+  function reveal() {
+    var t0 = null;
+    if (anim) cancelAnimationFrame(anim);
+    function f(now) {
+      if (!t0) t0 = now;
+      var p = Math.min(1, (now - t0) / 1500), a = q.ans * p;
+      real.setAttribute('d', arcD(c, 84, q.a0, q.a0 + a || q.a0 + .01));
+      setHand(h1, c, 62, q.a0 + a);
+      if (p < 1) anim = requestAnimationFrame(f);
+    }
+    anim = requestAnimationFrame(f);
+  }
+  $('im-guess').addEventListener('input', guess);
+  $('im-show').addEventListener('click', function () {
+    reveal();
+    var g = +$('im-guess').value, diff = Math.abs(g - q.ans);
+    $('im-fb').className = 'fb ' + (diff <= 5 ? 'ok' : 'bad');
+    $('im-fb').innerHTML = (L === 'ro' ? 'Arcul real: ' : 'Tatsächlicher Bogen: ') + deg(q.ans) + ' (' + q.du + ' min × 0,5°). ' + (diff <= 5 ? (L === 'ro' ? 'Estimare foarte bună!' : 'Sehr gute Schätzung!') : (L === 'ro' ? 'Estimarea ta a fost ' + deg(g) + '.' : 'Deine Schätzung war ' + deg(g) + '.'));
+  });
+  $('im-c').addEventListener('click', function () {
+    var a = parseNum($('im-a').value), fb = $('im-fb');
+    if (isNaN(a)) { fb.className = 'fb bad'; fb.textContent = L === 'ro' ? 'Scrie un număr de grade.' : 'Gib eine Gradzahl ein.'; return; }
+    if (Math.abs(a - q.ans) < 0.01) { fb.className = 'fb ok'; fb.innerHTML = (L === 'ro' ? 'Corect! ' : 'Richtig! ') + q.du + ' min × 0,5° = ' + deg(q.ans) + '.'; reveal(); }
+    else { fb.className = 'fb bad'; fb.innerHTML = L === 'ro' ? 'Nu chiar. Câte minute trec? Acul orar face 0,5° pe minut, adică 30° pe oră.' : 'Nicht ganz. Wie viele Minuten vergehen? Der Stundenzeiger schafft 0,5° pro Minute, also 30° pro Stunde.'; }
+  });
+  $('im-a').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('im-c').click(); });
+  $('im-n').addEventListener('click', next);
+  next();
+})();
+
+/* ---------- 3. Cercul: A și B se pot trage ---------- */
+(function () {
+  var s = $('circ'), c = [200, 200], r = 140, A = 60, B = 170, M;
+  var DEFS = [
+    { k: 'center', c: '#1f2430', ro: 'Centrul cercului', de: 'Mittelpunkt', t: { ro: 'Punctul O, aflat la aceeași distanță de toate punctele cercului. Pe ceas: axul în jurul căruia se rotesc acele.', de: 'Der Punkt O, der von allen Punkten des Kreises gleich weit entfernt ist. Auf der Uhr: die Achse, um die sich die Zeiger drehen.' } },
+    { k: 'radius', c: '#2f6fd6', ro: 'Raza', de: 'Radius', t: { ro: 'Segmentul care unește centrul cu un punct al cercului, de exemplu OA. Toate razele unui cerc sunt egale. Pe ceas: fiecare ac.', de: 'Die Strecke vom Mittelpunkt zu einem Punkt des Kreises, zum Beispiel OA. Alle Radien eines Kreises sind gleich lang. Auf der Uhr: jeder Zeiger.' } },
+    { k: 'chord', c: '#1f8a5b', ro: 'Coarda', de: 'Sehne', t: { ro: 'Segmentul care unește două puncte ale cercului, de exemplu AB.', de: 'Die Strecke zwischen zwei Punkten des Kreises, zum Beispiel AB.' } },
+    { k: 'diam', c: '#7a3fa0', ro: 'Diametrul', de: 'Durchmesser', t: { ro: 'O coardă care trece prin centru. Are cât două raze și este cea mai lungă coardă. Apasă „semicerc” ca să-l vezi.', de: 'Eine Sehne durch den Mittelpunkt. Sie ist so lang wie zwei Radien und die längste Sehne. Tippe auf „Halbkreis“, um ihn zu sehen.' } },
+    { k: 'angle', c: '#d64545', ro: 'Unghiul la centru', de: 'Mittelpunktswinkel', t: { ro: 'Unghiul cu vârful în centrul cercului, ∢AOB. Pe ceas: unghiul dintre ace.', de: 'Der Winkel mit dem Scheitel im Mittelpunkt, ∢AOB. Auf der Uhr: der Winkel zwischen den Zeigern.' } },
+    { k: 'minor', c: '#e8871e', ro: 'Arcul mic', de: 'Kleiner Kreisbogen', t: { ro: 'Porțiunea de cerc dintre A și B din interiorul unghiului la centru. Se notează <span class="arc">AB</span> și are aceeași măsură ca ∢AOB.', de: 'Der Teil des Kreises zwischen A und B im Inneren des Mittelpunktswinkels. Man schreibt <span class="arc">AB</span>; er ist so groß wie ∢AOB.' } },
+    { k: 'major', c: '#8a6a00', ro: 'Arcul mare', de: 'Großer Kreisbogen', t: { ro: 'Restul cercului. Se notează cu trei litere, <span class="arc">AMB</span>, și are 360° minus arcul mic.', de: 'Der Rest des Kreises. Man schreibt ihn mit drei Buchstaben, <span class="arc">AMB</span>; er hat 360° minus den kleinen Bogen.' } }
+  ];
+  var sel = null, box = $('defs');
+  DEFS.forEach(function (d) {
+    var b = h('button', 'def', '<b>' + d[L] + '</b> <span class="term">· ' + other(d) + '</span><p>' + d.t[L] + '</p>');
+    b.type = 'button'; b.style.setProperty('--c', d.c); b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', function () { sel = sel === d.k ? null : d.k; [].forEach.call(box.children, function (x, i) { x.setAttribute('aria-pressed', DEFS[i].k === sel); }); draw(); });
+    box.appendChild(b);
+  });
+  var G = el('g', {}, s), hA, hB;
+  function lbl(p, t, dx, dy, color) { var x = el('text', { x: p[0] + dx, y: p[1] + dy, 'text-anchor': 'middle', 'font-size': 20, 'font-weight': 800, 'font-style': 'italic', 'font-family': 'Alegreya, serif', fill: color || '#1f2430' }, G); x.textContent = t; }
+  function op(k) { return !sel || sel === k ? 1 : .18; }
+  function draw() {
+    G.innerHTML = '';
+    var lo = Math.min(A, B), hi = Math.max(A, B), s1 = lo, s2 = hi;
+    if (hi - lo > 180) { s1 = hi; s2 = lo + 360; }
+    var m = s2 - s1; M = (s2 + (s1 + 360)) / 2;
+    el('circle', { cx: c[0], cy: c[1], r: r, fill: 'none', stroke: '#c9ccd4', 'stroke-width': 2 }, G);
+    el('path', { d: arcD(c, r, s2, s1 + 360), fill: 'none', stroke: '#8a6a00', 'stroke-width': 7, 'stroke-linecap': 'round', opacity: op('major') * .8 }, G);
+    el('path', { d: arcD(c, r, s1, s2), fill: 'none', stroke: '#e8871e', 'stroke-width': 9, 'stroke-linecap': 'round', opacity: op('minor') }, G);
+    el('path', { d: sectorD(c, 50, s1, s2), fill: '#d64545', 'fill-opacity': .18 * op('angle') }, G);
+    el('path', { d: arcD(c, 36, s1, s2), fill: 'none', stroke: '#d64545', 'stroke-width': 2.5, opacity: op('angle') }, G);
+    var pa = pt(c, r, A), pb = pt(c, r, B), pm = pt(c, r, M % 360);
+    var isDiam = Math.abs(m - 180) < 0.5;
+    el('path', { d: 'M' + pa + ' L' + pb, stroke: isDiam ? '#7a3fa0' : '#1f8a5b', 'stroke-width': 3.5, opacity: Math.max(op('chord'), isDiam ? op('diam') : 0) }, G);
+    ['M' + c + ' L' + pa, 'M' + c + ' L' + pb].forEach(function (d) { el('path', { d: d, stroke: '#2f6fd6', 'stroke-width': 3.5, opacity: Math.max(op('radius'), op('angle')) }, G); });
+    el('circle', { cx: c[0], cy: c[1], r: sel === 'center' ? 8 : 5, fill: '#1f2430' }, G);
+    el('circle', { cx: pm[0], cy: pm[1], r: 4.5, fill: '#8a6a00', opacity: op('major') }, G);
+    lbl(c, 'O', -16, 22); lbl(pt(c, r + 22, A), 'A', 0, 7); lbl(pt(c, r + 22, B), 'B', 0, 7); lbl(pt(c, r + 20, M % 360), 'M', 0, 7, '#8a6a00');
+    var mt = pt(c, 70, (s1 + s2) / 2);
+    var tt = el('text', { x: mt[0], y: mt[1] + 6, 'text-anchor': 'middle', 'font-size': 16, 'font-weight': 800, fill: '#d64545', opacity: op('angle'), 'paint-order': 'stroke', stroke: '#fff', 'stroke-width': 4 }, G); tt.textContent = deg(m);
+    hA = el('circle', { cx: pa[0], cy: pa[1], r: 11, fill: '#fff', stroke: '#1f2430', 'stroke-width': 3, 'class': 'handle', 'data-p': 'A' }, G);
+    hB = el('circle', { cx: pb[0], cy: pb[1], r: 11, fill: '#fff', stroke: '#1f2430', 'stroke-width': 3, 'class': 'handle', 'data-p': 'B' }, G);
+    $('circ-m').innerHTML = 'm(∢AOB) = m(<span class="arc">AB</span>) = ' + deg(m) + ' &nbsp;·&nbsp; m(<span class="arc">AMB</span>) = 360° − ' + deg(m) + ' = ' + deg(360 - m) + (isDiam ? ' &nbsp;·&nbsp; <span style="color:#7a3fa0">' + (L === 'ro' ? 'AB este diametru' : 'AB ist ein Durchmesser') + '</span>' : '');
+  }
+  var dragging = null;
+  function angleAt(e) { var b = s.getBoundingClientRect(), x = (e.clientX - b.left) * 400 / b.width - c[0], y = (e.clientY - b.top) * 400 / b.height - c[1]; return (Math.atan2(x, -y) * 180 / Math.PI + 360) % 360; }
+  s.addEventListener('pointerdown', function (e) { var p = e.target.getAttribute && e.target.getAttribute('data-p'); if (p) { dragging = p; s.setPointerCapture(e.pointerId); } });
+  s.addEventListener('pointermove', function (e) { if (!dragging) return; var a = Math.round(angleAt(e) / 5) * 5 % 360; if (dragging === 'A') A = a; else B = a; if (A === B) return; draw(); });
+  ['pointerup', 'pointercancel'].forEach(function (ev) { s.addEventListener(ev, function () { dragging = null; }); });
+  [].forEach.call(document.querySelectorAll('[data-p]'), function (b) { if (b.tagName === 'BUTTON') b.addEventListener('click', function () { B = (A + +b.dataset.p) % 360; draw(); }); });
+  draw();
+})();
+
+/* ---------- 4. Exercițiile din caiet ---------- */
+[['a', 21, 0], ['b', 2, 0], ['c', 11, 0], ['d', 6, 0], ['e', 12, 30], ['f', 6, 15], ['g', 1, 5], ['h', 3, 45], ['i', 5, 10], ['j', 11, 20]].forEach(function (x) {
+  var t = (x[1] % 12) * 60 + x[2], b = between(t), a = b.a;
+  var row = h('div', 'ex-row', '<span class="l">' + x[0] + ')</span><span class="t num">' + x[1] + ':' + pad(x[2]) + '</span>');
+  var box = h('div', 'a', '<input type="text" inputmode="decimal" aria-label="' + x[0] + '"><span>°</span>');
+  var chk = h('button', 'btn sm', L === 'ro' ? 'Verifică' : 'Prüfen'); chk.type = 'button';
+  var sh = h('button', 'btn ghost sm', L === 'ro' ? 'Pe ceas' : 'Auf der Uhr'); sh.type = 'button';
+  var out = h('p', 'out');
+  box.appendChild(chk); box.appendChild(sh); box.appendChild(out); row.appendChild(box);
+  var steps = a.m + ' × 6° = ' + deg(a.am) + '; ' + a.h + ' × 30° + ' + a.m + ' × 0,5° = ' + deg(a.ah) + '; |' + deg(a.ah) + ' − ' + deg(a.am) + '| = ' + deg(b.d) + (b.d > 180 ? '; 360° − ' + deg(b.d) + ' = ' + deg(b.small) : '');
+  chk.addEventListener('click', function () {
+    var v = parseNum(box.querySelector('input').value);
+    if (isNaN(v)) { out.className = 'out'; out.textContent = L === 'ro' ? 'Scrie un număr de grade.' : 'Gib eine Gradzahl ein.'; return; }
+    var ok = Math.abs(v - b.small) < 0.01;
+    row.classList.toggle('ok', ok); row.classList.toggle('bad', !ok);
+    out.innerHTML = ok ? '<strong style="color:var(--ok)">' + (L === 'ro' ? 'Corect!' : 'Richtig!') + '</strong> <span class="muted num">' + steps + '</span>'
+      : '<strong style="color:var(--bad)">' + (L === 'ro' ? 'Nu încă.' : 'Noch nicht.') + '</strong> ' + (L === 'ro' ? 'Folosește „Pe ceas” sau metoda: minutarul, acul orar, apoi diferența.' : 'Nutze „Auf der Uhr“ oder die Methode: Minutenzeiger, Stundenzeiger, dann die Differenz.') +
+        (row.dataset.tries ? ' <span class="muted num">' + (L === 'ro' ? 'Rezolvare: ' : 'Lösung: ') + steps + '</span>' : '');
+    row.dataset.tries = '1';
+  });
+  box.querySelector('input').addEventListener('keydown', function (e) { if (e.key === 'Enter') chk.click(); });
+  sh.addEventListener('click', function () { showOnClock(t); });
+  $('ex').appendChild(row);
+});
+
+/* ---------- 5. Suprapunerile ---------- */
+for (var k = 0; k < 11; k++) {
+  var mins = k * 720 / 11, hh = Math.floor(mins / 60), mm = Math.floor(mins % 60), ss = Math.round((mins % 1) * 60);
+  if (ss === 60) { ss = 0; mm++; }
+  (function (tm, label) {
+    var b = h('button', 'num', label); b.type = 'button';
+    b.addEventListener('click', function () { showOnClock(Math.round(tm)); });
+    $('over').appendChild(b);
+  })(mins, (hh === 0 ? 12 : hh) + ':' + pad(mm) + ':' + pad(ss));
+}
+
+/* ---------- 6. Dicționar ---------- */
+[['cerc', 'der Kreis'], ['centrul cercului', 'der Mittelpunkt'], ['rază', 'der Radius'], ['diametru', 'der Durchmesser'], ['coardă', 'die Sehne'],
+ ['arc de cerc', 'der Kreisbogen'], ['arc mic / arc mare', 'kleiner / großer Bogen'], ['semicerc', 'der Halbkreis'], ['unghi la centru', 'der Mittelpunktswinkel'],
+ ['grad', 'das Grad'], ['unghi ascuțit', 'spitzer Winkel'], ['unghi drept', 'rechter Winkel'], ['unghi obtuz', 'stumpfer Winkel'], ['unghi alungit (180°)', 'gestreckter Winkel'],
+ ['unghi complet (360°)', 'der Vollwinkel'], ['ceas / cadran', 'die Uhr / das Zifferblatt'], ['acul orar', 'der Stundenzeiger'], ['minutarul', 'der Minutenzeiger'],
+ ['în sensul acelor de ceasornic', 'im Uhrzeigersinn'], ['a se suprapune', 'sich decken / übereinanderliegen']
+].forEach(function (p) { var d = h('div'); d.appendChild(h('dt', '', p[0])); d.appendChild(h('dd', '', p[1])); $('gloss').appendChild(d); });
+})();
+</script>
+</body>
+</html>
