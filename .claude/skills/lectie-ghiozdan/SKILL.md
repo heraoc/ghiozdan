@@ -72,6 +72,11 @@ Copiază scheletul unei lecții existente din aceeași materie (de ex.
 - Mobil: layout-urile pe două coloane trec pe o coloană sub ~820px; textul din SVG se mărește pe
   ecrane înguste; fără scroll orizontal la 375px.
 - Câmpuri de răspuns: `inputmode="numeric"`, stiluri `.ok` (verde) / `.bad` (roșu) definite în CSS.
+- **Hărți** (geografie, istorie): în `public/lectii/lib/` există d3, `topojson-client`, conturul
+  uscatului `land-50m.json` și țările `countries-110m.json` (Natural Earth, domeniu public).
+  Model de folosire: `public/lectii/clasa-6/geografie/descoperirea-lumii.html` (funcțiile
+  `makeMap`, `label`, `dot`: drumuri ca `LineString`, mărire doar din butoane, ca pe telefon
+  degetul să deruleze pagina; mărimea etichetelor se pune cu `style`, împărțită la zoom).
 
 Testul final: `src/content/{slug}-test.ts`, exportă `Question[]`
 (`q`, `options`, `correct` = indexul variantei corecte, `explain`, toate `{ ro, de }`).

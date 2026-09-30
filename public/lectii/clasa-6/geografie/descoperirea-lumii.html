@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Descoperirea lumii</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Die Entdeckung der Welt';
+})();
+</script>
+<script src="../../lib/d3-7.8.5.min.js"></script>
+<script src="../../lib/topojson-client-3.1.0.min.js"></script>
+<style>
+:root{
+  --paper:#f3f7f6; --card:#ffffff; --ink:#1b2a2e; --muted:#566468; --rule:#d9e3e2; --sheet:#e9f1ef;
+  --accent:#1f8a78; --accent-soft:#e1f3ef;
+  --sea:#dcebf2; --land:#efe6d2; --coast:#b9ae95; --grat:#c7d6de;
+  --route:#c0392b; --old:#9aa7ab;
+  --good:#27a36f; --good-soft:#e6f6ee; --bad:#d64545; --bad-soft:#fdeaea;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,select{font:inherit;color:inherit}
+button:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.term{font-style:italic;color:var(--muted);font-weight:400}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.hint{font-size:14.5px;color:var(--muted)}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.score{font-weight:700}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#b02e2e;background:var(--bad-soft)}
+.pick[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:#fff}
+
+/* hărți */
+.map{background:var(--sea);border:1px solid var(--rule);border-radius:12px;overflow:hidden;position:relative}
+.map svg{display:block;width:100%;height:auto}
+.map .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-weight:700}
+.sea{fill:var(--sea)} .land{fill:var(--land);stroke:var(--coast);stroke-width:.6;vector-effect:non-scaling-stroke}
+.grat{fill:none;stroke:var(--grat);stroke-width:.5;vector-effect:non-scaling-stroke}
+.route{fill:none;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.route.cur{stroke:var(--route);stroke-width:3.2}
+.route.old{stroke:var(--old);stroke-width:1.6;opacity:.7}
+.route.guess{stroke-dasharray:6 6}
+.mlbl{font:700 14px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.mlbl.sm{font-weight:500}
+.dot{stroke:#fff;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.map-btns{position:absolute;right:8px;top:8px;display:flex;gap:6px}
+.map-btns button{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:4px 10px;font-size:14px;font-weight:700;cursor:pointer}
+
+/* 1. popoare */
+.peoples{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.people{background:var(--card);border:1.5px solid var(--rule);border-radius:10px;padding:12px 14px;display:grid;gap:8px;align-content:start}
+.people h3{font-size:21px}
+.people .opts{display:flex;flex-wrap:wrap;gap:6px}
+.people .why{font-size:14.5px;color:var(--muted)}
+.people.done{border-color:var(--good)}
+.scholars{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px}
+.scholar{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:10px;padding:10px 14px}
+.scholar b{font-family:var(--display);font-size:19px}
+.scholar p{font-size:15px;color:var(--muted)}
+
+/* 2. linia timpului */
+.tl{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:thin}
+.tl button{flex:none;border:1.5px solid var(--rule);background:var(--card);border-radius:10px;padding:5px 10px;cursor:pointer;text-align:left;line-height:1.2}
+.tl button b{display:block;font-size:14px}
+.tl button span{font-size:12.5px;color:var(--muted)}
+.tl button[aria-current="true"]{border-color:var(--route);box-shadow:inset 0 -3px 0 var(--route)}
+.era{font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);align-self:center;padding:0 4px;flex:none}
+.tl-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start}
+.info{display:grid;gap:10px}
+.info .when{font:800 15px/1 var(--body);color:var(--route)}
+.info h3{font-size:26px}
+.info .who{color:var(--muted);font-size:15px;margin-top:-4px}
+.wtable{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;background:var(--sheet);border-radius:8px;padding:10px 12px;font-size:15.5px}
+.wtable dt{font-weight:700}
+.wtable dd{margin:0}
+.info .know{font-size:15.5px}
+.nav{display:flex;gap:8px;align-items:center}
+.nav .count{font-size:14px;color:var(--muted);font-weight:700}
+
+/* 3. Thule */
+.thule-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+.cands{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.clue{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;display:grid;gap:6px}
+.clue ul{margin:0;padding-left:1.2em;display:grid;gap:3px}
+.pro{color:#1d7f55} .con{color:#a12f2f}
+
+/* 4. vikingi */
+.dirs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.toggle{border:1.5px solid var(--c);background:transparent;border-radius:99px;padding:6px 14px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+.toggle i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.toggle[aria-pressed="true"]{background:var(--c);color:#fff}
+.toggle[aria-pressed="true"] i{background:#fff}
+.vk-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+.bank{display:flex;flex-wrap:wrap;gap:6px}
+.bank .pick.placed{border-color:var(--good);background:var(--good-soft);color:var(--ink);cursor:default}
+.cats{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.cats button{border:2px solid var(--c);background:#fff;border-radius:10px;padding:6px 14px;font-weight:800;cursor:pointer;color:var(--c)}
+.found{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.found div{background:var(--card);border:1px solid var(--rule);border-top:4px solid var(--c);border-radius:8px;padding:8px 10px;font-size:15px;min-height:70px}
+.found b{display:block;color:var(--c)}
+
+/* 5. mari descoperiri */
+.spices{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.fact{background:var(--card);border:1px solid var(--rule);border-left:4px solid #c98a1a;border-radius:10px;padding:10px 14px;margin-top:10px;min-height:66px}
+.la-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start;margin-top:18px}
+.lang-key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14.5px;margin-top:8px}
+.lang-key i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px}
+.country{cursor:pointer;stroke:#fff;stroke-width:.6;vector-effect:non-scaling-stroke}
+.country:hover{filter:brightness(.92)}
+.country.sel{stroke:var(--ink);stroke-width:2}
+.link-card{margin-top:14px;background:var(--accent-soft);border-radius:10px;padding:10px 14px;font-size:15.5px}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #a9c3bd;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted)}
+
+/* 6. tabelul din caiet */
+.tbl-wrap{overflow-x:auto}
+table.who{border-collapse:separate;border-spacing:0 6px;width:100%;min-width:640px}
+table.who th{font:700 13px/1.2 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 8px}
+table.who td{background:var(--card);padding:6px 8px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+table.who td:first-child{border-left:1px solid var(--rule);border-radius:8px 0 0 8px;font-weight:700}
+table.who td:last-child{border-right:1px solid var(--rule);border-radius:0 8px 8px 0}
+table.who select{width:100%;border:2px solid var(--rule);border-radius:8px;padding:4px 6px;background:#fff;min-height:36px}
+table.who select.ok{border-color:var(--good);background:var(--good-soft)}
+table.who select.bad{border-color:var(--bad);background:var(--bad-soft)}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:860px){
+  .tl-grid,.thule-grid,.vk-grid,.la-grid{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+}
+@media (max-width:600px){ .found{grid-template-columns:1fr} .map-btns{position:static;justify-content:flex-end;padding:6px 6px 0} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Geografie · Clasa a 6-a · Descoperirea lumii</span><span class="de">Geografie · Klasse 6 · Die Entdeckung der Welt</span></p>
+  <h1><span class="ro">Descoperirea lumii</span><span class="de">Die Entdeckung der Welt</span></h1>
+  <p class="lead">
+    <span class="ro">Mii de ani, oamenii au cunoscut doar ținutul în care trăiau. Pas cu pas, navigatori, negustori și învățați au descoperit suprafața Pământului: de la coastele Europei în Antichitate până la prima călătorie în jurul lumii.</span>
+    <span class="de">Tausende von Jahren kannten die Menschen nur den Landstrich, in dem sie lebten. Schritt für Schritt entdeckten Seefahrer, Händler und Gelehrte die Erdoberfläche: von den Küsten Europas im Altertum bis zur ersten Weltumsegelung.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">De unde știau oamenii din Antichitate cum arată lumea?</span><span class="de">Woher wussten die Menschen im Altertum, wie die Welt aussieht?</span></li>
+        <li><span class="ro">Cine a ajuns primul în America: Columb sau vikingii?</span><span class="de">Wer kam zuerst nach Amerika: Kolumbus oder die Wikinger?</span></li>
+        <li><span class="ro">De ce se numește o parte din America „America Latină”?</span><span class="de">Warum heißt ein Teil Amerikas „Lateinamerika“?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Cine a explorat și de ce</span><span class="de">Wer erkundete und warum</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Linia timpului pe hartă</span><span class="de">Zeitleiste auf der Karte</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Unde era Thule?</span><span class="de">Wo lag Thule?</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Vikingii</span><span class="de">Die Wikinger</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Marile Descoperiri</span><span class="de">Große Entdeckungen</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Tabelul din caiet</span><span class="de">Die Tabelle im Heft</span></a>
+  </nav>
+</header>
+
+<!-- 1. Cine a explorat și de ce -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Cine a explorat lumea și de ce?</span><span class="de">Wer erkundete die Welt und warum?</span></h2>
+  <p class="section-sub"><span class="ro">Popoare diferite au pornit la drum din motive diferite. Alege pentru fiecare popor ce îl împingea să exploreze.</span><span class="de">Verschiedene Völker brachen aus verschiedenen Gründen auf. Wähle für jedes Volk, was es zum Erkunden antrieb.</span></p>
+  <div class="peoples" id="peoples"></div>
+  <h3 style="margin:22px 0 2px;font-size:22px"><span class="ro">Învățații Antichității au scris ce se știa</span><span class="de">Die Gelehrten des Altertums schrieben auf, was man wusste</span></h3>
+  <p class="hint"><span class="ro">Datorită lor știm cum arăta lumea cunoscută atunci și ce popoare trăiau în ea.</span><span class="de">Dank ihnen wissen wir, wie die damals bekannte Welt aussah und welche Völker darin lebten.</span></p>
+  <div class="scholars">
+    <div class="scholar"><b>Herodot</b><p><span class="ro">istoric grec; a descris țările și popoarele pe care le-a vizitat</span><span class="de">griechischer Historiker; beschrieb die Länder und Völker, die er besuchte</span></p></div>
+    <div class="scholar"><b><span class="ro">Eratostene</span><span class="de">Eratosthenes</span></b><p><span class="ro">învățat grec; a calculat cât de mare e Pământul</span><span class="de">griechischer Gelehrter; berechnete, wie groß die Erde ist</span></p></div>
+    <div class="scholar"><b>Strabon</b><p><span class="ro">geograf grec; a scris o „Geografie” cu relieful, clima, apele și popoarele locurilor</span><span class="de">griechischer Geograph; schrieb eine „Geographie“ über Relief, Klima, Gewässer und Völker</span></p></div>
+    <div class="scholar"><b><span class="ro">Ptolemeu</span><span class="de">Ptolemäus</span></b><p><span class="ro">a desenat hărți ale lumii cunoscute, folosite sute de ani</span><span class="de">zeichnete Karten der bekannten Welt, die Jahrhunderte lang benutzt wurden</span></p></div>
+  </div>
+  <div class="check" id="c1"></div>
+</section>
+
+<!-- 2. Linia timpului pe hartă -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Linia timpului pe hartă</span><span class="de">Die Zeitleiste auf der Karte</span></h2>
+  <p class="section-sub"><span class="ro">De la Himilcon la Magellan. Apasă „Următorul” sau alege un an: harta arată drumul, iar fișa îți spune cine, când, de unde și încotro, ca în tabelul din caiet.</span><span class="de">Von Himilkon bis Magellan. Drücke „Weiter“ oder wähle ein Jahr: Die Karte zeigt den Weg, und die Karte daneben sagt dir wer, wann, woher und wohin, wie in der Tabelle im Heft.</span></p>
+  <div class="tl" id="tl" role="group"></div>
+  <div class="tl-grid">
+    <div class="map" id="tl-map"><div class="map-btns"><button type="button" id="tl-all"></button><button type="button" id="tl-reset"></button></div><svg id="tl-svg" role="img"></svg><div class="loading"></div></div>
+    <div class="info" id="tl-info" aria-live="polite"></div>
+  </div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Thule -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Unde era Thule, „insula de la capătul lumii”?</span><span class="de">Wo lag Thule, die „Insel am Ende der Welt“?</span></h2>
+  <p class="section-sub"><span class="ro">Pytheas a ajuns la o insulă din nord pe care scriitorii Antichității au numit-o <i>Ultima Thule</i>. Istoricii discută și azi care insulă era. Citește indiciile, alege un loc și vezi argumentele pentru și contra. Apoi formulează-ți părerea.</span><span class="de">Pytheas erreichte eine nördliche Insel, die die Schriftsteller des Altertums <i>Ultima Thule</i> nannten. Historiker diskutieren bis heute, welche Insel es war. Lies die Hinweise, wähle einen Ort und sieh dir die Argumente dafür und dagegen an. Bilde dir dann deine Meinung.</span></p>
+  <div class="thule-grid">
+    <div class="map" id="th-map"><svg id="th-svg" role="img"></svg><div class="loading"></div></div>
+    <div>
+      <div class="clue">
+        <b><span class="ro">Ce a povestit Pytheas despre Thule</span><span class="de">Was Pytheas über Thule erzählte</span></b>
+        <ul>
+          <li><span class="ro">se ajunge după <b>6 zile de navigație spre nord</b> de la Britania;</span><span class="de">man erreicht sie nach <b>6 Tagen Seefahrt nach Norden</b> von Britannien;</span></li>
+          <li><span class="ro">e aproape de o <b>mare înghețată</b>;</span><span class="de">sie liegt nahe an einem <b>gefrorenen Meer</b>;</span></li>
+          <li><span class="ro">vara, soarele apune doar pentru <b>2–3 ore</b>;</span><span class="de">im Sommer geht die Sonne nur für <b>2–3 Stunden</b> unter;</span></li>
+          <li><span class="ro">acolo trăiau <b>oameni</b> care cultivau cereale.</span><span class="de">dort lebten <b>Menschen</b>, die Getreide anbauten.</span></li>
+        </ul>
+      </div>
+      <div class="cands" id="th-cands" role="group" style="margin-top:12px"></div>
+      <div class="clue" id="th-args" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Vikingii -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Vikingii: oamenii nordului pe mare</span><span class="de">Die Wikinger: die Männer des Nordens auf dem Meer</span></h2>
+  <p class="section-sub"><span class="ro">Între secolele al VIII-lea și al IX-lea, <b>normanzii</b> („oamenii nordului”), triburi germanice din Iutlanda și de pe coastele Scandinaviei, au pornit în adevărate expediții pe mare. Li s-a spus <b>vikingi</b>, adică „copiii golfurilor”, pentru că își conduceau ușor corăbiile prin golfuri și strâmtori. Pornește fiecare direcție de pe hartă.</span><span class="de">Zwischen dem 8. und 9. Jahrhundert unternahmen die <b>Normannen</b> („Nord-Männer“), germanische Stämme aus Jütland und von den Küsten Skandinaviens, wahrhafte Expeditionen auf dem Meer. Man nannte sie <b>Wikinger</b>, „Kinder der Buchten“, weil sie ihre Segelschiffe mit Leichtigkeit durch Buchten und Meerengen steuerten. Schalte jede Richtung auf der Karte ein.</span></p>
+  <div class="dirs" id="vk-dirs"></div>
+  <div class="vk-grid">
+    <div class="map" id="vk-map"><svg id="vk-svg" role="img"></svg><div class="loading"></div></div>
+    <div id="vk-side"></div>
+  </div>
+  <h3 style="margin:24px 0 2px;font-size:22px"><span class="ro">Exercițiul din manual: 3 insule, 3 mări, 3 strâmtori</span><span class="de">Die Aufgabe aus dem Buch: 3 Inseln, 3 Meere, 3 Meerengen</span></h3>
+  <p class="hint"><span class="ro">Alege un nume, apoi spune ce este. Dacă ai dreptate, apare pe hartă.</span><span class="de">Wähle einen Namen und sag dann, was es ist. Wenn du richtig liegst, erscheint er auf der Karte.</span></p>
+  <div class="bank" id="vk-bank" style="margin-top:10px"></div>
+  <div class="cats" id="vk-cats"></div>
+  <p class="score" id="vk-score" aria-live="polite"></p>
+  <div class="found" id="vk-found"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro"><b>Spre est</b>: pe fluviile Europei, prin Rusia de azi, până la Marea Neagră și Bizanț.</span><span class="de"><b>Nach Osten</b>: auf den Strömen Europas durch das heutige Russland bis zum Schwarzen Meer und nach Byzanz.</span></li>
+      <li><span class="ro"><b>Spre vest</b>: peste Atlantic, în Islanda, Groenlanda și în sud-estul Canadei de azi.</span><span class="de"><b>Nach Westen</b>: über den Atlantik nach Island, Grönland und in den Südosten des heutigen Kanada.</span></li>
+      <li><span class="ro"><b>Spre sud</b>: Danemarca, Scoția, Anglia, vestul Franței.</span><span class="de"><b>Nach Süden</b>: Dänemark, Schottland, England, Westfrankreich.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Marile Descoperiri -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Marile Descoperiri Geografice</span><span class="de">Die Zeit der Großen Geographischen Entdeckungen</span></h2>
+  <p class="section-sub"><span class="ro">La sfârșitul secolului al XV-lea, europenii porneau pe mare spre „India”. Așa numeau ei ținuturile de unde veneau mărfuri foarte căutate, mai ales <b>mirodeniile</b>. Drumurile comerciale pe mare au făcut din <b>Portugalia și Spania</b> mari puteri maritime. Apasă pe o mirodenie să vezi de unde venea.</span><span class="de">Am Ende des 15. Jahrhunderts fuhren die Europäer zur See nach „Indien“. So nannten sie die Gebiete, aus denen sehr begehrte Waren kamen, vor allem <b>Gewürze</b>. Die Handelswege zur See machten <b>Portugal und Spanien</b> zu Seemächten. Tippe auf ein Gewürz, um zu sehen, woher es kam.</span></p>
+  <div class="spices" id="sp-btns" role="group"></div>
+  <div class="map" id="sp-map"><svg id="sp-svg" role="img"></svg><div class="loading"></div></div>
+  <div class="fact" id="sp-fact" aria-live="polite"></div>
+
+  <h3 style="margin:28px 0 2px;font-size:22px"><span class="ro">De ce „America Latină”?</span><span class="de">Warum „Lateinamerika“?</span></h3>
+  <p class="hint"><span class="ro">După descoperiri au urmat cuceririle: noile teritorii au fost declarate ale statelor europene, iar oamenii și bogățiile lor au fost exploatate. Așa s-au format marile <b>imperii coloniale</b>. Apasă pe o țară să vezi ce limbă se vorbește acolo azi.</span><span class="de">Auf die Entdeckungen folgten Eroberungszüge: Die neuen Gebiete wurden zu Territorien europäischer Staaten erklärt, um ihre menschlichen und natürlichen Ressourcen auszubeuten. So entstanden die großen <b>Kolonialreiche</b>. Tippe auf ein Land, um zu sehen, welche Sprache dort heute gesprochen wird.</span></p>
+  <div class="la-grid">
+    <div class="map" id="la-map"><svg id="la-svg" role="img"></svg><div class="loading"></div></div>
+    <div>
+      <div class="fact" id="la-fact" aria-live="polite" style="margin-top:0"></div>
+      <div class="lang-key" id="la-key"></div>
+      <div class="remember">
+        <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+        <p><span class="ro">Mexicul, America Centrală și America de Sud au fost cucerite mai ales de <b>Spania</b> și <b>Portugalia</b>. Spaniola și portugheza sunt limbi care provin din <b>latină</b>, de aceea această parte a Americii se numește <b>America Latină</b>.</span><span class="de">Mexiko, Mittelamerika und Südamerika wurden vor allem von <b>Spanien</b> und <b>Portugal</b> erobert. Spanisch und Portugiesisch stammen aus dem <b>Lateinischen</b>, deshalb heißt dieser Teil Amerikas <b>Lateinamerika</b>.</span></p>
+      </div>
+    </div>
+  </div>
+  <p class="link-card"><span class="ro">Pe Diaz, Columb, Vasco da Gama, Magellan și Drake îi cunoști în detaliu, cu hărțile călătoriilor lor, în lecția de Istorie <b>„Mari exploratori”</b>.</span><span class="de">Diaz, Kolumbus, Vasco da Gama, Magellan und Drake lernst du ausführlich, mit Karten ihrer Reisen, in der Geschichtslektion <b>„Große Entdecker“</b> kennen.</span></p>
+  <div class="check" id="c5"></div>
+</section>
+
+<!-- 6. Tabelul din caiet -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Completează tabelul din caiet</span><span class="de">Vervollständige die Tabelle aus dem Heft</span></h2>
+  <p class="section-sub"><span class="ro">Cine? Când? De unde? Încotro? Alege răspunsurile și apasă „Verifică”.</span><span class="de">Wer? Wann? Woher? Wohin? Wähle die Antworten und drücke „Prüfen“.</span></p>
+  <div class="tbl-wrap"><table class="who" id="who"></table></div>
+  <div class="actions">
+    <button class="btn" type="button" id="who-check"></button>
+    <button class="btn ghost" type="button" id="who-show"></button>
+    <span class="score" id="who-score" aria-live="polite"></span>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="t7">
+  <h2 class="section-title" id="t7"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <div class="gloss-head" style="margin-top:14px"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După manualul de Geografie, clasa a 6-a, „Repere ale descoperirii lumii” (p. 10–11), și notițele din caiet. Contururile hărților: Natural Earth. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Geographiebuch der 6. Klasse, „Anhaltspunkte der Entdeckung der Welt“ (S. 10–11), und den Notizen im Heft. Kartengrundlage: Natural Earth. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/** Întrebări scurte de verificare, cu răspuns imediat. */
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.textContent = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* ================= 1. Popoare și motive ================= */
+(function () {
+  var M = [
+    ['kol', { ro: 'colonii, comerț, navigație', de: 'Kolonien, Handel, Seefahrt' }],
+    ['plu', { ro: 'jefuirea unor ținuturi străine', de: 'Plünderung fremder Gebiete' }],
+    ['ast', { ro: 'călătorii, astronomie', de: 'Reisen, Astronomie' }],
+    ['ero', { ro: 'războaie de cucerire', de: 'Eroberungskriege' }]
+  ];
+  var P = [
+    [{ ro: 'Grecii', de: 'Griechen' }, 'kol', { ro: 'Au întemeiat colonii pe țărmurile mărilor și au făcut comerț pe mare.', de: 'Sie gründeten Kolonien an den Meeresküsten und trieben Handel zur See.' }],
+    [{ ro: 'Fenicienii', de: 'Phönizier' }, 'kol', { ro: 'Mari navigatori și negustori; au întemeiat, de exemplu, Cartagina.', de: 'Große Seefahrer und Händler; sie gründeten zum Beispiel Karthago.' }],
+    [{ ro: 'Normanzii (vikingii)', de: 'Normannen (Wikinger)' }, 'plu', { ro: 'Au jefuit ținuturi străine, mai ales în vestul Europei, dar au și explorat mările nordului.', de: 'Sie plünderten fremde Gebiete, vor allem in Westeuropa, erkundeten aber auch die Meere des Nordens.' }],
+    [{ ro: 'Arabii', de: 'Araber' }, 'ast', { ro: 'Au călătorit mult și s-au orientat după stele: astronomia i-a ajutat să navigheze.', de: 'Sie reisten viel und orientierten sich an den Sternen: Die Astronomie half ihnen beim Navigieren.' }],
+    [{ ro: 'Romanii', de: 'Römer' }, 'ero', { ro: 'Prin războaie de cucerire au format un imperiu uriaș în jurul Mării Mediterane.', de: 'Durch Eroberungskriege bildeten sie ein riesiges Reich rund um das Mittelmeer.' }]
+  ];
+  var host = $('#peoples');
+  P.forEach(function (p) {
+    var card = h('div', 'people'), opts = h('div', 'opts'), why = h('p', 'why');
+    card.appendChild(h('h3', '', T(p[0])));
+    var bs = M.map(function (m) {
+      var b = btn('pick', T(m[1]));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (m[0] === p[1]) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); card.classList.add('done'); why.textContent = T(p[2]); }
+        else { b.classList.add('wrong'); why.textContent = tx('Nu chiar. Gândește-te: cu ce se ocupau cel mai mult?', 'Nicht ganz. Überleg: Womit beschäftigten sie sich am meisten?'); }
+      };
+      opts.appendChild(b); return b;
+    });
+    card.appendChild(opts); card.appendChild(why); host.appendChild(card);
+  });
+  Check($('#c1'), [
+    { q: { ro: 'Cine a scris o „Geografie” în care descrie lumea cunoscută atunci?', de: 'Wer schrieb eine „Geographie“, in der er die damals bekannte Welt beschreibt?' },
+      o: [{ ro: 'Columb', de: 'Kolumbus' }, { ro: 'Strabon', de: 'Strabon' }, { ro: 'Erik cel Roșu', de: 'Erik der Rote' }], a: 1,
+      why: { ro: 'Strabon a călătorit prin Imperiul Roman și a descris relieful, clima, apele și popoarele.', de: 'Strabon bereiste das Römische Reich und beschrieb Relief, Klima, Gewässer und Völker.' } }
+  ]);
+})();
+
+/* ================= hărți: date și ajutoare ================= */
+var DATA = Promise.all([
+  fetch('../../lib/land-50m.json').then(function (r) { return r.json(); }),
+  fetch('../../lib/countries-110m.json').then(function (r) { return r.json(); })
+]).then(function (res) {
+  return { land: topojson.feature(res[0], res[0].objects.land), countries: topojson.feature(res[1], res[1].objects.countries).features };
+});
+function loaded(id) { var l = $('#' + id + ' .loading'); if (l) l.remove(); }
+document.querySelectorAll('.map .loading').forEach(function (l) { l.textContent = tx('Se încarcă harta…', 'Karte wird geladen …'); });
+
+/** Hartă cu mărire doar din butoane (pe telefon, degetul derulează pagina, nu harta). */
+function makeMap(svgSel, W, H, proj, land) {
+  var svg = d3.select(svgSel).attr('viewBox', '0 0 ' + W + ' ' + H);
+  var path = d3.geoPath(proj);
+  var g = svg.append('g');
+  g.append('path').datum({ type: 'Sphere' }).attr('class', 'sea').attr('d', path);
+  g.append('path').datum(d3.geoGraticule10()).attr('class', 'grat').attr('d', path);
+  g.append('path').datum(land).attr('class', 'land').attr('d', path);
+  var tr = d3.zoomIdentity, listeners = [];
+  var zoom = d3.zoom().on('zoom', function (e) { g.attr('transform', e.transform); tr = e.transform; listeners.forEach(function (f) { f(tr); }); });
+  return {
+    svg: svg, g: g, path: path, proj: proj, W: W,
+    t: function () { return tr; },
+    onZoom: function (f) { listeners.push(f); },
+    zoomTo: function (coords, maxK) {
+      var pts = coords.map(proj).filter(Boolean);
+      var xs = pts.map(function (p) { return p[0]; }), ys = pts.map(function (p) { return p[1]; });
+      var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+      var w = Math.max(x1 - x0, 60), hh = Math.max(y1 - y0, 40);
+      var s = Math.max(1, Math.min(maxK || 4, 0.7 / Math.max(w / W, hh / H)));
+      var t = d3.zoomIdentity.translate(W / 2, H / 2).scale(s).translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
+      // păstrăm harta în cadru
+      var tx0 = Math.min(0, Math.max(W - W * s, t.x)), ty0 = Math.min(0, Math.max(H - H * s, t.y));
+      t = d3.zoomIdentity.translate(tx0, ty0).scale(s);
+      (reduce ? svg : svg.transition().duration(700)).call(zoom.transform, t);
+    },
+    reset: function () { (reduce ? svg : svg.transition().duration(600)).call(zoom.transform, d3.zoomIdentity); }
+  };
+}
+/** Etichetă care își păstrează mărimea când harta se mărește. */
+function label(M, layer, lonlat, text, cls, dx, dy) {
+  var p = M.proj(lonlat); if (!p) return;
+  var t = layer.append('text').attr('class', 'mlbl ' + (cls || '')).text(text);
+  function place(tr) {
+    var k = tr.k, x = dx == null ? 6 : dx;
+    // aproape de marginea din dreapta, eticheta trece în stânga punctului
+    var right = tr.x + p[0] * k > M.W - 150 && x > 0;
+    var y = dy == null ? -6 : dy;
+    if (tr.y + p[1] * k < 28 && y < 0) y = 18; // lângă marginea de sus: sub punct
+    // pe telefon harta se micșorează, deci textul pornește mai mare
+    var base = window.innerWidth < 520 ? 22 : 14;
+    t.attr('text-anchor', right ? 'end' : 'start')
+      .attr('x', p[0] + (right ? -x : x) / k).attr('y', p[1] + y / k)
+      .style('font-size', base / k + 'px').style('stroke-width', 3.5 / k + 'px');
+  }
+  place(M.t()); M.onZoom(place);
+  return t;
+}
+function dot(M, layer, lonlat, color, r) {
+  var p = M.proj(lonlat); if (!p) return;
+  var c = layer.append('circle').attr('class', 'dot').attr('cx', p[0]).attr('cy', p[1]).attr('fill', color || '#c0392b');
+  function size(tr) { c.attr('r', (r || 4.5) / tr.k); }
+  size(M.t()); M.onZoom(size);
+  return c;
+}
+
+/* ================= 2. Linia timpului pe hartă ================= */
+var S = [
+  { era: 'ant', year: { ro: '470 sau 450 î.Hr.', de: '470 oder 450 v. Chr.' }, name: { ro: 'Himilcon', de: 'Himilkon' },
+    who: { ro: 'navigator din Cartagina', de: 'Seefahrer aus Karthago' },
+    from: { ro: 'Cartagina (nordul Africii)', de: 'Karthago (Nordafrika)' }, to: { ro: 'coasta atlantică a Europei', de: 'die atlantische Küste Europas' },
+    text: { ro: 'Pornind din Cartagina, explorează coasta atlantică a Europei.', de: 'Von Karthago ausgehend erforscht er die atlantische Küste Europas.' },
+    legs: [[[10.3, 36.85], [5, 37.6], [-1, 36.5], [-5.6, 36], [-9.4, 38.7], [-9.3, 42.9], [-4.6, 48.4], [-5.6, 50.1]]],
+    labels: [[[10.3, 36.85], { ro: 'Cartagina', de: 'Karthago' }]] },
+  { era: 'ant', year: { ro: '325–320 sau 310–306 î.Hr.', de: '325–320 oder 310–306 v. Chr.' }, name: { ro: 'Pytheas', de: 'Pytheas' },
+    who: { ro: 'navigator grec', de: 'griechischer Seefahrer' },
+    from: { ro: 'Grecia (colonia Massalia, azi Marsilia)', de: 'Griechenland (Kolonie Massalia, heute Marseille)' }, to: { ro: 'coasta de nord-vest a Europei, până la Thule', de: 'die Nordwest-Küste Europas, bis Thule' },
+    text: { ro: 'Navighează de-a lungul coastelor Europei spre ținuturile subarctice, până la insula numită Ultima Thule, „insula de la capătul lumii”.', de: 'Er segelt entlang der europäischen Küsten zu den subarktischen Gebieten, bis zur Insel, die als Ultima Thule („Insel vom Ende der Welt“) in die Geschichte eingegangen ist.' },
+    legs: [[[5.37, 43.3], [2.9, 41.6], [-0.4, 38.4], [-5.6, 36], [-9.4, 38.7], [-9.3, 42.9], [-4.8, 48.4], [-5.7, 50.1], [-5.4, 55], [-5.8, 58.4], [-3, 59.1], [-1.3, 60.4]]],
+    guess: [[[-1.3, 60.4], [-14, 64.4]]],
+    labels: [[[5.37, 43.3], { ro: 'Massalia', de: 'Massalia' }], [[-14, 64.4], { ro: 'Thule?', de: 'Thule?' }]] },
+  { era: 'ant', year: { ro: '64/63 î.Hr. – 23/24 d.Hr.', de: '64/63 v. Chr. – 23/24 n. Chr.' }, name: { ro: 'Strabon', de: 'Strabon' },
+    who: { ro: 'geograf și istoric grec', de: 'griechischer Geograph und Historiker' },
+    from: { ro: 'Grecia (orașul Amaseia, în Asia Mică)', de: 'Griechenland (Amaseia in Kleinasien)' }, to: { ro: 'lumea cunoscută atunci', de: 'die damals bekannte Welt' },
+    text: { ro: 'Călătorește prin Imperiul Roman: Europa, Africa și Asia Mică. Scrie două cărți, una de istorie și una de geografie, în care descrie lumea cunoscută atunci.', de: 'Er bereist das Römische Reich: Europa, Afrika und Kleinasien. Er schreibt zwei Bücher, ein Geschichtsbuch und ein Geographiebuch, in denen er die damals bekannte Welt beschreibt.' },
+    legs: [[[35.83, 40.65], [29, 41], [23.7, 38], [12.5, 41.9]], [[12.5, 41.9], [22, 36], [29.9, 31.2], [31.2, 30], [32.9, 24.1]]],
+    labels: [[[35.83, 40.65], { ro: 'Amaseia', de: 'Amaseia' }], [[12.5, 41.9], { ro: 'Roma', de: 'Rom' }], [[29.9, 31.2], { ro: 'Alexandria', de: 'Alexandria' }]] },
+  { era: 'med', year: { ro: '981/982–983 · în jurul anului 1000', de: '981/982–983 · um das Jahr 1000' }, name: { ro: 'Erik cel Roșu și Leif Eriksson', de: 'Erik der Rote und Leif Eriksson' },
+    who: { ro: 'vikingi din Scandinavia', de: 'Wikinger aus Skandinavien' },
+    from: { ro: 'Scandinavia (prin Islanda)', de: 'Skandinavien (über Island)' }, to: { ro: 'Groenlanda și coasta Americii de Nord', de: 'Grönland und die nordamerikanische Küste' },
+    text: { ro: 'Erik cel Roșu descoperă Groenlanda. Mai târziu, în jurul anului 1000, fiul său Leif Eriksson (Leif Norocosul) traversează Atlanticul și ajunge pe coasta Americii de Nord, cu aproape 500 de ani înaintea lui Columb.', de: 'Erik der Rote entdeckt Grönland. Später, um das Jahr 1000, überquert sein Sohn Leif Eriksson (Leif der Glückliche) den Atlantik und gelangt an die nordamerikanische Küste, beinahe fünf Jahrhunderte vor Kolumbus.' },
+    legs: [[[5.3, 60.4], [-7, 62], [-22, 64.1]], [[-22, 64.1], [-35, 63], [-45.5, 61.2]], [[-45.5, 61.2], [-58, 64], [-62, 58], [-57, 53], [-55.5, 51.6]]],
+    labels: [[[-45.5, 61.2], { ro: 'Groenlanda', de: 'Grönland' }], [[-55.5, 51.6], { ro: 'Terra Nova', de: 'Neufundland' }], [[-22, 64.1], { ro: 'Islanda', de: 'Island' }]] },
+  { era: 'med', year: { ro: '1271–1295 · Știai că…?', de: '1271–1295 · Wusstest du …?' }, name: { ro: 'Marco Polo', de: 'Marco Polo' },
+    who: { ro: 'negustor din Veneția', de: 'Venezianer Kaufmann' },
+    from: { ro: 'Veneția', de: 'Venedig' }, to: { ro: 'China, pe uscat, prin Asia', de: 'China, auf dem Landweg durch Asien' },
+    text: { ro: 'A fost unul dintre primii europeni care au traversat Asia. Cartea lui, „Cartea minunilor lumii” (numită și „Cartea călătoriilor”), a fost timp de secole un îndrumar pentru marii navigatori.', de: 'Er war einer der ersten Europäer, die Asien durchquert hatten. Sein „Buch der Weltwunder“, auch „Buch der Reisen“ genannt, wurde über Jahrhunderte ein Leitwerk für die großen Seefahrer und Forscher.' },
+    legs: [[[12.3, 45.4], [35.1, 32.9], [44.4, 37.5], [56.3, 27.2], [66.9, 36.7], [76, 39.5], [94.7, 40.1], [116.4, 39.9]]],
+    guess: [[[116.4, 39.9], [118.6, 24.9], [106.5, 9], [98, 5.5], [80.5, 6.5], [56.3, 27.2], [44, 38.5], [39.7, 41], [29, 41], [12.3, 45.4]]],
+    labels: [[[12.3, 45.4], { ro: 'Veneția', de: 'Venedig' }], [[116.4, 39.9], { ro: 'Hanbalik (Beijing)', de: 'Khanbaliq (Peking)' }]] },
+  { era: 'mod', year: { ro: '1488', de: '1488' }, name: { ro: 'Bartolomeu Diaz', de: 'Bartolomeu Díaz' },
+    who: { ro: 'navigator portughez', de: 'portugiesischer Seefahrer' },
+    from: { ro: 'Portugalia', de: 'Portugal' }, to: { ro: 'coasta Africii de Vest, până la Capul Bunei Speranțe', de: 'die westafrikanische Küste bis zum Kap der Guten Hoffnung' },
+    text: { ro: 'Navigând de-a lungul coastelor Africii de Vest, descoperă Capul Bunei Speranțe, vârful sudic al Africii.', de: 'Auf seiner Reise entlang der westafrikanischen Küsten entdeckt er das Kap der Guten Hoffnung.' },
+    legs: [[[-9.1, 38.7], [-17.2, 21], [-17.5, 14.7], [-13.5, 8], [-6, 4.3], [4, 3.5], [9.4, 0], [11.8, -5], [12.5, -13], [14.5, -23], [17.5, -32], [18.5, -34.4], [26, -33.8]]],
+    labels: [[[-9.1, 38.7], { ro: 'Lisabona', de: 'Lissabon' }], [[18.5, -34.4], { ro: 'Capul Bunei Speranțe', de: 'Kap der Guten Hoffnung' }]] },
+  { era: 'mod', year: { ro: '1492–1493', de: '1492–1493' }, name: { ro: 'Cristofor Columb', de: 'Christoph Kolumbus' },
+    who: { ro: 'navigator din Genova, în serviciul Spaniei', de: 'genuesischer Seefahrer im Dienste Spaniens' },
+    from: { ro: 'Spania', de: 'Spanien' }, to: { ro: 'America (o insulă din Bahamas)', de: 'Amerika (eine Insel der Bahamas)' },
+    text: { ro: 'Traversează Atlanticul și descoperă (din nou) America, debarcând pe o insulă din arhipelagul Bahamas. Mai face apoi încă trei călătorii în zonă.', de: 'Er überquert den Atlantik und entdeckt (von Neuem) Amerika, an einer Insel des Bahamas-Archipels anlegend. Nachträglich unternimmt er drei weitere Reisen in der Umgebung.' },
+    legs: [[[-6.9, 37.2], [-15.5, 28.1], [-40, 27], [-74.5, 24.1], [-77, 21.5], [-72.5, 19.8]], [[-72.5, 19.8], [-60, 33], [-25.5, 37.7], [-9.1, 38.7], [-6.9, 37.2]]],
+    labels: [[[-6.9, 37.2], { ro: 'Palos', de: 'Palos' }], [[-74.5, 24.1], { ro: 'Bahamas', de: 'Bahamas' }]] },
+  { era: 'mod', year: { ro: '1498', de: '1498' }, name: { ro: 'Vasco da Gama', de: 'Vasco da Gama' },
+    who: { ro: 'navigator portughez', de: 'portugiesischer Seefahrer' },
+    from: { ro: 'Portugalia', de: 'Portugal' }, to: { ro: 'India (coasta Malabar)', de: 'Indien (Malabar-Küste)' },
+    text: { ro: 'Primul european care ajunge pe mare în mult căutata „Indie”, pe coasta Malabar, în vestul Indiei.', de: 'Er ist der erste Europäer, der auf dem Wasserweg in das vielgesuchte „Indien“ gelangt, nämlich an die Malabar-Küste im Westen Indiens.' },
+    legs: [[[-9.1, 38.7], [-16, 28], [-23.5, 15], [-28, -5], [-26, -22], [-12, -33], [18, -32.7], [18.5, -34.4], [22, -34.2], [32.5, -26], [40.7, -15], [39.7, -4], [40.1, -3.2], [75.8, 11.3]]],
+    labels: [[[-9.1, 38.7], { ro: 'Lisabona', de: 'Lissabon' }], [[75.8, 11.3], { ro: 'Calicut', de: 'Calicut' }]] },
+  { era: 'mod', year: { ro: '1519–1522', de: '1519–1522' }, name: { ro: 'Fernando Magellan', de: 'Fernando Magellan' },
+    who: { ro: 'navigator portughez, în serviciul Spaniei', de: 'Portugiese im Dienste Spaniens' },
+    from: { ro: 'Portugalia (pleacă din Spania)', de: 'Portugal (Abfahrt in Spanien)' }, to: { ro: 'în jurul lumii', de: 'um die Welt' },
+    text: { ro: 'Pornește în prima călătorie în jurul lumii. Magellan moare pe drum, în Filipine; călătoria e încheiată de Juan Sebastián Elcano. Este dovada că Pământul are formă sferică.', de: 'Er unternimmt die erste Umrundung der Welt; die Reise wird von Juan Sebastián Elcano beendet. Sie erbringt den Beweis für die Kugelform der Erde.' },
+    legs: [[[-6.35, 36.8], [-15.5, 28.1], [-25, 5], [-34.8, -7], [-43.2, -22.9], [-57, -35.5], [-67.7, -49.3], [-70.9, -53.3], [-76, -48], [-80, -35], [-110, -18], [-150, 5], [170, 13], [144.8, 13.4], [123.9, 10.3]]],
+    guess: [[[123.9, 10.3], [127.4, 0.7], [124, -9], [105, -20], [70, -33], [20, -35.5], [5, -20], [-23.5, 15], [-15.5, 28.1], [-6.35, 36.8]]],
+    labels: [[[-6.35, 36.8], { ro: 'Sanlúcar', de: 'Sanlúcar' }], [[-70.9, -53.3], { ro: 'Strâmtoarea Magellan', de: 'Magellanstraße' }], [[123.9, 10.3], { ro: 'Filipine', de: 'Philippinen' }]] }
+];
+var ERAS = { ant: { ro: 'Antichitate', de: 'Altertum' }, med: { ro: 'Evul Mediu', de: 'Mittelalter' }, mod: { ro: 'Marile Descoperiri', de: 'Große Entdeckungen' } };
+
+DATA.then(function (D) {
+  loaded('tl-map');
+  // pe telefon, harta e mai înaltă ca să încapă drumurile de la nord la sud
+  var narrow = window.innerWidth < 600, W = narrow ? 640 : 960, H = narrow ? 560 : 500;
+  var M = makeMap('#tl-svg', W, H, d3.geoNaturalEarth1().fitExtent([[4, 4], [W - 4, H - 4]], { type: 'Sphere' }), D.land);
+  M.svg.attr('aria-label', tx('Harta lumii cu drumurile exploratorilor', 'Weltkarte mit den Wegen der Entdecker'));
+  var routes = M.g.append('g'), marks = M.g.append('g');
+  var cur = 0, all = false;
+  var tl = $('#tl'), info = $('#tl-info'), lastEra = null;
+  var tlBtns = S.map(function (s, i) {
+    if (s.era !== lastEra) { tl.appendChild(h('span', 'era', T(ERAS[s.era]))); lastEra = s.era; }
+    var b = btn('', '<b>' + T(s.name).split(' și ')[0].split(' und ')[0] + '</b><span>' + T(s.year).split(' · ')[0] + '</span>');
+    b.onclick = function () { go(i); };
+    tl.appendChild(b); return b;
+  });
+  var bAll = $('#tl-all'), bReset = $('#tl-reset');
+  bAll.textContent = tx('Toate drumurile', 'Alle Wege');
+  bReset.textContent = tx('Harta întreagă', 'Ganze Karte');
+  bAll.onclick = function () { all = !all; bAll.textContent = all ? tx('Doar acesta', 'Nur dieser') : tx('Toate drumurile', 'Alle Wege'); draw(); if (all) M.reset(); };
+  bReset.onclick = function () { M.reset(); };
+
+  function draw() {
+    routes.selectAll('*').remove(); marks.selectAll('*').remove();
+    S.forEach(function (s, i) {
+      var isCur = i === cur, show = all || i <= cur;
+      if (!show) return;
+      s.legs.forEach(function (leg) { routes.append('path').datum({ type: 'LineString', coordinates: leg }).attr('class', 'route ' + (isCur ? 'cur' : 'old')).attr('d', M.path); });
+      (s.guess || []).forEach(function (leg) { routes.append('path').datum({ type: 'LineString', coordinates: leg }).attr('class', 'route guess ' + (isCur ? 'cur' : 'old')).attr('d', M.path); });
+    });
+    var s = S[cur];
+    s.labels.forEach(function (l) { dot(M, marks, l[0]); label(M, marks, l[0], T(l[1])); });
+  }
+  function go(i) {
+    cur = i;
+    var s = S[i];
+    tlBtns.forEach(function (b, j) { b.setAttribute('aria-current', j === i ? 'true' : 'false'); });
+    if (tlBtns[i].scrollIntoView && !reduce) tlBtns[i].scrollIntoView({ block: 'nearest', inline: 'center' });
+    info.innerHTML = '';
+    info.appendChild(h('span', 'when', T(s.year)));
+    info.appendChild(h('h3', '', T(s.name)));
+    info.appendChild(h('p', 'who', T(s.who)));
+    var dl = h('dl', 'wtable');
+    [[tx('Cine?', 'Wer?'), T(s.name)], [tx('Când?', 'Wann?'), T(s.year).split(' · ')[0]], [tx('De unde?', 'Woher?'), T(s.from)], [tx('Încotro?', 'Wohin?'), T(s.to)]].forEach(function (r) {
+      dl.appendChild(h('dt', '', r[0])); dl.appendChild(h('dd', '', r[1]));
+    });
+    info.appendChild(dl);
+    info.appendChild(h('p', 'know', T(s.text)));
+    var nav = h('div', 'nav'), p = btn('btn ghost', '← ' + tx('Înapoi', 'Zurück')), n = btn('btn', tx('Următorul', 'Weiter') + ' →');
+    p.disabled = i === 0; n.disabled = i === S.length - 1;
+    p.onclick = function () { go(cur - 1); }; n.onclick = function () { go(cur + 1); };
+    nav.appendChild(p); nav.appendChild(n); nav.appendChild(h('span', 'count', (i + 1) + ' / ' + S.length));
+    info.appendChild(nav);
+    draw();
+    var pts = [].concat.apply([], s.legs.concat(s.guess || []));
+    M.zoomTo(pts, 6);
+  }
+  go(0);
+});
+
+Check($('#c2'), [
+  { q: { ro: 'Cine a ajuns primul pe coasta Americii de Nord?', de: 'Wer erreichte zuerst die nordamerikanische Küste?' },
+    o: [{ ro: 'Cristofor Columb', de: 'Christoph Kolumbus' }, { ro: 'Leif Eriksson', de: 'Leif Eriksson' }, { ro: 'Vasco da Gama', de: 'Vasco da Gama' }], a: 1,
+    why: { ro: 'Leif Eriksson a ajuns acolo în jurul anului 1000, cu aproape 500 de ani înaintea lui Columb.', de: 'Leif Eriksson kam um das Jahr 1000 dorthin, beinahe 500 Jahre vor Kolumbus.' },
+    hint: { ro: 'Uită-te la anii de pe linia timpului: cine a fost mai devreme?', de: 'Schau dir die Jahre auf der Zeitleiste an: Wer war früher?' } },
+  { q: { ro: 'Ce a dovedit călătoria lui Magellan și Elcano?', de: 'Was bewies die Reise von Magellan und Elcano?' },
+    o: [{ ro: 'că Pământul are formă sferică', de: 'die Kugelform der Erde' }, { ro: 'că India e în Africa', de: 'dass Indien in Afrika liegt' }, { ro: 'că Atlanticul e mic', de: 'dass der Atlantik klein ist' }], a: 0,
+    why: { ro: 'Au plecat spre vest și s-au întors din est: Pământul e rotund.', de: 'Sie fuhren nach Westen und kamen von Osten zurück: Die Erde ist rund.' } }
+]);
+
+/* ================= 3. Thule ================= */
+DATA.then(function (D) {
+  loaded('th-map');
+  var W = 560, H = 460;
+  var proj = d3.geoOrthographic().rotate([8, -60]).clipAngle(90);
+  proj.fitExtent([[10, 10], [W - 10, H - 10]], { type: 'MultiPoint', coordinates: [[-26, 51], [14, 51], [-24, 67.5], [18, 69]] });
+  var M = makeMap('#th-svg', W, H, proj, D.land);
+  M.svg.attr('aria-label', tx('Harta nordului Europei cu locurile propuse pentru Thule', 'Karte Nordeuropas mit den möglichen Orten von Thule'));
+  var lay = M.g.append('g');
+  dot(M, lay, [-3.5, 53.5], '#56606a', 4); label(M, lay, [-3.5, 53.5], tx('Britania', 'Britannien'), 'sm', 6, 16);
+  var C = [
+    { k: 'isl', ll: [-18.5, 64.9], n: { ro: 'Islanda', de: 'Island' },
+      pro: [{ ro: 'e la aproximativ 6 zile de navigație de Britania', de: 'liegt etwa 6 Tage Seefahrt von Britannien entfernt' }, { ro: 'e aproape de marea înghețată', de: 'liegt nahe am gefrorenen Meer' }, { ro: 'vara, nopțile sunt foarte scurte', de: 'im Sommer sind die Nächte sehr kurz' }],
+      con: [{ ro: 'pe atunci nu era locuită, iar Pytheas vorbește de oameni', de: 'damals war sie unbewohnt, Pytheas spricht aber von Menschen' }] },
+    { k: 'nor', ll: [8, 63], n: { ro: 'Coasta Norvegiei', de: 'Küste Norwegens' },
+      pro: [{ ro: 'era locuită, iar oamenii cultivau cereale', de: 'sie war bewohnt, und die Menschen bauten Getreide an' }, { ro: 'vara, nopțile sunt foarte scurte', de: 'im Sommer sind die Nächte sehr kurz' }],
+      con: [{ ro: 'nu e o insulă (dar are multe insule pe lângă coastă)', de: 'es ist keine Insel (aber es gibt viele Inseln vor der Küste)' }] },
+    { k: 'she', ll: [-1.3, 60.4], n: { ro: 'Insulele Shetland', de: 'Shetlandinseln' },
+      pro: [{ ro: 'sunt insule locuite, la nord de Britania', de: 'bewohnte Inseln nördlich von Britannien' }],
+      con: [{ ro: 'sunt prea aproape pentru 6 zile de navigație', de: 'zu nah für 6 Tage Seefahrt' }, { ro: 'marea nu îngheață acolo', de: 'das Meer friert dort nicht zu' }] },
+    { k: 'far', ll: [-6.9, 62], n: { ro: 'Insulele Feroe', de: 'Färöer' },
+      pro: [{ ro: 'sunt insule, între Britania și Islanda', de: 'es sind Inseln, zwischen Britannien und Island' }],
+      con: [{ ro: 'probabil nu erau locuite pe atunci', de: 'sie waren damals wahrscheinlich unbewohnt' }] }
+  ];
+  var marks = {};
+  C.forEach(function (c) { marks[c.k] = dot(M, lay, c.ll, '#9aa7ab', 6); label(M, lay, c.ll, T(c.n), 'sm', 8, 5); });
+  var host = $('#th-cands'), args = $('#th-args');
+  args.innerHTML = '<p class="muted">' + tx('Alege un loc de mai sus.', 'Wähle oben einen Ort.') + '</p>';
+  var bs = C.map(function (c) {
+    var b = btn('pick', T(c.n)); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () {
+      bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      Object.keys(marks).forEach(function (k) { marks[k].attr('fill', k === c.k ? '#c0392b' : '#9aa7ab'); });
+      args.innerHTML = '<b>' + T(c.n) + '</b>' +
+        '<ul>' + c.pro.map(function (p) { return '<li class="pro">✓ ' + T(p) + '</li>'; }).join('') + c.con.map(function (p) { return '<li class="con">✗ ' + T(p) + '</li>'; }).join('') + '</ul>' +
+        '<p class="hint">' + tx('Mulți istorici cred că Thule era Islanda sau coasta Norvegiei. Nimeni nu știe sigur, așa că orice părere bine argumentată e bună. Ce alegi tu și de ce? Scrie în caiet: „Cred că Thule era …, pentru că …”.', 'Viele Historiker meinen, Thule sei Island oder die Küste Norwegens gewesen. Niemand weiß es sicher, also ist jede gut begründete Meinung richtig. Was wählst du und warum? Schreib ins Heft: „Ich glaube, Thule war …, weil …“.') + '</p>';
+    };
+    host.appendChild(b); return b;
+  });
+});
+
+/* ================= 4. Vikingii ================= */
+DATA.then(function (D) {
+  loaded('vk-map');
+  var W = 620, H = 520;
+  var proj = d3.geoOrthographic().rotate([2, -55]).clipAngle(90);
+  proj.fitExtent([[8, 8], [W - 8, H - 8]], { type: 'MultiPoint', coordinates: [[-62, 48], [42, 38], [-45, 70], [40, 64], [10, 34]] });
+  var M = makeMap('#vk-svg', W, H, proj, D.land);
+  M.svg.attr('aria-label', tx('Harta drumurilor vikingilor', 'Karte der Wege der Wikinger'));
+  var home = M.g.append('g'), arrows = M.g.append('g'), found = M.g.append('g');
+  // patria vikingilor
+  [[10, 60.5], [15, 62], [9.5, 56]].forEach(function (p) { dot(M, home, p, '#1f8a78', 5); });
+  label(M, home, [13, 63.5], tx('Scandinavia', 'Skandinavien'), '', 6, -4);
+  var DIR = [
+    { k: 'ost', c: '#8e44ad', n: { ro: 'Spre est', de: 'Nach Osten' },
+      legs: [[[18, 59.3], [24, 60], [30, 59.9], [31.3, 58.5], [30.5, 54.5], [30.5, 50.4], [33, 47], [31.5, 46.6], [30.5, 45], [29, 41]]],
+      t: { ro: 'Pe fluvii (Nipru, Volga) prin Rusia de azi, până la Marea Neagră și Bizanț (Constantinopol).', de: 'Auf Flüssen (Dnjepr, Wolga) durch das heutige Russland bis zum Schwarzen Meer und nach Byzanz (Konstantinopel).' },
+      l: [[[30, 50.4], { ro: 'Rusia de azi', de: 'heutiges Russland' }], [[29, 41], { ro: 'Bizanț', de: 'Byzanz' }]] },
+    { k: 'west', c: '#c0392b', n: { ro: 'Spre vest', de: 'Nach Westen' },
+      legs: [[[5.3, 60.4], [-7, 62], [-22, 64.1], [-35, 63], [-45.5, 61.2], [-58, 64], [-62, 58], [-57, 53], [-55.5, 51.6]]],
+      t: { ro: 'Peste Atlantic: Islanda, Groenlanda și coasta de sud-est a Canadei de azi (Terra Nova).', de: 'Über den Atlantik: Island, Grönland und die Südostküste des heutigen Kanada (Neufundland).' },
+      l: [[[-22, 64.1], { ro: 'Islanda', de: 'Island' }], [[-45.5, 61.2], { ro: 'Groenlanda', de: 'Grönland' }], [[-55.5, 51.6], { ro: 'Canada (Terra Nova)', de: 'Kanada (Neufundland)' }]] },
+    { k: 'sud', c: '#d68910', n: { ro: 'Spre sud', de: 'Nach Süden' },
+      legs: [[[9.5, 57], [9, 55.5]], [[5.3, 60.4], [-2, 58.5], [-3.2, 56]], [[7, 58], [1.5, 53], [-0.5, 51.5]], [[8, 57], [2, 51], [-1.5, 49.7], [-4.5, 48.3], [-1.6, 47.2]]],
+      t: { ro: 'Danemarca, Scoția, Anglia și vestul Franței (Normandia și-a luat numele de la normanzi).', de: 'Dänemark, Schottland, England und Westfrankreich (die Normandie hat ihren Namen von den Normannen).' },
+      l: [[[9, 55.5], { ro: 'Danemarca', de: 'Dänemark' }], [[-3.2, 56], { ro: 'Scoția', de: 'Schottland' }], [[-0.5, 51.5], { ro: 'Anglia', de: 'England' }], [[-1.6, 47.2], { ro: 'vestul Franței', de: 'Westfrankreich' }]] }
+  ];
+  var on = { ost: false, west: false, sud: false }, side = $('#vk-side'), dirs = $('#vk-dirs');
+  DIR.forEach(function (d) {
+    var b = btn('toggle', '<i></i>' + T(d.n)); b.style.setProperty('--c', d.c); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { on[d.k] = !on[d.k]; b.setAttribute('aria-pressed', on[d.k] ? 'true' : 'false'); drawDirs(); };
+    dirs.appendChild(b);
+  });
+  var allB = btn('btn ghost', tx('Toate', 'Alle')); allB.onclick = function () { DIR.forEach(function (d, i) { on[d.k] = true; dirs.children[i].setAttribute('aria-pressed', 'true'); }); drawDirs(); };
+  dirs.appendChild(allB);
+  function drawDirs() {
+    arrows.selectAll('*').remove(); side.innerHTML = '';
+    var any = false;
+    DIR.forEach(function (d) {
+      if (!on[d.k]) return; any = true;
+      d.legs.forEach(function (leg) { arrows.append('path').datum({ type: 'LineString', coordinates: leg }).attr('class', 'route').attr('stroke', d.c).attr('stroke-width', 3).attr('d', M.path); });
+      d.l.forEach(function (l) { dot(M, arrows, l[0], d.c, 4); label(M, arrows, l[0], T(l[1]), 'sm'); });
+      var c = h('div', 'clue'); c.style.borderLeft = '4px solid ' + d.c; c.style.marginBottom = '8px';
+      c.innerHTML = '<b style="color:' + d.c + '">' + T(d.n) + '</b><p>' + T(d.t) + '</p>';
+      side.appendChild(c);
+    });
+    if (!any) side.innerHTML = '<p class="muted">' + tx('Pornește o direcție de deasupra hărții. Vikingii au plecat din Scandinavia în trei direcții.', 'Schalte eine Richtung über der Karte ein. Die Wikinger brachen von Skandinavien in drei Richtungen auf.') + '</p>';
+  }
+  drawDirs();
+
+  // exercițiul: insule, mări, strâmtori
+  var CAT = { ins: { c: '#1f8a78', n: { ro: 'Insulă', de: 'Insel' } }, mare: { c: '#2f6fbd', n: { ro: 'Mare', de: 'Meer' } }, str: { c: '#b0480f', n: { ro: 'Strâmtoare', de: 'Meerenge' } } };
+  var I = [
+    [{ ro: 'Islanda', de: 'Island' }, 'ins', [-18.5, 64.9]], [{ ro: 'Groenlanda', de: 'Grönland' }, 'ins', [-42, 66]],
+    [{ ro: 'Marea Britanie', de: 'Großbritannien' }, 'ins', [-2, 54]], [{ ro: 'Irlanda', de: 'Irland' }, 'ins', [-8, 53.2]],
+    [{ ro: 'Sicilia', de: 'Sizilien' }, 'ins', [14, 37.5]],
+    [{ ro: 'Marea Nordului', de: 'Nordsee' }, 'mare', [3, 56]], [{ ro: 'Marea Baltică', de: 'Ostsee' }, 'mare', [19, 57]],
+    [{ ro: 'Marea Neagră', de: 'Schwarzes Meer' }, 'mare', [34, 43.3]], [{ ro: 'Marea Mediterană', de: 'Mittelmeer' }, 'mare', [5, 39]],
+    [{ ro: 'Strâmtoarea Gibraltar', de: 'Straße von Gibraltar' }, 'str', [-5.6, 35.95]], [{ ro: 'Canalul Mânecii', de: 'Ärmelkanal' }, 'str', [-1.5, 50.2]],
+    [{ ro: 'Bosfor', de: 'Bosporus' }, 'str', [29.05, 41.1]], [{ ro: 'Skagerrak', de: 'Skagerrak' }, 'str', [9.5, 57.9]]
+  ];
+  var bank = $('#vk-bank'), cats = $('#vk-cats'), score = $('#vk-score'), fhost = $('#vk-found'), sel = null, placed = 0, miss = 0, lists = {};
+  Object.keys(CAT).forEach(function (k) {
+    var box = h('div', ''); box.style.setProperty('--c', CAT[k].c);
+    box.appendChild(h('b', '', T(CAT[k].n) + tx('', '')));
+    lists[k] = h('span', ''); box.appendChild(lists[k]); fhost.appendChild(box);
+    var b = btn('', T(CAT[k].n)); b.style.setProperty('--c', CAT[k].c);
+    b.onclick = function () { answer(k); };
+    cats.appendChild(b);
+  });
+  I.slice().sort(function () { return Math.random() - 0.5; }).forEach(function (it) {
+    var b = btn('pick', T(it[0])); b.setAttribute('aria-pressed', 'false');
+    b._it = it;
+    b.onclick = function () {
+      if (b.classList.contains('placed')) return;
+      if (sel) sel.setAttribute('aria-pressed', 'false');
+      sel = sel === b ? null : b;
+      if (sel) sel.setAttribute('aria-pressed', 'true');
+      score.textContent = sel ? tx('Ce este „' + T(it[0]) + '”?', 'Was ist „' + T(it[0]) + '“?') : '';
+    };
+    bank.appendChild(b);
+  });
+  function answer(k) {
+    if (!sel) { score.textContent = tx('Alege întâi un nume de mai sus.', 'Wähle zuerst oben einen Namen.'); return; }
+    var it = sel._it;
+    if (it[1] === k) {
+      sel.classList.add('placed'); sel.setAttribute('aria-pressed', 'false'); sel.disabled = true;
+      lists[k].textContent = (lists[k].textContent ? lists[k].textContent + ', ' : '') + T(it[0]);
+      dot(M, found, it[2], CAT[k].c, 5); label(M, found, it[2], T(it[0]), '', 7, 18);
+      sel = null; placed++;
+      score.textContent = placed === I.length ? tx('Gata! Greșeli: ' + miss + '.', 'Fertig! Fehler: ' + miss + '.') : tx('Corect! L-am pus pe hartă.', 'Richtig! Es steht jetzt auf der Karte.');
+    } else {
+      miss++;
+      score.textContent = tx('Nu chiar. O insulă e uscat înconjurat de apă; o strâmtoare e o trecere îngustă de apă între două uscaturi.', 'Nicht ganz. Eine Insel ist Land, das von Wasser umgeben ist; eine Meerenge ist ein schmaler Wasserweg zwischen zwei Landmassen.');
+    }
+  }
+});
+Check($('#c4'), [
+  { q: { ro: 'Ce înseamnă numele „vikingi”?', de: 'Was bedeutet der Name „Wikinger“?' },
+    o: [{ ro: 'copiii golfurilor', de: 'Kinder der Buchten' }, { ro: 'oamenii munților', de: 'Männer der Berge' }, { ro: 'negustorii de mirodenii', de: 'Gewürzhändler' }], a: 0,
+    why: { ro: 'Își conduceau corăbiile cu ușurință prin golfuri și strâmtori.', de: 'Sie steuerten ihre Schiffe mit Leichtigkeit durch Buchten und Meerengen.' } },
+  { q: { ro: 'Încotro au plecat vikingii spre vest?', de: 'Wohin fuhren die Wikinger nach Westen?' },
+    o: [{ ro: 'în Rusia de azi', de: 'ins heutige Russland' }, { ro: 'în Islanda, Groenlanda și Canada de azi', de: 'nach Island, Grönland und ins heutige Kanada' }, { ro: 'în Anglia', de: 'nach England' }], a: 1,
+    why: { ro: 'Spre vest înseamnă peste Atlantic.', de: 'Nach Westen heißt über den Atlantik.' } }
+]);
+
+/* ================= 5a. Mirodenii ================= */
+DATA.then(function (D) {
+  loaded('sp-map');
+  var W = 960, H = 440;
+  var proj = d3.geoNaturalEarth1().fitExtent([[4, 4], [W - 4, H - 4]], { type: 'MultiPoint', coordinates: [[-110, 45], [150, 45], [-110, -20], [150, -20]] });
+  var M = makeMap('#sp-svg', W, H, proj, D.land);
+  M.svg.attr('aria-label', tx('Harta: de unde veneau mirodeniile', 'Karte: Woher die Gewürze kamen'));
+  var lay = M.g.append('g'), eu = M.g.append('g');
+  dot(M, eu, [-9.1, 38.7], '#1f8a78', 5); label(M, eu, [-9.1, 38.7], tx('Lisabona', 'Lissabon'), 'sm', -70, -8);
+  var SP = [
+    { e: '🟤', n: { ro: 'Scorțișoară', de: 'Zimt' }, ll: [80.7, 7.8], p: { ro: 'Ceylon (Sri Lanka)', de: 'Ceylon (Sri Lanka)' }, t: { ro: 'Se face din coaja unui copac care crește în Ceylon, azi Sri Lanka.', de: 'Er wird aus der Rinde eines Baumes gemacht, der auf Ceylon, heute Sri Lanka, wächst.' } },
+    { e: '⚫', n: { ro: 'Piper', de: 'Pfeffer' }, ll: [76, 10.5], p: { ro: 'coasta Malabar, India', de: 'Malabar-Küste, Indien' }, t: { ro: 'Crește pe coasta Malabar, exact unde a ajuns Vasco da Gama în 1498. Era atât de scump încât i se spunea „aurul negru”.', de: 'Er wächst an der Malabar-Küste, genau dort, wo Vasco da Gama 1498 ankam. Er war so teuer, dass man ihn „schwarzes Gold“ nannte.' } },
+    { e: '🌸', n: { ro: 'Cuișoare', de: 'Nelken' }, ll: [127.4, 0.8], p: { ro: 'Insulele Moluce', de: 'Molukken' }, t: { ro: 'Creșteau doar pe câteva insule din Moluce, numite și „Insulele Mirodeniilor”. Aici voia să ajungă și expediția lui Magellan.', de: 'Sie wuchsen nur auf einigen Inseln der Molukken, auch „Gewürzinseln“ genannt. Dorthin wollte auch Magellans Expedition.' } },
+    { e: '🍮', n: { ro: 'Vanilie', de: 'Vanille' }, ll: [-97, 20], p: { ro: 'Mexic', de: 'Mexiko' }, t: { ro: 'Surpriză: vanilia nu vine din Asia, ci din Mexic! Europenii au cunoscut-o abia după descoperirea Americii.', de: 'Überraschung: Vanille kommt nicht aus Asien, sondern aus Mexiko! Die Europäer lernten sie erst nach der Entdeckung Amerikas kennen.' } }
+  ];
+  var btns = $('#sp-btns'), fact = $('#sp-fact');
+  fact.innerHTML = '<p class="muted">' + tx('Alege o mirodenie.', 'Wähle ein Gewürz.') + '</p>';
+  var bs = SP.map(function (s) {
+    var b = btn('pick', s.e + ' ' + T(s.n)); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () {
+      bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      lay.selectAll('*').remove();
+      dot(M, lay, s.ll, '#c98a1a', 7); label(M, lay, s.ll, T(s.p));
+      fact.innerHTML = '<b>' + s.e + ' ' + T(s.n) + ' · ' + T(s.p) + '</b><p>' + T(s.t) + '</p>';
+    };
+    btns.appendChild(b); return b;
+  });
+});
+
+/* ================= 5b. America Latină ================= */
+DATA.then(function (D) {
+  loaded('la-map');
+  var LG = {
+    es: { c: '#e8b830', n: { ro: 'spaniolă', de: 'Spanisch' } },
+    pt: { c: '#2e9a5b', n: { ro: 'portugheză', de: 'Portugiesisch' } },
+    fr: { c: '#4a78c2', n: { ro: 'franceză', de: 'Französisch' } },
+    en: { c: '#c9c4bb', n: { ro: 'engleză', de: 'Englisch' } },
+    nl: { c: '#e07b39', n: { ro: 'olandeză', de: 'Niederländisch' } }
+  };
+  var C = {
+    'Mexico': ['es', 'Mexic', 'Mexiko'], 'Guatemala': ['es', 'Guatemala', 'Guatemala'], 'Honduras': ['es', 'Honduras', 'Honduras'],
+    'El Salvador': ['es', 'El Salvador', 'El Salvador'], 'Nicaragua': ['es', 'Nicaragua', 'Nicaragua'], 'Costa Rica': ['es', 'Costa Rica', 'Costa Rica'],
+    'Panama': ['es', 'Panama', 'Panama'], 'Cuba': ['es', 'Cuba', 'Kuba'], 'Dominican Rep.': ['es', 'Republica Dominicană', 'Dominikanische Republik'],
+    'Puerto Rico': ['es', 'Puerto Rico', 'Puerto Rico'], 'Colombia': ['es', 'Columbia', 'Kolumbien'], 'Venezuela': ['es', 'Venezuela', 'Venezuela'],
+    'Ecuador': ['es', 'Ecuador', 'Ecuador'], 'Peru': ['es', 'Peru', 'Peru'], 'Bolivia': ['es', 'Bolivia', 'Bolivien'], 'Chile': ['es', 'Chile', 'Chile'],
+    'Argentina': ['es', 'Argentina', 'Argentinien'], 'Uruguay': ['es', 'Uruguay', 'Uruguay'], 'Paraguay': ['es', 'Paraguay', 'Paraguay'],
+    'Brazil': ['pt', 'Brazilia', 'Brasilien'], 'Haiti': ['fr', 'Haiti', 'Haiti'], 'France': ['fr', 'Guyana Franceză', 'Französisch-Guayana'],
+    'Guyana': ['en', 'Guyana', 'Guyana'], 'Belize': ['en', 'Belize', 'Belize'], 'Jamaica': ['en', 'Jamaica', 'Jamaika'], 'Bahamas': ['en', 'Bahamas', 'Bahamas'],
+    'Trinidad and Tobago': ['en', 'Trinidad și Tobago', 'Trinidad und Tobago'], 'Suriname': ['nl', 'Surinam', 'Suriname'],
+    'United States of America': ['en', 'Statele Unite', 'Vereinigte Staaten'], 'Canada': ['en', 'Canada', 'Kanada']
+  };
+  var W = 460, H = 560;
+  var proj = d3.geoNaturalEarth1().fitExtent([[6, 6], [W - 6, H - 6]], { type: 'MultiPoint', coordinates: [[-118, 32], [-34, 32], [-118, -56], [-34, -56]] });
+  var svg = d3.select('#la-svg').attr('viewBox', '0 0 ' + W + ' ' + H), path = d3.geoPath(proj);
+  svg.attr('aria-label', tx('Harta Americii, colorată după limba vorbită', 'Karte Amerikas, nach Sprachen gefärbt'));
+  svg.append('path').datum({ type: 'Sphere' }).attr('class', 'sea').attr('d', path);
+  var fact = $('#la-fact');
+  fact.innerHTML = '<p class="muted">' + tx('Apasă pe o țară din America.', 'Tippe auf ein Land in Amerika.') + '</p>';
+  var sel = null;
+  svg.append('g').selectAll('path').data(D.countries).join('path')
+    .attr('class', function (d) { return C[d.properties.name] ? 'country' : 'land'; })
+    .attr('fill', function (d) { var c = C[d.properties.name]; return c ? LG[c[0]].c : null; })
+    .attr('d', path)
+    .on('click', function (e, d) {
+      var c = C[d.properties.name]; if (!c) return;
+      if (sel) sel.classList.remove('sel'); sel = this; this.classList.add('sel');
+      var latin = c[0] === 'es' || c[0] === 'pt' || c[0] === 'fr';
+      fact.innerHTML = '<b>' + (L === 'de' ? c[2] : c[1]) + '</b><p>' + tx('Limba oficială: ', 'Amtssprache: ') + T(LG[c[0]].n) + '. ' +
+        (latin ? tx('Este o limbă care provine din latină, deci face parte din America Latină.', 'Diese Sprache stammt aus dem Lateinischen, das Land gehört also zu Lateinamerika.')
+               : tx('Nu este o limbă latină, deci nu se numără de obicei în America Latină.', 'Das ist keine romanische Sprache, deshalb zählt es meist nicht zu Lateinamerika.')) + '</p>';
+    })
+    .append('title').text(function (d) { var c = C[d.properties.name]; return c ? (L === 'de' ? c[2] : c[1]) : ''; });
+  var key = $('#la-key');
+  Object.keys(LG).forEach(function (k) { key.appendChild(h('span', '', '<i style="background:' + LG[k].c + '"></i>' + T(LG[k].n))); });
+});
+Check($('#c5'), [
+  { q: { ro: 'Ce căutau navigatorii europeni în „India”?', de: 'Was suchten die europäischen Seefahrer in „Indien“?' },
+    o: [{ ro: 'aur și argint din Europa', de: 'Gold und Silber aus Europa' }, { ro: 'mirodenii și alte mărfuri scumpe', de: 'Gewürze und andere wertvolle Waren' }, { ro: 'gheață', de: 'Eis' }], a: 1,
+    why: { ro: 'Scorțișoara, piperul, cuișoarele erau foarte căutate și scumpe.', de: 'Zimt, Pfeffer und Nelken waren sehr begehrt und teuer.' } },
+  { q: { ro: 'De ce se numește „America Latină”?', de: 'Warum heißt es „Lateinamerika“?' },
+    o: [{ ro: 'pentru că acolo s-a vorbit latina', de: 'weil man dort Latein sprach' }, { ro: 'pentru că limbile vorbite (spaniola, portugheza) provin din latină', de: 'weil die gesprochenen Sprachen (Spanisch, Portugiesisch) aus dem Lateinischen stammen' }, { ro: 'după numele unui navigator', de: 'nach dem Namen eines Seefahrers' }], a: 1,
+    why: { ro: 'Spaniolii și portughezii au adus acolo limbile lor, care provin din latină.', de: 'Spanier und Portugiesen brachten ihre Sprachen dorthin, die aus dem Lateinischen stammen.' } }
+]);
+
+/* ================= 6. Tabelul din caiet ================= */
+(function () {
+  var WANN = ['470–450 î.Hr.|470–450 v. Chr.', 'sec. al IV-lea î.Hr.|4. Jh. v. Chr.', 'sec. I î.Hr.|1. Jh. v. Chr.', 'în jurul anului 1000|um 1000', '1488|1488', '1492–1493|1492–1493', '1498|1498', '1519–1522|1519–1522'];
+  var WOHER = ['Cartagina|Karthago', 'Grecia|Griechenland', 'Scandinavia|Skandinavien', 'Portugalia|Portugal', 'Spania|Spanien'];
+  var WOHIN = ['coasta atlantică a Europei|atlantische Küste Europas', 'coasta de nord-vest a Europei|Nordwest-Küste Europas', 'lumea cunoscută atunci|damals bekannte Welt',
+    'Groenlanda / coasta Americii de Nord|Grönland / nordamerikanische Küste', 'coasta Africii de Vest|westafrikanische Küste', 'America|Amerika', 'India|Indien', 'în jurul lumii|um die Welt'];
+  var ROWS = [
+    [{ ro: 'Himilcon', de: 'Himilkon' }, 0, 0, 0], [{ ro: 'Pytheas', de: 'Pytheas' }, 1, 1, 1], [{ ro: 'Strabon', de: 'Strabon' }, 2, 1, 2],
+    [{ ro: 'Erik cel Roșu / Leif Eriksson', de: 'Erik der Rote / Leif Eriksson' }, 3, 2, 3], [{ ro: 'Bartolomeu Diaz', de: 'Bartolomeu Díaz' }, 4, 3, 4],
+    [{ ro: 'Cristofor Columb', de: 'Christoph Kolumbus' }, 5, 4, 5], [{ ro: 'Vasco da Gama', de: 'Vasco da Gama' }, 6, 3, 6], [{ ro: 'Fernando Magellan', de: 'Fernando Magellan' }, 7, 3, 7]
+  ];
+  function lab(s) { var p = s.split('|'); return L === 'de' ? p[1] : p[0]; }
+  var tbl = $('#who'), sels = [];
+  var thead = h('tr', '');
+  [tx('Cine?', 'Wer?'), tx('Când?', 'Wann?'), tx('De unde?', 'Woher?'), tx('Încotro?', 'Wohin?')].forEach(function (t) { thead.appendChild(h('th', '', t)); });
+  tbl.appendChild(thead);
+  ROWS.forEach(function (r) {
+    var tr = h('tr', '');
+    tr.appendChild(h('td', '', T(r[0])));
+    [[WANN, r[1]], [WOHER, r[2]], [WOHIN, r[3]]].forEach(function (col, ci) {
+      var td = h('td', ''), s = h('select', '');
+      s.setAttribute('aria-label', T(r[0]) + ' · ' + [tx('Când?', 'Wann?'), tx('De unde?', 'Woher?'), tx('Încotro?', 'Wohin?')][ci]);
+      s.appendChild(h('option', '', '—'));
+      col[0].forEach(function (o, i) { var op = h('option', '', lab(o)); op.value = i; s.appendChild(op); });
+      s.dataset.a = col[1];
+      s.onchange = function () { s.classList.remove('ok', 'bad'); };
+      sels.push(s); td.appendChild(s); tr.appendChild(td);
+    });
+    tbl.appendChild(tr);
+  });
+  var chk = $('#who-check'), show = $('#who-show'), score = $('#who-score');
+  chk.textContent = tx('Verifică', 'Prüfen'); show.textContent = tx('Arată răspunsurile', 'Lösungen zeigen');
+  chk.onclick = function () {
+    var ok = 0;
+    sels.forEach(function (s) { s.classList.remove('ok', 'bad'); if (s.value === '—' || s.value === '') return; if (s.value === s.dataset.a) { s.classList.add('ok'); ok++; } else s.classList.add('bad'); });
+    score.textContent = ok + ' / ' + sels.length + ' ' + tx('corecte', 'richtig') + (ok === sels.length ? ' 🎉' : '');
+  };
+  show.onclick = function () { sels.forEach(function (s) { s.value = s.dataset.a; s.classList.remove('bad'); s.classList.add('ok'); }); score.textContent = ''; };
+})();
+
+/* ================= Mic dicționar ================= */
+(function () {
+  var G = [
+    ['descoperire', 'die Entdeckung'], ['explorator', 'der Forscher'], ['navigator', 'der Seefahrer'], ['călătorie pe mare', 'die Seereise'],
+    ['colonie', 'die Kolonie'], ['comerț', 'der Handel'], ['jaf', 'die Plünderung'], ['război de cucerire', 'der Eroberungskrieg'],
+    ['vikingi / normanzi', 'Wikinger / Normannen'], ['golf', 'die Bucht'], ['strâmtoare', 'die Meerenge'], ['insulă', 'die Insel'],
+    ['mirodenii', 'die Gewürze'], ['putere maritimă', 'die Seemacht'], ['imperiu colonial', 'das Kolonialreich'],
+    ['înconjurul lumii', 'die Umrundung der Welt'], ['Capul Bunei Speranțe', 'das Kap der Guten Hoffnung'], ['America Latină', 'Lateinamerika'],
+    ['atlas geografic', 'der geographische Atlas'], ['suprafața Pământului', 'die Erdoberfläche']
+  ];
+  var dl = $('#gloss');
+  G.forEach(function (g) { dl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
+})();
+})();
+</script>
+</body>
+</html>

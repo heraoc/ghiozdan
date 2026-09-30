@@ -7,6 +7,7 @@ import { sumaSiDiferentaTest } from './content/suma-si-diferenta-test';
 import { mariExploratoriTest } from './content/mari-exploratori-test';
 import { organismulOmuluiTest } from './content/organismul-omului-test';
 import { nutritiaTest } from './content/nutritia-test';
+import { descoperireaLumiiTest } from './content/descoperirea-lumii-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import type { Text } from './i18n';
@@ -216,6 +217,21 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/fizica/unitati-de-masura.html',
         test: { questions: unitatiDeMasuraTest, minutes: 8 },
+      },
+    ],
+    geo: [
+      {
+        slug: 'descoperirea-lumii',
+        title: {
+          ro: 'Descoperirea lumii',
+          de: 'Die Entdeckung der Welt',
+        },
+        summary: {
+          ro: 'De la Himilcon și Pytheas la vikingi și Magellan: cine a explorat lumea, de ce, când, de unde și încotro, pe hărți interactive.',
+          de: 'Von Himilkon und Pytheas bis zu den Wikingern und Magellan: wer die Welt erkundete, warum, wann, woher und wohin, auf interaktiven Karten.',
+        },
+        src: 'lectii/clasa-6/geografie/descoperirea-lumii.html',
+        test: { questions: descoperireaLumiiTest, minutes: 8 },
       },
     ],
     ist: [
