@@ -485,6 +485,19 @@ button {
   box-shadow: var(--card-shadow-hover);
 }
 
+.lesson-no {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c);
+}
+
+.lesson-head .lesson-no {
+  margin-bottom: 4px;
+}
+
 .lesson-title {
   margin: 0;
   font-size: 17px;

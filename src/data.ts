@@ -115,8 +115,9 @@ const SUBJECTS: Record<Grade, [SubjectKey, glyph: string][]> = {
 };
 
 /**
- * Lecțiile fiecărei materii. Momentan nu există niciuna; numărul de lecții
- * de pe carduri se calculează automat din această listă.
+ * Lecțiile fiecărei materii, în ordinea în care au fost create: lecțiile noi se adaugă
+ * la sfârșitul listei materiei. Numărul lecției (1, 2, 3…) vine din poziția în listă,
+ * iar numărul de lecții de pe carduri se calculează tot din această listă.
  */
 const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
   3: {

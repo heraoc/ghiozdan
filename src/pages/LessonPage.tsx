@@ -41,6 +41,7 @@ export function LessonPage({ grade, subjectSlug, lessonSlug, toTest }: Props) {
       </a>
       <div className="lesson-head">
         <div>
+          <span className="lesson-no">{t.lessonNo(subject.lessons.indexOf(lesson) + 1)}</span>
           <h1 className="page-title">{lesson.title[lang]}</h1>
           <p className="page-meta">{lesson.summary[lang]}</p>
         </div>

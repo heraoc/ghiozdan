@@ -26,8 +26,9 @@ export function SubjectPage({ grade, slug }: { grade: Grade; slug: string }) {
 
       {subject.lessons.length ? (
         <div className="lesson-list">
-          {subject.lessons.map((l) => (
+          {subject.lessons.map((l, i) => (
             <a key={l.slug} className="lesson-card" href={lessonHref(grade, subject, l)}>
+              <span className="lesson-no">{t.lessonNo(i + 1)}</span>
               <h2 className="lesson-title">{l.title[lang]}</h2>
               <p className="lesson-summary">{l.summary[lang]}</p>
               <span className="lesson-cta">{t.openLesson} →</span>
