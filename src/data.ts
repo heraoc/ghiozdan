@@ -6,6 +6,7 @@ import { inmultireaTest } from './content/inmultirea-test';
 import { sumaSiDiferentaTest } from './content/suma-si-diferenta-test';
 import { mariExploratoriTest } from './content/mari-exploratori-test';
 import { organismulOmuluiTest } from './content/organismul-omului-test';
+import { nutritiaTest } from './content/nutritia-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import type { Text } from './i18n';
@@ -172,6 +173,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/biologie/organismul-omului.html',
         test: { questions: organismulOmuluiTest, minutes: 8 },
+      },
+      {
+        slug: 'nutritia',
+        title: {
+          ro: 'Nutriția în lumea vie',
+          de: 'Ernährung in der lebenden Welt',
+        },
+        summary: {
+          ro: 'Autotrof și heterotrof, fotosinteza, frunza pe dinafară și pe dinăuntru, plante insectivore, saprotrofe, simbioză și parazitism.',
+          de: 'Autotroph und heterotroph, Fotosynthese, äußere und innere Struktur des Blattes, insektenfressende Pflanzen, Saprotrophe, Symbiose und Parasitismus.',
+        },
+        src: 'lectii/clasa-6/biologie/nutritia.html',
+        test: { questions: nutritiaTest, minutes: 8 },
       },
     ],
     gmt: [
