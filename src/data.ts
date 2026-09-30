@@ -7,6 +7,7 @@ import { sumaSiDiferentaTest } from './content/suma-si-diferenta-test';
 import { mariExploratoriTest } from './content/mari-exploratori-test';
 import { organismulOmuluiTest } from './content/organismul-omului-test';
 import { nutritiaTest } from './content/nutritia-test';
+import { frunzaTest } from './content/frunza-test';
 import { descoperireaLumiiTest } from './content/descoperirea-lumii-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
@@ -187,6 +188,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/biologie/nutritia.html',
         test: { questions: nutritiaTest, minutes: 8 },
+      },
+      {
+        slug: 'frunza',
+        title: {
+          ro: 'Frunza: structură și funcție',
+          de: 'Das Blatt – Struktur und Funktion',
+        },
+        summary: {
+          ro: 'Părțile frunzei, forma ei ca adaptare la mediu, experimentul „De ce sunt frunzele verzi?”, straturile frunzei și epiderma.',
+          de: 'Die Teile des Blattes, seine Form als Anpassung an den Lebensraum, das Experiment „Warum sind Blätter grün?“, die Gewebeschichten und die Epidermis.',
+        },
+        src: 'lectii/clasa-6/biologie/frunza.html',
+        test: { questions: frunzaTest, minutes: 8 },
       },
     ],
     gmt: [
