@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vikingii: navigatorii nordului</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Die Wikinger: Seefahrer des Nordens';
+})();
+</script>
+<script src="../../lib/d3-7.8.5.min.js"></script>
+<script src="../../lib/topojson-client-3.1.0.min.js"></script>
+<style>
+:root{
+  --paper:#f3f7f6; --card:#ffffff; --ink:#1b2a2e; --muted:#566468; --rule:#d9e3e2; --sheet:#e9f1ef;
+  --accent:#1f8a78; --accent-soft:#e1f3ef;
+  --sea:#dcebf2; --land:#efe6d2; --coast:#b9ae95; --grat:#c7d6de;
+  --route:#c0392b; --old:#9aa7ab;
+  --good:#27a36f; --good-soft:#e6f6ee; --bad:#d64545; --bad-soft:#fdeaea;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.term{font-style:italic;color:var(--muted);font-weight:400}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.hint{font-size:14.5px;color:var(--muted)}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.score{font-weight:700}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:10px}
+.fig svg{display:block;width:100%;height:auto}
+.split{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;align-items:start}
+.desc{border-left:4px solid var(--c,var(--rule));background:var(--sheet);border-radius:8px;padding:12px 16px;min-height:100px}
+.desc h3{font-size:21px}
+.desc p{margin-top:4px}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#b02e2e;background:var(--bad-soft)}
+.pick[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:#fff}
+.fact{margin-top:12px;background:var(--card);border:1px solid var(--rule);border-left:4px solid #c98a1a;border-radius:10px;padding:10px 14px}
+.quote{font-family:var(--display);font-style:italic;font-size:19px;border-left:4px solid var(--accent);padding:4px 14px;margin:6px 0}
+
+/* hărți */
+.map{background:var(--sea);border:1px solid var(--rule);border-radius:12px;overflow:hidden;position:relative}
+.map svg{display:block;width:100%;height:auto}
+.map .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-weight:700}
+.sea{fill:var(--sea)} .land{fill:var(--land);stroke:var(--coast);stroke-width:.6;vector-effect:non-scaling-stroke}
+.grat{fill:none;stroke:var(--grat);stroke-width:.5;vector-effect:non-scaling-stroke}
+.route{fill:none;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.route.cur{stroke:var(--route);stroke-width:3.2}
+.route.old{stroke:var(--old);stroke-width:1.8;opacity:.8}
+.route.guess{stroke-dasharray:6 6}
+.mlbl{font:700 14px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.mlbl.sm{font-weight:500}
+.dot{stroke:#fff;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.stepper{display:grid;gap:10px}
+.stepper .when{font:800 15px/1 var(--body);color:var(--route)}
+.stepper h3{font-size:24px}
+.nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.nav .count{font-size:14px;color:var(--muted);font-weight:700}
+
+/* 1. organizare */
+.part{cursor:pointer;transition:opacity .25s}
+svg.sel .part:not(.hi){opacity:.3}
+.plbl{font:800 17px var(--body);fill:#fff;pointer-events:none}
+.seasons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.season{border:1.5px solid var(--rule);background:var(--card);border-radius:10px;padding:8px;cursor:pointer;text-align:center;font-weight:700}
+.season span{display:block;font-size:26px}
+.season[aria-pressed="true"]{border-color:var(--ink);background:var(--sheet)}
+
+/* 2. corabia */
+.mode{display:inline-flex;border:1.5px solid var(--rule);border-radius:99px;overflow:hidden;margin-bottom:10px}
+.mode button{border:0;background:transparent;padding:6px 14px;cursor:pointer;font-weight:700;font-size:15px}
+.mode button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.stats{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;background:var(--sheet);border-radius:8px;padding:10px 12px;font-size:15.5px;margin-bottom:10px}
+.stats dt{font-weight:700} .stats dd{margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+
+/* 3. navigație */
+.kit{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.tool{border:1.5px solid var(--rule);background:var(--card);border-radius:10px;padding:8px 10px;cursor:pointer;text-align:left;display:grid;gap:2px}
+.tool span{font-size:26px;line-height:1}
+.tool b{font-size:15px}
+.tool[aria-pressed="true"]{border-color:var(--ink);background:var(--sheet)}
+.slider{display:grid;gap:4px}
+.slider input{width:100%;accent-color:var(--accent)}
+
+/* 5. Vinland */
+.lands{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+
+/* 6. jurnal */
+.log{display:grid;gap:6px;counter-reset:ev}
+.log .ev{display:grid;grid-template-columns:70px 1fr;gap:10px;align-items:center;background:var(--card);border:1px solid var(--good);border-left:5px solid var(--good);border-radius:8px;padding:6px 12px;animation:fadein .3s ease both}
+.log .ev b{font:800 18px var(--display);color:var(--accent)}
+.bank{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #a9c3bd;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted)}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+.foot ul{margin:4px 0 0;padding-left:1.2em}
+
+@media (max-width:860px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+}
+@media (max-width:520px){ .seasons{grid-template-columns:repeat(2,1fr)} .plbl{font-size:20px} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important} .log .ev{animation:none}}
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Geografie · Clasa a 6-a · Lecție de explorare</span><span class="de">Geografie · Klasse 6 · Entdeckerstunde</span></p>
+  <h1><span class="ro">Vikingii: navigatorii nordului</span><span class="de">Die Wikinger: Seefahrer des Nordens</span></h1>
+  <p class="lead">
+    <span class="ro">Cu aproape 500 de ani înaintea lui Columb, vikingii au traversat Atlanticul de Nord cu corăbii deschise, fără busolă și fără hărți. Află cum erau organizați, cum își găseau drumul pe mare și cum au ajuns Erik cel Roșu în Groenlanda și fiul său, Leif Eriksson, în America.</span>
+    <span class="de">Fast 500 Jahre vor Kolumbus überquerten die Wikinger den Nordatlantik mit offenen Schiffen, ohne Kompass und ohne Karten. Erfahre, wie sie organisiert waren, wie sie auf dem Meer ihren Weg fanden und wie Erik der Rote nach Grönland und sein Sohn Leif Eriksson nach Amerika gelangten.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Cum îți găsești drumul pe mare fără busolă?</span><span class="de">Wie findest du ohne Kompass deinen Weg auf dem Meer?</span></li>
+        <li><span class="ro">De ce și-ar numi cineva o insulă acoperită de gheață „Țara Verde”?</span><span class="de">Warum würde jemand eine eisbedeckte Insel „grünes Land“ nennen?</span></li>
+        <li><span class="ro">De unde știm azi că vikingii au ajuns în America?</span><span class="de">Woher wissen wir heute, dass die Wikinger in Amerika waren?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Organizarea</span><span class="de">Organisation</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Corabia</span><span class="de">Das Schiff</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Navigația</span><span class="de">Navigation</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Erik cel Roșu</span><span class="de">Erik der Rote</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Leif Eriksson</span><span class="de">Leif Eriksson</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Jurnalul de bord</span><span class="de">Das Logbuch</span></a>
+  </nav>
+</header>
+
+<!-- 1. Organizarea -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Cum erau organizați vikingii</span><span class="de">Wie die Wikinger organisiert waren</span></h2>
+  <p class="section-sub"><span class="ro">Vikingii nu erau doar războinici: cei mai mulți erau țărani, pescari, meșteșugari și negustori din Scandinavia. Apasă pe fiecare treaptă a societății.</span><span class="de">Die Wikinger waren nicht nur Krieger: Die meisten waren Bauern, Fischer, Handwerker und Händler aus Skandinavien. Tippe auf jede Stufe der Gesellschaft.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="soc-svg" viewBox="0 0 520 330" role="img"></svg></div>
+    <div class="desc" id="soc-desc" aria-live="polite"></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Adunarea: „Thing”-ul</span><span class="de">Die Versammlung: das „Thing“</span></h3>
+    <p><span class="ro">Oamenii liberi se adunau la <b>Thing</b>, unde judecau neînțelegerile și hotărau legile. Un „rostitor al legii” spunea legile pe de rost, pentru că nu erau scrise. În Islanda, adunarea tuturor, <b>Althing</b>-ul, s-a ținut prima dată în anul <b>930</b> și e considerată unul dintre cele mai vechi parlamente din lume.</span><span class="de">Die freien Menschen versammelten sich beim <b>Thing</b>, wo sie Streitigkeiten schlichteten und Gesetze beschlossen. Ein „Gesetzessprecher“ trug die Gesetze auswendig vor, denn sie waren nicht aufgeschrieben. In Island tagte die Versammlung aller, das <b>Althing</b>, zum ersten Mal im Jahr <b>930</b>; es gilt als eines der ältesten Parlamente der Welt.</span></p>
+  </div>
+  <h3 style="margin:22px 0 2px;font-size:22px"><span class="ro">Un an din viața unui viking</span><span class="de">Ein Jahr im Leben eines Wikingers</span></h3>
+  <p class="hint"><span class="ro">Alege un anotimp.</span><span class="de">Wähle eine Jahreszeit.</span></p>
+  <div class="seasons" id="seasons" role="group"></div>
+  <div class="desc" id="season-desc" style="margin-top:10px;min-height:0" aria-live="polite"></div>
+  <div class="check" id="c1"></div>
+</section>
+
+<!-- 2. Corabia -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Corabia vikingă</span><span class="de">Das Wikingerschiff</span></h2>
+  <p class="section-sub"><span class="ro">Corăbiile au fost „secretul” vikingilor. Compară corabia lungă de război cu knarr-ul, corabia de transport cu care au ajuns coloniștii în Islanda și Groenlanda. Apasă pe părțile corabiei.</span><span class="de">Die Schiffe waren das „Geheimnis“ der Wikinger. Vergleiche das lange Kriegsschiff mit dem Knarr, dem Frachtschiff, mit dem die Siedler nach Island und Grönland kamen. Tippe auf die Teile des Schiffes.</span></p>
+  <div class="mode" id="ship-mode" role="group"></div>
+  <div class="split">
+    <div class="fig"><svg id="ship-svg" viewBox="0 0 640 330" role="img"></svg></div>
+    <div>
+      <dl class="stats" id="ship-stats"></dl>
+      <div class="legend" id="ship-legend"></div>
+      <div class="desc" id="ship-desc" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="fact"><span class="ro">💡 Cârma vikingilor era o vâslă mare, prinsă pe partea dreaptă a pupei. De aici vine cuvântul german <b>„Steuerbord”</b> („bordul cu cârma”), care înseamnă partea dreaptă a unei nave. În română, partea dreaptă se numește <b>tribord</b>.</span><span class="de">💡 Das Steuer der Wikinger war ein großes Ruder, das auf der rechten Seite des Hecks befestigt war. Daher kommt das Wort <b>„Steuerbord“</b> für die rechte Seite eines Schiffes.</span></div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Navigația -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Navigația fără busolă</span><span class="de">Navigation ohne Kompass</span></h2>
+  <p class="section-sub"><span class="ro">Vikingii nu aveau busolă (în Europa a apărut abia pe la 1200) și nici hărți. Deschide trusa navigatorului și vezi ce „instrumente” foloseau.</span><span class="de">Die Wikinger hatten keinen Kompass (in Europa kam er erst um 1200 auf) und keine Karten. Öffne die Ausrüstung des Navigators und sieh, welche „Instrumente“ sie benutzten.</span></p>
+  <div class="kit" id="kit" role="group"></div>
+  <div class="desc" id="kit-desc" style="margin-top:10px" aria-live="polite"></div>
+
+  <h3 style="margin:26px 0 2px;font-size:22px"><span class="ro">Soarele de la amiază arată paralela</span><span class="de">Die Mittagssonne zeigt den Breitengrad</span></h3>
+  <p class="hint"><span class="ro">Cu cât mergi mai spre nord, cu atât soarele de la amiază stă mai jos pe cer. Dacă un navigator ține soarele de la amiază mereu la aceeași înălțime, merge pe aceeași <b>paralelă</b>, spre vest sau spre est. Mișcă glisorul (o zi de iunie, în sezonul de navigație).</span><span class="de">Je weiter man nach Norden fährt, desto tiefer steht die Mittagssonne. Hält ein Seefahrer die Mittagssonne immer auf derselben Höhe, fährt er auf demselben <b>Breitengrad</b> nach Westen oder Osten. Bewege den Schieberegler (ein Junitag, in der Segelzeit).</span></p>
+  <div class="split" style="margin-top:10px">
+    <div class="fig"><svg id="sun-svg" viewBox="0 0 520 300" role="img"></svg></div>
+    <div>
+      <div class="slider">
+        <label for="sun-lat"><b><span class="ro">Paralela (latitudinea nordică)</span><span class="de">Breitengrad (nördliche Breite)</span>: <span id="sun-lat-v"></span>°</b></label>
+        <input type="range" id="sun-lat" min="54" max="72" value="61">
+      </div>
+      <div class="desc" id="sun-desc" style="margin-top:10px;min-height:0" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <h3 style="margin:26px 0 2px;font-size:22px"><span class="ro">Un „GPS” de acum 800 de ani: drumul spre Groenlanda</span><span class="de">Ein „GPS“ von vor 800 Jahren: der Weg nach Grönland</span></h3>
+  <p class="hint"><span class="ro">O carte islandeză veche, <i>Landnámabók</i> („Cartea așezărilor”), păstrează instrucțiunile de drum din Norvegia în Groenlanda. Urmează-le pas cu pas: vezi cum corabia merge pe aceeași paralelă, în jur de 61° nord.</span><span class="de">Ein altes isländisches Buch, das <i>Landnámabók</i> („Buch der Landnahme“), bewahrt die Segelanweisungen von Norwegen nach Grönland. Folge ihnen Schritt für Schritt: Sieh, wie das Schiff auf demselben Breitengrad fährt, um 61° Nord.</span></p>
+  <div class="split" style="margin-top:10px">
+    <div class="map" id="lb-map"><svg id="lb-svg" role="img"></svg><div class="loading"></div></div>
+    <div class="stepper" id="lb-info" aria-live="polite"></div>
+  </div>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Erik cel Roșu -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Erik cel Roșu și „Țara Verde”</span><span class="de">Erik der Rote und das „grüne Land“</span></h2>
+  <p class="section-sub"><span class="ro">Erik Thorvaldsson, numit „cel Roșu” (probabil după culoarea părului și a bărbii), s-a născut în Norvegia, pe la anul 950. Urmărește povestea lui pe hartă.</span><span class="de">Erik Thorvaldsson, genannt „der Rote“ (wahrscheinlich wegen seiner Haar- und Bartfarbe), wurde um das Jahr 950 in Norwegen geboren. Verfolge seine Geschichte auf der Karte.</span></p>
+  <div class="split">
+    <div class="map" id="er-map"><svg id="er-svg" role="img"></svg><div class="loading"></div></div>
+    <div class="stepper" id="er-info" aria-live="polite"></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">De ce „Groenlanda”?</span><span class="de">Warum „Grönland“?</span></h3>
+    <p><span class="ro">O carte islandeză veche spune că Erik a ales numele <b>„Țara Verde”</b> (Grænland) ca să atragă coloniști: oamenii ar fi mers mai ușor într-o țară cu un nume frumos. Dar numele nu era chiar o păcăleală: pe atunci clima era ceva mai caldă decât mai târziu, iar vara, în fiordurile din sud-vest, creșteau iarbă și mesteceni pitici. Restul insulei era, ca și azi, acoperit de gheață.</span><span class="de">Ein altes isländisches Buch berichtet, dass Erik den Namen <b>„grünes Land“</b> (Grænland) wählte, um Siedler anzulocken: Die Menschen würden lieber in ein Land mit einem schönen Namen ziehen. Ganz geflunkert war der Name aber nicht: Damals war das Klima etwas wärmer als später, und im Sommer wuchsen in den Fjorden im Südwesten Gras und Zwergbirken. Der Rest der Insel war, wie heute, von Eis bedeckt.</span></p>
+  </div>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Leif Eriksson -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Leif Eriksson ajunge în America</span><span class="de">Leif Eriksson erreicht Amerika</span></h2>
+  <p class="section-sub"><span class="ro">Leif, fiul lui Erik, a fost poreclit „Norocosul”. În jurul anului 1000, a pornit spre vest, spre niște ținuturi pe care alt navigator le văzuse doar de departe. Urmărește călătoria și apasă pe cele trei ținuturi pe care le-a numit.</span><span class="de">Leif, der Sohn Eriks, bekam den Beinamen „der Glückliche“. Um das Jahr 1000 segelte er nach Westen, zu Ländern, die ein anderer Seefahrer nur aus der Ferne gesehen hatte. Verfolge die Reise und tippe auf die drei Länder, die er benannte.</span></p>
+  <div class="split">
+    <div class="map" id="lf-map"><svg id="lf-svg" role="img"></svg><div class="loading"></div></div>
+    <div class="stepper" id="lf-info" aria-live="polite"></div>
+  </div>
+  <div class="fact"><span class="ro">🔎 <b>Detectivii arheologi.</b> Mult timp, călătoria lui Leif a fost cunoscută doar din sagas, poveștile islandeze. În <b>1960</b>, cercetătorii norvegieni Helge și Anne Stine Ingstad au găsit, la <b>L'Anse aux Meadows</b> în Terra Nova (Canada), resturile unor case vikinge. În <b>2021</b>, oamenii de știință au arătat că lemnul de acolo a fost tăiat cu unelte de fier exact în anul <b>1021</b>. Este prima dovadă sigură că europenii au fost în America înaintea lui Columb. Locul face parte din patrimoniul mondial UNESCO.</span><span class="de">🔎 <b>Archäologische Detektive.</b> Lange kannte man Leifs Reise nur aus den Sagas, den isländischen Erzählungen. <b>1960</b> fanden die norwegischen Forscher Helge und Anne Stine Ingstad in <b>L'Anse aux Meadows</b> auf Neufundland (Kanada) die Reste von Wikingerhäusern. <b>2021</b> zeigten Wissenschaftler, dass das Holz dort genau im Jahr <b>1021</b> mit Eisenwerkzeugen geschlagen wurde. Das ist der erste sichere Beweis, dass Europäer vor Kolumbus in Amerika waren. Der Ort gehört zum UNESCO-Welterbe.</span></div>
+  <div class="check" id="c5"></div>
+</section>
+
+<!-- 6. Jurnalul de bord -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Jurnalul de bord: pune evenimentele în ordine</span><span class="de">Das Logbuch: Bring die Ereignisse in die richtige Reihenfolge</span></h2>
+  <p class="section-sub"><span class="ro">Alege, pe rând, evenimentul care a urmat. Începe cu cel mai vechi.</span><span class="de">Wähle nacheinander das Ereignis, das als Nächstes kam. Beginne mit dem ältesten.</span></p>
+  <div class="bank" id="log-bank"></div>
+  <p class="score" id="log-score" aria-live="polite"></p>
+  <div class="log" id="log"></div>
+</section>
+
+<section class="block" aria-labelledby="t7">
+  <h2 class="section-title" id="t7"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <div class="gloss-head" style="margin-top:14px"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<div class="foot">
+  <p><span class="ro">Lecție de explorare, documentată pentru Ghiozdan. Surse: sagele islandeze („Saga groenlandezilor”, „Saga lui Erik cel Roșu”), <i>Íslendingabók</i> și <i>Landnámabók</i>; situl L'Anse aux Meadows (UNESCO); datarea lemnului la anul 1021 (revista <i>Nature</i>, 2021). Unele detalii din sagas, scrise la 200 de ani după întâmplări, sunt nesigure; le-am marcat cu „probabil”. Contururile hărților: Natural Earth. Testul de mai jos verifică ce ai învățat.</span><span class="de">Entdeckerstunde, für Ghiozdan recherchiert. Quellen: die isländischen Sagas („Grænlendinga saga“, „Eiríks saga rauða“), <i>Íslendingabók</i> und <i>Landnámabók</i>; die Fundstätte L'Anse aux Meadows (UNESCO); die Datierung des Holzes auf 1021 (Zeitschrift <i>Nature</i>, 2021). Manche Einzelheiten der Sagas, 200 Jahre nach den Ereignissen aufgeschrieben, sind unsicher; sie sind mit „wahrscheinlich“ gekennzeichnet. Kartengrundlage: Natural Earth. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/** Întrebări scurte de verificare, cu răspuns imediat. */
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.textContent = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* ================= 1. Societatea și anul ================= */
+(function () {
+  var svg = $('#soc-svg'), desc = $('#soc-desc');
+  var LV = [
+    { k: 'jarl', c: '#8e44ad', n: { ro: 'Jarlii (nobilii)', de: 'Jarle (Adlige)' }, pts: '260,6 360,116 160,116',
+      d: { ro: 'Puțini și bogați. Conduceau ținuturi, aveau corăbii și plăteau echipajele. Ei porneau expedițiile.', de: 'Wenige und reich. Sie herrschten über Gebiete, besaßen Schiffe und bezahlten die Mannschaften. Sie starteten die Expeditionen.' } },
+    { k: 'karl', c: '#1f8a78', n: { ro: 'Oamenii liberi', de: 'Freie (Karle)' }, pts: '160,116 360,116 430,216 90,216',
+      d: { ro: 'Cei mai mulți: țărani, pescari, meșteșugari, negustori. Aveau voie să poarte arme și să vorbească la adunare. Femeile libere puteau avea pământ și conduceau ferma cât timp bărbații erau pe mare.', de: 'Die meisten: Bauern, Fischer, Handwerker, Händler. Sie durften Waffen tragen und bei der Versammlung sprechen. Freie Frauen konnten Land besitzen und führten den Hof, während die Männer auf See waren.' } },
+    { k: 'thrall', c: '#8a6a3a', n: { ro: 'Robii', de: 'Unfreie (Thralle)' }, pts: '90,216 430,216 500,318 20,318',
+      d: { ro: 'Oameni fără libertate, adesea prizonieri aduși din expediții. Făceau munca grea de la fermă și nu aveau drepturi.', de: 'Menschen ohne Freiheit, oft Gefangene aus Raubzügen. Sie machten die schwere Arbeit auf dem Hof und hatten keine Rechte.' } }
+  ];
+  var parts = {};
+  LV.forEach(function (l, i) {
+    var g = el('g', { class: 'part' }, svg);
+    el('polygon', { points: l.pts, fill: l.c, stroke: '#fff', 'stroke-width': 3 }, g);
+    el('text', { x: 260, y: [100, 173, 275][i], 'text-anchor': 'middle', class: 'plbl' }, g, T(l.n));
+    g.onclick = function () { pick(l.k); };
+    parts[l.k] = g;
+  });
+  svg.setAttribute('aria-label', tx('Piramida societății vikinge', 'Pyramide der Wikingergesellschaft'));
+  function pick(k) {
+    svg.classList.add('sel');
+    LV.forEach(function (l) { parts[l.k].classList.toggle('hi', l.k === k); if (l.k === k) { desc.style.setProperty('--c', l.c); desc.innerHTML = '<h3>' + T(l.n) + '</h3><p>' + T(l.d) + '</p>'; } });
+  }
+  desc.innerHTML = '<p class="muted">' + tx('Apasă pe o treaptă a piramidei.', 'Tippe auf eine Stufe der Pyramide.') + '</p>';
+
+  var S = [
+    ['🌱', { ro: 'Primăvara', de: 'Frühling' }, { ro: 'Se ară și se seamănă câmpurile. Corăbiile sunt reparate și pregătite de drum.', de: 'Die Felder werden gepflügt und besät. Die Schiffe werden repariert und für die Reise vorbereitet.' }],
+    ['☀️', { ro: 'Vara', de: 'Sommer' }, { ro: 'Marea e mai liniștită și zilele sunt foarte lungi: e timpul expedițiilor de comerț, al raidurilor și al explorărilor.', de: 'Das Meer ist ruhiger und die Tage sind sehr lang: Zeit für Handelsfahrten, Raubzüge und Entdeckungsreisen.' }],
+    ['🍂', { ro: 'Toamna', de: 'Herbst' }, { ro: 'Corăbiile se întorc acasă înainte de furtuni. Se strânge recolta și se pregătesc provizii pentru iarnă.', de: 'Die Schiffe kehren vor den Stürmen heim. Die Ernte wird eingebracht und Vorräte für den Winter angelegt.' }],
+    ['❄️', { ro: 'Iarna', de: 'Winter' }, { ro: 'Nopțile sunt lungi. Se lucrează în casă: se țese lână pentru pânze, se fac unelte, se spun povești (sagas).', de: 'Die Nächte sind lang. Man arbeitet im Haus: Wolle für Segel wird gewebt, Werkzeuge werden gemacht, Geschichten (Sagas) erzählt.' }]
+  ];
+  var host = $('#seasons'), sd = $('#season-desc');
+  var bs = S.map(function (s) {
+    var b = btn('season', '<span aria-hidden="true">' + s[0] + '</span>' + T(s[1]));
+    b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); sd.innerHTML = '<p>' + T(s[2]) + '</p>'; };
+    host.appendChild(b); return b;
+  });
+  bs[1].click();
+})();
+Check($('#c1'), [
+  { q: { ro: 'Cu ce se ocupau cei mai mulți vikingi?', de: 'Womit beschäftigten sich die meisten Wikinger?' },
+    o: [{ ro: 'doar cu războiul', de: 'nur mit Krieg' }, { ro: 'cu agricultura, pescuitul, meșteșugurile și comerțul', de: 'mit Landwirtschaft, Fischfang, Handwerk und Handel' }, { ro: 'cu scrisul cărților', de: 'mit dem Schreiben von Büchern' }], a: 1,
+    why: { ro: 'Cei mai mulți erau oameni liberi care își lucrau ferma și plecau pe mare vara.', de: 'Die meisten waren freie Leute, die ihren Hof bewirtschafteten und im Sommer zur See fuhren.' } },
+  { q: { ro: 'Ce era Althing-ul?', de: 'Was war das Althing?' },
+    o: [{ ro: 'o corabie', de: 'ein Schiff' }, { ro: 'un zeu', de: 'ein Gott' }, { ro: 'adunarea oamenilor liberi din Islanda', de: 'die Versammlung der freien Menschen in Island' }], a: 2,
+    why: { ro: 'Se ținea din anul 930: aici se judecau certurile și se hotărau legile.', de: 'Es tagte seit 930: Hier wurden Streitigkeiten entschieden und Gesetze beschlossen.' } }
+]);
+
+/* ================= 2. Corabia ================= */
+(function () {
+  var svg = $('#ship-svg'), stats = $('#ship-stats'), legend = $('#ship-legend'), desc = $('#ship-desc'), modeHost = $('#ship-mode');
+  var type = 'long', cur = null;
+  var P = {
+    prova: { n: { ro: 'Prova cu cap de dragon', de: 'Steven mit Drachenkopf' }, d: { ro: 'Partea din față, înaltă și curbată. Pe corăbiile de război avea uneori un cap de dragon, ca să sperie dușmanii.', de: 'Der vordere Teil, hoch und geschwungen. Auf Kriegsschiffen trug er manchmal einen Drachenkopf, um Feinde zu erschrecken.' } },
+    vela: { n: { ro: 'Vela pătrată', de: 'Rahsegel' }, d: { ro: 'O pânză mare, pătrată, țesută din lână. Împinsă de vânt, corabia putea merge zile întregi fără vâslași.', de: 'Ein großes, viereckiges Segel aus gewebter Wolle. Mit dem Wind konnte das Schiff tagelang ohne Ruderer fahren.' } },
+    vasle: { n: { ro: 'Vâslele', de: 'Riemen' }, d: { ro: 'Când nu bătea vântul, sau pe râuri și în fiorduri, echipajul vâslea. Corabia lungă avea mulți vâslași, knarr-ul doar câțiva.', de: 'Wenn kein Wind wehte, oder auf Flüssen und in Fjorden, ruderte die Mannschaft. Das Langschiff hatte viele Ruderer, der Knarr nur wenige.' } },
+    carma: { n: { ro: 'Cârma laterală', de: 'Seitenruder' }, d: { ro: 'O vâslă mare prinsă pe partea dreaptă a pupei (partea din spate). Cu ea, cârmaciul conducea corabia.', de: 'Ein großes Ruder rechts am Heck (hinterer Teil). Damit steuerte der Steuermann das Schiff.' } },
+    clin: { n: { ro: 'Scânduri suprapuse', de: 'Klinkerbauweise' }, d: { ro: 'Scândurile erau prinse una peste alta, ca țiglele unui acoperiș. Corabia era ușoară, flexibilă și rezista la valuri mari.', de: 'Die Planken überlappten sich wie Dachziegel. Das Schiff war leicht, biegsam und hielt hohen Wellen stand.' } },
+    pescaj: { n: { ro: 'Pescaj mic', de: 'Geringer Tiefgang' }, d: { ro: 'Corabia intra puțin în apă. Putea urca pe râuri și putea fi trasă direct pe plajă, fără port.', de: 'Das Schiff tauchte nur wenig ins Wasser. Es konnte Flüsse hinauffahren und direkt an den Strand gezogen werden, ohne Hafen.' } }
+  };
+  var STATS = {
+    long: [[{ ro: 'Lungime', de: 'Länge' }, { ro: 'aproximativ 20–30 m', de: 'etwa 20–30 m' }], [{ ro: 'Echipaj', de: 'Mannschaft' }, { ro: 'până la 60–80 de oameni', de: 'bis zu 60–80 Mann' }], [{ ro: 'Pescaj', de: 'Tiefgang' }, { ro: 'sub 1 m', de: 'unter 1 m' }], [{ ro: 'Folosire', de: 'Nutzung' }, { ro: 'războaie, raiduri rapide, drumuri pe râuri', de: 'Krieg, schnelle Raubzüge, Fahrten auf Flüssen' }]],
+    knarr: [[{ ro: 'Lungime', de: 'Länge' }, { ro: 'aproximativ 15–20 m', de: 'etwa 15–20 m' }], [{ ro: 'Echipaj', de: 'Mannschaft' }, { ro: 'câțiva marinari, plus familii de coloniști', de: 'wenige Seeleute, dazu Siedlerfamilien' }], [{ ro: 'Pescaj', de: 'Tiefgang' }, { ro: 'mai mare, pentru încărcătură', de: 'größer, wegen der Ladung' }], [{ ro: 'Folosire', de: 'Nutzung' }, { ro: 'comerț și colonizare: ducea oameni, animale, lemn, provizii peste ocean', de: 'Handel und Besiedlung: brachte Menschen, Tiere, Holz und Vorräte übers Meer' }]]
+  };
+  var shapes = {};
+  function draw() {
+    svg.innerHTML = '';
+    var long = type === 'long';
+    var x0 = long ? 70 : 130, x1 = long ? 570 : 510, deck = long ? 190 : 170, keel = long ? 232 : 250, wl = long ? 222 : 228;
+    // apa
+    el('rect', { x: 0, y: wl, width: 640, height: 330 - wl, fill: '#cfe3ee' }, svg);
+    el('path', { d: 'M0 ' + wl + ' q20 -5 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0', stroke: '#8fbcd4', 'stroke-width': 2, fill: 'none' }, svg);
+    var mid = (x0 + x1) / 2;
+    // vela și catargul
+    shapes.vela = el('g', { class: 'part' }, svg);
+    el('line', { x1: mid, y1: deck, x2: mid, y2: 30, stroke: '#6b4a2a', 'stroke-width': 6 }, shapes.vela);
+    var sw = long ? 150 : 130, sy = 45, sh = long ? 120 : 82;
+    el('rect', { x: mid - sw / 2, y: sy, width: sw, height: sh, fill: '#f3ead6', stroke: '#8a6a3a', 'stroke-width': 2 }, shapes.vela);
+    for (var i = 1; i < 6; i += 2) el('rect', { x: mid - sw / 2 + i * sw / 6, y: sy, width: sw / 6, height: sh, fill: '#c0392b', opacity: .85 }, shapes.vela);
+    el('line', { x1: mid - sw / 2 - 8, y1: sy, x2: mid + sw / 2 + 8, y2: sy, stroke: '#6b4a2a', 'stroke-width': 5 }, shapes.vela);
+    // corpul cu scânduri suprapuse
+    shapes.clin = el('g', { class: 'part' }, svg);
+    var hull = 'M' + x0 + ' ' + (deck - 30) + ' Q' + (x0 + 20) + ' ' + keel + ' ' + (x0 + 90) + ' ' + keel + ' L' + (x1 - 90) + ' ' + keel + ' Q' + (x1 - 20) + ' ' + keel + ' ' + x1 + ' ' + (deck - 30) + ' L' + (x1 - 20) + ' ' + deck + ' L' + (x0 + 20) + ' ' + deck + ' Z';
+    el('path', { d: hull, fill: '#a0703c', stroke: '#5a3a1a', 'stroke-width': 2.5 }, shapes.clin);
+    for (var s = 1; s <= 4; s++) {
+      var y = deck + (keel - deck) * s / 5;
+      el('path', { d: 'M' + (x0 + 14 + s * 3) + ' ' + (y - 12) + ' Q' + (x0 + 60) + ' ' + (y + 2) + ' ' + (x0 + 110) + ' ' + y + ' L' + (x1 - 110) + ' ' + y + ' Q' + (x1 - 60) + ' ' + (y + 2) + ' ' + (x1 - 14 - s * 3) + ' ' + (y - 12), stroke: '#6b4a24', 'stroke-width': 1.6, fill: 'none' }, shapes.clin);
+    }
+    // scuturi (doar corabia lungă) și încărcătură (knarr)
+    if (long) for (var sx = x0 + 60; sx < x1 - 50; sx += 26) el('circle', { cx: sx, cy: deck - 2, r: 10, fill: sx % 52 < 26 ? '#e9c94a' : '#c0392b', stroke: '#5a3a1a', 'stroke-width': 1.5 }, svg);
+    else { el('text', { x: mid - 110, y: deck - 4, style: 'font-size:26px' }, svg, '🐑🐄📦🐑'); el('text', { x: mid + 40, y: deck - 4, style: 'font-size:26px' }, svg, '🪵📦'); }
+    // vâsle
+    shapes.vasle = el('g', { class: 'part' }, svg);
+    var oars = long ? 14 : 3, ox = long ? x0 + 70 : x0 + 40, step = long ? (x1 - x0 - 140) / (oars - 1) : 26;
+    for (var o = 0; o < oars; o++) { var xx = ox + o * step; el('line', { x1: xx, y1: deck + 6, x2: xx - 26, y2: wl + 24, stroke: '#6b4a2a', 'stroke-width': 3.5, 'stroke-linecap': 'round' }, shapes.vasle); }
+    // prova (dreapta) cu cap de dragon și pupa (stânga)
+    shapes.prova = el('g', { class: 'part' }, svg);
+    el('path', { d: 'M' + (x1 - 6) + ' ' + (deck - 26) + ' Q' + (x1 + 22) + ' ' + (deck - 60) + ' ' + (x1 + 10) + ' ' + (deck - 95), stroke: '#5a3a1a', 'stroke-width': 9, fill: 'none', 'stroke-linecap': 'round' }, shapes.prova);
+    if (long) { el('path', { d: 'M' + (x1 + 10) + ' ' + (deck - 95) + ' q18 -6 26 4 q-10 2 -14 10 q-8 -2 -12 -14 z', fill: '#2e7d4f', stroke: '#1b4d30', 'stroke-width': 2 }, shapes.prova); el('circle', { cx: x1 + 24, cy: deck - 94, r: 2.2, fill: '#fff' }, shapes.prova); }
+    el('path', { d: 'M' + (x0 + 6) + ' ' + (deck - 26) + ' Q' + (x0 - 22) + ' ' + (deck - 60) + ' ' + (x0 - 6) + ' ' + (deck - 90) + ' q8 -6 10 4', stroke: '#5a3a1a', 'stroke-width': 9, fill: 'none', 'stroke-linecap': 'round' }, svg);
+    // cârma laterală (la pupă)
+    shapes.carma = el('g', { class: 'part' }, svg);
+    el('path', { d: 'M' + (x0 + 34) + ' ' + (deck - 10) + ' L' + (x0 + 22) + ' ' + (wl + 30), stroke: '#3d2a14', 'stroke-width': 6, 'stroke-linecap': 'round' }, shapes.carma);
+    el('path', { d: 'M' + (x0 + 26) + ' ' + (wl - 2) + ' l10 0 l-6 36 l-14 0 z', fill: '#6b4a2a', stroke: '#3d2a14' }, shapes.carma);
+    // pescajul
+    shapes.pescaj = el('g', { class: 'part' }, svg);
+    el('line', { x1: x1 - 60, y1: wl, x2: x1 - 60, y2: keel, stroke: '#1f5fbf', 'stroke-width': 2.5 }, shapes.pescaj);
+    el('line', { x1: x1 - 68, y1: wl, x2: x1 - 52, y2: wl, stroke: '#1f5fbf', 'stroke-width': 2.5 }, shapes.pescaj);
+    el('line', { x1: x1 - 68, y1: keel, x2: x1 - 52, y2: keel, stroke: '#1f5fbf', 'stroke-width': 2.5 }, shapes.pescaj);
+    el('text', { x: x1 - 44, y: keel + 18, class: 'mlbl', fill: '#1f5fbf' }, shapes.pescaj, long ? tx('< 1 m', '< 1 m') : tx('mai adânc', 'tiefer'));
+    Object.keys(P).forEach(function (k) { shapes[k].onclick = function () { pick(k); }; });
+    svg.setAttribute('aria-label', long ? tx('Corabie lungă vikingă', 'Wikinger-Langschiff') : tx('Knarr, corabie de transport', 'Knarr, Frachtschiff'));
+    hi();
+  }
+  function hi() { svg.classList.toggle('sel', !!cur); Object.keys(shapes).forEach(function (k) { shapes[k].classList.toggle('hi', k === cur); }); }
+  function pick(k) {
+    cur = k; hi();
+    [].forEach.call(legend.children, function (b) { b.setAttribute('aria-pressed', b.dataset.k === k ? 'true' : 'false'); });
+    desc.style.setProperty('--c', '#a0703c');
+    desc.innerHTML = '<h3>' + T(P[k].n) + '</h3><p>' + T(P[k].d) + '</p>';
+  }
+  function fillStats() { stats.innerHTML = ''; STATS[type].forEach(function (r) { stats.appendChild(h('dt', '', T(r[0]))); stats.appendChild(h('dd', '', T(r[1]))); }); }
+  Object.keys(P).forEach(function (k) { var b = btn('pick', T(P[k].n)); b.dataset.k = k; b.setAttribute('aria-pressed', 'false'); b.onclick = function () { pick(k); }; legend.appendChild(b); });
+  [['long', tx('Corabia lungă (drakkar)', 'Langschiff')], ['knarr', tx('Knarr (de transport)', 'Knarr (Frachtschiff)')]].forEach(function (m) {
+    var b = btn('', m[1]); b.setAttribute('aria-pressed', m[0] === type ? 'true' : 'false');
+    b.onclick = function () { type = m[0]; [].forEach.call(modeHost.children, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); draw(); fillStats(); };
+    modeHost.appendChild(b);
+  });
+  desc.innerHTML = '<p class="muted">' + tx('Apasă pe o parte a corabiei.', 'Tippe auf einen Teil des Schiffes.') + '</p>';
+  draw(); fillStats();
+})();
+Check($('#c2'), [
+  { q: { ro: 'De ce puteau vikingii să urce cu corăbiile pe râuri și să le tragă pe plajă?', de: 'Warum konnten die Wikinger mit ihren Schiffen Flüsse hinauffahren und sie an den Strand ziehen?' },
+    o: [{ ro: 'pentru că aveau pescaj mic', de: 'weil sie einen geringen Tiefgang hatten' }, { ro: 'pentru că aveau motor', de: 'weil sie einen Motor hatten' }, { ro: 'pentru că erau din fier', de: 'weil sie aus Eisen waren' }], a: 0,
+    why: { ro: 'Corabia intra mai puțin de un metru în apă.', de: 'Das Schiff tauchte weniger als einen Meter ins Wasser.' } },
+  { q: { ro: 'Cu ce corabie au ajuns coloniștii, cu animalele lor, în Groenlanda?', de: 'Mit welchem Schiff kamen die Siedler mit ihren Tieren nach Grönland?' },
+    o: [{ ro: 'cu corabia lungă de război', de: 'mit dem Langschiff' }, { ro: 'cu knarr-ul', de: 'mit dem Knarr' }], a: 1,
+    why: { ro: 'Knarr-ul era mai lat și mai adânc: avea loc pentru oameni, animale și provizii.', de: 'Der Knarr war breiter und tiefer: Er hatte Platz für Menschen, Tiere und Vorräte.' } }
+]);
+
+/* ================= 3a. Trusa navigatorului ================= */
+(function () {
+  var K = [
+    ['☀️', { ro: 'Soarele', de: 'Die Sonne' }, { ro: 'Dimineața răsare spre est, seara apune spre vest. La amiază arată sudul, iar înălțimea lui arată cât de departe spre nord ești.', de: 'Morgens geht sie im Osten auf, abends im Westen unter. Mittags zeigt sie nach Süden, und ihre Höhe zeigt, wie weit im Norden man ist.' }],
+    ['⭐', { ro: 'Steaua Polară', de: 'Der Polarstern' }, { ro: 'Arată mereu nordul. Dar vara, în nordul îndepărtat, nopțile sunt atât de luminoase încât stelele abia se văd.', de: 'Er zeigt immer nach Norden. Aber im Sommer sind die Nächte im hohen Norden so hell, dass man die Sterne kaum sieht.' }],
+    ['🐦‍⬛', { ro: 'Corbii', de: 'Raben' }, { ro: 'O saga povestește că navigatorul Flóki a luat cu el trei corbi. Pe cel care a zburat înainte și nu s-a mai întors l-a urmat: așa a găsit Islanda.', de: 'Eine Saga erzählt, dass der Seefahrer Flóki drei Raben mitnahm. Dem Raben, der vorausflog und nicht zurückkam, folgte er: So fand er Island.' }],
+    ['🐋', { ro: 'Balene și păsări marine', de: 'Wale und Seevögel' }, { ro: 'Unde sunt multe păsări și balene, apa e bogată în hrană și uscatul e aproape.', de: 'Wo es viele Vögel und Wale gibt, ist das Wasser nahrungsreich und Land ist nahe.' }],
+    ['☁️', { ro: 'Norii și valurile', de: 'Wolken und Wellen' }, { ro: 'Deasupra insulelor se strâng adesea nori, iar valurile își schimbă forma lângă țărm. Marinarii pricepuți „citeau” marea.', de: 'Über Inseln sammeln sich oft Wolken, und die Wellen ändern nahe der Küste ihre Form. Erfahrene Seeleute „lasen“ das Meer.' }],
+    ['🏔️', { ro: 'Munții și coastele', de: 'Berge und Küsten' }, { ro: 'Piscurile înalte și ghețarii se văd de foarte departe pe mare. Erau „repere” pe drum.', de: 'Hohe Gipfel und Gletscher sieht man auf dem Meer von sehr weit. Sie waren „Wegmarken“.' }],
+    ['💎', { ro: 'Piatra soarelui', de: 'Der Sonnenstein' }, { ro: 'Sagele pomenesc o „piatră a soarelui”. Unii cercetători cred că era un cristal (spat de Islanda) prin care se vedea unde e soarele chiar și pe cer înnorat. Nu știm sigur.', de: 'Die Sagas erwähnen einen „Sonnenstein“. Manche Forscher glauben, es war ein Kristall (Islandspat), mit dem man die Sonne auch bei Wolken finden konnte. Sicher weiß man es nicht.' }]
+  ];
+  var host = $('#kit'), d = $('#kit-desc');
+  var bs = K.map(function (k) {
+    var b = btn('tool', '<span aria-hidden="true">' + k[0] + '</span><b>' + T(k[1]) + '</b>'); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); d.style.setProperty('--c', '#1f8a78'); d.innerHTML = '<h3>' + k[0] + ' ' + T(k[1]) + '</h3><p>' + T(k[2]) + '</p>'; };
+    host.appendChild(b); return b;
+  });
+  d.innerHTML = '<p class="muted">' + tx('Alege un instrument din trusă.', 'Wähle ein Instrument aus der Ausrüstung.') + '</p>';
+})();
+
+/* ================= 3b. Înălțimea soarelui ================= */
+(function () {
+  var svg = $('#sun-svg'), inp = $('#sun-lat'), v = $('#sun-lat-v'), d = $('#sun-desc');
+  var PL = [[58.8, { ro: 'sudul Norvegiei', de: 'Südnorwegen' }], [61, { ro: 'drumul Norvegia – Groenlanda', de: 'Route Norwegen – Grönland' }], [64.1, { ro: 'Islanda', de: 'Island' }], [60.4, { ro: 'Insulele Shetland', de: 'Shetlandinseln' }], [69.5, { ro: 'nordul Norvegiei', de: 'Nordnorwegen' }]];
+  function draw() {
+    var lat = +inp.value, alt = 90 - lat + 23.4, ox = 90, oy = 240, R = 190;
+    v.textContent = lat;
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: 520, height: oy, fill: '#eaf4fb' }, svg);
+    el('rect', { x: 0, y: oy, width: 520, height: 60, fill: '#cfe3ee' }, svg);
+    el('line', { x1: 0, y1: oy, x2: 520, y2: oy, stroke: '#1f5fbf', 'stroke-width': 2 }, svg);
+    el('text', { x: 500, y: oy - 8, 'text-anchor': 'end', class: 'mlbl sm' }, svg, tx('orizontul (sud)', 'Horizont (Süden)'));
+    var a = alt * Math.PI / 180, sx = ox + R * Math.cos(a), sy = oy - R * Math.sin(a);
+    el('path', { d: 'M' + (ox + 70) + ' ' + oy + ' A70 70 0 0 0 ' + (ox + 70 * Math.cos(a)) + ' ' + (oy - 70 * Math.sin(a)), fill: 'none', stroke: '#c98a1a', 'stroke-width': 3 }, svg);
+    el('line', { x1: ox, y1: oy, x2: sx, y2: sy, stroke: '#c98a1a', 'stroke-width': 2, 'stroke-dasharray': '6 5' }, svg);
+    el('circle', { cx: sx, cy: sy, r: 22, fill: '#f7c948' }, svg);
+    el('text', { x: ox + 80, y: oy - 14, class: 'mlbl', fill: '#8a5a00' }, svg, Math.round(alt) + '°');
+    el('text', { x: ox - 6, y: oy + 28, 'text-anchor': 'middle', style: 'font-size:34px' }, svg, '⛵');
+    svg.setAttribute('aria-label', tx('Soarele la amiază este la ', 'Die Mittagssonne steht bei ') + Math.round(alt) + '°');
+    var near = PL.filter(function (p) { return Math.abs(p[0] - lat) < 1.2; }).map(function (p) { return T(p[1]); });
+    d.innerHTML = '<p>' + tx('La ', 'Bei ') + lat + '° ' + tx('nord, în iunie, soarele de la amiază urcă doar până la ', 'Nord steht die Mittagssonne im Juni nur ') + '<b>' + Math.round(alt) + '°</b>' + tx(' deasupra orizontului.', ' über dem Horizont.') + '</p>' +
+      (near.length ? '<p>' + tx('Aici e: ', 'Hier liegt: ') + near.join(', ') + '.</p>' : '') +
+      '<p class="hint">' + tx('Cu o scândurică și umbra unui băț se putea măsura înălțimea soarelui.', 'Mit einem Brett und dem Schatten eines Stabes konnte man die Sonnenhöhe messen.') + '</p>';
+  }
+  inp.addEventListener('input', draw);
+  draw();
+})();
+
+/* ================= hărți ================= */
+var DATA = fetch('../../lib/land-50m.json').then(function (r) { return r.json(); }).then(function (t) { return topojson.feature(t, t.objects.land); });
+function loaded(id) { var l = $('#' + id + ' .loading'); if (l) l.remove(); }
+document.querySelectorAll('.map .loading').forEach(function (l) { l.textContent = tx('Se încarcă harta…', 'Karte wird geladen …'); });
+
+/** Hartă cu mărire doar din butoane (pe telefon, degetul derulează pagina, nu harta). */
+function makeMap(svgSel, W, H, proj, land) {
+  var svg = d3.select(svgSel).attr('viewBox', '0 0 ' + W + ' ' + H);
+  var path = d3.geoPath(proj);
+  var g = svg.append('g');
+  g.append('path').datum({ type: 'Sphere' }).attr('class', 'sea').attr('d', path);
+  g.append('path').datum(d3.geoGraticule().step([10, 5])()).attr('class', 'grat').attr('d', path);
+  g.append('path').datum(land).attr('class', 'land').attr('d', path);
+  var tr = d3.zoomIdentity, listeners = [];
+  var zoom = d3.zoom().on('zoom', function (e) { g.attr('transform', e.transform); tr = e.transform; listeners.forEach(function (f) { f(tr); }); });
+  return {
+    svg: svg, g: g, path: path, proj: proj, W: W,
+    t: function () { return tr; },
+    onZoom: function (f) { listeners.push(f); },
+    zoomTo: function (coords, maxK) {
+      var pts = coords.map(proj).filter(Boolean);
+      var xs = pts.map(function (p) { return p[0]; }), ys = pts.map(function (p) { return p[1]; });
+      var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+      var w = Math.max(x1 - x0, 60), hh = Math.max(y1 - y0, 40);
+      var s = Math.max(1, Math.min(maxK || 3, 0.7 / Math.max(w / W, hh / H)));
+      var t = d3.zoomIdentity.translate(W / 2, H / 2).scale(s).translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
+      var tx0 = Math.min(0, Math.max(W - W * s, t.x)), ty0 = Math.min(0, Math.max(H - H * s, t.y));
+      t = d3.zoomIdentity.translate(tx0, ty0).scale(s);
+      (reduce ? svg : svg.transition().duration(700)).call(zoom.transform, t);
+    },
+    reset: function () { (reduce ? svg : svg.transition().duration(600)).call(zoom.transform, d3.zoomIdentity); }
+  };
+}
+/** Etichetă care își păstrează mărimea când harta se mărește. */
+function label(M, layer, lonlat, text, cls, dx, dy) {
+  var p = M.proj(lonlat); if (!p) return;
+  var t = layer.append('text').attr('class', 'mlbl ' + (cls || '')).text(text);
+  function place(tr) {
+    var k = tr.k, x = dx == null ? 6 : dx;
+    var right = tr.x + p[0] * k > M.W - 150 && x > 0;
+    var y = dy == null ? -6 : dy;
+    if (tr.y + p[1] * k < 28 && y < 0) y = 18;
+    var base = window.innerWidth < 520 ? 22 : 14;
+    t.attr('text-anchor', right ? 'end' : 'start')
+      .attr('x', p[0] + (right ? -x : x) / k).attr('y', p[1] + y / k)
+      .style('font-size', base / k + 'px').style('stroke-width', 3.5 / k + 'px');
+  }
+  place(M.t()); M.onZoom(place);
+  return t;
+}
+function dot(M, layer, lonlat, color, r) {
+  var p = M.proj(lonlat); if (!p) return;
+  var c = layer.append('circle').attr('class', 'dot').attr('cx', p[0]).attr('cy', p[1]).attr('fill', color || '#c0392b');
+  function size(tr) { c.attr('r', (r || 4.5) / tr.k); }
+  size(M.t()); M.onZoom(size);
+  return c;
+}
+/** Harta Atlanticului de Nord, aceeași în toate secțiunile. */
+function northAtlantic(id, land) {
+  var W = 620, H = 470;
+  var proj = d3.geoOrthographic().rotate([22, -60]).clipAngle(90);
+  proj.fitExtent([[8, 8], [W - 8, H - 8]], { type: 'MultiPoint', coordinates: [[-68, 47], [12, 56], [-52, 73], [14, 67], [-25, 50]] });
+  return makeMap('#' + id, W, H, proj, land);
+}
+/** Poveste pe hartă: pași cu drumuri, puncte și etichete. */
+function Story(M, host, steps, opts) {
+  var routes = M.g.append('g'), marks = M.g.append('g'), cur = 0;
+  function go(i) {
+    cur = i;
+    var s = steps[i];
+    routes.selectAll('*').remove(); marks.selectAll('*').remove();
+    steps.forEach(function (st, j) {
+      if (j > i) return;
+      (st.legs || []).forEach(function (leg) {
+        routes.append('path').datum({ type: 'LineString', coordinates: leg }).attr('class', 'route ' + (j === i ? 'cur' : 'old') + (st.dashed ? ' guess' : '')).attr('d', M.path);
+      });
+    });
+    (s.marks || []).forEach(function (m) { dot(M, marks, m[0], m[2] || '#c0392b'); label(M, marks, m[0], T(m[1]), m[3] || '', m[4], m[5]); });
+    host.innerHTML = '';
+    host.appendChild(h('span', 'when', T(s.when)));
+    host.appendChild(h('h3', '', T(s.title)));
+    host.appendChild(h('p', '', T(s.text)));
+    if (s.quote) host.appendChild(h('p', 'quote', T(s.quote)));
+    if (s.extra) host.appendChild(s.extra());
+    var nav = h('div', 'nav'), p = btn('btn ghost', '← ' + tx('Înapoi', 'Zurück')), n = btn('btn', tx('Mai departe', 'Weiter') + ' →');
+    p.disabled = i === 0; n.disabled = i === steps.length - 1;
+    p.onclick = function () { go(cur - 1); }; n.onclick = function () { go(cur + 1); };
+    nav.appendChild(p); nav.appendChild(n); nav.appendChild(h('span', 'count', (i + 1) + ' / ' + steps.length));
+    host.appendChild(nav);
+    var pts = [].concat.apply([], (s.focus || s.legs || [[s.marks[0][0]]]));
+    M.zoomTo(pts, (opts && opts.maxK) || 2.6);
+  }
+  go(0);
+  return { go: go };
+}
+
+/* ================= 3c. Drumul din Landnámabók ================= */
+DATA.then(function (land) {
+  loaded('lb-map');
+  var M = northAtlantic('lb-svg', land);
+  M.svg.attr('aria-label', tx('Drumul din Norvegia în Groenlanda, după Landnámabók', 'Der Weg von Norwegen nach Grönland nach dem Landnámabók'));
+  var par = M.g.append('path').datum({ type: 'LineString', coordinates: d3.range(-50, 11, 1).map(function (x) { return [x, 61]; }) }).attr('class', 'route').attr('stroke', '#1f5fbf').attr('stroke-width', 1.5).attr('stroke-dasharray', '2 6').attr('d', M.path);
+  var HER = [4.8, 60.6], SHE = [-1.2, 61.3], FAR = [-7, 61.2], ISL = [-19, 62.3], HVA = [-43.5, 59.9];
+  Story(M, $('#lb-info'), [
+    { when: { ro: 'Pornirea', de: 'Der Aufbruch' }, title: { ro: 'Din Hernar, Norvegia', de: 'Von Hernar, Norwegen' },
+      text: { ro: 'Pleci de la Hernar, lângă Bergen, și navighezi mereu spre vest. Linia albastră punctată este paralela de 61° nord.', de: 'Du fährst von Hernar bei Bergen ab und segelst immer nach Westen. Die blaue gepunktete Linie ist der Breitengrad 61° Nord.' },
+      marks: [[HER, { ro: 'Hernar', de: 'Hernar' }]], focus: [[HER, [-8, 61], [10, 58]]] },
+    { when: { ro: 'Primul reper', de: 'Erste Wegmarke' }, title: { ro: 'La nord de Shetland', de: 'Nördlich der Shetlandinseln' },
+      text: { ro: 'Treci la nord de insulele Shetland, cât să le mai vezi doar în depărtare.', de: 'Du fährst nördlich an den Shetlandinseln vorbei, so dass du sie gerade noch in der Ferne siehst.' },
+      quote: { ro: '„…să le vezi doar când e senin.”', de: '„… dass man sie nur bei klarer Sicht sieht.“' },
+      legs: [[HER, SHE]], marks: [[SHE, { ro: 'Shetland', de: 'Shetland' }]] },
+    { when: { ro: 'Al doilea reper', de: 'Zweite Wegmarke' }, title: { ro: 'La sud de Insulele Feroe', de: 'Südlich der Färöer' },
+      text: { ro: 'Treci la sud de Insulele Feroe, astfel încât marea să pară că ajunge până la jumătatea munților lor.', de: 'Du fährst südlich an den Färöern vorbei, so dass das Meer bis zur Mitte ihrer Berge zu reichen scheint.' },
+      legs: [[HER, SHE, FAR]], marks: [[FAR, { ro: 'Feroe', de: 'Färöer' }]] },
+    { when: { ro: 'Al treilea reper', de: 'Dritte Wegmarke' }, title: { ro: 'La sud de Islanda', de: 'Südlich von Island' },
+      text: { ro: 'Treci la sud de Islanda, destul de aproape cât să vezi păsările și balenele de lângă coasta ei.', de: 'Du fährst südlich an Island vorbei, nah genug, um die Vögel und Wale vor seiner Küste zu sehen.' },
+      legs: [[HER, SHE, FAR, ISL]], marks: [[ISL, { ro: 'Islanda', de: 'Island' }, '#c0392b', '', 6, 18]] },
+    { when: { ro: 'Sosirea', de: 'Die Ankunft' }, title: { ro: 'Hvarf, Groenlanda', de: 'Hvarf, Grönland' },
+      text: { ro: 'Ajungi la Hvarf, în sudul Groenlandei. De acolo, coloniștii mergeau spre fiordurile din sud-vest. Ai mers tot timpul pe aproape aceeași paralelă!', de: 'Du erreichst Hvarf im Süden Grönlands. Von dort fuhren die Siedler zu den Fjorden im Südwesten. Du bist die ganze Zeit fast auf demselben Breitengrad gefahren!' },
+      legs: [[HER, SHE, FAR, ISL, HVA]], marks: [[HVA, { ro: 'Hvarf', de: 'Hvarf' }], [HER, { ro: 'Hernar', de: 'Hernar' }]], focus: [[HER, HVA, [-20, 64]]] }
+  ]);
+});
+Check($('#c3'), [
+  { q: { ro: 'Cum știa un navigator viking că merge pe aceeași paralelă?', de: 'Woran erkannte ein Wikinger, dass er auf demselben Breitengrad fuhr?' },
+    o: [{ ro: 'după busolă', de: 'am Kompass' }, { ro: 'soarele de la amiază rămânea la aceeași înălțime', de: 'die Mittagssonne blieb auf derselben Höhe' }, { ro: 'după ceas', de: 'an der Uhr' }], a: 1,
+    why: { ro: 'Înălțimea soarelui la amiază depinde de latitudine.', de: 'Die Höhe der Mittagssonne hängt vom Breitengrad ab.' },
+    hint: { ro: 'Vikingii nu aveau busolă și nici ceas. Ce vedeau pe cer?', de: 'Die Wikinger hatten weder Kompass noch Uhr. Was sahen sie am Himmel?' } }
+]);
+
+/* ================= 4. Erik cel Roșu ================= */
+DATA.then(function (land) {
+  loaded('er-map');
+  var M = northAtlantic('er-svg', land);
+  M.svg.attr('aria-label', tx('Călătoriile lui Erik cel Roșu', 'Die Reisen Eriks des Roten'));
+  var NOR = [5.7, 58.8], ICE = [-22.3, 65.1], SNA = [-23.9, 64.8], EGR = [-37.5, 65.5], CAP = [-43.9, 59.8], BRA = [-45.5, 61.15], WEST = [-51.7, 64.2];
+  Story(M, $('#er-info'), [
+    { when: { ro: 'în jurul anului 960', de: 'um das Jahr 960' }, title: { ro: 'Din Norvegia în Islanda', de: 'Von Norwegen nach Island' },
+      text: { ro: 'Tatăl lui Erik a fost alungat din Norvegia din cauza unor omoruri. Familia s-a mutat în Islanda, unde toate locurile bune erau deja luate.', de: 'Eriks Vater wurde wegen Totschlags aus Norwegen verbannt. Die Familie zog nach Island, wo alle guten Plätze schon vergeben waren.' },
+      legs: [[NOR, [-6, 62.5], ICE]], marks: [[NOR, { ro: 'Norvegia', de: 'Norwegen' }], [ICE, { ro: 'Islanda', de: 'Island' }]] },
+    { when: { ro: 'anul 982', de: 'im Jahr 982' }, title: { ro: 'Alungat pentru trei ani', de: 'Für drei Jahre verbannt' },
+      text: { ro: 'După o ceartă cu vecinii, adunarea l-a alungat pe Erik din Islanda pentru trei ani. El a hotărât să caute ținutul văzut de departe, spre vest, de un alt navigator, Gunnbjörn.', de: 'Nach einem Streit mit Nachbarn verbannte die Versammlung Erik für drei Jahre aus Island. Er beschloss, das Land zu suchen, das ein anderer Seefahrer, Gunnbjörn, im Westen aus der Ferne gesehen hatte.' },
+      legs: [[SNA, EGR]], marks: [[SNA, { ro: 'Snæfellsnes', de: 'Snæfellsnes' }], [EGR, { ro: 'coasta de est a Groenlandei', de: 'Ostküste Grönlands' }, '#c0392b', 'sm']] },
+    { when: { ro: '982–985', de: '982–985' }, title: { ro: 'Trei ani de explorare', de: 'Drei Jahre Erkundung' },
+      text: { ro: 'Coasta de est era plină de gheață, așa că Erik a navigat spre sud, a ocolit vârful sudic și a explorat coasta de vest. Acolo a găsit fiorduri adăpostite, cu pășuni verzi vara.', de: 'Die Ostküste war voller Eis, also segelte Erik nach Süden, umrundete die Südspitze und erkundete die Westküste. Dort fand er geschützte Fjorde mit grünen Sommerweiden.' },
+      legs: [[EGR, [-40, 62.5], CAP, BRA, [-49, 62.5], WEST]], marks: [[CAP, { ro: 'vârful sudic', de: 'Südspitze' }, '#9aa7ab', 'sm', 6, 18], [BRA, { ro: 'fiordurile din sud-vest', de: 'Fjorde im Südwesten' }]] },
+    { when: { ro: 'anul 985', de: 'im Jahr 985' }, title: { ro: 'Înapoi în Islanda: „Țara Verde”', de: 'Zurück in Island: „grünes Land“' },
+      text: { ro: 'Erik s-a întors în Islanda și a povestit despre noul ținut, numit „Țara Verde”, ca să convingă oamenii să vină cu el.', de: 'Erik kehrte nach Island zurück und erzählte von dem neuen Land, das er „grünes Land“ nannte, um Menschen zum Mitkommen zu überreden.' },
+      legs: [[BRA, CAP, [-30, 62], SNA]], dashed: true, marks: [[ICE, { ro: 'Islanda', de: 'Island' }]] },
+    { when: { ro: 'anul 985 sau 986', de: 'im Jahr 985 oder 986' }, title: { ro: 'Coloniștii pornesc: 25 de corăbii', de: 'Die Siedler brechen auf: 25 Schiffe' },
+      text: { ro: 'Au plecat 25 de corăbii cu familii și animale. Doar 14 au ajuns: unele s-au scufundat, altele s-au întors. Erik și-a construit ferma la Brattahlíð, iar Groenlanda a avut așezări vikinge vreme de aproape 450 de ani.', de: '25 Schiffe mit Familien und Tieren brachen auf. Nur 14 kamen an: Einige sanken, andere kehrten um. Erik baute seinen Hof in Brattahlíð, und Grönland hatte fast 450 Jahre lang Wikingersiedlungen.' },
+      legs: [[SNA, [-32, 62.5], CAP, BRA]], marks: [[BRA, { ro: 'Brattahlíð', de: 'Brattahlíð' }], [SNA, { ro: 'Islanda', de: 'Island' }, '#9aa7ab', 'sm']] }
+  ]);
+});
+Check($('#c4'), [
+  { q: { ro: 'De ce a plecat Erik cel Roșu din Islanda în 982?', de: 'Warum verließ Erik der Rote 982 Island?' },
+    o: [{ ro: 'a fost alungat pentru trei ani', de: 'er wurde für drei Jahre verbannt' }, { ro: 'căuta mirodenii', de: 'er suchte Gewürze' }, { ro: 'l-a trimis regele Spaniei', de: 'der König von Spanien schickte ihn' }], a: 0,
+    why: { ro: 'După o ceartă, adunarea l-a alungat. Așa a ajuns să exploreze Groenlanda.', de: 'Nach einem Streit verbannte ihn die Versammlung. So kam er dazu, Grönland zu erkunden.' } },
+  { q: { ro: 'De ce a numit-o Erik „Țara Verde”?', de: 'Warum nannte Erik sie „grünes Land“?' },
+    o: [{ ro: 'pentru că toată insula era o pădure', de: 'weil die ganze Insel ein Wald war' }, { ro: 'ca să atragă coloniști; vara, fiordurile din sud erau verzi', de: 'um Siedler anzulocken; im Sommer waren die Fjorde im Süden grün' }, { ro: 'după un zeu', de: 'nach einem Gott' }], a: 1,
+    why: { ro: 'Un nume frumos atrăgea oamenii, iar pășunile verzi din fiorduri existau cu adevărat.', de: 'Ein schöner Name lockte Menschen an, und die grünen Weiden in den Fjorden gab es wirklich.' } }
+]);
+
+/* ================= 5. Leif Eriksson ================= */
+DATA.then(function (land) {
+  loaded('lf-map');
+  var M = northAtlantic('lf-svg', land);
+  M.svg.attr('aria-label', tx('Călătoria lui Leif Eriksson spre America', 'Leif Erikssons Reise nach Amerika'));
+  var BRA = [-45.5, 61.15], HEL = [-65, 64.5], MAR = [-60, 55.5], VIN = [-55.53, 51.6], ICE = [-22, 64];
+  var LANDS = {
+    hel: { ll: HEL, n: { ro: 'Helluland', de: 'Helluland' }, m: { ro: '„Țara pietrelor plate”: stânci și gheață. Azi: insula Baffin (Canada).', de: '„Land der flachen Steine“: Felsen und Eis. Heute: die Baffininsel (Kanada).' } },
+    mar: { ll: MAR, n: { ro: 'Markland', de: 'Markland' }, m: { ro: '„Țara pădurilor”: plaje albe și păduri întinse. Lemnul lipsea în Groenlanda, deci era prețios. Azi: Labrador (Canada).', de: '„Waldland“: weiße Strände und weite Wälder. Holz fehlte in Grönland und war daher wertvoll. Heute: Labrador (Kanada).' } },
+    vin: { ll: VIN, n: { ro: 'Vinland', de: 'Vinland' }, m: { ro: '„Țara viței-de-vie” sau „țara pășunilor”: aici și-au construit case și au iernat. Azi: Terra Nova și ținuturile de la sud de ea (Canada).', de: '„Weinland“ oder „Weideland“: Hier bauten sie Häuser und überwinterten. Heute: Neufundland und die Gebiete südlich davon (Kanada).' } }
+  };
+  var landBox = function () {
+    var box = h('div', ''), lands = h('div', 'lands'), d = h('p', 'hint');
+    Object.keys(LANDS).forEach(function (k) {
+      var b = btn('pick', T(LANDS[k].n)); b.setAttribute('aria-pressed', 'false');
+      b.onclick = function () { [].forEach.call(lands.children, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); d.innerHTML = '<b>' + T(LANDS[k].n) + '</b>: ' + T(LANDS[k].m); M.zoomTo([LANDS[k].ll, [LANDS[k].ll[0] + 8, LANDS[k].ll[1] + 4], [LANDS[k].ll[0] - 8, LANDS[k].ll[1] - 4]], 2.6); };
+      lands.appendChild(b);
+    });
+    box.appendChild(lands); box.appendChild(d);
+    return box;
+  };
+  Story(M, $('#lf-info'), [
+    { when: { ro: 'anul 986', de: 'im Jahr 986' }, title: { ro: 'Bjarni se rătăcește', de: 'Bjarni verirrt sich' },
+      text: { ro: 'Negustorul Bjarni Herjólfsson voia să ajungă din Islanda în Groenlanda, dar ceața și vântul l-au împins spre sud-vest. A văzut ținuturi necunoscute, cu păduri, dar nu a coborât pe țărm.', de: 'Der Händler Bjarni Herjólfsson wollte von Island nach Grönland, doch Nebel und Wind trieben ihn nach Südwesten. Er sah unbekannte Länder mit Wäldern, ging aber nicht an Land.' },
+      legs: [[ICE, [-38, 58], [-52, 52], [-60, 56], [-62, 61], BRA]], dashed: true, marks: [[ICE, { ro: 'Islanda', de: 'Island' }], [BRA, { ro: 'Groenlanda', de: 'Grönland' }]] },
+    { when: { ro: 'în jurul anului 1000', de: 'um das Jahr 1000' }, title: { ro: 'Leif pornește spre vest', de: 'Leif segelt nach Westen' },
+      text: { ro: 'Leif a cumpărat corabia lui Bjarni și a pornit cu 35 de oameni din Brattahlíð, ferma tatălui său, spre ținuturile văzute de Bjarni.', de: 'Leif kaufte Bjarnis Schiff und brach mit 35 Mann von Brattahlíð, dem Hof seines Vaters, zu den Ländern auf, die Bjarni gesehen hatte.' },
+      legs: [[BRA, [-55, 64], HEL]], marks: [[BRA, { ro: 'Brattahlíð', de: 'Brattahlíð' }], [HEL, { ro: 'Helluland', de: 'Helluland' }]] },
+    { when: { ro: 'drumul spre sud', de: 'die Fahrt nach Süden' }, title: { ro: 'Helluland, Markland, Vinland', de: 'Helluland, Markland, Vinland' },
+      text: { ro: 'Pe drum spre sud, Leif a dat nume celor trei ținuturi, după ce a văzut acolo. Apasă pe fiecare.', de: 'Auf der Fahrt nach Süden gab Leif den drei Ländern Namen, nach dem, was er dort sah. Tippe auf jedes.' },
+      legs: [[BRA, [-55, 64], HEL, [-62, 60], MAR, VIN]], marks: [[HEL, { ro: 'Helluland', de: 'Helluland' }], [MAR, { ro: 'Markland', de: 'Markland' }], [VIN, { ro: 'Vinland', de: 'Vinland' }]], extra: landBox },
+    { when: { ro: 'iarna în Vinland', de: 'der Winter in Vinland' }, title: { ro: 'Casele de la L’Anse aux Meadows', de: 'Die Häuser von L’Anse aux Meadows' },
+      text: { ro: 'Vikingii au iernat în Vinland și s-au întors apoi în Groenlanda cu lemn. Pe drum, Leif a salvat niște naufragiați; de aici, poate, porecla „Norocosul”. Mai târziu au venit și alți vikingi, dar așezarea a fost părăsită, după neînțelegeri cu localnicii.', de: 'Die Wikinger überwinterten in Vinland und kehrten dann mit Holz nach Grönland zurück. Unterwegs rettete Leif Schiffbrüchige; daher vielleicht der Beiname „der Glückliche“. Später kamen weitere Wikinger, doch die Siedlung wurde nach Streit mit den Einheimischen aufgegeben.' },
+      legs: [[VIN, [-57, 56], [-58, 62], BRA]], marks: [[VIN, { ro: 'L’Anse aux Meadows', de: 'L’Anse aux Meadows' }], [BRA, { ro: 'Groenlanda', de: 'Grönland' }]] }
+  ]);
+});
+Check($('#c5'), [
+  { q: { ro: 'Ce înseamnă „Markland”?', de: 'Was bedeutet „Markland“?' },
+    o: [{ ro: 'țara pietrelor plate', de: 'Land der flachen Steine' }, { ro: 'țara pădurilor', de: 'Waldland' }, { ro: 'țara viței-de-vie', de: 'Weinland' }], a: 1,
+    why: { ro: 'Markland, azi Labrador, avea păduri întinse: lemn prețios pentru groenlandezi.', de: 'Markland, heute Labrador, hatte weite Wälder: wertvolles Holz für die Grönländer.' } },
+  { q: { ro: 'Care este dovada sigură că vikingii au fost în America?', de: 'Was ist der sichere Beweis, dass die Wikinger in Amerika waren?' },
+    o: [{ ro: 'o hartă desenată de Leif', de: 'eine von Leif gezeichnete Karte' }, { ro: 'casele găsite la L’Anse aux Meadows', de: 'die Häuser, die in L’Anse aux Meadows gefunden wurden' }, { ro: 'o scrisoare a lui Columb', de: 'ein Brief von Kolumbus' }], a: 1,
+    why: { ro: 'Arheologii le-au găsit în 1960; lemnul a fost tăiat în anul 1021.', de: 'Archäologen fanden sie 1960; das Holz wurde im Jahr 1021 geschlagen.' } }
+]);
+
+/* ================= 6. Jurnalul de bord ================= */
+(function () {
+  var E = [
+    ['930', { ro: 'Prima adunare a Althing-ului în Islanda', de: 'Erstes Althing in Island' }],
+    ['982', { ro: 'Erik cel Roșu, alungat din Islanda, pornește spre vest', de: 'Erik der Rote wird aus Island verbannt und segelt nach Westen' }],
+    ['985', { ro: 'Erik se întoarce și vorbește despre „Țara Verde”', de: 'Erik kehrt zurück und erzählt vom „grünen Land“' }],
+    ['986', { ro: 'Bjarni vede de departe ținuturile din vest', de: 'Bjarni sieht die Länder im Westen aus der Ferne' }],
+    ['~1000', { ro: 'Leif Eriksson ajunge în Vinland', de: 'Leif Eriksson erreicht Vinland' }],
+    ['1021', { ro: 'Se taie lemnul găsit la L’Anse aux Meadows', de: 'Das in L’Anse aux Meadows gefundene Holz wird geschlagen' }],
+    ['1492', { ro: 'Columb ajunge în America', de: 'Kolumbus erreicht Amerika' }],
+    ['1960', { ro: 'Arheologii descoperă casele vikinge din Terra Nova', de: 'Archäologen entdecken die Wikingerhäuser auf Neufundland' }]
+  ];
+  var bank = $('#log-bank'), log = $('#log'), score = $('#log-score'), next = 0, miss = 0;
+  E.map(function (e, i) { return { e: e, i: i }; }).sort(function () { return Math.random() - 0.5; }).forEach(function (o) {
+    var b = btn('pick', T(o.e[1]));
+    b.onclick = function () {
+      if (o.i === next) {
+        b.remove(); next++;
+        var ev = h('div', 'ev', '<b>' + o.e[0] + '</b><span>' + T(o.e[1]) + '</span>'); log.appendChild(ev);
+        score.textContent = next === E.length ? tx('Jurnalul e complet! Greșeli: ' + miss + '.', 'Das Logbuch ist fertig! Fehler: ' + miss + '.') : '';
+      } else {
+        miss++; b.classList.add('wrong'); setTimeout(function () { b.classList.remove('wrong'); }, 700);
+        score.textContent = tx('Nu încă: s-a întâmplat mai târziu. Ce a fost înainte?', 'Noch nicht: Das geschah später. Was war davor?');
+      }
+    };
+    bank.appendChild(b);
+  });
+})();
+
+/* ================= Mic dicționar ================= */
+(function () {
+  var G = [
+    ['vikingi / normanzi', 'Wikinger / Normannen'], ['adunare (Thing)', 'die Versammlung (Thing)'], ['om liber', 'der Freie'], ['rob', 'der Unfreie (Thrall)'],
+    ['corabie lungă', 'das Langschiff'], ['corabie de transport (knarr)', 'der Knarr (Frachtschiff)'], ['velă pătrată', 'das Rahsegel'], ['vâslă', 'der Riemen'],
+    ['cârmă laterală', 'das Seitenruder'], ['tribord (partea dreaptă)', 'Steuerbord'], ['pescaj', 'der Tiefgang'], ['construcție cu scânduri suprapuse', 'die Klinkerbauweise'],
+    ['navigație', 'die Navigation'], ['busolă', 'der Kompass'], ['paralelă (latitudine)', 'der Breitengrad'], ['Steaua Polară', 'der Polarstern'],
+    ['a fi alungat', 'verbannt werden'], ['colonist', 'der Siedler'], ['fiord', 'der Fjord'], ['arheolog', 'der Archäologe']
+  ];
+  var dl = $('#gloss');
+  G.forEach(function (g) { dl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
+})();
+})();
+</script>
+</body>
+</html>

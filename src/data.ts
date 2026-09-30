@@ -9,6 +9,7 @@ import { organismulOmuluiTest } from './content/organismul-omului-test';
 import { nutritiaTest } from './content/nutritia-test';
 import { frunzaTest } from './content/frunza-test';
 import { descoperireaLumiiTest } from './content/descoperirea-lumii-test';
+import { vikingiiTest } from './content/vikingii-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import type { Text } from './i18n';
@@ -246,6 +247,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/geografie/descoperirea-lumii.html',
         test: { questions: descoperireaLumiiTest, minutes: 8 },
+      },
+      {
+        slug: 'vikingii',
+        title: {
+          ro: 'Vikingii: navigatorii nordului',
+          de: 'Die Wikinger: Seefahrer des Nordens',
+        },
+        summary: {
+          ro: 'Lecție de explorare: organizarea vikingilor, corăbiile lor, navigația fără busolă și călătoriile lui Erik cel Roșu și Leif Eriksson.',
+          de: 'Entdeckerstunde: die Organisation der Wikinger, ihre Schiffe, Navigation ohne Kompass und die Reisen von Erik dem Roten und Leif Eriksson.',
+        },
+        src: 'lectii/clasa-6/geografie/vikingii.html',
+        test: { questions: vikingiiTest, minutes: 8 },
       },
     ],
     ist: [
