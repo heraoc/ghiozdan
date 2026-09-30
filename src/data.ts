@@ -3,6 +3,7 @@
 import { ceasulSiArceleTest } from './content/ceasul-si-arcele-test';
 import { ibnBattutaTest } from './content/ibn-battuta-test';
 import { inmultireaTest } from './content/inmultirea-test';
+import { sumaSiDiferentaTest } from './content/suma-si-diferenta-test';
 import { mariExploratoriTest } from './content/mari-exploratori-test';
 import { organismulOmuluiTest } from './content/organismul-omului-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
@@ -128,6 +129,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-3/matematica/inmultirea.html',
         test: { questions: inmultireaTest, minutes: 8 },
+      },
+      {
+        slug: 'suma-si-diferenta',
+        title: {
+          ro: 'Metoda grafică: suma și diferența',
+          de: 'Die grafische Methode: Summe und Differenz',
+        },
+        summary: {
+          ro: 'Aflăm două numere când le știm suma și diferența: desenul cu segmente, planul în 4 pași și exerciții cu verificare.',
+          de: 'Wir finden zwei Zahlen, wenn wir ihre Summe und Differenz kennen: Zeichnung mit Strecken, Plan in 4 Schritten und Übungen mit Kontrolle.',
+        },
+        src: 'lectii/clasa-3/matematica/suma-si-diferenta.html',
+        test: { questions: sumaSiDiferentaTest, minutes: 6 },
       },
     ],
   },

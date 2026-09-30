@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Metoda grafică: suma și diferența</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Die grafische Methode: Summe und Differenz';
+})();
+</script>
+<style>
+:root{
+  --paper:#f4f7fc; --card:#ffffff; --ink:#1b2440; --muted:#56607a; --rule:#dbe2f0;
+  --accent:#2f80ed; --accent-soft:#e7f0fd;
+  --part:#2f80ed; --extra:#e5673d; --extra-soft:#fdece5; --good:#0f9d58; --good-soft:#e3f5ec; --bad:#d62f2f; --bad-soft:#fde3e3;
+  --lav:#d9d8ec; --lav-ink:#5a2a86; --navy:#1f3a8a;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:18px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:800 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.pt{color:var(--part);font-weight:800} .ex-c{color:var(--extra);font-weight:800}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:66ch;font-size:20px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:56px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:70ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 17px/1 var(--display);margin-right:10px;vertical-align:4px}
+.lab{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:16px}
+.hint{font-size:15px;color:var(--muted)}
+
+/* butoane */
+.ctrls{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-bottom:12px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--rule);background:#fff;border-radius:99px;padding:5px 14px;cursor:pointer;font-weight:800}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.stepnav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.count{font-weight:700;color:var(--muted);font-size:15px}
+
+/* enunț */
+.story{background:#fff9e6;border:1px solid #f1e2b0;border-radius:12px;padding:12px 16px;font-size:20px;font-weight:500;margin-bottom:14px}
+
+/* caietul cu pătrățele și desenul */
+.grid-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.notebook{border-radius:10px;border:1px solid #cfdcf0;padding:6px;
+  background-color:#fff;
+  background-image:linear-gradient(#dfe8f6 1px,transparent 1px),linear-gradient(90deg,#dfe8f6 1px,transparent 1px);
+  background-size:22px 22px}
+.notebook svg{display:block;width:100%;height:auto}
+.seg-lab{font:800 24px var(--body);fill:var(--ink)}
+.seg-num{font:800 24px var(--display)}
+.fade{transition:opacity .35s}
+
+/* rezolvarea, rând cu rând */
+.sol{display:grid;gap:8px}
+.sol .line{display:grid;gap:2px;background:#fff;border:1px solid var(--rule);border-left:5px solid var(--accent);border-radius:8px;padding:8px 12px;animation:fadein .3s ease both}
+.sol .line.cur{background:#fff9d6;border-left-color:#e0a100}
+.sol .what{font-size:15px;font-weight:700;color:var(--muted)}
+.sol .eqn{font:800 24px/1.2 var(--display)}
+.sol .say{font-size:16px}
+.ok-mark{color:var(--good)}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* Reține */
+.retine{margin-top:18px}
+.retine .tab{display:inline-block;background:var(--navy);color:#fff;font:800 19px/1 var(--display);padding:9px 34px 9px 16px;clip-path:polygon(0 0,84% 0,100% 100%,0 100%)}
+.retine .body{background:var(--lav);color:var(--lav-ink);border-radius:0 10px 10px 10px;padding:14px 18px;box-shadow:0 3px 10px rgba(31,42,90,.12);display:grid;gap:6px}
+.retine ol,.retine ul{margin:0;padding-left:1.3em;display:grid;gap:4px}
+.formula{font:800 22px/1.3 var(--display);color:var(--ink)}
+
+/* formulări */
+.say-grid{display:grid;gap:8px}
+.say-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:10px 14px}
+.say-row .eq{font:800 22px/1.2 var(--display);color:var(--part);white-space:nowrap}
+.who{display:grid;gap:10px;margin-top:16px}
+.who-item{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:10px 14px;display:grid;gap:8px}
+.who-item .opts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.who-item .opt{border:2px solid var(--rule);background:#fff;border-radius:10px;padding:6px 14px;font-weight:700;cursor:pointer;min-height:40px}
+.who-item .opt.right{border-color:var(--good);background:var(--good-soft)}
+.who-item .opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.who-item .fb{font-size:15px}
+
+/* exerciții ghidate */
+.ex-card{display:grid;gap:14px}
+.ex-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between}
+.badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:#1b5fbf;font-weight:800;font-size:14px;border-radius:99px;padding:3px 12px}
+.plan{display:grid;gap:10px}
+.plan-row{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:6px 14px;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:10px 14px}
+.plan-row label{font-weight:700}
+.plan-row .tip-line{grid-column:1/-1;font-size:15px;color:var(--muted)}
+.ans{width:110px;font:800 24px/1 var(--display);text-align:center;padding:6px 8px;border:2px solid var(--rule);border-radius:10px;background:#fff;color:var(--ink)}
+.ans.ok{border-color:var(--good);background:var(--good-soft)}
+.ans.bad{border-color:var(--bad);background:var(--bad-soft)}
+.result{border-radius:10px;padding:12px 16px;font-weight:700;display:grid;gap:4px}
+.result.good{background:var(--good-soft);color:#17744d}
+.result.try{background:#fdf0d5;color:#8a5a00}
+.result .eqn{font:800 22px/1.25 var(--display);color:var(--ink)}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:800}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:800 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:860px){
+  .grid-grid{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+}
+@media (max-width:520px){
+  body{font-size:17px}
+  .seg-lab{font-size:34px}
+  .seg-num{font-size:34px}
+  .story{font-size:18px}
+  .say-row{grid-template-columns:1fr}
+  .plan-row{grid-template-columns:1fr 96px}
+  .ans{width:96px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+  .sol .line{animation:none}
+}
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Matematică · Clasa a 3-a · Metoda grafică</span><span class="de">Mathematik · Klasse 3 · Die grafische Methode</span></p>
+  <h1><span class="ro">Suma și diferența</span><span class="de">Summe und Differenz</span></h1>
+  <p class="lead">
+    <span class="ro">Știm cât fac două numere împreună (suma) și cu cât este unul mai mare decât celălalt (diferența). Cum aflăm numerele? Le desenăm ca segmente și rezolvăm în 4 pași.</span>
+    <span class="de">Wir wissen, wie viel zwei Zahlen zusammen ergeben (die Summe) und um wie viel die eine größer ist als die andere (die Differenz). Wie finden wir die Zahlen? Wir zeichnen sie als Strecken und lösen in 4 Schritten.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Dacă a + b = 36 și a − b = 6, ce numere sunt a și b?</span><span class="de">Wenn a + b = 36 und a − b = 6 ist, welche Zahlen sind a und b?</span></li>
+        <li><span class="ro">Ce înseamnă „a este mai mare decât b cu 5”?</span><span class="de">Was bedeutet „a ist um 5 größer als b“?</span></li>
+        <li><span class="ro">Cum verificăm dacă am găsit numerele corecte?</span><span class="de">Wie prüfen wir, ob wir die richtigen Zahlen gefunden haben?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Desenul și cei 4 pași</span><span class="de">Zeichnung und 4 Schritte</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Cum e spusă diferența</span><span class="de">Wie die Differenz gesagt wird</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Exersează</span><span class="de">Übe</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Rezumat</span><span class="de">Zusammenfassung</span></a>
+  </nav>
+</header>
+
+<!-- 1. Exemplu rezolvat pas cu pas -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Desenul cu segmente și cei 4 pași</span><span class="de">Die Zeichnung mit Strecken und die 4 Schritte</span></h2>
+  <p class="section-sub"><span class="ro">Alege un exemplu din fișă și apasă „Pasul următor”. Urmărește ce se întâmplă cu segmentele din caiet.</span><span class="de">Wähle ein Beispiel vom Arbeitsblatt und drücke „Nächster Schritt“. Beobachte, was mit den Strecken im Heft passiert.</span></p>
+  <div class="lab">
+    <div class="ctrls">
+      <div class="chips" id="wk-chips" role="group"></div>
+    </div>
+    <div class="story" id="wk-story"></div>
+    <div class="grid-grid">
+      <div class="notebook"><svg id="wk-svg" viewBox="0 0 640 200" role="img"></svg></div>
+      <div>
+        <div class="sol" id="wk-lines" aria-live="polite"></div>
+        <div class="stepnav">
+          <button class="btn ghost" type="button" id="wk-prev"></button>
+          <button class="btn" type="button" id="wk-next"></button>
+          <span class="count" id="wk-count"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="retine">
+    <span class="tab"><span class="ro">Reține</span><span class="de">Merke</span></span>
+    <div class="body">
+      <div class="ro">
+        <p>Numărul mai mare are o <b>bucată în plus</b>, egală cu diferența. Planul de rezolvare:</p>
+        <ol>
+          <li>Aflăm suma părților egale: <span class="formula">suma − diferența</span></li>
+          <li>Aflăm numărul mai mic: <span class="formula">(suma − diferența) : 2</span></li>
+          <li>Aflăm numărul mai mare: <span class="formula">numărul mai mic + diferența</span></li>
+          <li>Verificăm: adunate dau suma, scăzute dau diferența. Apoi scriem răspunsul.</li>
+        </ol>
+      </div>
+      <div class="de">
+        <p>Die größere Zahl hat ein <b>zusätzliches Stück</b>, so groß wie die Differenz. Der Lösungsplan:</p>
+        <ol>
+          <li>Wir finden die Summe der gleichen Teile: <span class="formula">Summe − Differenz</span></li>
+          <li>Wir finden die kleinere Zahl: <span class="formula">(Summe − Differenz) : 2</span></li>
+          <li>Wir finden die größere Zahl: <span class="formula">kleinere Zahl + Differenz</span></li>
+          <li>Wir machen die Probe: addiert ergeben sie die Summe, subtrahiert die Differenz. Dann schreiben wir die Antwort.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Cum e spusă diferența -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Aceeași diferență, spusă în mai multe feluri</span><span class="de">Dieselbe Differenz, auf verschiedene Arten gesagt</span></h2>
+  <p class="section-sub"><span class="ro">În probleme, diferența nu apare mereu ca „a − b”. Toate propozițiile de mai jos spun același lucru.</span><span class="de">In Aufgaben steht die Differenz nicht immer als „a − b“. Alle Sätze unten sagen dasselbe.</span></p>
+  <div class="say-grid" id="say-grid"></div>
+  <h3 style="margin:24px 0 4px;font-size:22px"><span class="ro">Care este numărul mai mare?</span><span class="de">Welche Zahl ist größer?</span></h3>
+  <p class="hint"><span class="ro">Citește cu atenție și alege. Numărul mai mare este cel care are bucata în plus.</span><span class="de">Lies genau und wähle. Die größere Zahl ist die mit dem zusätzlichen Stück.</span></p>
+  <div class="who" id="who"></div>
+</section>
+
+<!-- 3. Exersează -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Exersează: rezolvă cu planul</span><span class="de">Übe: Löse mit dem Plan</span></h2>
+  <p class="section-sub"><span class="ro">Scrie rezultatul fiecărui pas și apasă „Verifică”. Dacă te încurci, deschide desenul sau cere un indiciu. Primele probleme seamănă cu cele din fișă; apoi primești probleme noi, cu text.</span><span class="de">Schreibe das Ergebnis jedes Schritts und drücke „Prüfen“. Wenn du nicht weiterweißt, öffne die Zeichnung oder hol dir einen Tipp. Die ersten Aufgaben ähneln denen vom Arbeitsblatt; danach bekommst du neue Textaufgaben.</span></p>
+  <div class="lab ex-card" id="ex"></div>
+</section>
+
+<!-- 4. Rezumat -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Rezumat și glosar</span><span class="de">Zusammenfassung und Glossar</span></h2>
+  <div class="lab" style="margin-top:14px">
+    <div class="ro" style="display:grid;gap:8px">
+      <p><b>a + b = 36</b> și <b>a − b = 6</b> (a este mai mare decât b cu 6).</p>
+      <p>① 36 − 6 = 30 &nbsp; ② 30 : 2 = <span class="pt">15</span> = b &nbsp; ③ 15 + 6 = <span class="pt">21</span> = a</p>
+      <p>④ Verificare: 21 + 15 = 36 <span class="ok-mark">✓</span> și 21 − 15 = 6 <span class="ok-mark">✓</span>. Răspuns: a = 21, b = 15.</p>
+    </div>
+    <div class="de" style="display:grid;gap:8px">
+      <p><b>a + b = 36</b> und <b>a − b = 6</b> (a ist um 6 größer als b).</p>
+      <p>① 36 − 6 = 30 &nbsp; ② 30 : 2 = <span class="pt">15</span> = b &nbsp; ③ 15 + 6 = <span class="pt">21</span> = a</p>
+      <p>④ Probe: 21 + 15 = 36 <span class="ok-mark">✓</span> und 21 − 15 = 6 <span class="ok-mark">✓</span>. Antwort: a = 21, b = 15.</p>
+    </div>
+  </div>
+  <h3 style="margin:26px 0 10px;font-size:22px"><span class="ro">Cuvinte noi</span><span class="de">Neue Wörter</span></h3>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După fișa de lucru „Metoda grafică: suma și diferența”, clasa a 3-a. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Arbeitsblatt „Die grafische Methode: Summe und Differenz“, Klasse 3. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function rint(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+var PR = new Intl.PluralRules('ro');
+/** „1 nucă”, „12 nuci”, „20 de nuci”; în germană doar singular/plural. */
+function cnt(n, roSg, roPl, deSg, dePl) {
+  if (L === 'de') return n + ' ' + (n === 1 ? deSg : dePl);
+  if (n === 1) return '1 ' + roSg;
+  return n + (PR.select(n) === 'other' ? ' de ' : ' ') + roPl;
+}
+
+/* ---------- problemele: suma S, diferența D ---------- */
+// kind: 'd' = a − b, 'mare' = a este mai mare cu, 'mic' = b este mai mic cu, apoi probleme cu text
+var KINDS = {
+  d: {
+    text: function (S, D) { return tx('Dacă a + b = ' + S + ' și a − b = ' + D + ', aflați cele două numere.', 'Wenn a + b = ' + S + ' und a − b = ' + D + ' ist, finde die beiden Zahlen.'); },
+    diff: function (D) { return 'a − b = ' + D; },
+    small: 'b', big: 'a', smallL: function () { return tx('numărul mai mic (b)', 'die kleinere Zahl (b)'); }, bigL: function () { return tx('numărul mai mare (a)', 'die größere Zahl (a)'); },
+    answer: function (a, b) { return 'a = ' + a + ', b = ' + b; }
+  },
+  mare: {
+    text: function (S, D) { return tx('Dacă a + b = ' + S + ' și a este mai mare decât b cu ' + D + ', aflați cele două numere.', 'Wenn a + b = ' + S + ' ist und a um ' + D + ' größer ist als b, finde die beiden Zahlen.'); },
+    diff: function (D) { return tx('a este mai mare decât b cu ' + D, 'a ist um ' + D + ' größer als b') + ' → a − b = ' + D; },
+    small: 'b', big: 'a', smallL: function () { return tx('numărul mai mic (b)', 'die kleinere Zahl (b)'); }, bigL: function () { return tx('numărul mai mare (a)', 'die größere Zahl (a)'); },
+    answer: function (a, b) { return 'a = ' + a + ', b = ' + b; }
+  },
+  mic: {
+    text: function (S, D) { return tx('Dacă a + b = ' + S + ' și b este mai mic decât a cu ' + D + ', aflați cele două numere.', 'Wenn a + b = ' + S + ' ist und b um ' + D + ' kleiner ist als a, finde die beiden Zahlen.'); },
+    diff: function (D) { return tx('b este mai mic decât a cu ' + D, 'b ist um ' + D + ' kleiner als a') + ' → a − b = ' + D; },
+    small: 'b', big: 'a', smallL: function () { return tx('numărul mai mic (b)', 'die kleinere Zahl (b)'); }, bigL: function () { return tx('numărul mai mare (a)', 'die größere Zahl (a)'); },
+    answer: function (a, b) { return 'a = ' + a + ', b = ' + b; }
+  },
+  nuci: {
+    text: function (S, D) {
+      return tx('Ana și Mihai au împreună ' + cnt(S, 'nucă', 'nuci') + '. Ana are cu ' + cnt(D, 'nucă', 'nuci') + ' mai multe decât Mihai. Câte nuci are fiecare copil?',
+        'Ana und Mihai haben zusammen ' + S + ' Nüsse. Ana hat ' + D + ' Nüsse mehr als Mihai. Wie viele Nüsse hat jedes Kind?');
+    },
+    diff: function (D) { return tx('Ana are cu ' + D + ' mai multe', 'Ana hat ' + D + ' mehr'); },
+    small: 'Mihai', big: 'Ana', smallL: function () { return tx('Mihai (mai puține)', 'Mihai (weniger)'); }, bigL: function () { return tx('Ana (mai multe)', 'Ana (mehr)'); },
+    answer: function (a, b) { return tx('Ana are ' + cnt(a, 'nucă', 'nuci') + ', iar Mihai are ' + cnt(b, 'nucă', 'nuci') + '.', 'Ana hat ' + cnt(a, 'Nuss', 'Nüsse', 'Nuss', 'Nüsse') + ', Mihai hat ' + cnt(b, 'Nuss', 'Nüsse', 'Nuss', 'Nüsse') + '.'); }
+  },
+  carti: {
+    text: function (S, D) {
+      return tx('Pe două rafturi sunt ' + cnt(S, 'carte', 'cărți') + '. Pe raftul de sus sunt cu ' + cnt(D, 'carte', 'cărți') + ' mai puține decât pe raftul de jos. Câte cărți sunt pe fiecare raft?',
+        'Auf zwei Regalbrettern stehen ' + S + ' Bücher. Oben stehen ' + D + ' Bücher weniger als unten. Wie viele Bücher stehen auf jedem Brett?');
+    },
+    diff: function (D) { return tx('sus sunt cu ' + D + ' mai puține', 'oben sind es ' + D + ' weniger'); },
+    small: tx('sus', 'oben'), big: tx('jos', 'unten'), smallL: function () { return tx('raftul de sus', 'das obere Brett'); }, bigL: function () { return tx('raftul de jos', 'das untere Brett'); },
+    answer: function (a, b) { return tx('Pe raftul de jos sunt ' + cnt(a, 'carte', 'cărți') + ', iar pe raftul de sus sunt ' + cnt(b, 'carte', 'cărți') + '.', 'Unten stehen ' + cnt(a, '', '', 'Buch', 'Bücher') + ', oben ' + cnt(b, '', '', 'Buch', 'Bücher') + '.'); }
+  },
+  creion: {
+    text: function (S, D) {
+      return tx('Un creion și o gumă costă împreună ' + cnt(S, 'leu', 'lei') + '. Creionul costă cu ' + cnt(D, 'leu', 'lei') + ' mai mult decât guma. Cât costă fiecare?',
+        'Ein Bleistift und ein Radiergummi kosten zusammen ' + S + ' Lei. Der Bleistift kostet ' + D + ' Lei mehr als der Radiergummi. Wie viel kostet jedes?');
+    },
+    diff: function (D) { return tx('creionul costă cu ' + D + ' mai mult', 'der Bleistift kostet ' + D + ' mehr'); },
+    small: tx('guma', 'Gummi'), big: tx('creion', 'Stift'), smallL: function () { return tx('guma (costă mai puțin)', 'der Radiergummi (billiger)'); }, bigL: function () { return tx('creionul (costă mai mult)', 'der Bleistift (teurer)'); },
+    answer: function (a, b) { return tx('Creionul costă ' + cnt(a, 'leu', 'lei') + ', iar guma costă ' + cnt(b, 'leu', 'lei') + '.', 'Der Bleistift kostet ' + cnt(a, '', '', 'Leu', 'Lei') + ', der Radiergummi ' + cnt(b, '', '', 'Leu', 'Lei') + '.'); }
+  }
+};
+
+/* ---------- desenul cu segmente ----------
+   step: 0 datele, 1 desenul, 2 suma părților egale, 3 numărul mic, 4 numărul mare, 5+ verificare */
+function drawSegments(svg, P, step) {
+  var S = P.S, D = P.D, b = (S - D) / 2, a = b + D, k = KINDS[P.kind];
+  svg.innerHTML = '';
+  var yb = 70, ya = 146, tick = 11;
+  // etichete în stânga; spațiul pentru ele se potrivește după lungimea lor (pe telefon textul e mai mare)
+  var lb = el('text', { y: yb + 8, 'text-anchor': 'end', class: 'seg-lab' }, svg, k.small + (step >= 3 ? ' = ' + b : ''));
+  var la = el('text', { y: ya + 8, 'text-anchor': 'end', class: 'seg-lab' }, svg, k.big + (step >= 4 ? ' = ' + a : ''));
+  var lw = 0;
+  try { lw = Math.max(lb.getBBox().width, la.getBBox().width); } catch (e) { /* desen ascuns */ }
+  var x0 = Math.max(120, Math.ceil(lw) + 30), maxW = Math.min(380, 540 - x0), u = maxW / a;
+  lb.setAttribute('x', x0 - 16); la.setAttribute('x', x0 - 16);
+  var wb = b * u, wd = D * u;
+  svg.setAttribute('aria-label', tx('Desen cu segmente: ', 'Zeichnung mit Strecken: ') + k.small + ' = ' + (step >= 3 ? b : '?') + ', ' + k.big + ' = ' + (step >= 4 ? a : '?'));
+  function seg(x1, x2, y, color, extra) {
+    var g = el('g', { class: 'fade' }, svg);
+    el('line', { x1: x1, y1: y, x2: x2, y2: y, stroke: color, 'stroke-width': 6, 'stroke-linecap': 'round', 'stroke-dasharray': extra || '' }, g);
+    el('line', { x1: x1, y1: y - tick, x2: x1, y2: y + tick, stroke: '#1b2440', 'stroke-width': 2.4 }, g);
+    el('line', { x1: x2, y1: y - tick, x2: x2, y2: y + tick, stroke: '#1b2440', 'stroke-width': 2.4 }, g);
+    return g;
+  }
+  // părțile egale
+  seg(x0, x0 + wb, yb, '#2f80ed');
+  seg(x0, x0 + wb, ya, '#2f80ed');
+  // bucata în plus
+  var cut = step === 2 || step === 3;
+  var ex = seg(x0 + wb, x0 + wb + wd, ya, '#e5673d', cut ? '4 7' : '');
+  ex.setAttribute('opacity', cut ? 0.35 : 1);
+  if (step >= 1) {
+    el('text', { x: x0 + wb + wd / 2, y: ya - 18, 'text-anchor': 'middle', class: 'seg-num', fill: '#e5673d', opacity: cut ? 0.5 : 1 }, svg, '+' + D);
+    // linia punctată care arată că părțile sunt egale
+    el('line', { x1: x0 + wb, y1: yb - 26, x2: x0 + wb, y2: ya + 26, stroke: '#56607a', 'stroke-width': 1.6, 'stroke-dasharray': '5 5' }, svg);
+    // acolada cu suma
+    var bx = x0 + wb + wd + 22, y1 = yb - 16, y2 = ya + 16, my = (y1 + y2) / 2;
+    el('path', { d: 'M' + bx + ' ' + y1 + ' q12 0 12 12 V' + (my - 12) + ' q0 12 12 12 q-12 0 -12 12 V' + (y2 - 12) + ' q0 12 -12 12', fill: 'none', stroke: '#1b2440', 'stroke-width': 2.4 }, svg);
+    el('text', { x: bx + 34, y: my + 9, class: 'seg-num', fill: '#1b2440' }, svg, String(S));
+  }
+  if (step === 2) {
+    el('text', { x: x0 + wb / 2, y: 188, 'text-anchor': 'middle', class: 'seg-num', fill: '#2f80ed' }, svg, tx('2 părți egale = ', '2 gleiche Teile = ') + (S - D));
+  }
+  if (step >= 3) {
+    el('text', { x: x0 + wb / 2, y: yb - 18, 'text-anchor': 'middle', class: 'seg-num', fill: '#2f80ed' }, svg, String(b));
+    el('text', { x: x0 + wb / 2, y: ya - 18, 'text-anchor': 'middle', class: 'seg-num', fill: '#2f80ed' }, svg, String(b));
+  }
+}
+
+/* ---------- 1. exemplul rezolvat ---------- */
+(function () {
+  var EX = [
+    { kind: 'd', S: 36, D: 6 },
+    { kind: 'mare', S: 13, D: 5 },
+    { kind: 'mic', S: 45, D: 27 },
+    { kind: 'nuci', S: 30, D: 8 }
+  ];
+  var cur = 0, step = 0, LAST = 6;
+  var chips = $('#wk-chips'), story = $('#wk-story'), svg = $('#wk-svg'), lines = $('#wk-lines');
+  var prev = $('#wk-prev'), next = $('#wk-next'), count = $('#wk-count');
+  prev.textContent = '← ' + tx('Înapoi', 'Zurück');
+  next.textContent = tx('Pasul următor', 'Nächster Schritt') + ' →';
+  var chipBtns = EX.map(function (e, i) {
+    var c = h('button', 'chip', i < 3 ? tx('Exemplul ', 'Beispiel ') + (i + 1) : tx('Cu text', 'Textaufgabe'));
+    c.type = 'button';
+    c.onclick = function () { cur = i; step = 0; render(); };
+    chips.appendChild(c);
+    return c;
+  });
+  function render() {
+    var P = EX[cur], k = KINDS[P.kind], S = P.S, D = P.D, E = S - D, b = E / 2, a = b + D;
+    chipBtns.forEach(function (c, i) { c.setAttribute('aria-pressed', i === cur ? 'true' : 'false'); });
+    story.textContent = k.text(S, D);
+    drawSegments(svg, P, Math.min(step, 5));
+    var R = [
+      [tx('Datele problemei', 'Was wir wissen'), k.small === 'b' ? 'a + b = ' + S + ', &nbsp;a − b = ' + D : tx('împreună: ', 'zusammen: ') + S + ', &nbsp;' + k.diff(D),
+        tx('Știm suma celor două numere și cu cât este unul mai mare decât celălalt.', 'Wir kennen die Summe der beiden Zahlen und wissen, um wie viel die eine größer ist.')],
+      [tx('Desenul cu segmente', 'Die Zeichnung mit Strecken'), '',
+        tx('Desenăm numărul mai mic (' + k.small + ') ca un segment. Numărul mai mare (' + k.big + ') este la fel de lung, plus o <span class="ex-c">bucată în plus de ' + D + '</span>. Împreună fac ' + S + '.',
+           'Wir zeichnen die kleinere Zahl (' + k.small + ') als Strecke. Die größere Zahl (' + k.big + ') ist genauso lang, plus ein <span class="ex-c">zusätzliches Stück von ' + D + '</span>. Zusammen sind es ' + S + '.')],
+      [tx('① Aflăm suma părților egale', '① Summe der gleichen Teile'), S + ' − ' + D + ' = ' + E,
+        tx('Scoatem bucata în plus. Rămân două părți egale.', 'Wir nehmen das zusätzliche Stück weg. Es bleiben zwei gleiche Teile.')],
+      [tx('② Aflăm numărul mai mic', '② Die kleinere Zahl'), E + ' : 2 = <span class="pt">' + b + '</span>',
+        tx('Cele două părți sunt egale, deci împărțim la 2: ' + k.small + ' = ' + b + '.', 'Die zwei Teile sind gleich groß, also teilen wir durch 2: ' + k.small + ' = ' + b + '.')],
+      [tx('③ Aflăm numărul mai mare', '③ Die größere Zahl'), b + ' + ' + D + ' = <span class="pt">' + a + '</span>',
+        tx('Adăugăm bucata în plus: ' + k.big + ' = ' + a + '.', 'Wir fügen das zusätzliche Stück hinzu: ' + k.big + ' = ' + a + '.')],
+      [tx('④ Verificare', '④ Probe'), a + ' + ' + b + ' = ' + S + ' <span class="ok-mark">✓</span> &nbsp; ' + a + ' − ' + b + ' = ' + D + ' <span class="ok-mark">✓</span>',
+        tx('Adunate dau suma, scăzute dau diferența.', 'Addiert ergeben sie die Summe, subtrahiert die Differenz.')],
+      [tx('Răspuns', 'Antwort'), '', '<b>' + k.answer(a, b) + '</b>']
+    ];
+    lines.innerHTML = '';
+    for (var i = 0; i <= step; i++) {
+      var r = R[i], ln = h('div', 'line' + (i === step ? ' cur' : ''));
+      ln.appendChild(h('span', 'what', r[0]));
+      if (r[1]) ln.appendChild(h('span', 'eqn', r[1]));
+      ln.appendChild(h('span', 'say', r[2]));
+      lines.appendChild(ln);
+    }
+    prev.disabled = step === 0;
+    next.disabled = step === LAST;
+    count.textContent = tx('Pasul ', 'Schritt ') + (step + 1) + tx(' din ', ' von ') + (LAST + 1);
+  }
+  prev.onclick = function () { if (step > 0) { step--; render(); } };
+  next.onclick = function () { if (step < LAST) { step++; render(); } };
+  render();
+})();
+
+/* ---------- 2. formulări ---------- */
+(function () {
+  var rows = [
+    [tx('Diferența numerelor a și b este 6.', 'Die Differenz der Zahlen a und b ist 6.'), 'a − b = 6'],
+    [tx('a este mai mare decât b cu 6.', 'a ist um 6 größer als b.'), 'a − b = 6'],
+    [tx('b este mai mic decât a cu 6.', 'b ist um 6 kleiner als a.'), 'a − b = 6'],
+    [tx('a are cu 6 mai mult decât b.', 'a hat 6 mehr als b.'), 'a = b + 6'],
+    [tx('b are cu 6 mai puțin decât a.', 'b hat 6 weniger als a.'), 'b = a − 6']
+  ];
+  var grid = $('#say-grid');
+  rows.forEach(function (r) {
+    var row = h('div', 'say-row');
+    row.appendChild(h('span', '', r[0]));
+    row.appendChild(h('span', 'eq', r[1]));
+    grid.appendChild(row);
+  });
+
+  var Q = [
+    [tx('x este mai mic decât y cu 4.', 'x ist um 4 kleiner als y.'), ['x', 'y'], 1],
+    [tx('Mara are cu 3 creioane mai multe decât Radu.', 'Mara hat 3 Stifte mehr als Radu.'), ['Mara', 'Radu'], 0],
+    [tx('Pe raftul de sus sunt cu 5 cărți mai puține decât pe raftul de jos.', 'Oben stehen 5 Bücher weniger als unten.'), [tx('raftul de sus', 'oben'), tx('raftul de jos', 'unten')], 1],
+    ['m − n = 7', ['m', 'n'], 0]
+  ];
+  var host = $('#who');
+  Q.forEach(function (q) {
+    var item = h('div', 'who-item'), opts = h('div', 'opts'), fb = h('span', 'fb');
+    item.appendChild(h('span', '', '<b>' + q[0] + '</b>'));
+    var btns = q[1].map(function (o, i) {
+      var b = h('button', 'opt', o); b.type = 'button';
+      b.onclick = function () {
+        btns.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === q[2]) { b.classList.add('right'); fb.textContent = tx('Corect! ', 'Richtig! ') + q[1][q[2]] + tx(' are bucata în plus.', ' hat das zusätzliche Stück.'); }
+        else { b.classList.add('wrong'); fb.textContent = tx('Mai citește o dată: cine are „mai mult”, sau față de cine celălalt are „mai puțin”?', 'Lies noch einmal: Wer hat „mehr“, bzw. im Vergleich zu wem hat der andere „weniger“?'); }
+      };
+      opts.appendChild(b); return b;
+    });
+    opts.appendChild(fb);
+    item.appendChild(opts);
+    host.appendChild(item);
+  });
+})();
+
+/* ---------- 3. exerciții ghidate ---------- */
+(function () {
+  // primele 6 seamănă cu fișa; după ele, probleme generate
+  var FIXED = [
+    { kind: 'd', S: 48, D: 8 },
+    { kind: 'mare', S: 17, D: 3 },
+    { kind: 'mic', S: 60, D: 24 },
+    { kind: 'nuci', S: 30, D: 6 },
+    { kind: 'carti', S: 50, D: 10 },
+    { kind: 'creion', S: 14, D: 4 }
+  ];
+  var ORDER = ['d', 'mare', 'mic', 'nuci', 'carti', 'creion'];
+  var idx = 0, P = FIXED[0];
+  var host = $('#ex');
+
+  function randomProblem(prev) {
+    var kind, S, D, b;
+    do {
+      kind = ORDER[rint(0, ORDER.length - 1)];
+      b = rint(kind === 'creion' ? 2 : 4, kind === 'creion' ? 12 : 40);
+      D = rint(2, kind === 'creion' ? 9 : 30);
+      S = 2 * b + D;
+    } while (S > (kind === 'creion' ? 30 : 100) || (prev && prev.kind === kind && prev.S === S));
+    return { kind: kind, S: S, D: D };
+  }
+
+  function render() {
+    var k = KINDS[P.kind], S = P.S, D = P.D, E = S - D, b = E / 2, a = b + D;
+    host.innerHTML = '';
+    var head = h('div', 'ex-head');
+    head.appendChild(h('span', 'badge', idx < FIXED.length ? tx('Problema ', 'Aufgabe ') + (idx + 1) + tx(' din ', ' von ') + FIXED.length : tx('Problemă nouă', 'Neue Aufgabe')));
+    host.appendChild(head);
+    host.appendChild(h('div', 'story', k.text(S, D)));
+
+    var rows = [
+      { label: tx('① Suma părților egale', '① Summe der gleichen Teile'), ans: E, tip: tx('Din sumă scade bucata în plus: ' + S + ' − ' + D + '.', 'Ziehe das zusätzliche Stück von der Summe ab: ' + S + ' − ' + D + '.') },
+      { label: tx('② ', '② ') + cap(k.smallL()), ans: b, tip: tx('Suma părților egale se împarte la 2.', 'Die Summe der gleichen Teile wird durch 2 geteilt.') },
+      { label: tx('③ ', '③ ') + cap(k.bigL()), ans: a, tip: tx('La numărul mai mic adaugă diferența (' + D + ').', 'Addiere die Differenz (' + D + ') zur kleineren Zahl.') }
+    ];
+    var plan = h('div', 'plan'), inputs = [];
+    rows.forEach(function (r, i) {
+      var row = h('div', 'plan-row'), id = 'ans-' + i;
+      var lab = h('label', '', r.label); lab.htmlFor = id;
+      var inp = h('input', 'ans'); inp.id = id; inp.type = 'text'; inp.inputMode = 'numeric'; inp.autocomplete = 'off';
+      var tip = h('span', 'tip-line'); tip.hidden = true; tip.textContent = '💡 ' + r.tip;
+      row.appendChild(lab); row.appendChild(inp); row.appendChild(tip);
+      plan.appendChild(row);
+      inputs.push({ el: inp, ans: r.ans, tip: tip });
+      inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
+    });
+    host.appendChild(plan);
+
+    var draw = h('div', 'notebook'); draw.hidden = true;
+    var svg = el('svg', { viewBox: '0 0 640 200', role: 'img' }, draw);
+    drawSegments(svg, P, 1);
+    host.appendChild(draw);
+
+    var result = h('div', 'result'); result.hidden = true;
+    result.setAttribute('aria-live', 'polite');
+
+    var act = h('div', 'stepnav');
+    var bCheck = h('button', 'btn', tx('Verifică', 'Prüfen'));
+    var bTip = h('button', 'btn ghost', '💡 ' + tx('Indiciu', 'Tipp'));
+    var bDraw = h('button', 'btn ghost', tx('Arată desenul', 'Zeichnung zeigen'));
+    var bSolve = h('button', 'btn ghost', tx('Arată rezolvarea', 'Lösung zeigen'));
+    var bNext = h('button', 'btn ghost', tx('Altă problemă', 'Nächste Aufgabe') + ' →');
+    [bCheck, bTip, bDraw, bSolve, bNext].forEach(function (b) { b.type = 'button'; act.appendChild(b); });
+    host.appendChild(act);
+    host.appendChild(result);
+
+    function value(i) { var v = i.el.value.trim(); return v === '' ? null : Number(v); }
+    function check() {
+      var good = 0, empty = 0;
+      inputs.forEach(function (i) {
+        i.el.classList.remove('ok', 'bad');
+        var v = value(i);
+        if (v === null) { empty++; return; }
+        if (v === i.ans) { i.el.classList.add('ok'); good++; } else { i.el.classList.add('bad'); i.tip.hidden = false; }
+      });
+      result.hidden = false;
+      if (good === inputs.length) {
+        result.className = 'result good';
+        result.innerHTML = '<span>🎉 ' + tx('Bravo, ai rezolvat corect!', 'Super, alles richtig gelöst!') + '</span>' +
+          '<span class="eqn">④ ' + a + ' + ' + b + ' = ' + S + ' ✓ &nbsp; ' + a + ' − ' + b + ' = ' + D + ' ✓</span>' +
+          '<span>' + tx('Răspuns: ', 'Antwort: ') + k.answer(a, b) + '</span>';
+      } else {
+        result.className = 'result try';
+        result.textContent = empty && !good && empty === inputs.length
+          ? tx('Scrie mai întâi rezultatele pașilor.', 'Schreibe zuerst die Ergebnisse der Schritte.')
+          : good + tx(' din ', ' von ') + inputs.length + tx(' pași sunt corecți. Citește indiciul de la pașii greșiți și mai încearcă.', ' Schritten sind richtig. Lies den Tipp bei den falschen Schritten und versuch es nochmal.');
+      }
+    }
+    bCheck.onclick = check;
+    bTip.onclick = function () {
+      // arată indiciul primului pas necompletat sau greșit
+      for (var n = 0; n < inputs.length; n++) {
+        if (value(inputs[n]) !== inputs[n].ans) { inputs[n].tip.hidden = false; inputs[n].el.focus(); return; }
+      }
+    };
+    bDraw.onclick = function () {
+      draw.hidden = !draw.hidden;
+      bDraw.textContent = draw.hidden ? tx('Arată desenul', 'Zeichnung zeigen') : tx('Ascunde desenul', 'Zeichnung verbergen');
+    };
+    bSolve.onclick = function () {
+      inputs.forEach(function (i) { i.el.value = i.ans; });
+      check();
+    };
+    bNext.onclick = function () {
+      idx++;
+      P = idx < FIXED.length ? FIXED[idx] : randomProblem(P);
+      render();
+      host.scrollIntoView({ block: 'nearest' });
+    };
+  }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  render();
+})();
+
+/* ---------- 4. glosar ---------- */
+(function () {
+  var G = [
+    ['suma', 'die Summe'], ['diferența', 'die Differenz'],
+    ['metoda grafică', 'die grafische Methode'], ['segment', 'die Strecke'],
+    ['părți egale', 'gleiche Teile'], ['numărul mai mare', 'die größere Zahl'],
+    ['numărul mai mic', 'die kleinere Zahl'], ['verificare', 'die Probe'],
+    ['cu … mai mult', 'um … mehr'], ['cu … mai puțin', 'um … weniger']
+  ];
+  var dl = $('#gloss');
+  G.forEach(function (g) { dl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
+})();
+})();
+</script>
+</body>
+</html>
