@@ -601,28 +601,40 @@ var FIG = {
       : tx('Unghiurile ' + names.join(', ') + ' sunt unghiuri în jurul punctului O. ', 'Die Winkel ' + names.join(', ') + ' liegen um den Punkt O. ');
     txt += names.map(function (nm, i) { return '∢' + nm + ' = ' + term(p.A[i], p.C[i]); }).join(', ') + '.';
     host.appendChild(h('div', 'story', txt));
-    var row = h('div', 'row');
-    var ix = h('input', 'ans'), ia = h('input', 'ans');
-    [ix, ia].forEach(function (i) { i.inputMode = 'numeric'; i.autocomplete = 'off'; });
+    function num() { var i = h('input', 'ans'); i.inputMode = 'numeric'; i.autocomplete = 'off'; return i; }
+    function line(parts) { var r = h('div', 'row'); parts.forEach(function (q) { r.appendChild(typeof q === 'string' ? h('span', 'fx', q) : q); }); return r; }
+    var sa = p.A.reduce(function (x, y) { return x + y; }, 0), sc = p.C.reduce(function (x, y) { return x + y; }, 0);
+    var isa = num(), irh = num(), ix = num(), ia = num();
+    isa.setAttribute('aria-label', tx('suma coeficienților', 'Summe der Koeffizienten')); irh.setAttribute('aria-label', tx('membrul drept', 'rechte Seite'));
     ix.setAttribute('aria-label', 'x'); ia.setAttribute('aria-label', '∢' + names[p.ask]);
-    row.appendChild(h('b', '', 'x =')); row.appendChild(ix);
-    row.appendChild(h('b', '', '∢' + names[p.ask] + ' =')); row.appendChild(ia); row.appendChild(h('span', '', '°'));
-    host.appendChild(row);
+    host.appendChild(h('b', '', tx('Rezolvarea ta', 'Deine Lösung')));
+    host.appendChild(h('b', '', tx('Pasul 1. Suma unghiurilor este ' + p.total + '°. Adună termenii cu x și mută numerele în dreapta:', 'Schritt 1. Die Summe der Winkel ist ' + p.total + '°. Fasse die Terme mit x zusammen und bringe die Zahlen nach rechts:')));
+    host.appendChild(line([isa, '· x =', irh]));
+    host.appendChild(h('b', '', tx('Pasul 2. Află x:', 'Schritt 2. Berechne x:')));
+    host.appendChild(line(['x =', ix]));
+    host.appendChild(h('b', '', tx('Pasul 3. Înlocuiește x în expresia unghiului și calculează:', 'Schritt 3. Setze x in den Term des Winkels ein und rechne:')));
+    host.appendChild(line(['∢' + names[p.ask] + ' =', ia, '°']));
     var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
     var act = h('div', 'actions'), c = btn('btn', tx('Verifică', 'Prüfen')), s = btn('btn ghost', tx('Arată rezolvarea', 'Lösung zeigen')), nx = btn('btn ghost', tx('Altă problemă', 'Neue Aufgabe') + ' →');
     act.appendChild(c); act.appendChild(s); act.appendChild(nx); host.appendChild(act); host.appendChild(res);
-    var sa = p.A.reduce(function (x, y) { return x + y; }, 0), sc = p.C.reduce(function (x, y) { return x + y; }, 0);
     var solution = tx('Suma este ', 'Die Summe ist ') + p.total + '°: ' + sa + 'x ' + (sc >= 0 ? '+ ' + sc : '− ' + (-sc)) + ' = ' + p.total + ' ⇒ ' + sa + 'x = ' + (p.total - sc) + ' ⇒ x = ' + p.x + '. ∢' + names[p.ask] + ' = ' + term(p.A[p.ask], p.C[p.ask]).replace(/x°/, '·' + p.x) + ' = ' + p.V[p.ask] + '°.';
+    var F = [[isa, sa], [irh, p.total - sc], [ix, p.x], [ia, p.V[p.ask]]];
+    var HINT = [
+      tx('Adună coeficienții lui x din toate expresiile (' + p.A.join(' + ') + ').', 'Addiere die Koeffizienten von x aus allen Termen (' + p.A.join(' + ') + ').'),
+      tx('Scade din ' + p.total + ' numerele de la celelalte expresii.', 'Ziehe die übrigen Zahlen von ' + p.total + ' ab.'),
+      tx('Împarte membrul drept la coeficientul lui x.', 'Teile die rechte Seite durch den Koeffizienten von x.'),
+      tx('Înlocuiește x în expresia ∢' + names[p.ask] + '.', 'Setze x in den Term von ∢' + names[p.ask] + ' ein.')
+    ];
     c.onclick = function () {
-      var okx = +ix.value.trim() === p.x && ix.value.trim() !== '', oka = +ia.value.trim() === p.V[p.ask] && ia.value.trim() !== '';
-      ix.className = 'ans ' + (okx ? 'ok' : 'bad'); ia.className = 'ans ' + (oka ? 'ok' : 'bad');
+      var bad = -1;
+      F.forEach(function (f, i) { var t = f[0].value.trim(), ok = t !== '' && +t === f[1]; f[0].className = 'ans ' + (t === '' ? '' : ok ? 'ok' : 'bad'); if (!ok && bad < 0) bad = i; });
       res.hidden = false;
-      if (okx && oka) { res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! ', 'Richtig! ') + solution; }
-      else { res.className = 'result try'; res.textContent = okx ? tx('x e corect. Înlocuiește-l în expresia unghiului.', 'x stimmt. Setze es in den Term des Winkels ein.') : tx('Indiciu: adună toate expresiile și egalează cu ', 'Tipp: Addiere alle Terme und setze sie gleich ') + p.total + '°.'; }
+      if (bad < 0) { res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! ', 'Richtig! ') + solution; }
+      else { res.className = 'result try'; res.textContent = tx('Indiciu: ', 'Tipp: ') + HINT[bad]; }
     };
-    s.onclick = function () { ix.value = p.x; ia.value = p.V[p.ask]; c.onclick(); };
+    s.onclick = function () { F.forEach(function (f) { f[0].value = f[1]; }); c.onclick(); };
     nx.onclick = render;
-    [ix, ia].forEach(function (i) { i.addEventListener('keydown', function (e) { if (e.key === 'Enter') c.onclick(); }); });
+    F.forEach(function (f) { f[0].addEventListener('keydown', function (e) { if (e.key === 'Enter') c.onclick(); }); });
   }
   render();
 })();

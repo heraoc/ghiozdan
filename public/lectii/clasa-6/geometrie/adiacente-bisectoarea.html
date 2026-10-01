@@ -104,6 +104,7 @@ section.block{margin-top:52px}
 .ans{width:86px;font:800 20px/1 var(--display);text-align:center;padding:5px 6px;border:2px solid var(--rule);border-radius:10px;background:#fff}
 .ans.ok{border-color:var(--good);background:var(--good-soft)}
 .ans.bad{border-color:var(--bad);background:var(--bad-soft)}
+.calc{width:100%;max-width:460px;font:600 18px/1.3 var(--body);padding:8px 10px;border:2px solid var(--rule);border-radius:10px;background:#fff}
 .result{border-radius:10px;padding:10px 14px;font-weight:700}
 .result.good{background:var(--good-soft);color:#17744d}
 .result.try{background:#fdf0d5;color:#8a5a00}
@@ -595,21 +596,42 @@ Check($('#c2'), [
   }
   function renderTry() {
     tryBox.innerHTML = '';
-    var row = h('div', 'row'), ix = h('input', 'ans'), iy = h('input', 'ans');
-    [ix, iy].forEach(function (i) { i.inputMode = 'numeric'; i.autocomplete = 'off'; });
-    ix.setAttribute('aria-label', 'x'); iy.setAttribute('aria-label', 'y');
-    row.appendChild(h('b', '', 'x =')); row.appendChild(ix); row.appendChild(h('span', '', '°'));
-    row.appendChild(h('b', '', 'y =')); row.appendChild(iy); row.appendChild(h('span', '', '°'));
-    var c = btn('btn', tx('Verifică', 'Prüfen')); row.appendChild(c);
+    var v = info(pr);
+    function num() { var i = h('input', 'ans'); i.inputMode = 'numeric'; i.autocomplete = 'off'; return i; }
+    function line(parts) { var r = h('div', 'row'); parts.forEach(function (p) { r.appendChild(typeof p === 'string' ? h('span', 'fx', p) : p); }); return r; }
+    var ip = num(), iq = num(), ik = num(), ix = num(), iy = num();
+    ip.setAttribute('aria-label', tx('numitor pentru x', 'Nenner für x')); iq.setAttribute('aria-label', tx('numitor pentru y', 'Nenner für y'));
+    ik.setAttribute('aria-label', 'k'); ix.setAttribute('aria-label', 'x'); iy.setAttribute('aria-label', 'y');
+    var F = [[ip, pr.p], [iq, pr.q], [ik, v.k], [ix, v.x], [iy, v.y]];
+    tryBox.appendChild(h('h3', '', tx('Rezolvarea ta', 'Deine Lösung')));
+    tryBox.appendChild(h('b', '', tx('Pasul 1. Din ' + pr.p + ' · x = ' + pr.q + ' · y = k scoatem x și y:', 'Schritt 1. Aus ' + pr.p + ' · x = ' + pr.q + ' · y = k erhalten wir x und y:')));
+    tryBox.appendChild(line(['x = k :', ip, ', y = k :', iq]));
+    tryBox.appendChild(h('b', '', tx('Pasul 2. Înlocuim în suma ' + pr.S + '°: k : ' + pr.p + ' + k : ' + pr.q + ' = ' + pr.S + '°. Află k:', 'Schritt 2. Einsetzen in die Summe ' + pr.S + '°: k : ' + pr.p + ' + k : ' + pr.q + ' = ' + pr.S + '°. Berechne k:')));
+    tryBox.appendChild(line(['k =', ik, '°']));
+    tryBox.appendChild(h('b', '', tx('Pasul 3. Aflăm unghiurile:', 'Schritt 3. Wir berechnen die Winkel:')));
+    tryBox.appendChild(line(['x =', ix, '°', ' y =', iy, '°']));
+    var row = h('div', 'row'), c = btn('btn', tx('Verifică', 'Prüfen')); row.appendChild(c);
     var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
     tryBox.appendChild(row); tryBox.appendChild(res);
     c.onclick = function () {
-      var v = info(pr), okx = ix.value.trim() !== '' && +ix.value === v.x, oky = iy.value.trim() !== '' && +iy.value === v.y;
-      ix.className = 'ans ' + (okx ? 'ok' : 'bad'); iy.className = 'ans ' + (oky ? 'ok' : 'bad'); res.hidden = false;
-      if (okx && oky) { res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! Vezi pe desen cele ' + (pr.p + pr.q) + ' părți egale.', 'Richtig! Sieh dir am Bild die ' + (pr.p + pr.q) + ' gleichen Teile an.'); solved = true; st.last(); }
-      else { res.className = 'result try'; res.textContent = +ix.value + +iy.value === pr.S ? tx('Suma e bună, dar verifică egalitatea ' + pr.p + ' · x = ' + pr.q + ' · y.', 'Die Summe stimmt, aber prüfe die Gleichung ' + pr.p + ' · x = ' + pr.q + ' · y.') : tx('Indiciu: x + y trebuie să dea ' + pr.S + '°. Deschide primul pas dacă te blochezi.', 'Tipp: x + y muss ' + pr.S + '° ergeben. Öffne den ersten Schritt, wenn du nicht weiterkommst.'); }
+      var bad = -1, empty = false;
+      F.forEach(function (f, i) {
+        var t = f[0].value.trim(), ok = t !== '' && +t === f[1];
+        f[0].className = 'ans ' + (t === '' ? '' : ok ? 'ok' : 'bad');
+        if (!ok && bad < 0) bad = i; if (t === '') empty = true;
+      });
+      res.hidden = false;
+      if (bad < 0) { res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! Vezi pe desen cele ' + (pr.p + pr.q) + ' părți egale.', 'Richtig! Sieh dir am Bild die ' + (pr.p + pr.q) + ' gleichen Teile an.'); solved = true; st.last(); return; }
+      res.className = 'result try';
+      res.textContent = [
+        tx('Pasul 1: din ' + pr.p + ' · x = k împărțim la ' + pr.p + ' ca să rămână x.', 'Schritt 1: Aus ' + pr.p + ' · x = k teilen wir durch ' + pr.p + ', damit x übrig bleibt.'),
+        tx('Pasul 1: din ' + pr.q + ' · y = k împărțim la ' + pr.q + ' ca să rămână y.', 'Schritt 1: Aus ' + pr.q + ' · y = k teilen wir durch ' + pr.q + ', damit y übrig bleibt.'),
+        tx('Pasul 2: adu fracțiile la același numitor, ' + (pr.p * pr.q) + ': ' + (pr.p + pr.q) + 'k = ' + pr.S + ' · ' + (pr.p * pr.q) + ', apoi împarte la ' + (pr.p + pr.q) + '.', 'Schritt 2: Bringe auf den Nenner ' + (pr.p * pr.q) + ': ' + (pr.p + pr.q) + 'k = ' + pr.S + ' · ' + (pr.p * pr.q) + ', dann durch ' + (pr.p + pr.q) + ' teilen.'),
+        tx('Pasul 3: x = k : ' + pr.p + '. Folosește valoarea lui k.', 'Schritt 3: x = k : ' + pr.p + '. Benutze den Wert von k.'),
+        tx('Pasul 3: y = k : ' + pr.q + '. Folosește valoarea lui k. Verifică: x + y = ' + pr.S + '°.', 'Schritt 3: y = k : ' + pr.q + '. Benutze den Wert von k. Probe: x + y = ' + pr.S + '°.')
+      ][bad];
     };
-    [ix, iy].forEach(function (i) { i.addEventListener('keydown', function (e) { if (e.key === 'Enter') c.onclick(); }); });
+    F.forEach(function (f) { f[0].addEventListener('keydown', function (e) { if (e.key === 'Enter') c.onclick(); }); });
   }
   function load(r, manual) {
     pr = r; solved = false;
@@ -859,9 +881,11 @@ Check($('#c5'), [
     host.innerHTML = '';
     host.appendChild(h('div', 'row', '<span class="score">' + tx('Corecte: ', 'Richtig: ') + good + ' / ' + total + '</span>'));
     host.appendChild(h('div', 'story', p.q));
+    var work = h('input', 'calc'); work.type = 'text'; work.autocomplete = 'off'; work.placeholder = tx('Scrie aici calculul, ca în caiet', 'Schreib hier die Rechnung, wie im Heft'); work.setAttribute('aria-label', tx('Calculul tău', 'Deine Rechnung'));
+    host.appendChild(h('b', '', tx('Rezolvarea ta', 'Deine Lösung'))); host.appendChild(work);
     var row = h('div', 'row'), ia = h('input', 'ans');
     ia.inputMode = 'numeric'; ia.autocomplete = 'off'; ia.setAttribute('aria-label', tx('răspuns', 'Antwort'));
-    row.appendChild(ia); row.appendChild(h('span', '', '°')); host.appendChild(row);
+    row.appendChild(h('b', '', tx('Răspuns:', 'Antwort:'))); row.appendChild(ia); row.appendChild(h('span', '', '°')); host.appendChild(row);
     var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
     var act = h('div', 'actions'), c = btn('btn', tx('Verifică', 'Prüfen')), s = btn('btn ghost', tx('Arată rezolvarea', 'Lösung zeigen')), nx = btn('btn ghost', tx('Altă problemă', 'Neue Aufgabe') + ' →');
     act.appendChild(c); act.appendChild(s); act.appendChild(nx); host.appendChild(act); host.appendChild(res);
@@ -869,7 +893,7 @@ Check($('#c5'), [
       var ok = ia.value.trim() !== '' && +ia.value.replace(',', '.') === p.a;
       ia.className = 'ans ' + (ok ? 'ok' : 'bad'); res.hidden = false;
       if (!counted) { counted = true; total++; if (ok) good++; host.querySelector('.score').textContent = tx('Corecte: ', 'Richtig: ') + good + ' / ' + total; }
-      if (ok) { res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! ', 'Richtig! ') + p.s; }
+      if (ok) { res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! ', 'Richtig! ') + tx('Rezolvare model: ', 'Musterlösung: ') + p.s + (work.value.trim() ? '' : tx(' (Data viitoare scrie și calculul.)', ' (Schreib nächstes Mal auch die Rechnung auf.)')); }
       else { res.className = 'result try'; res.textContent = tx('Indiciu: ', 'Tipp: ') + p.hint; }
     };
     s.onclick = function () { if (!counted) { counted = true; total++; host.querySelector('.score').textContent = tx('Corecte: ', 'Richtig: ') + good + ' / ' + total; } ia.value = p.a; ia.className = 'ans'; res.hidden = false; res.className = 'result good'; res.textContent = p.s; };
