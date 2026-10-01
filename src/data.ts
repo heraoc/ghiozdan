@@ -210,19 +210,6 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
     ],
     gmt: [
       {
-        slug: 'ceasul-si-arcele',
-        title: {
-          ro: 'Ceasul și arcele de cerc',
-          de: 'Die Uhr und die Kreisbögen',
-        },
-        summary: {
-          ro: 'Unghiul dintre acele ceasului la orice oră, arcul parcurs de acul orar și elementele cercului: rază, coardă, diametru, arce.',
-          de: 'Der Winkel zwischen den Uhrzeigern zu jeder Uhrzeit, der Bogen des Stundenzeigers und die Teile des Kreises: Radius, Sehne, Durchmesser, Bögen.',
-        },
-        src: 'lectii/clasa-6/geometrie/ceasul-si-arcele.html',
-        test: { questions: ceasulSiArceleTest, minutes: 8 },
-      },
-      {
         slug: 'adiacente-bisectoarea',
         title: {
           ro: 'Unghiuri suplementare, complementare, adiacente. Bisectoarea',
@@ -234,6 +221,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/geometrie/adiacente-bisectoarea.html',
         test: { questions: adiacenteBisectoareaTest, minutes: 8 },
+      },
+      {
+        slug: 'ceasul-si-arcele',
+        title: {
+          ro: 'Ceasul și arcele de cerc',
+          de: 'Die Uhr und die Kreisbögen',
+        },
+        summary: {
+          ro: 'Unghiul dintre acele ceasului la orice oră, arcul parcurs de acul orar și elementele cercului: rază, coardă, diametru, arce.',
+          de: 'Der Winkel zwischen den Uhrzeigern zu jeder Uhrzeit, der Bogen des Stundenzeigers und die Teile des Kreises: Radius, Sehne, Durchmesser, Bögen.',
+        },
+        src: 'lectii/clasa-6/geometrie/ceasul-si-arcele.html',
+        test: { questions: ceasulSiArceleTest, minutes: 8 },
       },
       {
         slug: 'unghiuri',
