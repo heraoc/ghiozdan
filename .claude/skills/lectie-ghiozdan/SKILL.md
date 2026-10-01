@@ -83,7 +83,8 @@ Testul final: `src/content/{slug}-test.ts`, exportă `Question[]`
 Variază poziția răspunsului corect.
 
 Înregistrare: în `src/data.ts`, **la sfârșitul** listei `LESSONS[clasă][cheieMaterie]` (lecțiile sunt
-numerotate automat în ordinea creării: „Lecția 1”, „Lecția 2”…), adaugă
+numerotate automat în ordinea creării: „Lecția 1”, „Lecția 2”…; o mutăm mai sus doar dacă cere
+utilizatorul, de exemplu ca o recapitulare să rămână după lecțiile recapitulate), adaugă
 `{ slug, title: {ro,de}, summary: {ro,de}, src: 'lectii/…/{slug}.html', test: { questions, minutes } }`
 și importul testului. Numărul de lecții de pe carduri, căutarea și tabul Teste se actualizează singure.
 Dacă materia nu există la acea clasă, adaug-o în `SUBJECTS` (iconiță + culoare din `PALETTE`).

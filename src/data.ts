@@ -2,6 +2,7 @@
 
 import { ceasulSiArceleTest } from './content/ceasul-si-arcele-test';
 import { unghiuriTest } from './content/unghiuri-test';
+import { adiacenteBisectoareaTest } from './content/adiacente-bisectoarea-test';
 import { ibnBattutaTest } from './content/ibn-battuta-test';
 import { inmultireaTest } from './content/inmultirea-test';
 import { sumaSiDiferentaTest } from './content/suma-si-diferenta-test';
@@ -117,7 +118,8 @@ const SUBJECTS: Record<Grade, [SubjectKey, glyph: string][]> = {
 
 /**
  * Lecțiile fiecărei materii, în ordinea în care au fost create: lecțiile noi se adaugă
- * la sfârșitul listei materiei. Numărul lecției (1, 2, 3…) vine din poziția în listă,
+ * la sfârșitul listei materiei (doar la cerere se mută mai sus, de exemplu o recapitulare
+ * pusă după lecțiile pe care le recapitulează). Numărul lecției (1, 2, 3…) vine din poziția în listă,
  * iar numărul de lecții de pe carduri se calculează tot din această listă.
  */
 const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
@@ -219,6 +221,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/geometrie/ceasul-si-arcele.html',
         test: { questions: ceasulSiArceleTest, minutes: 8 },
+      },
+      {
+        slug: 'adiacente-bisectoarea',
+        title: {
+          ro: 'Unghiuri suplementare, complementare, adiacente. Bisectoarea',
+          de: 'Supplement- und Komplementwinkel, benachbarte Winkel, Winkelhalbierende',
+        },
+        summary: {
+          ro: 'Suplement și complement, problemele cu rapoarte (metoda cu k), când sunt două unghiuri adiacente și construcția bisectoarei cu raportorul sau cu rigla și compasul.',
+          de: 'Supplement und Komplement, Aufgaben mit Verhältnissen (Methode mit k), wann zwei Winkel benachbart sind, und die Konstruktion der Winkelhalbierenden mit Winkelmesser oder mit Lineal und Zirkel.',
+        },
+        src: 'lectii/clasa-6/geometrie/adiacente-bisectoarea.html',
+        test: { questions: adiacenteBisectoareaTest, minutes: 8 },
       },
       {
         slug: 'unghiuri',
