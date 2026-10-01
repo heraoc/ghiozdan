@@ -1,6 +1,7 @@
 // Conținutul site-ului. Fiecare text are variantă în română (ro) și germană (de).
 
 import { ceasulSiArceleTest } from './content/ceasul-si-arcele-test';
+import { unghiuriTest } from './content/unghiuri-test';
 import { ibnBattutaTest } from './content/ibn-battuta-test';
 import { inmultireaTest } from './content/inmultirea-test';
 import { sumaSiDiferentaTest } from './content/suma-si-diferenta-test';
@@ -218,6 +219,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/geometrie/ceasul-si-arcele.html',
         test: { questions: ceasulSiArceleTest, minutes: 8 },
+      },
+      {
+        slug: 'unghiuri',
+        title: {
+          ro: 'Recapitulare: unghiuri',
+          de: 'Wiederholung: Winkel',
+        },
+        summary: {
+          ro: 'Unghiuri adiacente, complementare și suplementare, opuse la vârf, în jurul unui punct, bisectoarea, metoda cu x și evaluarea din manual, interactivă.',
+          de: 'Benachbarte Winkel, Komplement- und Supplementwinkel, Scheitelwinkel, Winkel um einen Punkt, die Winkelhalbierende, die Methode mit x und die Prüfung aus dem Buch, interaktiv.',
+        },
+        src: 'lectii/clasa-6/geometrie/unghiuri.html',
+        test: { questions: unghiuriTest, minutes: 8 },
       },
     ],
     fiz: [
