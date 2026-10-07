@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Poli, oceane, vârfuri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Pole, Ozeane, Gipfel';
+})();
+</script>
+<script src="../../lib/d3-7.8.5.min.js"></script>
+<script src="../../lib/topojson-client-3.1.0.min.js"></script>
+<style>
+:root{
+  --paper:#f3f7f6; --card:#ffffff; --ink:#1b2a2e; --muted:#566468; --rule:#d9e3e2; --sheet:#e9f1ef;
+  --accent:#1f8a78; --accent-soft:#e1f3ef;
+  --sea:#dcebf2; --land:#efe6d2; --coast:#b9ae95; --grat:#c7d6de;
+  --route:#c0392b; --old:#9aa7ab;
+  --good:#27a36f; --good-soft:#e6f6ee; --bad:#d64545; --bad-soft:#fdeaea;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,select{font:inherit;color:inherit}
+button:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.hint{font-size:14.5px;color:var(--muted)}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.score{font-weight:700}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#b02e2e;background:var(--bad-soft)}
+.pick[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:#fff}
+.pick.placed{border-color:var(--good);background:var(--good-soft);color:var(--ink);cursor:default}
+
+/* hărți */
+.map{background:var(--sea);border:1px solid var(--rule);border-radius:12px;overflow:hidden;position:relative}
+.map svg{display:block;width:100%;height:auto}
+.map .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-weight:700}
+.sea{fill:var(--sea)} .land{fill:var(--land);stroke:var(--coast);stroke-width:.6;vector-effect:non-scaling-stroke}
+.ice{fill:#fbfdfe}
+.grat{fill:none;stroke:var(--grat);stroke-width:.5;vector-effect:non-scaling-stroke}
+.route{fill:none;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.mlbl{font:700 14px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.mlbl.sm{font-weight:500}
+.dot{stroke:#fff;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.map-btns{position:absolute;right:8px;top:8px;display:flex;gap:6px}
+.map-btns button{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:4px 10px;font-size:14px;font-weight:700;cursor:pointer}
+
+.two{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+.toggles{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.toggle{border:1.5px solid var(--c);background:transparent;border-radius:99px;padding:6px 14px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+.toggle i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.toggle[aria-pressed="true"]{background:var(--c);color:#fff}
+.toggle[aria-pressed="true"] i{background:#fff}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tabs .pick{font-weight:700}
+.info{display:grid;gap:10px;align-content:start}
+.info .when{font:800 15px/1 var(--body);color:var(--route)}
+.info h3{font-size:26px}
+.info .who{color:var(--muted);font-size:15px;margin-top:-4px}
+.wtable{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;background:var(--sheet);border-radius:8px;padding:10px 12px;font-size:15.5px;margin:0}
+.wtable dt{font-weight:700}
+.wtable dd{margin:0}
+.info .know{font-size:15.5px}
+.nav{display:flex;gap:8px;align-items:center}
+.nav .count{font-size:14px;color:var(--muted);font-weight:700}
+.fact{background:var(--card);border:1px solid var(--rule);border-left:4px solid #c98a1a;border-radius:10px;padding:10px 14px}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:14px}
+.facts .fact b{display:block;font-family:var(--display);font-size:19px}
+.facts .fact p{font-size:15px;color:var(--muted)}
+.clue{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;display:grid;gap:6px}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #a9c3bd;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted)}
+
+/* tabelul din caiet */
+.tbl-wrap{overflow-x:auto}
+table.who{border-collapse:separate;border-spacing:0 6px;width:100%;min-width:640px}
+table.who th{font:700 13px/1.2 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 8px}
+table.who td{background:var(--card);padding:6px 8px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+table.who td:first-child{border-left:1px solid var(--rule);border-radius:8px 0 0 8px;font-weight:700}
+table.who td:last-child{border-right:1px solid var(--rule);border-radius:0 8px 8px 0}
+table.who select{width:100%;border:2px solid var(--rule);border-radius:8px;padding:4px 6px;background:#fff;min-height:36px}
+table.who select.ok{border-color:var(--good);background:var(--good-soft)}
+table.who select.bad{border-color:var(--bad);background:var(--bad-soft)}
+
+/* ordonare */
+.order{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:10px}
+.slot{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:8px 12px;min-height:56px;font-size:15px}
+.slot b{display:block;color:var(--accent);font-size:14px}
+.slot.on{border-color:var(--good);background:var(--good-soft)}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:860px){ .two{grid-template-columns:1fr} .gloss-head{max-width:none} }
+@media (max-width:600px){ .map-btns{position:static;justify-content:flex-end;padding:6px 6px 0} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Geografie · Clasa a 6-a · Repere ale cunoașterii Terrei</span><span class="de">Geografie · Klasse 6 · Meilensteine der Erforschung der Erde</span></p>
+  <h1><span class="ro">Poli, oceane, vârfuri</span><span class="de">Pole, Ozeane, Gipfel</span></h1>
+  <p class="lead">
+    <span class="ro">Pe la 1850, hărțile arătau aproape toate continentele. Rămăseseră „pete albe” în locurile cele mai greu de atins: gheața polilor, adâncurile oceanelor, cele mai înalte vârfuri. Hai să vedem cine și când a ajuns acolo.</span>
+    <span class="de">Um 1850 zeigten die Karten fast alle Kontinente. Weiße Flecken blieben an den Orten, die am schwersten zu erreichen waren: das Eis der Pole, die Tiefen der Ozeane, die höchsten Gipfel. Sehen wir, wer wann dort ankam.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">De ce s-au dus oamenii la poli, unde nu e nimic de câștigat?</span><span class="de">Warum zogen Menschen zu den Polen, wo es nichts zu gewinnen gibt?</span></li>
+        <li><span class="ro">Ce te-ar ajuta mai mult ca să ajungi la Polul Sud: o corabie, un avion sau o sanie cu câini?</span><span class="de">Was würde dir am Südpol mehr helfen: ein Schiff, ein Flugzeug oder ein Hundeschlitten?</span></li>
+        <li><span class="ro">Cum poți explora fundul mării, unde un om nu poate respira?</span><span class="de">Wie erforscht man den Meeresboden, wo ein Mensch nicht atmen kann?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Drumul prin Arctica</span><span class="de">Der Weg durch die Arktis</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Cei doi poli</span><span class="de">Die beiden Pole</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Oceane și vârfuri</span><span class="de">Ozeane und Gipfel</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Tabelul din caiet</span><span class="de">Die Tabelle im Heft</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Pune în ordine</span><span class="de">In die Reihenfolge bringen</span></a>
+  </nav>
+</header>
+
+<!-- 1. Arctica -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Drumul prin Arctica: Pasajul de Nord-Est și de Nord-Vest</span><span class="de">Der Weg durch die Arktis: Nordost- und Nordwestpassage</span></h2>
+  <p class="section-sub"><span class="ro">Europenii visau să ajungă din Atlantic în Pacific <b>pe la nord</b>, printre gheți: așa drumul spre Asia ar fi fost mult mai scurt. Harta e privită de deasupra Polului Nord. Pornește fiecare drum și urmărește-l.</span><span class="de">Die Europäer träumten davon, vom Atlantik in den Pazifik <b>im Norden</b>, zwischen dem Eis hindurch, zu gelangen: Der Weg nach Asien wäre viel kürzer gewesen. Die Karte zeigt den Blick von oben auf den Nordpol. Schalte jeden Weg ein und verfolge ihn.</span></p>
+  <div class="toggles" id="ar-btns" role="group"></div>
+  <div class="two">
+    <div class="map" id="ar-map"><svg id="ar-svg" role="img"></svg><div class="loading"></div></div>
+    <div class="info" id="ar-info" aria-live="polite"></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro"><b>Pasajul de Nord-Est</b> trece pe lângă țărmul Siberiei (Marele Drum Maritim de Nord): <b>Nordenskjöld</b>, 1878–1879.</span><span class="de"><b>Die Nordostpassage</b> führt an der Küste Sibiriens entlang: <b>Nordenskjöld</b>, 1878–1879.</span></li>
+      <li><span class="ro"><b>Pasajul de Nord-Vest</b> trece prin canalele Arhipelagului Arctic Canadian: <b>Amundsen</b>, 1903–1906.</span><span class="de"><b>Die Nordwestpassage</b> führt durch die Kanäle des Kanadisch-Arktischen Archipels: <b>Amundsen</b>, 1903–1906.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c1"></div>
+</section>
+
+<!-- 2. Polii -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Cei doi poli geografici</span><span class="de">Die beiden geographischen Pole</span></h2>
+  <p class="section-sub"><span class="ro">La începutul secolului al XX-lea, polii erau încă neatinși. Alege un pol, apoi un explorator, și vezi pe hartă drumul lui (traseele sunt desenate aproximativ).</span><span class="de">Zu Beginn des 20. Jahrhunderts waren die Pole noch unerreicht. Wähle einen Pol und dann einen Forscher und sieh dir seinen Weg auf der Karte an (die Wege sind ungefähr eingezeichnet).</span></p>
+  <div class="tabs" id="po-tabs" role="group"></div>
+  <div class="toggles" id="po-btns" role="group"></div>
+  <div class="two">
+    <div class="map" id="po-map"><svg id="po-svg" role="img"></svg><div class="loading"></div></div>
+    <div class="info" id="po-info" aria-live="polite"></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro"><b>Polul Nord</b> (în mijlocul oceanului înghețat): Peary, 1909; din avion, Byrd, 1926.</span><span class="de"><b>Nordpol</b> (mitten im gefrorenen Ozean): Peary, 1909; mit dem Flugzeug Byrd, 1926.</span></li>
+      <li><span class="ro"><b>Polul Sud</b> (pe continentul Antarctida): Amundsen, 14 decembrie 1911, înaintea lui Scott; din avion, Byrd, 1929.</span><span class="de"><b>Südpol</b> (auf dem Kontinent Antarktis): Amundsen, 14. Dezember 1911, vor Scott; mit dem Flugzeug Byrd, 1929.</span></li>
+      <li><span class="ro">Cunoașterea Antarcticii a început cu expediția <b>„Belgica”</b> (1897–1899), la care a participat românul <b>Emil Racoviță</b>.</span><span class="de">Die Erforschung der Antarktis begann mit der Expedition der <b>„Belgica“</b> (1897–1899), an der der Rumäne <b>Emil Racoviță</b> teilnahm.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Oceane și vârfuri -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Oceane și vârfuri: epoca modernă</span><span class="de">Ozeane und Gipfel: die Neuzeit</span></h2>
+  <p class="section-sub"><span class="ro">Odată cu progresul științei și al tehnicii, oamenii au ajuns și în locuri pe care nu le atinsese nimeni. Apasă „Următorul” și vezi pe hartă unde s-a petrecut fiecare.</span><span class="de">Mit dem Fortschritt von Wissenschaft und Technik gelangten die Menschen auch an Orte, die noch niemand erreicht hatte. Drücke „Weiter“ und sieh auf der Karte, wo sich alles abspielte.</span></p>
+  <div class="two">
+    <div class="map" id="mo-map"><div class="map-btns"><button type="button" id="mo-reset"></button></div><svg id="mo-svg" role="img"></svg><div class="loading"></div></div>
+    <div class="info" id="mo-info" aria-live="polite"></div>
+  </div>
+  <h3 style="margin:26px 0 2px;font-size:22px"><span class="ro">Știai că?</span><span class="de">Wusstest du?</span></h3>
+  <div class="facts">
+    <div class="fact"><b>1875</b><p><span class="ro">Au fost făcute primele măsurători ale Gropii Marianelor, cea mai adâncă groapă oceanică.</span><span class="de">Die ersten Messungen des Marianengrabens, des tiefsten Meeresgrabens, wurden gemacht.</span></p></div>
+    <div class="fact"><b>1960</b><p><span class="ro">Don Walsh și Jacques Piccard au coborât până în cea mai adâncă fosă, la bordul batiscafului <i>Trieste</i>.</span><span class="de">Don Walsh und Jacques Piccard tauchten im Bathyskaph <i>Trieste</i> bis in den tiefsten Meeresgraben hinab.</span></p></div>
+    <div class="fact"><b>Elektro-L 1</b><p><span class="ro">Cea mai performantă imagine a Terrei a fost făcută de un satelit meteorologic rusesc: are 121 de megapixeli.</span><span class="de">Das leistungsfähigste Bild der Erde machte ein russischer Wettersatellit: Es hat 121 Megapixel.</span></p></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Pe mare, <b>Thor Heyerdahl</b> a dovedit cu pluta <i>Kon-Tiki</i> (1947) că oamenii puteau trece Pacificul cu mijloace simple.</span><span class="de">Auf dem Meer bewies <b>Thor Heyerdahl</b> mit dem Floß <i>Kon-Tiki</i> (1947), dass Menschen den Pazifik mit einfachen Mitteln überqueren konnten.</span></li>
+      <li><span class="ro">Pe uscat, <b>Hillary și Tenzing</b> au urcat pe cel mai înalt vârf, Everest (8 850 m), în 1953.</span><span class="de">An Land bestiegen <b>Hillary und Tenzing</b> den höchsten Gipfel, den Everest (8850 m), im Jahr 1953.</span></li>
+      <li><span class="ro">Sub apă, <b>Jacques-Yves Cousteau</b> a cercetat oceanele de la bordul navei <i>Calypso</i> (peste 250 000 km parcurși).</span><span class="de">Unter Wasser erforschte <b>Jacques-Yves Cousteau</b> die Ozeane vom Schiff <i>Calypso</i> aus (über 250 000 km zurückgelegt).</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Tabelul din caiet -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Completează tabelul din caiet</span><span class="de">Vervollständige die Tabelle aus dem Heft</span></h2>
+  <p class="section-sub"><span class="ro">Cine? Când? De unde? Încotro? Alege răspunsurile și apasă „Verifică”.</span><span class="de">Wer? Wann? Woher? Wohin? Wähle die Antworten und drücke „Prüfen“.</span></p>
+  <div class="tbl-wrap"><table class="who" id="who"></table></div>
+  <div class="actions">
+    <button class="btn" type="button" id="who-check"></button>
+    <button class="btn ghost" type="button" id="who-show"></button>
+    <span class="score" id="who-score" aria-live="polite"></span>
+  </div>
+</section>
+
+<!-- 5. Ordonare -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Pune în ordine pe linia timpului</span><span class="de">Bringe sie auf der Zeitleiste in die Reihenfolge</span></h2>
+  <p class="section-sub"><span class="ro">Apasă pe evenimente începând cu cel mai vechi. Dacă ai dreptate, se așază pe linia timpului.</span><span class="de">Tippe die Ereignisse an, beginnend mit dem ältesten. Wenn du richtig liegst, wird es auf der Zeitleiste eingeordnet.</span></p>
+  <div class="order" id="od-bank"></div>
+  <p class="score" id="od-msg" aria-live="polite"></p>
+  <div class="slots" id="od-slots"></div>
+</section>
+
+<section class="block" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <div class="gloss-head" style="margin-top:14px"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După manualul de Geografie, clasa a 6-a, „Repere ale cunoașterii Terrei – de la marile descoperiri geografice la explorarea modernă” (p. 12–13), și notițele din caiet (tabelul wer / wann / woher / wohin). Anul expediției lui Racoviță este cel din manual (1897–1899). Contururile hărților: Natural Earth. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Geographiebuch der 6. Klasse, „Meilensteine der Erforschung der Erde – von den großen geographischen Entdeckungen bis zur modernen Erkundung“ (S. 12–13), und den Notizen im Heft (Tabelle wer / wann / woher / wohin). Das Jahr der Expedition von Racoviță stammt aus dem Buch (1897–1899). Kartengrundlage: Natural Earth. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/** Întrebări scurte de verificare, cu răspuns imediat. */
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.textContent = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* ================= hărți: date și ajutoare ================= */
+var DATA = Promise.all([
+  fetch('../../lib/land-50m.json').then(function (r) { return r.json(); })
+]).then(function (res) {
+  return { land: topojson.feature(res[0], res[0].objects.land) };
+});
+function loaded(id) { var l = $('#' + id + ' .loading'); if (l) l.remove(); }
+document.querySelectorAll('.map .loading').forEach(function (l) { l.textContent = tx('Se încarcă harta…', 'Karte wird geladen …'); });
+
+function makeMap(svgSel, W, H, proj, land) {
+  var svg = d3.select(svgSel).attr('viewBox', '0 0 ' + W + ' ' + H);
+  var path = d3.geoPath(proj);
+  var g = svg.append('g');
+  g.append('path').datum({ type: 'Sphere' }).attr('class', 'sea').attr('d', path);
+  g.append('path').datum(d3.geoGraticule10()).attr('class', 'grat').attr('d', path);
+  g.append('path').datum(land).attr('class', 'land').attr('d', path);
+  var tr = d3.zoomIdentity, listeners = [];
+  var zoom = d3.zoom().on('zoom', function (e) { g.attr('transform', e.transform); tr = e.transform; listeners.forEach(function (f) { f(tr); }); });
+  return {
+    svg: svg, g: g, path: path, proj: proj, W: W,
+    t: function () { return tr; },
+    onZoom: function (f) { listeners.push(f); },
+    zoomTo: function (coords, maxK) {
+      var pts = coords.map(proj).filter(Boolean);
+      var xs = pts.map(function (p) { return p[0]; }), ys = pts.map(function (p) { return p[1]; });
+      var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+      var w = Math.max(x1 - x0, 60), hh = Math.max(y1 - y0, 40);
+      var s = Math.max(1, Math.min(maxK || 4, 0.7 / Math.max(w / W, hh / H)));
+      var t = d3.zoomIdentity.translate(W / 2, H / 2).scale(s).translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
+      var tx0 = Math.min(0, Math.max(W - W * s, t.x)), ty0 = Math.min(0, Math.max(H - H * s, t.y));
+      t = d3.zoomIdentity.translate(tx0, ty0).scale(s);
+      (reduce ? svg : svg.transition().duration(700)).call(zoom.transform, t);
+    },
+    reset: function () { (reduce ? svg : svg.transition().duration(600)).call(zoom.transform, d3.zoomIdentity); }
+  };
+}
+function label(M, layer, lonlat, text, cls, dx, dy) {
+  var p = M.proj(lonlat); if (!p) return;
+  var t = layer.append('text').attr('class', 'mlbl ' + (cls || '')).text(text);
+  function place(tr) {
+    var k = tr.k, x = dx == null ? 6 : dx;
+    var right = tr.x + p[0] * k > M.W - 150 && x > 0;
+    var y = dy == null ? -6 : dy;
+    if (tr.y + p[1] * k < 28 && y < 0) y = 18;
+    var base = window.innerWidth < 520 ? 22 : 14;
+    t.attr('text-anchor', right ? 'end' : 'start')
+      .attr('x', p[0] + (right ? -x : x) / k).attr('y', p[1] + y / k)
+      .style('font-size', base / k + 'px').style('stroke-width', 3.5 / k + 'px');
+  }
+  place(M.t()); M.onZoom(place);
+  return t;
+}
+function dot(M, layer, lonlat, color, r) {
+  var p = M.proj(lonlat); if (!p) return;
+  var c = layer.append('circle').attr('class', 'dot').attr('cx', p[0]).attr('cy', p[1]).attr('fill', color || '#c0392b');
+  function size(tr) { c.attr('r', (r || 4.5) / tr.k); }
+  size(M.t()); M.onZoom(size);
+  return c;
+}
+function line(layer, M, coords, color, w, dash) {
+  var p = layer.append('path').datum({ type: 'LineString', coordinates: coords }).attr('class', 'route').attr('stroke', color).attr('stroke-width', w || 3).attr('d', M.path);
+  if (dash) p.attr('stroke-dasharray', dash);
+  return p;
+}
+/** Hartă azimutală centrată pe un pol; clip = unghiul în grade față de pol. */
+function polar(svgSel, land, south, clip) {
+  var W = 560, H = 560;
+  var proj = d3.geoAzimuthalEquidistant().rotate([0, south ? 90 : -90]).clipAngle(clip)
+    .translate([W / 2, H / 2]).scale((H / 2 - 6) / (clip * Math.PI / 180));
+  return makeMap(svgSel, W, H, proj, land);
+}
+function infoCard(host, e, extra) {
+  host.innerHTML = '';
+  host.appendChild(h('span', 'when', T(e.year)));
+  host.appendChild(h('h3', '', T(e.name)));
+  host.appendChild(h('p', 'who', T(e.who)));
+  var dl = h('dl', 'wtable');
+  [[tx('Cine?', 'Wer?'), T(e.name)], [tx('Când?', 'Wann?'), T(e.year)], [tx('De unde?', 'Woher?'), T(e.from)], [tx('Încotro?', 'Wohin?'), T(e.to)]].forEach(function (r) {
+    dl.appendChild(h('dt', '', r[0])); dl.appendChild(h('dd', '', r[1]));
+  });
+  host.appendChild(dl);
+  host.appendChild(h('p', 'know', T(e.text)));
+  if (extra) host.appendChild(extra);
+}
+
+/* ================= 1. Arctica ================= */
+DATA.then(function (D) {
+  loaded('ar-map');
+  var M = polar('#ar-svg', D.land, false, 36);
+  M.svg.attr('aria-label', tx('Harta Arcticii privită de deasupra Polului Nord, cu cele două pasaje', 'Karte der Arktis von oben auf den Nordpol, mit den beiden Passagen'));
+  var base = M.g.append('g'), lay = M.g.append('g');
+  dot(M, base, [0, 90], '#56606a', 3.5); label(M, base, [0, 90], tx('Polul Nord', 'Nordpol'), 'sm', 6, 14);
+  label(M, base, [-42, 71], tx('Groenlanda', 'Grönland'), 'sm', 0, 0);
+  label(M, base, [75, 62], 'Siberia', 'sm', 0, 0);
+  label(M, base, [-170, 59], tx('Strâmtoarea Bering', 'Beringstraße'), 'sm', -4, -2);
+  var R = [
+    { k: 'ne', c: '#2f6fbd', year: { ro: '1878–1879', de: '1878–1879' }, name: { ro: 'Pasajul de Nord-Est: Nordenskjöld', de: 'Nordostpassage: Nordenskjöld' },
+      who: { ro: 'Nils Adolf Erik Nordenskjöld, explorator și geolog scandinav', de: 'Nils Adolf Erik Nordenskjöld, skandinavischer Forscher und Geologe' },
+      from: { ro: 'Scandinavia', de: 'Skandinavien' }, to: { ro: 'între Oceanul Atlantic și Oceanul Pacific', de: 'zwischen Atlantischem und Pazifischem Ozean' },
+      text: { ro: 'A străbătut „Drumul Maritim de Nord-Est” pe lângă țărmul Siberiei și a fost primul care a trecut pe mare din Atlantic în Pacific prin regiunea arctică.', de: 'Er befuhr die „Nordostpassage“ entlang der sibirischen Küste und fuhr als Erster über das Meer vom Atlantik in den Pazifik durch die Arktis.' },
+      legs: [[[15.6, 56.2], [5, 62], [18.9, 69.7], [33, 71.5], [56, 70.3], [70, 73.5], [104, 77.6], [128, 73.5], [160, 70], [-170, 66.2], [-168.5, 65.7]]],
+      pts: [[[15.6, 56.2], { ro: 'Suedia', de: 'Schweden' }], [[104, 77.6], { ro: 'Capul Celiuskin', de: 'Kap Tscheljuskin' }]] },
+    { k: 'nv', c: '#c0392b', year: { ro: '1903–1906', de: '1903–1906' }, name: { ro: 'Pasajul de Nord-Vest: Amundsen', de: 'Nordwestpassage: Amundsen' },
+      who: { ro: 'Roald Amundsen, explorator norvegian', de: 'Roald Amundsen, norwegischer Forscher' },
+      from: { ro: 'Norvegia', de: 'Norwegen' }, to: { ro: 'între Atlantic și Pacific, prin Arhipelagul Arctic Canadian', de: 'zwischen Atlantik und Pazifik, durch den Kanadisch-Arktischen Archipel' },
+      text: { ro: 'A navigat trei ani prin canalele înghețate dintre insulele nordului Canadei, cu o corabie mică, și a ieșit în Pacific prin Strâmtoarea Bering.', de: 'Er segelte drei Jahre lang mit einem kleinen Schiff durch die vereisten Kanäle zwischen den Inseln Nordkanadas und kam durch die Beringstraße in den Pazifik.' },
+      legs: [[[10.7, 59.9], [-10, 63], [-50, 63], [-58, 72], [-82, 74.2], [-92, 72.5], [-96, 68.6], [-110, 68], [-130, 70.5], [-156, 71.3], [-168, 65.8]]],
+      pts: [[[10.7, 59.9], { ro: 'Norvegia', de: 'Norwegen' }], [[-96, 68.6], { ro: 'Gjoa Haven (iernat)', de: 'Gjoa Haven (überwintert)' }]] }
+  ];
+  var on = { ne: false, nv: false }, info = $('#ar-info'), host = $('#ar-btns');
+  R.forEach(function (r) {
+    var b = btn('toggle', '<i></i>' + T(r.name).split(':')[0]); b.style.setProperty('--c', r.c); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { on[r.k] = !on[r.k]; b.setAttribute('aria-pressed', on[r.k] ? 'true' : 'false'); draw(); };
+    host.appendChild(b);
+  });
+  function draw() {
+    lay.selectAll('*').remove(); info.innerHTML = '';
+    var any = false;
+    R.forEach(function (r) {
+      if (!on[r.k]) return; any = true;
+      r.legs.forEach(function (l) { line(lay, M, l, r.c, 3.2); });
+      r.pts.forEach(function (p) { dot(M, lay, p[0], r.c, 4.5); label(M, lay, p[0], T(p[1]), 'sm'); });
+      var box = h('div', ''); infoCard(box, r); box.style.cssText = 'display:grid;gap:10px;border-left:4px solid ' + r.c + ';padding-left:12px;margin-bottom:10px';
+      info.appendChild(box);
+    });
+    if (!any) info.innerHTML = '<p class="muted">' + tx('Pornește un drum de deasupra hărții. Care dintre ele trece pe lângă Siberia și care pe lângă Canada?', 'Schalte oben einen Weg ein. Welcher führt an Sibirien vorbei und welcher an Kanada?') + '</p>';
+  }
+  draw();
+});
+Check($('#c1'), [
+  { q: { ro: 'Cine a făcut primul drumul pe mare din Atlantic în Pacific prin Arctica?', de: 'Wer machte als Erster die Seereise vom Atlantik in den Pazifik durch die Arktis?' },
+    o: [{ ro: 'Roald Amundsen', de: 'Roald Amundsen' }, { ro: 'Nils Adolf Erik Nordenskjöld', de: 'Nils Adolf Erik Nordenskjöld' }, { ro: 'Robert Scott', de: 'Robert Scott' }], a: 1,
+    why: { ro: 'Nordenskjöld, în 1878–1879, pe Pasajul de Nord-Est. Amundsen a trecut abia după 1903, pe Pasajul de Nord-Vest.', de: 'Nordenskjöld, 1878–1879, auf der Nordostpassage. Amundsen fuhr erst ab 1903, auf der Nordwestpassage.' },
+    hint: { ro: 'Uită-te la ani: cine a plecat mai devreme?', de: 'Schau dir die Jahre an: Wer fuhr früher los?' } },
+  { q: { ro: 'Pe lângă ce țărm trece Pasajul de Nord-Vest?', de: 'An welcher Küste führt die Nordwestpassage vorbei?' },
+    o: [{ ro: 'Siberia', de: 'Sibirien' }, { ro: 'nordul Canadei', de: 'Nordkanada' }, { ro: 'Antarctida', de: 'Antarktis' }], a: 1,
+    why: { ro: 'Trece prin canalele dintre insulele Arhipelagului Arctic Canadian.', de: 'Sie führt durch die Kanäle zwischen den Inseln des Kanadisch-Arktischen Archipels.' } }
+]);
+
+/* ================= 2. Polii ================= */
+(function () {
+  // cele două hărți polare folosesc același element: la schimbare se redesenează
+  DATA.then(function (D) {
+    var svgEl = $('#po-svg');
+    var PN = { south: false, clip: 30, pole: { ro: 'Polul Nord', de: 'Nordpol' } }, PS = { south: true, clip: 38, pole: { ro: 'Polul Sud', de: 'Südpol' } };
+    var E = {
+      n: [
+        { k: 'peary', c: '#c0392b', year: { ro: '6 aprilie 1909', de: '6. April 1909' }, name: { ro: 'Robert Edwin Peary', de: 'Robert Edwin Peary' },
+          who: { ro: 'explorator american', de: 'amerikanischer Forscher' }, from: { ro: 'America', de: 'Amerika' }, to: { ro: 'Polul Nord', de: 'Nordpol' },
+          text: { ro: 'A ajuns la Polul Nord pe gheață, cu sănii. Frederick Cook, și el american, afirmase că ajunsese acolo cu un an înainte. Peary este cel recunoscut drept câștigător.', de: 'Er erreichte den Nordpol über das Eis mit Schlitten. Frederick Cook, ebenfalls Amerikaner, behauptete, schon ein Jahr früher dort gewesen zu sein. Als Sieger gilt Peary.' },
+          legs: [[[-69, 83.1], [-30, 87], [0, 90]]], pts: [[[-69, 83.1], { ro: 'Insula Ellesmere', de: 'Ellesmere-Insel' }]] },
+        { k: 'byrd', c: '#2f6fbd', year: { ro: '1926', de: '1926' }, name: { ro: 'Richard Byrd', de: 'Richard Byrd' },
+          who: { ro: 'aviator american', de: 'amerikanischer Flieger' }, from: { ro: 'America', de: 'Amerika' }, to: { ro: 'Polul Nord (și, în 1929, Polul Sud)', de: 'Nordpol (und 1929 Südpol)' },
+          text: { ro: 'A zburat deasupra Polului Nord, în premieră, la 17 ani după Peary. Trei ani mai târziu a cucerit pe calea aerului și Polul Sud.', de: 'Er überflog als Erster den Nordpol, 17 Jahre nach Peary. Drei Jahre später erreichte er auch den Südpol auf dem Luftweg.' },
+          legs: [[[11.9, 78.9], [0, 90]]], pts: [[[11.9, 78.9], { ro: 'Spitsbergen', de: 'Spitzbergen' }]] }
+      ],
+      s: [
+        { k: 'belgica', c: '#8e44ad', year: { ro: '1897–1899', de: '1897–1899' }, name: { ro: 'Emil Racoviță (expediția „Belgica”)', de: 'Emil Racoviță (Expedition der „Belgica“)' },
+          who: { ro: 'biolog și naturalist român', de: 'rumänischer Biologe und Naturforscher' }, from: { ro: 'România (expediție belgiană)', de: 'Rumänien (belgische Expedition)' }, to: { ro: 'Antarctida', de: 'Antarktis' },
+          text: { ro: 'A fost naturalistul expediției științifice antarctice „Belgica”. Nava a rămas prinsă în gheață și echipajul a iernat în Antarctida, cercetând viețuitoarele din regiune.', de: 'Er war der Naturforscher der wissenschaftlichen Antarktisexpedition „Belgica“. Das Schiff blieb im Eis stecken, und die Besatzung überwinterte in der Antarktis und erforschte die Lebewesen der Region.' },
+          legs: [[[-68, -54.8], [-62, -64], [-85, -70.5]]], pts: [[[-68, -54.8], { ro: 'Țara de Foc', de: 'Feuerland' }], [[-85, -70.5], { ro: 'Belgica prinsă în gheață', de: '„Belgica“ im Eis' }]] },
+        { k: 'amundsen', c: '#c0392b', year: { ro: '14 decembrie 1911', de: '14. Dezember 1911' }, name: { ro: 'Roald Amundsen', de: 'Roald Amundsen' },
+          who: { ro: 'explorator norvegian', de: 'norwegischer Forscher' }, from: { ro: 'Norvegia', de: 'Norwegen' }, to: { ro: 'Polul Sud', de: 'Südpol' },
+          text: { ro: 'A ajuns primul la Polul Sud, cu sănii trase de câini.', de: 'Er erreichte als Erster den Südpol, mit von Hunden gezogenen Schlitten.' },
+          legs: [[[-164, -78.5], [-150, -86], [0, -90]]], pts: [[[-164, -78.5], { ro: 'Golful Balenelor', de: 'Bucht der Wale' }]] },
+        { k: 'scott', c: '#d68910', year: { ro: '18 ianuarie 1912', de: '18. Januar 1912' }, name: { ro: 'Robert Falcon Scott', de: 'Robert Falcon Scott' },
+          who: { ro: 'explorator englez (britanic)', de: 'englischer (britischer) Forscher' }, from: { ro: 'Anglia', de: 'England' }, to: { ro: 'Polul Sud', de: 'Südpol' },
+          text: { ro: 'A ajuns la pol la mai bine de o lună după Amundsen. Pe drumul de întoarcere, el și cei patru camarazi au murit din cauza vremii rele, a lipsei proviziilor și a deznădejdii.', de: 'Er erreichte den Pol gut einen Monat nach Amundsen. Auf dem Rückweg starben er und seine vier Kameraden an schlechtem Wetter, Mangel an Vorräten und Mutlosigkeit.' },
+          legs: [[[166.4, -77.6], [170, -84], [0, -90]]], pts: [[[166.4, -77.6], { ro: 'Insula Ross', de: 'Ross-Insel' }]] }
+      ]
+    };
+    var cur = 'n', sel = 0, M = null, lay = null;
+    var tabs = $('#po-tabs'), host = $('#po-btns'), info = $('#po-info');
+    var tb = {};
+    [['n', { ro: 'Polul Nord', de: 'Nordpol' }], ['s', { ro: 'Polul Sud', de: 'Südpol' }]].forEach(function (t) {
+      var b = btn('pick', T(t[1])); b.setAttribute('aria-pressed', 'false'); tb[t[0]] = b;
+      b.onclick = function () { cur = t[0]; sel = 0; build(); };
+      tabs.appendChild(b);
+    });
+    function build() {
+      Object.keys(tb).forEach(function (k) { tb[k].setAttribute('aria-pressed', k === cur ? 'true' : 'false'); });
+      d3.select(svgEl).selectAll('*').remove();
+      var P = cur === 'n' ? PN : PS;
+      M = polar('#po-svg', D.land, P.south, P.clip);
+      M.svg.attr('aria-label', tx('Harta ' + (cur === 'n' ? 'Arcticii' : 'Antarcticii') + ' privită de deasupra polului', 'Karte der ' + (cur === 'n' ? 'Arktis' : 'Antarktis') + ' von oben auf den Pol'));
+      var base = M.g.append('g'); lay = M.g.append('g');
+      dot(M, base, [0, P.south ? -90 : 90], '#56606a', 3.5); label(M, base, [0, P.south ? -90 : 90], T(P.pole), 'sm', 6, 14);
+      if (P.south) label(M, base, [70, -78], 'Antarctida', 'sm', 0, 0), label(M, base, [-88, -52.5], tx('America de Sud', 'Südamerika'), 'sm', 0, 0);
+      else label(M, base, [-42, 71], tx('Groenlanda', 'Grönland'), 'sm', 0, 0);
+      host.innerHTML = '';
+      E[cur].forEach(function (e, i) {
+        var b = btn('toggle', '<i></i>' + T(e.name).split(' (')[0]); b.style.setProperty('--c', e.c); b.setAttribute('aria-pressed', i === sel ? 'true' : 'false');
+        b.onclick = function () { sel = i; draw(); Array.prototype.forEach.call(host.children, function (x, j) { x.setAttribute('aria-pressed', j === i ? 'true' : 'false'); }); };
+        host.appendChild(b);
+      });
+      draw();
+    }
+    function draw() {
+      lay.selectAll('*').remove();
+      E[cur].forEach(function (e, i) { if (i !== sel) e.legs.forEach(function (l) { line(lay, M, l, '#9aa7ab', 1.6, '4 4'); }); });
+      var e = E[cur][sel];
+      e.legs.forEach(function (l) { line(lay, M, l, e.c, 3.4); });
+      e.pts.forEach(function (p) { dot(M, lay, p[0], e.c, 4.5); label(M, lay, p[0], T(p[1]), 'sm'); });
+      infoCard(info, e);
+      info.style.borderLeft = '4px solid ' + e.c; info.style.paddingLeft = '12px';
+    }
+    build();
+    loaded('po-map');
+  });
+})();
+Check($('#c2'), [
+  { q: { ro: 'Cine a ajuns primul la Polul Sud?', de: 'Wer erreichte als Erster den Südpol?' },
+    o: [{ ro: 'Robert Scott', de: 'Robert Scott' }, { ro: 'Roald Amundsen', de: 'Roald Amundsen' }, { ro: 'Robert Peary', de: 'Robert Peary' }], a: 1,
+    why: { ro: 'Amundsen, la 14 decembrie 1911. Scott a ajuns după mai bine de o lună.', de: 'Amundsen am 14. Dezember 1911. Scott kam gut einen Monat später an.' },
+    hint: { ro: 'Peary a mers spre celălalt pol. Dintre ceilalți doi, cine a ajuns mai devreme?', de: 'Peary ging zum anderen Pol. Wer von den beiden anderen kam früher an?' } },
+  { q: { ro: 'Ce a făcut Emil Racoviță la expediția „Belgica”?', de: 'Was machte Emil Racoviță auf der „Belgica“-Expedition?' },
+    o: [{ ro: 'a fost căpitanul navei', de: 'er war Kapitän des Schiffes' }, { ro: 'a studiat viețuitoarele ca biolog și naturalist', de: 'er erforschte die Lebewesen als Biologe und Naturforscher' }, { ro: 'a ajuns la Polul Sud', de: 'er erreichte den Südpol' }], a: 1,
+    why: { ro: 'Racoviță a fost naturalistul expediției; mai târziu a întemeiat biospeologia, știința care studiază viața din peșteri.', de: 'Racoviță war der Naturforscher der Expedition; später begründete er die Biospeläologie, die Wissenschaft vom Leben in Höhlen.' } }
+]);
+
+/* ================= 3. Oceane și vârfuri ================= */
+DATA.then(function (D) {
+  loaded('mo-map');
+  var W = 960, H = 480;
+  var proj = d3.geoNaturalEarth1().fitExtent([[4, 4], [W - 4, H - 4]], { type: 'MultiPoint', coordinates: [[-170, 75], [170, 75], [-170, -55], [170, -55]] });
+  var M = makeMap('#mo-svg', W, H, proj, D.land);
+  M.svg.attr('aria-label', tx('Harta lumii cu locurile de la pasul 3', 'Weltkarte mit den Orten aus Schritt 3'));
+  var lay = M.g.append('g');
+  var S = [
+    { year: { ro: '1947', de: '1947' }, name: { ro: 'Thor Heyerdahl', de: 'Thor Heyerdahl' }, who: { ro: 'explorator norvegian', de: 'norwegischer Forscher' },
+      from: { ro: 'Norvegia', de: 'Norwegen' }, to: { ro: 'Oceanul Pacific', de: 'Pazifischer Ozean' }, c: '#2f6fbd',
+      text: { ro: 'Cu pluta Kon-Tiki, făcută din lemn de balsa, a traversat Oceanul Pacific din portul peruvian Callao (America de Sud) până în arhipelagul Tuamotu (Polinezia Franceză). Voia să arate că polinezienii puteau veni din America de Sud. Pluta e expusă azi la Muzeul Kon-Tiki din Oslo.', de: 'Mit dem Balsaholz-Floß Kon-Tiki überquerte er den Pazifik vom peruanischen Hafen Callao (Südamerika) bis zum Tuamotu-Archipel (Französisch-Polynesien). Er wollte zeigen, dass die Polynesier aus Südamerika gekommen sein konnten. Das Floß steht heute im Kon-Tiki-Museum in Oslo.' },
+      legs: [[[-77.1, -12], [-100, -9], [-120, -12], [-142.4, -16]]], pts: [[[-77.1, -12], { ro: 'Callao', de: 'Callao' }], [[-142.4, -16], { ro: 'Tuamotu', de: 'Tuamotu' }]], zoom: [[-77.1, -12], [-142.4, -16]], maxK: 3 },
+    { year: { ro: '1953', de: '1953' }, name: { ro: 'Edmund Hillary și Norgay Tenzing', de: 'Edmund Hillary und Tenzing Norgay' }, who: { ro: 'alpiniști: un neozeelandez și un nepalez', de: 'Bergsteiger: ein Neuseeländer und ein Nepalese' },
+      from: { ro: 'Noua Zeelandă și Nepal', de: 'Neuseeland und Nepal' }, to: { ro: 'vârful Everest (Chomolungma), 8 850 m', de: 'Gipfel des Everest (Chomolungma), 8850 m' }, c: '#c0392b',
+      text: { ro: 'Au urcat primii pe cel mai înalt vârf montan de pe Pământ, Everest (Chomolungma), în munții Himalaya.', de: 'Sie bestiegen als Erste den höchsten Berggipfel der Erde, den Everest (Chomolungma) im Himalaya.' },
+      legs: [], pts: [[[86.9, 27.99], { ro: 'Everest', de: 'Everest' }]], zoom: [[86.9, 27.99], [80, 22]], maxK: 6 },
+    { year: { ro: '1967–1970', de: '1967–1970' }, name: { ro: 'Jacques-Yves Cousteau', de: 'Jacques-Yves Cousteau' }, who: { ro: 'comandant și oceanolog francez', de: 'französischer Kommandant und Ozeanograph' },
+      from: { ro: 'Franța', de: 'Frankreich' }, to: { ro: 'oceanele lumii', de: 'die Ozeane der Welt' }, c: '#1f8a78',
+      text: { ro: 'La bordul navei „Calypso” a organizat lungi campanii de explorare științifică a mărilor și oceanelor lumii (peste 250 000 km), cu scufundători și camere subacvatice. Multe taine ale vieții marine au fost dezvăluite prin filmele lui.', de: 'An Bord des Schiffes „Calypso“ leitete er lange wissenschaftliche Forschungsfahrten auf den Meeren und Ozeanen der Welt (über 250 000 km), mit Tauchern und Unterwasserkameras. Viele Geheimnisse des Meereslebens wurden durch seine Filme enthüllt.' },
+      legs: [], pts: [[[5.93, 43.1], { ro: 'Franța (Toulon)', de: 'Frankreich (Toulon)' }]], zoom: null }
+  ];
+  var cur = 0, info = $('#mo-info');
+  $('#mo-reset').textContent = tx('Harta întreagă', 'Ganze Karte');
+  $('#mo-reset').onclick = function () { M.reset(); };
+  function go(i) {
+    cur = i; var s = S[i];
+    lay.selectAll('*').remove();
+    s.legs.forEach(function (l) { line(lay, M, l, s.c, 3.4); });
+    s.pts.forEach(function (p) { dot(M, lay, p[0], s.c, 5); label(M, lay, p[0], T(p[1]), ''); });
+    var nav = h('div', 'nav'), p = btn('btn ghost', '← ' + tx('Înapoi', 'Zurück')), n = btn('btn', tx('Următorul', 'Weiter') + ' →');
+    p.disabled = i === 0; n.disabled = i === S.length - 1;
+    p.onclick = function () { go(cur - 1); }; n.onclick = function () { go(cur + 1); };
+    nav.appendChild(p); nav.appendChild(n); nav.appendChild(h('span', 'count', (i + 1) + ' / ' + S.length));
+    infoCard(info, s, nav);
+    if (s.zoom) M.zoomTo(s.zoom, s.maxK); else M.reset();
+  }
+  go(0);
+});
+Check($('#c3'), [
+  { q: { ro: 'Ce a vrut să arate Thor Heyerdahl cu pluta Kon-Tiki?', de: 'Was wollte Thor Heyerdahl mit dem Floß Kon-Tiki zeigen?' },
+    o: [{ ro: 'că poate ajunge la Polul Sud', de: 'dass er den Südpol erreichen kann' }, { ro: 'că oamenii din America de Sud puteau ajunge cu o plută în Polinezia', de: 'dass Menschen aus Südamerika mit einem Floß nach Polynesien gelangen konnten' }, { ro: 'că Pământul e rotund', de: 'dass die Erde rund ist' }], a: 1,
+    why: { ro: 'A plecat din Callao (Peru) și a ajuns în arhipelagul Tuamotu, cu o plută din lemn de balsa.', de: 'Er fuhr von Callao (Peru) los und erreichte den Tuamotu-Archipel auf einem Floß aus Balsaholz.' } },
+  { q: { ro: 'Cine a urcat primul pe Everest, în 1953?', de: 'Wer bestieg 1953 als Erster den Everest?' },
+    o: [{ ro: 'Hillary și Tenzing', de: 'Hillary und Tenzing' }, { ro: 'Cousteau și Piccard', de: 'Cousteau und Piccard' }, { ro: 'Byrd și Heyerdahl', de: 'Byrd und Heyerdahl' }], a: 0,
+    why: { ro: 'Edmund Hillary (Noua Zeelandă) și Norgay Tenzing (Nepal).', de: 'Edmund Hillary (Neuseeland) und Tenzing Norgay (Nepal).' },
+    hint: { ro: 'Caută pe cei doi alpiniști, nu pe exploratorii oceanelor sau ai polilor.', de: 'Such die zwei Bergsteiger, nicht die Erforscher der Ozeane oder der Pole.' } }
+]);
+
+/* ================= 4. Tabelul din caiet ================= */
+(function () {
+  var WANN = ['1878–1879|1878–1879', '1897–1899|1897–1899', '1909|1909', '1911|1911', '1926|1926', '1947|1947', '1953|1953', '1967–1970|1967–1970'];
+  var WOHER = ['Scandinavia|Skandinavien', 'România|Rumänien', 'America|Amerika', 'Norvegia|Norwegen', 'Noua Zeelandă|Neuseeland', 'Nepal|Nepal', 'Franța|Frankreich'];
+  var WOHIN = ['între Oceanul Atlantic și Oceanul Pacific|zwischen Atlantischem und Pazifischem Ozean', 'Antarctida|Antarktis', 'Polul Nord|Nordpol', 'Polul Sud|Südpol', 'Polul Nord și Polul Sud|Nord- und Südpol', 'Oceanul Pacific|Pazifischer Ozean', 'vârful Everest|Everest-Gipfel', 'oceanele lumii|die Ozeane der Welt'];
+  var ROWS = [
+    [{ ro: 'Nils Adolf Erik Nordenskjöld', de: 'Nils Adolf Erik Nordenskjöld' }, 0, 0, 0], [{ ro: 'Emil Racoviță', de: 'Emil Racoviță' }, 1, 1, 1],
+    [{ ro: 'Robert Edwin Peary', de: 'Robert Edwin Peary' }, 2, 2, 2], [{ ro: 'Roald Amundsen', de: 'Roald Amundsen' }, 3, 3, 3],
+    [{ ro: 'Richard Byrd', de: 'Richard Byrd' }, 4, 2, 4], [{ ro: 'Thor Heyerdahl', de: 'Thor Heyerdahl' }, 5, 3, 5],
+    [{ ro: 'Edmund Hillary', de: 'Edmund Hillary' }, 6, 4, 6], [{ ro: 'Norgay Tenzing', de: 'Norgay Tenzing' }, 6, 5, 6],
+    [{ ro: 'Jacques-Yves Cousteau', de: 'Jacques-Yves Cousteau' }, 7, 6, 7]
+  ];
+  function lab(s) { var p = s.split('|'); return L === 'de' ? p[1] : p[0]; }
+  var tbl = $('#who'), sels = [];
+  var thead = h('tr', '');
+  [tx('Cine?', 'Wer?'), tx('Când?', 'Wann?'), tx('De unde?', 'Woher?'), tx('Încotro?', 'Wohin?')].forEach(function (t) { thead.appendChild(h('th', '', t)); });
+  tbl.appendChild(thead);
+  ROWS.forEach(function (r) {
+    var tr = h('tr', '');
+    tr.appendChild(h('td', '', T(r[0])));
+    [[WANN, r[1]], [WOHER, r[2]], [WOHIN, r[3]]].forEach(function (col, ci) {
+      var td = h('td', ''), s = h('select', '');
+      s.setAttribute('aria-label', T(r[0]) + ' · ' + [tx('Când?', 'Wann?'), tx('De unde?', 'Woher?'), tx('Încotro?', 'Wohin?')][ci]);
+      s.appendChild(h('option', '', '—'));
+      col[0].forEach(function (o, i) { var op = h('option', '', lab(o)); op.value = i; s.appendChild(op); });
+      s.dataset.a = col[1];
+      s.onchange = function () { s.classList.remove('ok', 'bad'); };
+      sels.push(s); td.appendChild(s); tr.appendChild(td);
+    });
+    tbl.appendChild(tr);
+  });
+  var chk = $('#who-check'), show = $('#who-show'), score = $('#who-score');
+  chk.textContent = tx('Verifică', 'Prüfen'); show.textContent = tx('Arată răspunsurile', 'Lösungen zeigen');
+  chk.onclick = function () {
+    var ok = 0;
+    sels.forEach(function (s) { s.classList.remove('ok', 'bad'); if (s.value === '—' || s.value === '') return; if (s.value === s.dataset.a) { s.classList.add('ok'); ok++; } else s.classList.add('bad'); });
+    score.textContent = ok + ' / ' + sels.length + ' ' + tx('corecte', 'richtig') + (ok === sels.length ? ' 🎉' : '');
+  };
+  show.onclick = function () { sels.forEach(function (s) { s.value = s.dataset.a; s.classList.remove('bad'); s.classList.add('ok'); }); score.textContent = ''; };
+})();
+
+/* ================= 5. Ordonare ================= */
+(function () {
+  var EV = [
+    ['1878–1879', { ro: 'Nordenskjöld trece prin Pasajul de Nord-Est', de: 'Nordenskjöld durchfährt die Nordostpassage' }],
+    ['1897–1899', { ro: 'Expediția „Belgica”, cu Emil Racoviță', de: 'Expedition der „Belgica“ mit Emil Racoviță' }],
+    ['1909', { ro: 'Peary ajunge la Polul Nord', de: 'Peary erreicht den Nordpol' }],
+    ['1911', { ro: 'Amundsen ajunge la Polul Sud', de: 'Amundsen erreicht den Südpol' }],
+    ['1926', { ro: 'Byrd zboară deasupra Polului Nord', de: 'Byrd überfliegt den Nordpol' }],
+    ['1947', { ro: 'Heyerdahl traversează Pacificul pe Kon-Tiki', de: 'Heyerdahl überquert den Pazifik auf der Kon-Tiki' }],
+    ['1953', { ro: 'Hillary și Tenzing urcă pe Everest', de: 'Hillary und Tenzing besteigen den Everest' }],
+    ['1967–1970', { ro: 'Cousteau explorează oceanele cu „Calypso”', de: 'Cousteau erforscht die Ozeane mit der „Calypso“' }]
+  ];
+  var bank = $('#od-bank'), slots = $('#od-slots'), msg = $('#od-msg'), next = 0, miss = 0;
+  // ordine amestecată fixă, ca evenimentele să nu apară cronologic
+  var order = [5, 2, 7, 0, 4, 6, 1, 3];
+  var sl = EV.map(function (e) { var s = h('div', 'slot', '<b>?</b>'); slots.appendChild(s); return s; });
+  order.forEach(function (i) {
+    var b = btn('pick', T(EV[i][1]));
+    b.onclick = function () {
+      if (b.classList.contains('placed')) return;
+      if (i === next) {
+        b.classList.add('placed'); b.disabled = true;
+        sl[i].classList.add('on'); sl[i].innerHTML = '<b>' + EV[i][0] + '</b>' + T(EV[i][1]);
+        next++;
+        msg.textContent = next === EV.length ? tx('Gata! Greșeli: ' + miss + '.', 'Fertig! Fehler: ' + miss + '.') : tx('Corect! Care urmează?', 'Richtig! Was kommt als Nächstes?');
+      } else {
+        miss++;
+        msg.textContent = tx('Nu chiar. Caută evenimentul cu anul cel mai mic dintre cele rămase. Ajută-te de tabelul din caiet.', 'Nicht ganz. Such das Ereignis mit der kleinsten Jahreszahl unter den übrigen. Die Tabelle im Heft hilft.');
+      }
+    };
+    bank.appendChild(b);
+  });
+})();
+
+/* ================= Mic dicționar ================= */
+(function () {
+  var G = [
+    ['Polul Nord', 'der Nordpol'], ['Polul Sud', 'der Südpol'], ['Arctica', 'die Arktis'], ['Antarctida', 'die Antarktis'],
+    ['Pasajul de Nord-Est', 'die Nordostpassage'], ['Pasajul de Nord-Vest', 'die Nordwestpassage'], ['strâmtoare', 'die Meerenge'], ['gheață', 'das Eis'],
+    ['expediție', 'die Expedition'], ['explorator', 'der Forscher'], ['naturalist', 'der Naturforscher'], ['oceanolog', 'der Ozeanograph'],
+    ['alpinist', 'der Bergsteiger'], ['vârf', 'der Gipfel'], ['plută', 'das Floß'], ['batiscaf', 'der Bathyskaph'],
+    ['fosă oceanică', 'der Meeresgraben'], ['satelit', 'der Satellit'], ['scufundător', 'der Taucher'], ['a hiberna / a ierna', 'überwintern']
+  ];
+  var dl = $('#gloss');
+  G.forEach(function (g) { dl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
+})();
+})();
+</script>
+</body>
+</html>

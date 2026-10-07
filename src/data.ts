@@ -12,6 +12,7 @@ import { nutritiaTest } from './content/nutritia-test';
 import { frunzaTest } from './content/frunza-test';
 import { descoperireaLumiiTest } from './content/descoperirea-lumii-test';
 import { vikingiiTest } from './content/vikingii-test';
+import { poliiSiOceaneleTest } from './content/polii-si-oceanele-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import type { Text } from './i18n';
@@ -290,6 +291,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/geografie/vikingii.html',
         test: { questions: vikingiiTest, minutes: 8 },
+      },
+      {
+        slug: 'polii-si-oceanele',
+        title: {
+          ro: 'Poli, oceane, vârfuri: explorarea modernă',
+          de: 'Pole, Ozeane, Gipfel: die moderne Erforschung',
+        },
+        summary: {
+          ro: 'De la Pasajul de Nord-Est la Polul Sud, de la Kon-Tiki la Everest: cine, când, de unde și încotro. Urmărește drumurile pe hărți polare și completează tabelul din caiet.',
+          de: 'Von der Nordostpassage bis zum Südpol, von der Kon-Tiki bis zum Everest: wer, wann, woher und wohin. Verfolge die Wege auf Polkarten und vervollständige die Tabelle aus dem Heft.',
+        },
+        src: 'lectii/clasa-6/geografie/polii-si-oceanele.html',
+        test: { questions: poliiSiOceaneleTest, minutes: 6 },
       },
     ],
     ist: [
