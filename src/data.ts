@@ -10,6 +10,7 @@ import { mariExploratoriTest } from './content/mari-exploratori-test';
 import { organismulOmuluiTest } from './content/organismul-omului-test';
 import { nutritiaTest } from './content/nutritia-test';
 import { frunzaTest } from './content/frunza-test';
+import { fotosintezaTest } from './content/fotosinteza-test';
 import { descoperireaLumiiTest } from './content/descoperirea-lumii-test';
 import { vikingiiTest } from './content/vikingii-test';
 import { poliiSiOceaneleTest } from './content/polii-si-oceanele-test';
@@ -207,6 +208,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/biologie/frunza.html',
         test: { questions: frunzaTest, minutes: 8 },
+      },
+      {
+        slug: 'fotosinteza',
+        title: {
+          ro: 'Fotosinteza: ecuația și drumul substanțelor',
+          de: 'Fotosynthese: Gleichung und Weg der Stoffe',
+        },
+        summary: {
+          ro: 'Ecuația fotosintezei, pe unde intră apa, dioxidul de carbon și lumina, unde se face zahărul, pe unde iese oxigenul și cum ajută frunza.',
+          de: 'Die Gleichung der Fotosynthese, wo Wasser, Kohlendioxid und Licht hineingehen, wo der Zucker entsteht, wo der Sauerstoff hinausgeht und wie das Blatt hilft.',
+        },
+        src: 'lectii/clasa-6/biologie/fotosinteza.html',
+        test: { questions: fotosintezaTest, minutes: 8 },
       },
     ],
     gmt: [

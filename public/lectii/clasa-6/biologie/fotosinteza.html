@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fotosinteza: ecuația și drumul substanțelor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Fotosynthese: Gleichung und Weg der Stoffe';
+})();
+</script>
+<style>
+:root{
+  --paper:#f5f7f0; --card:#ffffff; --ink:#1c2a22; --muted:#56655b; --rule:#dde4d6; --sheet:#eef3e6;
+  --accent:#27a36f; --accent-soft:#e3f5ec;
+  --light:#e0a100; --co2:#6b7a86; --water:#2f80ed; --o2:#1fa5c9; --food:#d9701f; --mineral:#8a5a2b;
+  --good:#27a36f; --good-soft:#e6f6ee; --bad:#d64545; --bad-soft:#fdeaea;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.term{font-style:italic;color:var(--muted);font-weight:400}
+sub{font-size:.7em;line-height:0}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.hint{font-size:14.5px;color:var(--muted)}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.score{font-weight:700}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:10px}
+.fig svg{display:block;width:100%;height:auto}
+.desc{border-left:4px solid var(--c,var(--rule));background:var(--sheet);border-radius:8px;padding:12px 16px;min-height:96px;margin-top:12px}
+.desc h3{font-size:21px}
+.desc p{margin-top:4px}
+.equation{margin-top:14px;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:12px 16px;font:800 clamp(18px,2.4vw,24px)/1.5 var(--display);text-align:center}
+.equation small{display:block;font:500 15px/1.4 var(--body);color:var(--muted)}
+.c-co2{color:var(--co2)} .c-water{color:var(--water)} .c-min{color:var(--mineral)} .c-light{color:var(--light)} .c-chl{color:var(--accent)} .c-food{color:var(--food)} .c-o2{color:var(--o2)}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #b9c7ad;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .opts button{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px;text-align:left}
+.cq .opts button:hover:not(:disabled){border-color:var(--muted)}
+.cq .opts button.right{border-color:var(--good);background:var(--good);color:#fff}
+.cq .opts button.wrong{border-color:var(--bad);color:#b02e2e;background:var(--bad-soft)}
+.cq .why{font-size:15px;color:var(--muted)}
+.cq.done .q::before{content:"✓ ";color:var(--good)}
+
+/* 1. compune ecuația */
+.bank{display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:var(--card);border:1.5px dashed var(--rule);border-radius:10px;min-height:56px}
+.chip{border:1.5px solid var(--ink);background:#fff;border-radius:99px;padding:5px 14px;cursor:pointer;font-weight:700;font-size:16px}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+.chip.placed{border-color:var(--good);background:var(--good-soft);cursor:default;font-weight:500}
+.cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:12px;margin-top:14px}
+.slot{background:var(--card);border:1.5px solid var(--rule);border-top:6px solid var(--c);border-radius:10px;padding:10px 12px;display:grid;gap:6px;cursor:pointer;text-align:left;align-content:start;min-height:120px}
+.slot:hover{border-color:var(--c)}
+.slot.flash{border-color:var(--bad);background:var(--bad-soft)}
+.slot h3{font-size:19px;color:var(--c)}
+.slot .d{font-size:14px;color:var(--muted)}
+.slot .items{display:flex;flex-wrap:wrap;gap:6px;min-height:4px}
+.slot.s-in{--c:var(--water)} .slot.s-cond{--c:var(--light)} .slot.s-out{--c:var(--food)}
+
+/* 2. drumul substanțelor */
+.lbl{font:700 16px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.flow{fill:none;stroke-width:6;stroke-linecap:round}
+.flow.run{stroke-dasharray:4 12;animation:run 1.1s linear infinite}
+@keyframes run{to{stroke-dashoffset:-32}}
+.pgs{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.pgs i{width:22px;height:8px;border-radius:4px;background:var(--rule)}
+.pgs i.on{background:var(--ink)}
+
+/* 5. tabel din caiet */
+.tbl{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.tbl > div{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:12px 16px}
+.tbl h3{font-size:19px;margin-bottom:4px;color:var(--accent)}
+.tbl ul{margin:0;padding-left:1.1em;display:grid;gap:2px}
+
+/* 6. completează */
+.cloze{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 12px;font:800 20px/1.2 var(--display)}
+.cloze select{font:600 16px var(--body);border:1.5px solid var(--ink);border-radius:8px;padding:6px 8px;background:#fff;max-width:170px}
+.cloze select.ok{border-color:var(--good);background:var(--good-soft)}
+.cloze select.bad{border-color:var(--bad);background:var(--bad-soft)}
+.places{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.places .under{display:grid;gap:4px;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 12px}
+.places select{font:600 16px var(--body);border:1.5px solid var(--ink);border-radius:8px;padding:6px 8px;background:#fff;width:100%}
+.places select.ok{border-color:var(--good);background:var(--good-soft)}
+.places select.bad{border-color:var(--bad);background:var(--bad-soft)}
+.cloze .arrow{display:grid;gap:4px;justify-items:center;font-size:26px}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .cols,.tbl{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+}
+@media (max-width:520px){ .lbl{font-size:23px} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important} .flow.run{animation:none}}
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Biologie · Clasa a 6-a · Nutriția în lumea vie</span><span class="de">Biologie · Klasse 6 · Ernährung in der lebenden Welt</span></p>
+  <h1><span class="ro">Fotosinteza: ecuația și drumul substanțelor</span><span class="de">Fotosynthese: Gleichung und Weg der Stoffe</span></h1>
+  <p class="lead">
+    <span class="ro">Planta își face singură hrana, dar nu din nimic. Ce intră în ea, pe unde intră, unde se face zahărul și pe unde iese oxigenul? Urmărește fiecare substanță pe drumul ei prin plantă.</span>
+    <span class="de">Die Pflanze stellt ihre Nahrung selbst her, aber nicht aus dem Nichts. Was geht hinein, wo geht es hinein, wo entsteht der Zucker und wo kommt der Sauerstoff heraus? Verfolge jeden Stoff auf seinem Weg durch die Pflanze.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Plantele nu mănâncă. Din ce își fac zahărul?</span><span class="de">Pflanzen fressen nicht. Woraus machen sie ihren Zucker?</span></li>
+        <li><span class="ro">Apa o ia rădăcina, dar fotosinteza se face în frunză. Cum ajunge acolo?</span><span class="de">Das Wasser nimmt die Wurzel auf, aber die Fotosynthese läuft im Blatt. Wie kommt es dorthin?</span></li>
+        <li><span class="ro">De ce spunem că pădurea „curăță” aerul?</span><span class="de">Warum sagt man, dass der Wald die Luft „reinigt“?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Ecuația</span><span class="de">Die Gleichung</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Drumul substanțelor</span><span class="de">Der Weg der Stoffe</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Unde se întâmplă?</span><span class="de">Wo passiert es?</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Ce se întâmplă dacă…</span><span class="de">Was passiert, wenn …</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Cum ajută frunza</span><span class="de">Wie das Blatt hilft</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Completează</span><span class="de">Vervollständige</span></a>
+  </nav>
+</header>
+
+<!-- 1. Ecuația -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Ecuația fotosintezei</span><span class="de">Die Gleichung der Fotosynthese</span></h2>
+  <p class="section-sub"><span class="ro">Ca în caiet: o parte din substanțe <b>intră</b> în plantă, două lucruri <b>ajută</b> (lumina și clorofila), iar la sfârșit <b>rezultă</b> altele. Alege un element, apoi apasă pe coloana în care îl pui.</span><span class="de">Wie im Heft: Ein Teil der Stoffe <b>geht in die Pflanze hinein</b>, zwei Dinge <b>helfen</b> (Licht und Chlorophyll), und am Ende <b>entstehen</b> andere. Wähle ein Element und tippe dann auf die Spalte, in die es gehört.</span></p>
+  <div class="bank" id="bank" aria-label="Elemente"></div>
+  <p class="score" id="eq-score" style="margin-top:8px" aria-live="polite"></p>
+  <div class="cols" id="cols"></div>
+  <div class="equation" id="eq-final" hidden>
+    <span class="c-co2">CO<sub>2</sub></span> + <span class="c-water">H<sub>2</sub>O</span> + <span class="c-min"><span class="ro">săruri minerale</span><span class="de">Mineralien</span></span>
+    <span style="color:var(--light)">—<small style="display:inline;font-size:.6em"><span class="ro">lumină, clorofilă</span><span class="de">Licht, Chlorophyll</span></small>→</span>
+    <span class="c-food"><span class="ro">zahăr (glucoză)</span><span class="de">Zucker (Glukose)</span></span> + <span class="c-o2">O<sub>2</sub></span>
+    <small><span class="ro">Dioxidul de carbon (CO<sub>2</sub>) este un gaz din aer, iar O<sub>2</sub> este oxigenul pe care îl respirăm.</span><span class="de">Kohlendioxid (CO<sub>2</sub>) ist ein Gas aus der Luft, und O<sub>2</sub> ist der Sauerstoff, den wir atmen.</span></small>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro">Lumina și clorofila nu se „consumă” ca ingredientele: ele fac posibilă fotosinteza.</span><span class="de">Licht und Chlorophyll werden nicht wie Zutaten „verbraucht“: Sie machen die Fotosynthese erst möglich.</span></li>
+      <li><span class="ro">Din substanțe <b>anorganice</b> (CO<sub>2</sub>, apă, săruri minerale) planta face substanță <b>organică</b>: zahărul.</span><span class="de">Aus <b>anorganischen</b> Stoffen (CO<sub>2</sub>, Wasser, Mineralien) macht die Pflanze einen <b>organischen</b> Stoff: den Zucker.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 2. Drumul substanțelor -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Drumul substanțelor prin plantă</span><span class="de">Der Weg der Stoffe durch die Pflanze</span></h2>
+  <p class="section-sub"><span class="ro">Apasă „Pasul următor” și urmărește, pe rând, pe unde intră, unde lucrează și pe unde pleacă fiecare substanță.</span><span class="de">Tippe auf „Nächster Schritt“ und verfolge nacheinander, wo jeder Stoff hineingeht, wo er arbeitet und wo er hinausgeht.</span></p>
+  <div class="fig"><svg id="plant" viewBox="0 0 720 430" role="img" aria-label="Plantă cu rădăcină, tulpină și frunze; săgeți arată drumul substanțelor"></svg></div>
+  <div class="desc" id="pl-desc" aria-live="polite"></div>
+  <div class="actions">
+    <button type="button" class="btn ghost" id="pl-prev"><span class="ro">Înapoi</span><span class="de">Zurück</span></button>
+    <button type="button" class="btn" id="pl-next"><span class="ro">Pasul următor</span><span class="de">Nächster Schritt</span></button>
+    <button type="button" class="btn ghost" id="pl-reset"><span class="ro">De la început</span><span class="de">Von vorn</span></button>
+    <span class="pgs" id="pl-pgs" aria-hidden="true"></span>
+  </div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Unde se întâmplă? -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Unde se întâmplă fiecare lucru?</span><span class="de">Wo passiert was?</span></h2>
+  <p class="section-sub"><span class="ro">În caiet, sub ecuație, fiecare termen are scris locul lui. Potrivește și tu fiecare termen cu locul potrivit.</span><span class="de">Im Heft steht unter der Gleichung bei jedem Begriff sein Ort. Ordne auch du jedem Begriff den passenden Ort zu.</span></p>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Ce se întâmplă dacă -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Ce se întâmplă dacă…</span><span class="de">Was passiert, wenn …</span></h2>
+  <p class="section-sub"><span class="ro">Dacă lipsește un singur lucru din ecuație, fotosinteza se oprește. Descoperă care lipsește în fiecare situație.</span><span class="de">Fehlt nur ein einziges Ding in der Gleichung, hört die Fotosynthese auf. Finde heraus, was in jeder Situation fehlt.</span></p>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Cum ajută frunza -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Cum ajută frunza fotosinteza</span><span class="de">Wie das Blatt die Fotosynthese unterstützt</span></h2>
+  <p class="section-sub"><span class="ro">Frunza are însușiri <b>interne</b> și <b>externe</b> care asigură fotosinteza. Pentru fiecare, alege la ce ajută.</span><span class="de">Das Blatt hat <b>innere</b> Eigenschaften und <b>äußere</b> Merkmale, die die Fotosynthese sichern. Wähle bei jeder, wobei sie hilft.</span></p>
+  <div class="tbl">
+    <div>
+      <h3><span class="ro">Însușiri interne</span><span class="de">Innere Eigenschaften</span></h3>
+      <ul>
+        <li><span class="ro">celule cu numeroase cloroplaste</span><span class="de">Zellen mit zahlreichen Chloroplasten</span></li>
+        <li><span class="ro">strat dens de țesut asimilator</span><span class="de">dichte Schicht von Ernährungsgewebe</span></li>
+        <li><span class="ro">spații intercelulare cu aer</span><span class="de">Zwischenzellräume mit Luft</span></li>
+        <li><span class="ro">țesut conducător: lemn și liber</span><span class="de">Leitgewebe: Holz und Bast</span></li>
+        <li><span class="ro">stomate</span><span class="de">Spaltöffnungen</span></li>
+      </ul>
+    </div>
+    <div>
+      <h3><span class="ro">Trăsături externe</span><span class="de">Äußere Merkmale</span></h3>
+      <ul>
+        <li><span class="ro">lama frunzei lățită</span><span class="de">breite Blattspreite</span></li>
+        <li><span class="ro">orientarea spre soare</span><span class="de">Orientierung zur Sonne</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="check" id="c5"></div>
+</section>
+
+<!-- 6. Completează -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Completează ecuația și locurile</span><span class="de">Vervollständige Gleichung und Orte</span></h2>
+  <p class="section-sub"><span class="ro">Fără ajutor: pune la fiecare loc gol termenul potrivit, apoi apasă „Verifică”. Primele trei goluri pot fi în orice ordine.</span><span class="de">Ohne Hilfe: Setze an jede Lücke den passenden Begriff und tippe dann auf „Prüfen“. Die ersten drei Lücken dürfen in beliebiger Reihenfolge stehen.</span></p>
+  <div class="cloze" id="cloze"></div>
+  <div class="places" id="places"></div>
+  <div class="actions">
+    <button type="button" class="btn" id="cl-check"><span class="ro">Verifică</span><span class="de">Prüfen</span></button>
+    <span class="score" id="cl-msg" aria-live="polite"></span>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="t7">
+  <h2 class="section-title" id="t7"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <div class="gloss-head" style="margin-top:14px"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După notițele din caiet („Fotosynthese”, 7.X.2026) și manualul de Biologie, clasa a 6-a. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach den Notizen im Heft („Fotosynthese“, 7.10.2026) und dem Biologiebuch der 6. Klasse. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+
+/** Întrebări scurte cu răspuns imediat. items: [{q, o:[..], a, why, hint?}] (texte {ro,de}) */
+function Check(host, items, title) {
+  host.appendChild(h('h3', '', title || tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); box.classList.add('done'); why.textContent = T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = it.hint ? T(it.hint) : tx('Nu chiar. Mai încearcă.', 'Nicht ganz. Versuch es nochmal.'); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* ================= 1. Compune ecuația ================= */
+(function () {
+  var TERMS = [
+    { f: 'CO<sub>2</sub>', n: { ro: 'dioxid de carbon', de: 'Kohlendioxid' }, g: 'in' },
+    { f: 'H<sub>2</sub>O', n: { ro: 'apă', de: 'Wasser' }, g: 'in' },
+    { f: '', n: { ro: 'săruri minerale', de: 'Mineralien' }, g: 'in' },
+    { f: '', n: { ro: 'lumină', de: 'Licht' }, g: 'cond' },
+    { f: '', n: { ro: 'clorofilă', de: 'Chlorophyll' }, g: 'cond' },
+    { f: '', n: { ro: 'zahăr (glucoză)', de: 'Zucker (Glukose)' }, g: 'out' },
+    { f: 'O<sub>2</sub>', n: { ro: 'oxigen', de: 'Sauerstoff' }, g: 'out' }
+  ];
+  var GROUPS = [
+    { k: 'in', c: 's-in', t: { ro: 'Intră în plantă', de: 'Geht in die Pflanze' }, d: { ro: 'substanțe luate din aer și din sol', de: 'Stoffe aus Luft und Boden' } },
+    { k: 'cond', c: 's-cond', t: { ro: 'Ajută (deasupra săgeții)', de: 'Hilft (über dem Pfeil)' }, d: { ro: 'fac fotosinteza posibilă', de: 'machen die Fotosynthese möglich' } },
+    { k: 'out', c: 's-out', t: { ro: 'Rezultă', de: 'Entsteht' }, d: { ro: 'ce se obține la sfârșit', de: 'was am Ende herauskommt' } }
+  ];
+  var bank = $('#bank'), cols = $('#cols'), score = $('#eq-score'), sel = null, done = 0, tries = 0;
+  var chips = TERMS.map(function (t) {
+    var b = btn('chip', (t.f ? t.f + ' · ' : '') + T(t.n));
+    b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () {
+      if (b.classList.contains('placed')) return;
+      chips.forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
+      if (sel === t) { sel = null; return; }
+      sel = t; b.setAttribute('aria-pressed', 'true');
+    };
+    t.chip = b; bank.appendChild(b); return b;
+  });
+  // amestecă ordinea chipurilor (fixă ca să fie reproductibilă)
+  [3, 6, 1, 4, 0, 5, 2].forEach(function (i) { bank.appendChild(chips[i]); });
+  GROUPS.forEach(function (g) {
+    var s = btn('slot ' + g.c), items = h('div', 'items');
+    s.appendChild(h('h3', '', T(g.t))); s.appendChild(h('p', 'd', T(g.d))); s.appendChild(items);
+    s.onclick = function () {
+      if (!sel) { score.textContent = tx('Alege mai întâi un element de sus.', 'Wähle zuerst oben ein Element.'); return; }
+      tries++;
+      if (sel.g === g.k) {
+        var c = sel.chip; c.classList.add('placed'); c.setAttribute('aria-pressed', 'false'); c.disabled = true;
+        items.appendChild(c); sel = null; done++;
+        score.textContent = done === TERMS.length
+          ? tx('Ecuația e completă! O vezi mai jos.', 'Die Gleichung ist vollständig! Du siehst sie unten.')
+          : tx('Corect. ' + done + ' din ' + TERMS.length + '.', 'Richtig. ' + done + ' von ' + TERMS.length + '.');
+        if (done === TERMS.length) { $('#eq-final').hidden = false; }
+      } else {
+        s.classList.add('flash'); setTimeout(function () { s.classList.remove('flash'); }, 600);
+        score.textContent = g.k === 'cond'
+          ? tx('Nu e nici lumină, nici clorofilă. Gândește-te: se consumă sau doar ajută?', 'Das ist weder Licht noch Chlorophyll. Überleg: Wird es verbraucht oder hilft es nur?')
+          : g.k === 'in'
+            ? tx('Se obține la sfârșit sau intră în plantă? Gândește-te la ce face planta.', 'Entsteht es am Ende oder geht es in die Pflanze? Denk daran, was die Pflanze macht.')
+            : tx('Planta o face sau o primește? Gândește-te: ce e „hrana” ei?', 'Stellt die Pflanze es her oder bekommt sie es? Denk daran: Was ist ihre „Nahrung“?');
+      }
+    };
+    cols.appendChild(s);
+  });
+})();
+
+/* ================= 2. Drumul substanțelor ================= */
+(function () {
+  var svg = $('#plant'), desc = $('#pl-desc'), prev = $('#pl-prev'), next = $('#pl-next'), pgs = $('#pl-pgs');
+  var C = { water: '#2f80ed', co2: '#6b7a86', light: '#e0a100', o2: '#1fa5c9', food: '#d9701f' };
+  function A(g, d, key, run) { return el('path', { d: d, class: 'flow' + (run ? ' run' : ''), stroke: C[key], 'marker-end': 'url(#ah-' + key + ')' }, g); }
+  function Lb(g, x, y, text, anchor) { return el('text', { x: x, y: y, class: 'lbl', 'text-anchor': anchor || 'middle' }, g, text); }
+  var STEPS = [
+    { k: 'water', c: C.water,
+      t: { ro: 'Apa și sărurile minerale intră prin rădăcină', de: 'Wasser und Mineralien gehen durch die Wurzel hinein' },
+      p: { ro: 'Rădăcina absoarbe din sol apa cu sărurile minerale dizolvate în ea.', de: 'Die Wurzel nimmt aus dem Boden das Wasser mit den darin gelösten Mineralien auf.' },
+      draw: function (g, r) {
+        A(g, 'M250 360 Q300 330 342 292', 'water', r); A(g, 'M470 370 Q420 330 378 294', 'water', r);
+        Lb(g, 200, 392, tx('apă + săruri minerale', 'Wasser + Mineralien'), 'middle');
+      } },
+    { k: 'water', c: C.water,
+      t: { ro: 'Urcă prin lemn până în frunză', de: 'Sie steigen im Holz bis ins Blatt' },
+      p: { ro: 'Țesutul conducător numit lemn (Holz) duce apa cu sărurile minerale de jos în sus, până la frunze.', de: 'Das Leitgewebe Holz leitet das Wasser mit den Mineralien von unten nach oben bis zu den Blättern.' },
+      draw: function (g, r) {
+        A(g, 'M355 250 L355 170 Q357 150 395 140', 'water', r);
+        Lb(g, 322, 232, tx('lemn', 'Holz'), 'end');
+      } },
+    { k: 'co2', c: C.co2,
+      t: { ro: 'Dioxidul de carbon intră prin stomate', de: 'Das Kohlendioxid geht durch die Spaltöffnungen hinein' },
+      p: { ro: 'Stomatele, mici deschideri din fața de jos a frunzei, lasă dioxidul de carbon din aer să intre în frunză.', de: 'Die Spaltöffnungen, kleine Öffnungen auf der Blattunterseite, lassen das Kohlendioxid aus der Luft ins Blatt.' },
+      draw: function (g, r) {
+        A(g, 'M508 262 L508 186', 'co2', r);
+        Lb(g, 508, 284, 'CO₂', 'middle'); Lb(g, 540, 250, tx('stomată', 'Spaltöffnung'), 'start');
+      } },
+    { k: 'light', c: C.light,
+      t: { ro: 'Lumina e prinsă de clorofila din cloroplaste', de: 'Das Licht wird vom Chlorophyll in den Chloroplasten eingefangen' },
+      p: { ro: 'Lumina soarelui cade pe frunză. Clorofila, pigmentul verde din cloroplaste, îi „prinde” energia.', de: 'Das Sonnenlicht fällt aufs Blatt. Das Chlorophyll, der grüne Farbstoff in den Chloroplasten, „fängt“ seine Energie ein.' },
+      draw: function (g, r) {
+        A(g, 'M120 96 L420 104', 'light', r); A(g, 'M110 120 L460 130', 'light', r);
+        Lb(g, 250, 80, tx('lumină', 'Licht'), 'middle'); Lb(g, 560, 74, tx('cloroplaste', 'Chloroplasten'), 'middle');
+      } },
+    { k: 'food', c: C.food,
+      t: { ro: 'În țesutul asimilator se face zahărul', de: 'Im Assimilationsgewebe entsteht der Zucker' },
+      p: { ro: 'În celulele țesutului asimilator (hrănitor), cu energia luminii, apa și dioxidul de carbon se transformă în zahăr (glucoză).', de: 'In den Zellen des Assimilationsgewebes (Ernährungsgewebes) werden mit der Energie des Lichts Wasser und Kohlendioxid zu Zucker (Glukose).' },
+      draw: function (g, r) {
+        [[430, 128], [470, 112], [510, 112], [550, 124], [470, 146], [515, 146], [450, 128]].forEach(function (p) { el('circle', { cx: p[0], cy: p[1], r: r ? 6 : 5, fill: C.food }, g); });
+        Lb(g, 630, 150, tx('zahăr', 'Zucker'), 'middle');
+      } },
+    { k: 'o2', c: C.o2,
+      t: { ro: 'Oxigenul iese prin stomate', de: 'Der Sauerstoff geht durch die Spaltöffnungen hinaus' },
+      p: { ro: 'Oxigenul rezultat nu e folosit de plantă în fotosinteză. Pleacă din frunză, tot prin stomate, în aer.', de: 'Der entstandene Sauerstoff wird in der Fotosynthese nicht gebraucht. Er verlässt das Blatt, ebenfalls durch die Spaltöffnungen, in die Luft.' },
+      draw: function (g, r) {
+        A(g, 'M466 178 L440 252', 'o2', r); A(g, 'M556 156 L596 236', 'o2', r);
+        Lb(g, 436, 276, 'O₂', 'middle'); Lb(g, 600, 262, 'O₂', 'middle');
+      } },
+    { k: 'food', c: C.food,
+      t: { ro: 'Zahărul coboară prin liber', de: 'Der Zucker wandert im Bast nach unten' },
+      p: { ro: 'Celălalt țesut conducător, liberul (Bast), duce zahărul din frunze în toate părțile plantei, chiar și în rădăcină.', de: 'Das andere Leitgewebe, der Bast, bringt den Zucker aus den Blättern in alle Teile der Pflanze, sogar in die Wurzel.' },
+      draw: function (g, r) {
+        A(g, 'M366 170 L366 262 Q366 290 372 318', 'food', r);
+        Lb(g, 392, 232, tx('liber', 'Bast'), 'start');
+      } }
+  ];
+  var cur = 0;
+  STEPS.forEach(function () { pgs.appendChild(h('i')); });
+
+  function base() {
+    var defs = el('defs', {}, svg);
+    Object.keys(C).forEach(function (k) {
+      var mk = el('marker', { id: 'ah-' + k, viewBox: '0 0 10 10', refX: 6, refY: 5, markerWidth: 4, markerHeight: 4, orient: 'auto-start-reverse' }, defs);
+      el('path', { d: 'M0 0 L10 5 L0 10 z', fill: C[k] }, mk);
+    });
+    el('rect', { x: 0, y: 0, width: 720, height: 250, fill: '#eaf4fb', rx: 10 }, svg);
+    el('rect', { x: 0, y: 250, width: 720, height: 180, fill: '#c9ab84' }, svg);
+    el('rect', { x: 0, y: 250, width: 720, height: 10, fill: '#8a6a3a' }, svg);
+    // soare
+    el('circle', { cx: 70, cy: 64, r: 30, fill: '#f7c948' }, svg);
+    for (var i = 0; i < 8; i++) {
+      var a = i * Math.PI / 4;
+      el('line', { x1: 70 + Math.cos(a) * 40, y1: 64 + Math.sin(a) * 40, x2: 70 + Math.cos(a) * 52, y2: 64 + Math.sin(a) * 52, stroke: '#f7c948', 'stroke-width': 5, 'stroke-linecap': 'round' }, svg);
+    }
+    // rădăcini
+    ['M360 256 Q330 300 290 340', 'M360 256 Q372 310 366 366', 'M360 256 Q400 300 440 345', 'M330 290 Q300 300 270 296', 'M395 300 Q430 296 460 308'].forEach(function (d) {
+      el('path', { d: d, fill: 'none', stroke: '#7a5a2e', 'stroke-width': 5, 'stroke-linecap': 'round' }, svg);
+    });
+    // tulpină: lemn (stânga) și liber (dreapta)
+    el('rect', { x: 349, y: 140, width: 24, height: 118, rx: 6, fill: '#5fae4f' }, svg);
+    el('line', { x1: 355, y1: 150, x2: 355, y2: 255, stroke: '#9cc8f2', 'stroke-width': 5 }, svg);
+    el('line', { x1: 366, y1: 150, x2: 366, y2: 255, stroke: '#f0b88a', 'stroke-width': 5 }, svg);
+    // frunze
+    el('path', { d: 'M349 200 C320 140 250 130 200 168 C250 222 320 226 349 200 Z', fill: '#6fbf5a', stroke: '#3f8a35', 'stroke-width': 2 }, svg);
+    el('path', { d: 'M372 150 C410 56 540 44 640 106 C580 196 440 208 372 150 Z', fill: '#6fbf5a', stroke: '#3f8a35', 'stroke-width': 2.5 }, svg);
+    el('path', { d: 'M372 150 C450 140 560 120 630 108', fill: 'none', stroke: '#3f8a35', 'stroke-width': 3 }, svg);
+    // stomate pe fața de jos
+    [[466, 178], [508, 184], [556, 156]].forEach(function (p) {
+      el('ellipse', { cx: p[0], cy: p[1], rx: 9, ry: 5, fill: '#f7e3a6', stroke: '#c79a12', 'stroke-width': 2 }, svg);
+    });
+  }
+  function draw() {
+    svg.innerHTML = ''; base();
+    // cloroplaste (de la pasul 4 încolo), puncte verzi mai închise
+    if (cur >= 3) [[430, 92], [470, 82], [520, 84], [570, 96], [440, 140], [490, 158], [540, 140], [600, 110]].forEach(function (p) {
+      el('ellipse', { cx: p[0], cy: p[1], rx: 7, ry: 4.5, fill: '#2a7a2a' }, svg);
+    });
+    // etichete fixe
+    if (cur < 2) { Lb(svg, 360, 124, tx('frunză', 'Blatt'), 'end'); }
+    STEPS.forEach(function (s, i) {
+      if (i > cur) return;
+      var g = el('g', { opacity: i === cur ? 1 : 0.3 }, svg);
+      s.draw(g, i === cur);
+    });
+    var s = STEPS[cur];
+    desc.style.setProperty('--c', s.c);
+    desc.innerHTML = '<h3>' + (cur + 1) + '. ' + T(s.t) + '</h3><p>' + T(s.p) + '</p>';
+    prev.disabled = cur === 0; next.disabled = cur === STEPS.length - 1;
+    Array.prototype.forEach.call(pgs.children, function (d, i) { d.className = i <= cur ? 'on' : ''; });
+  }
+  prev.onclick = function () { if (cur > 0) { cur--; draw(); } };
+  next.onclick = function () { if (cur < STEPS.length - 1) { cur++; draw(); } };
+  $('#pl-reset').onclick = function () { cur = 0; draw(); };
+  draw();
+
+  Check($('#c2'), [
+    { q: { ro: 'Pe unde urcă apa din rădăcină spre frunză?', de: 'Wo steigt das Wasser von der Wurzel zum Blatt hinauf?' },
+      o: [{ ro: 'prin liber', de: 'durch den Bast' }, { ro: 'prin lemn', de: 'durch das Holz' }, { ro: 'prin stomate', de: 'durch die Spaltöffnungen' }], a: 1,
+      why: { ro: 'Apa și sărurile minerale urcă prin lemn. Liberul duce zahărul.', de: 'Wasser und Mineralien steigen im Holz auf. Der Bast bringt den Zucker.' },
+      hint: { ro: 'Stomatele sunt la frunză. Rămân două țesuturi conducătoare: care duce apa?', de: 'Die Spaltöffnungen sind am Blatt. Es bleiben zwei Leitgewebe: Welches leitet das Wasser?' } },
+    { q: { ro: 'Ce duce liberul?', de: 'Was bringt der Bast?' },
+      o: [{ ro: 'zahărul făcut în frunze', de: 'den Zucker aus den Blättern' }, { ro: 'dioxidul de carbon', de: 'das Kohlendioxid' }, { ro: 'lumina', de: 'das Licht' }], a: 0,
+      why: { ro: 'Liberul distribuie hrana (zahărul) în toată planta.', de: 'Der Bast verteilt die Nahrung (den Zucker) in der ganzen Pflanze.' },
+      hint: { ro: 'Dioxidul de carbon intră din aer, iar lumina nu „curge” prin plantă. Ce se face în frunză și trebuie dus în altă parte?', de: 'Kohlendioxid kommt aus der Luft, und Licht „fließt“ nicht durch die Pflanze. Was entsteht im Blatt und muss woandershin?' } }
+  ]);
+})();
+
+/* ================= 3. Unde se întâmplă? ================= */
+(function () {
+  var P = {
+    st: { ro: 'stomate', de: 'Spaltöffnungen' }, rad: { ro: 'rădăcină', de: 'Wurzel' },
+    cl: { ro: 'cloroplaste', de: 'Chloroplasten' }, as: { ro: 'țesut asimilator', de: 'Assimilationsgewebe' }
+  };
+  function mk(q, a, why, hint) {
+    return { q: q, o: [P.st, P.rad, P.cl, P.as], a: a, why: why, hint: hint };
+  }
+  Check($('#c3'), [
+    mk({ ro: 'CO₂ intră în frunză prin…', de: 'CO₂ geht ins Blatt durch …' }, 0,
+      { ro: 'Corect: dioxidul de carbon este un gaz, iar gazele trec prin stomate.', de: 'Richtig: Kohlendioxid ist ein Gas, und Gase gehen durch die Spaltöffnungen.' },
+      { ro: 'CO₂ este un gaz din aer. Pe unde schimbă frunza gazele cu aerul?', de: 'CO₂ ist ein Gas aus der Luft. Wo tauscht das Blatt Gase mit der Luft aus?' }),
+    mk({ ro: 'H₂O (apa) intră în plantă prin…', de: 'H₂O (Wasser) geht in die Pflanze durch …' }, 1,
+      { ro: 'Corect: apa se absoarbe din sol, prin rădăcină.', de: 'Richtig: Das Wasser wird aus dem Boden aufgenommen, durch die Wurzel.' },
+      { ro: 'De unde ia planta apa: din aer sau din sol? Ce organ stă în sol?', de: 'Woher nimmt die Pflanze Wasser: aus der Luft oder aus dem Boden? Welches Organ steckt im Boden?' }),
+    mk({ ro: 'Lumina e „prinsă” de clorofila din…', de: 'Das Licht wird vom Chlorophyll in den … eingefangen' }, 2,
+      { ro: 'Corect: clorofila se află în cloroplaste.', de: 'Richtig: Das Chlorophyll befindet sich in den Chloroplasten.' },
+      { ro: 'Unde se află pigmentul verde, în interiorul celulelor?', de: 'Wo liegt der grüne Farbstoff im Inneren der Zellen?' }),
+    mk({ ro: 'Zahărul (glucoza) se face în…', de: 'Der Zucker (Glukose) entsteht im …' }, 3,
+      { ro: 'Corect: în țesutul asimilator, adică în celulele cu cloroplaste.', de: 'Richtig: im Assimilationsgewebe, also in den Zellen mit Chloroplasten.' },
+      { ro: 'Care strat al frunzei „face hrana” și are multe cloroplaste?', de: 'Welche Blattschicht „macht die Nahrung“ und hat viele Chloroplasten?' }),
+    mk({ ro: 'O₂ (oxigenul) iese din frunză prin…', de: 'O₂ (Sauerstoff) verlässt das Blatt durch …' }, 0,
+      { ro: 'Corect: tot prin stomate, aceleași „porți” pentru gaze.', de: 'Richtig: ebenfalls durch die Spaltöffnungen, dieselben „Tore“ für Gase.' },
+      { ro: 'Și oxigenul e un gaz. Pe unde trec gazele?', de: 'Auch Sauerstoff ist ein Gas. Wo gehen Gase hindurch?' })
+  ], tx('Potrivește', 'Ordne zu'));
+})();
+
+/* ================= 4. Ce se întâmplă dacă ================= */
+(function () {
+  Check($('#c4'), [
+    { q: { ro: 'Stomatele unei frunze sunt astupate cu vopsea. Ce nu mai ajunge la celule?', de: 'Die Spaltöffnungen eines Blattes werden mit Farbe verstopft. Was kommt nicht mehr zu den Zellen?' },
+      o: [{ ro: 'apa din sol', de: 'das Wasser aus dem Boden' }, { ro: 'dioxidul de carbon din aer', de: 'das Kohlendioxid aus der Luft' }, { ro: 'clorofila', de: 'das Chlorophyll' }], a: 1,
+      why: { ro: 'Prin stomate intră CO₂. Apa vine prin rădăcină, iar clorofila e deja în celule.', de: 'Durch die Spaltöffnungen kommt CO₂ hinein. Das Wasser kommt durch die Wurzel, und das Chlorophyll ist schon in den Zellen.' },
+      hint: { ro: 'Stomatele sunt „porțile” pentru gaze. Care dintre variante e un gaz?', de: 'Die Spaltöffnungen sind die „Tore“ für Gase. Welche Antwort ist ein Gas?' } },
+    { q: { ro: 'Rădăcinile unei plante sunt tăiate, dar frunzele stau la lumină. Ce nu mai ajunge în frunze?', de: 'Die Wurzeln einer Pflanze werden abgeschnitten, aber die Blätter stehen im Licht. Was kommt nicht mehr in die Blätter?' },
+      o: [{ ro: 'apa cu sărurile minerale', de: 'Wasser mit den Mineralien' }, { ro: 'lumina', de: 'das Licht' }, { ro: 'oxigenul', de: 'der Sauerstoff' }], a: 0,
+      why: { ro: 'Fără rădăcină nu se mai absoarbe apă. Lumina vine de la soare, iar oxigenul e doar un rezultat.', de: 'Ohne Wurzel wird kein Wasser mehr aufgenommen. Das Licht kommt von der Sonne, und Sauerstoff ist nur ein Ergebnis.' },
+      hint: { ro: 'Ce preia rădăcina din sol?', de: 'Was nimmt die Wurzel aus dem Boden auf?' } },
+    { q: { ro: 'Planta stă o săptămână într-un dulap întunecos. De ce nu mai face zahăr?', de: 'Die Pflanze steht eine Woche in einem dunklen Schrank. Warum macht sie keinen Zucker mehr?' },
+      o: [{ ro: 'nu mai are apă', de: 'sie hat kein Wasser mehr' }, { ro: 'clorofila a dispărut', de: 'das Chlorophyll ist verschwunden' }, { ro: 'nu mai primește energia luminii', de: 'sie bekommt keine Lichtenergie mehr' }], a: 2,
+      why: { ro: 'Lumina e energia fotosintezei. Fără ea, clorofila nu are ce „prinde”.', de: 'Das Licht ist die Energie der Fotosynthese. Ohne es hat das Chlorophyll nichts zum „Einfangen“.' },
+      hint: { ro: 'Ce e diferit în dulap față de fereastră? Apa poate fi tot acolo.', de: 'Was ist im Schrank anders als am Fenster? Das Wasser kann trotzdem da sein.' } },
+    { q: { ro: 'O frunză are marginile albe, fără clorofilă. Unde se face zahăr?', de: 'Ein Blatt hat weiße Ränder ohne Chlorophyll. Wo entsteht Zucker?' },
+      o: [{ ro: 'în marginile albe', de: 'in den weißen Rändern' }, { ro: 'în partea verde', de: 'im grünen Teil' }, { ro: 'peste tot la fel', de: 'überall gleich' }], a: 1,
+      why: { ro: 'Zahărul se face doar unde sunt clorofila și cloroplastele, adică în partea verde.', de: 'Zucker entsteht nur dort, wo Chlorophyll und Chloroplasten sind, also im grünen Teil.' },
+      hint: { ro: 'Unde se află clorofila, pigmentul verde?', de: 'Wo ist das Chlorophyll, der grüne Farbstoff?' } }
+  ]);
+})();
+
+/* ================= 5. Cum ajută frunza ================= */
+(function () {
+  function it(q, o, a, why) { return { q: q, o: o, a: a, why: why, hint: { ro: 'Gândește-te ce are nevoie planta pentru fotosinteză: lumină, CO₂, apă. Care e legătura?', de: 'Denk daran, was die Pflanze für die Fotosynthese braucht: Licht, CO₂, Wasser. Was ist die Verbindung?' } }; }
+  Check($('#c5'), [
+    it({ ro: 'Celule cu numeroase cloroplaste', de: 'Zellen mit zahlreichen Chloroplasten' },
+      [{ ro: 'apără frunza de frig', de: 'schützen das Blatt vor Kälte' }, { ro: 'prind multă lumină și fac zahăr', de: 'fangen viel Licht ein und machen Zucker' }, { ro: 'duc apa spre frunză', de: 'leiten Wasser zum Blatt' }], 1,
+      { ro: 'Cu cât mai multe cloroplaste, cu atât mai multă clorofilă care prinde lumina.', de: 'Je mehr Chloroplasten, desto mehr Chlorophyll, das Licht einfängt.' }),
+    it({ ro: 'Strat dens de țesut asimilator', de: 'Dichte Schicht von Ernährungsgewebe' },
+      [{ ro: 'multe celule care fac zahăr, lângă lumină', de: 'viele Zellen, die Zucker machen, nahe am Licht' }, { ro: 'lasă gazele să treacă', de: 'lässt Gase hindurch' }, { ro: 'depozitează apa', de: 'speichert Wasser' }], 0,
+      { ro: 'Celulele strânse una lângă alta fac împreună multă hrană.', de: 'Die dicht gedrängten Zellen stellen zusammen viel Nahrung her.' }),
+    it({ ro: 'Spații intercelulare cu aer', de: 'Zwischenzellräume mit Luft' },
+      [{ ro: 'păstrează zahărul', de: 'bewahren den Zucker auf' }, { ro: 'prind lumina', de: 'fangen Licht ein' }, { ro: 'lasă CO₂ să ajungă la toate celulele', de: 'lassen CO₂ zu allen Zellen gelangen' }], 2,
+      { ro: 'Aerul din spațiile dintre celule duce CO₂ la fiecare celulă și lasă oxigenul să se răspândească.', de: 'Die Luft in den Räumen zwischen den Zellen bringt CO₂ zu jeder Zelle und lässt den Sauerstoff sich ausbreiten.' }),
+    it({ ro: 'Țesut conducător: lemn și liber', de: 'Leitgewebe: Holz und Bast' },
+      [{ ro: 'lemnul aduce apă, liberul duce zahărul', de: 'Holz bringt Wasser, Bast leitet den Zucker' }, { ro: 'lemnul duce zahărul, liberul aduce apă', de: 'Holz leitet den Zucker, Bast bringt Wasser' }, { ro: 'amândouă prind lumina', de: 'beide fangen Licht ein' }], 0,
+      { ro: 'Lemnul: sus, cu apă și săruri. Liberul: jos, cu zahăr.', de: 'Holz: nach oben, mit Wasser und Mineralien. Bast: nach unten, mit Zucker.' }),
+    it({ ro: 'Stomate', de: 'Spaltöffnungen' },
+      [{ ro: 'absorb apa din sol', de: 'nehmen Wasser aus dem Boden auf' }, { ro: 'lasă CO₂ să intre și O₂ să iasă', de: 'lassen CO₂ hinein und O₂ hinaus' }, { ro: 'fac zahărul', de: 'machen den Zucker' }], 1,
+      { ro: 'Sunt „ferestrele” frunzei pentru schimbul de gaze.', de: 'Sie sind die „Fenster“ des Blattes für den Gasaustausch.' }),
+    it({ ro: 'Lama frunzei lățită (extern)', de: 'Breite Blattspreite (außen)' },
+      [{ ro: 'primește multă lumină', de: 'bekommt viel Licht' }, { ro: 'absoarbe apa', de: 'nimmt Wasser auf' }, { ro: 'duce zahărul în rădăcină', de: 'bringt Zucker in die Wurzel' }], 0,
+      { ro: 'O suprafață mare prinde mai multă lumină, ca o farfurie întinsă spre soare.', de: 'Eine große Fläche fängt mehr Licht ein, wie ein zur Sonne ausgestreckter Teller.' }),
+    it({ ro: 'Orientarea spre soare (extern)', de: 'Orientierung zur Sonne (außen)' },
+      [{ ro: 'frunzele se ferește de lumină', de: 'Blätter weichen dem Licht aus' }, { ro: 'frunzele nu se umbresc între ele și primesc lumină', de: 'Blätter beschatten sich nicht und bekommen Licht' }, { ro: 'planta pierde apă', de: 'die Pflanze verliert Wasser' }], 1,
+      { ro: 'Frunzele își întorc lamele spre lumină și se așază astfel încât să nu se umbrească.', de: 'Die Blätter drehen ihre Spreiten zum Licht und ordnen sich so an, dass sie sich nicht beschatten.' })
+  ], tx('La ce ajută?', 'Wobei hilft es?'));
+})();
+
+/* ================= 6. Completează ================= */
+(function () {
+  var N = [
+    { k: 'co2', n: 'CO₂' }, { k: 'h2o', n: 'H₂O' }, { k: 'min', n: { ro: 'săruri minerale', de: 'Mineralien' } },
+    { k: 'lum', n: { ro: 'lumină', de: 'Licht' } }, { k: 'chl', n: { ro: 'clorofilă', de: 'Chlorophyll' } },
+    { k: 'zah', n: { ro: 'zahăr (glucoză)', de: 'Zucker (Glukose)' } }, { k: 'o2', n: 'O₂' },
+    { k: 'st', n: { ro: 'stomate', de: 'Spaltöffnungen' } }, { k: 'rad', n: { ro: 'rădăcină', de: 'Wurzel' } },
+    { k: 'cl', n: { ro: 'cloroplaste', de: 'Chloroplasten' } }, { k: 'as', n: { ro: 'țesut asimilator', de: 'Assimilationsgewebe' } }
+  ];
+  function nm(n) { return typeof n === 'string' ? n : T(n); }
+  // [grup, ok-chei]
+  var SLOTS = [
+    { g: 'in', ok: ['co2', 'h2o', 'min'] }, { g: 'in', ok: ['co2', 'h2o', 'min'] }, { g: 'in', ok: ['co2', 'h2o', 'min'] },
+    { g: 'cond', ok: ['lum', 'chl'] }, { g: 'cond', ok: ['lum', 'chl'] },
+    { g: 'out', ok: ['zah', 'o2'] }, { g: 'out', ok: ['zah', 'o2'] }
+  ];
+  // sub primele trei: locul fiecăruia; ordinea nu contează, deci întrebăm locuri separat
+  var host = $('#cloze'), selects = [];
+  function sel(extra) {
+    var s = h('select'); s.appendChild(h('option', '', tx('—', '—'))); s.firstChild.value = '';
+    var order = [3, 0, 7, 5, 9, 1, 10, 2, 6, 8, 4];
+    order.forEach(function (i) { var o = h('option', '', nm(N[i].n)); o.value = N[i].k; s.appendChild(o); });
+    s.setAttribute('aria-label', extra || tx('alege', 'wähle'));
+    return s;
+  }
+  function plus() { return h('span', '', '+'); }
+  function put(s) { selects.push(s); host.appendChild(s); }
+  var s0 = sel(), s1 = sel(), s2 = sel(); put(s0); host.appendChild(plus()); put(s1); host.appendChild(plus()); put(s2);
+  var arr = h('span', 'arrow'); arr.innerHTML = '<span>→</span>'; host.appendChild(arr);
+  var c0 = sel(), c1 = sel(); put(c0); put(c1);
+  var arr2 = h('span', 'arrow'); arr2.innerHTML = '<span>→</span>'; host.appendChild(arr2);
+  var o0 = sel(), o1 = sel(); put(o0); host.appendChild(plus()); put(o1);
+  // locuri: stomate intrare CO2 / rădăcină apă / cloroplaste / țesut asimilator zahăr / stomate O2
+  var Q = [
+    [{ ro: 'CO₂ intră prin', de: 'CO₂ geht hinein durch' }, 'st'],
+    [{ ro: 'apa intră prin', de: 'Wasser geht hinein durch' }, 'rad'],
+    [{ ro: 'lumina e prinsă în', de: 'Licht wird eingefangen in den' }, 'cl'],
+    [{ ro: 'zahărul se face în', de: 'Zucker entsteht im' }, 'as'],
+    [{ ro: 'O₂ iese prin', de: 'O₂ geht hinaus durch' }, 'st']
+  ];
+  var where = [];
+  Q.forEach(function (q) {
+    var d = h('div', 'under'); d.appendChild(h('span', 'hint', T(q[0]))); var s = sel(T(q[0])); d.appendChild(s); $('#places').appendChild(d); where.push([s, q[1]]);
+  });
+  function mark(s, ok) { s.classList.remove('ok', 'bad'); s.classList.add(ok ? 'ok' : 'bad'); }
+  $('#cl-check').onclick = function () {
+    var good = 0, total = 0;
+    function grp(sels, allowed) {
+      var seen = {};
+      sels.forEach(function (s) {
+        total++;
+        var ok = allowed.indexOf(s.value) >= 0 && !seen[s.value];
+        if (ok) { seen[s.value] = 1; good++; }
+        mark(s, ok);
+      });
+    }
+    grp([s0, s1, s2], ['co2', 'h2o', 'min']);
+    grp([c0, c1], ['lum', 'chl']);
+    grp([o0, o1], ['zah', 'o2']);
+    where.forEach(function (w) { total++; var ok = w[0].value === w[1]; if (ok) good++; mark(w[0], ok); });
+    $('#cl-msg').textContent = good === total
+      ? tx('Perfect! Ecuația și locurile sunt corecte.', 'Perfekt! Gleichung und Orte stimmen.')
+      : tx(good + ' din ' + total + ' corecte. Schimbă cele roșii și verifică din nou.', good + ' von ' + total + ' richtig. Ändere die roten und prüfe nochmal.');
+  };
+})();
+
+/* ================= Dicționar ================= */
+(function () {
+  var G = [
+    ['fotosinteză', 'die Fotosynthese'], ['dioxid de carbon', 'das Kohlendioxid'], ['apă', 'das Wasser'],
+    ['săruri minerale', 'die Mineralien'], ['lumină', 'das Licht'], ['clorofilă', 'das Chlorophyll'],
+    ['cloroplaste', 'die Chloroplasten'], ['zahăr (glucoză)', 'der Zucker (die Glukose)'], ['oxigen', 'der Sauerstoff'],
+    ['stomate', 'die Spaltöffnungen'], ['rădăcină', 'die Wurzel'], ['țesut asimilator', 'das Assimilationsgewebe (Ernährungsgewebe)'],
+    ['țesut conducător', 'das Leitgewebe'], ['lemn', 'das Holz'], ['liber', 'der Bast'], ['substanță anorganică', 'der anorganische Stoff']
+  ];
+  var d = $('#gloss');
+  G.forEach(function (g) { var r = h('div'); r.appendChild(h('dt', '', g[0])); r.appendChild(h('dd', '', g[1])); d.appendChild(r); });
+})();
+})();
+</script>
+</body>
+</html>
