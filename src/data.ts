@@ -16,6 +16,7 @@ import { vikingiiTest } from './content/vikingii-test';
 import { poliiSiOceaneleTest } from './content/polii-si-oceanele-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
+import { operatiiCuMultimiTest } from './content/operatii-cu-multimi-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -221,6 +222,21 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/biologie/fotosinteza.html',
         test: { questions: fotosintezaTest, minutes: 8 },
+      },
+    ],
+    alg: [
+      {
+        slug: 'operatii-cu-multimi',
+        title: {
+          ro: 'Mulțimi: recapitulare și operații',
+          de: 'Mengen: Wiederholung und Operationen',
+        },
+        summary: {
+          ro: 'Elemente, egalitate, incluziune, mulțimi finite și infinite, apoi reuniunea, intersecția și diferența: pe desen, într-un laborator de mulțimi și cu exerciții.',
+          de: 'Elemente, Gleichheit, Teilmengen, endliche und unendliche Mengen, dann Vereinigung, Durchschnitt und Differenz: im Diagramm, in einem Mengenlabor und mit Übungen.',
+        },
+        src: 'lectii/clasa-6/algebra/operatii-cu-multimi.html',
+        test: { questions: operatiiCuMultimiTest, minutes: 8 },
       },
     ],
     gmt: [
