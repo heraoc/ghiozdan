@@ -138,4 +138,21 @@ export const poliiSiOceaneleTest: Question[] = [
       de: 'Edmund Hillary und Tenzing Norgay waren die Ersten auf dem höchsten Gipfel der Erde (8850 m).',
     },
   },
+  {
+    q: {
+      ro: 'Ce s-a întâmplat cu nava „Belgica” în Antarctida?',
+      de: 'Was geschah mit dem Schiff „Belgica“ in der Antarktis?',
+    },
+    options: [
+      { ro: 'a rămas prinsă în gheață, iar echipajul a iernat acolo', de: 'es blieb im Eis stecken, und die Besatzung überwinterte dort' },
+      { ro: 'a ajuns la Polul Sud', de: 'es erreichte den Südpol' },
+      { ro: 'a trecut prin Pasajul de Nord-Est', de: 'es durchfuhr die Nordostpassage' },
+      { ro: 's-a întors imediat în Belgia', de: 'es kehrte sofort nach Belgien zurück' },
+    ],
+    correct: 0,
+    explain: {
+      ro: 'Nava a fost blocată în banchiză și echipajul a petrecut iarna în Antarctida, prima iernare de acest fel.',
+      de: 'Das Schiff saß im Packeis fest, und die Besatzung überwinterte in der Antarktis, als erste überhaupt.',
+    },
+  },
 ];
