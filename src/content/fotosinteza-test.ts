@@ -138,4 +138,38 @@ export const fotosintezaTest: Question[] = [
       de: 'Eine breite, zur Sonne gedrehte Spreite bekommt mehr Licht. Die anderen sind innere Eigenschaften.',
     },
   },
+  {
+    q: {
+      ro: 'Cum se numește hrana (zahărul dizolvat) care coboară prin liber?',
+      de: 'Wie heißt die Nahrung (gelöster Zucker), die im Bast nach unten wandert?',
+    },
+    options: [
+      { ro: 'seva brută', de: 'Rohsaft' },
+      { ro: 'seva elaborată', de: 'Nährsaft (elaborierter Saft)' },
+      { ro: 'dioxid de carbon', de: 'Kohlendioxid' },
+      { ro: 'clorofila', de: 'Chlorophyll' },
+    ],
+    correct: 1,
+    explain: {
+      ro: 'Seva brută (apă și săruri minerale) urcă prin lemn. Seva elaborată (hrana) coboară prin liber.',
+      de: 'Der Rohsaft (Wasser und Mineralien) steigt im Holz auf. Der Nährsaft (die Nahrung) wandert im Bast nach unten.',
+    },
+  },
+  {
+    q: {
+      ro: 'De ce este fotosinteza importantă și pentru animale și pentru om?',
+      de: 'Warum ist die Fotosynthese auch für Tiere und den Menschen wichtig?',
+    },
+    options: [
+      { ro: 'pentru că produce lumină', de: 'Weil sie Licht erzeugt' },
+      { ro: 'pentru că oprește respirația plantelor', de: 'Weil sie die Atmung der Pflanzen stoppt' },
+      { ro: 'pentru că le dă oxigen pentru respirație și hrană', de: 'Weil sie ihnen Sauerstoff zum Atmen und Nahrung liefert' },
+      { ro: 'pentru că ia oxigenul din aer', de: 'Weil sie den Sauerstoff aus der Luft nimmt' },
+    ],
+    correct: 2,
+    explain: {
+      ro: 'Plantele eliberează oxigen în aer și sunt hrana pentru celelalte viețuitoare.',
+      de: 'Pflanzen geben Sauerstoff an die Luft ab und sind die Nahrung für die anderen Lebewesen.',
+    },
+  },
 ];

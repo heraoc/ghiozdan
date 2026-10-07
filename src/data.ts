@@ -216,8 +216,8 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Fotosynthese: Gleichung und Weg der Stoffe',
         },
         summary: {
-          ro: 'Ecuația fotosintezei, pe unde intră apa, dioxidul de carbon și lumina, unde se face zahărul, pe unde iese oxigenul și cum ajută frunza.',
-          de: 'Die Gleichung der Fotosynthese, wo Wasser, Kohlendioxid und Licht hineingehen, wo der Zucker entsteht, wo der Sauerstoff hinausgeht und wie das Blatt hilft.',
+          ro: 'Ecuația fotosintezei, pe unde intră apa, dioxidul de carbon și lumina, unde se face zahărul, pe unde iese oxigenul, cum ajută frunza și de ce contează pentru toate viețuitoarele.',
+          de: 'Die Gleichung der Fotosynthese, wo Wasser, Kohlendioxid und Licht hineingehen, wo der Zucker entsteht, wo der Sauerstoff hinausgeht, wie das Blatt hilft und warum sie für alle Lebewesen wichtig ist.',
         },
         src: 'lectii/clasa-6/biologie/fotosinteza.html',
         test: { questions: fotosintezaTest, minutes: 8 },
