@@ -128,4 +128,48 @@ export const mariExploratoriTest: Question[] = [
       de: 'Die Europäer gründeten Kolonien. Viele Ureinwohner starben an eingeschleppten Krankheiten wie den Pocken.',
     },
   },
+  {
+    q: { ro: 'Prin ce tratat și-au împărțit Spania și Portugalia pământurile noi, în 1494?', de: 'Durch welchen Vertrag teilten Spanien und Portugal 1494 die neuen Gebiete auf?' },
+    options: [
+      { ro: 'Tratatul de la Zaragoza', de: 'den Vertrag von Zaragoza' },
+      { ro: 'Tratatul de la Tordesillas', de: 'den Vertrag von Tordesillas' },
+      { ro: 'Tratatul de la Lisabona', de: 'den Vertrag von Lissabon' },
+      { ro: 'Tratatul de la Sevilla', de: 'den Vertrag von Sevilla' },
+    ],
+    correct: 1,
+    explain: { ro: 'Tratatul de la Tordesillas a tras o linie de graniță; așa au apărut primele imperii coloniale.', de: 'Der Vertrag von Tordesillas legte eine Grenzlinie fest; so entstanden die ersten Kolonialreiche.' },
+  },
+  {
+    q: { ro: 'Ce imperiu a cucerit Hernán Cortés în 1519–1521?', de: 'Welches Reich eroberte Hernán Cortés 1519–1521?' },
+    options: [
+      { ro: 'Imperiul incaș', de: 'das Inkareich' },
+      { ro: 'cetățile mayașe', de: 'die Städte der Mayas' },
+      { ro: 'Imperiul aztec', de: 'das Aztekenreich' },
+      { ro: 'Brazilia', de: 'Brasilien' },
+    ],
+    correct: 2,
+    explain: { ro: 'Cortés a cucerit Imperiul aztec, cu capitala Tenochtitlan (azi Ciudad de México). Incașii au fost cuceriți de Pizarro.', de: 'Cortés eroberte das Aztekenreich mit der Hauptstadt Tenochtitlan (heute Mexiko-Stadt). Die Inkas wurden von Pizarro erobert.' },
+  },
+  {
+    q: { ro: 'Care dintre acestea a ajuns din America în Europa?', de: 'Was kam aus Amerika nach Europa?' },
+    options: [
+      { ro: 'cartoful', de: 'die Kartoffel' },
+      { ro: 'calul', de: 'das Pferd' },
+      { ro: 'secara', de: 'der Roggen' },
+      { ro: 'oaia', de: 'das Schaf' },
+    ],
+    correct: 0,
+    explain: { ro: 'Cartofii, porumbul, roșiile și cacaoua au venit din America. Caii, oile și secara au fost duse de europeni în America.', de: 'Kartoffeln, Mais, Tomaten und Kakao kamen aus Amerika. Pferde, Schafe und Roggen brachten die Europäer nach Amerika.' },
+  },
+  {
+    q: { ro: 'Ce se transporta pe drumul din Africa în America al comerțului triunghiular?', de: 'Was wurde auf dem Weg von Afrika nach Amerika im Dreieckshandel transportiert?' },
+    options: [
+      { ro: 'zahăr și tutun', de: 'Zucker und Tabak' },
+      { ro: 'mărfuri ieftine', de: 'Billigwaren' },
+      { ro: 'aur și argint', de: 'Gold und Silber' },
+      { ro: 'oameni făcuți sclavi', de: 'versklavte Menschen' },
+    ],
+    correct: 3,
+    explain: { ro: 'Sclavii erau duși din Africa în America și vânduți proprietarilor de plantații și de mine.', de: 'Sklaven wurden aus Afrika nach Amerika gebracht und an Plantagen- und Minenbesitzer verkauft.' },
+  },
 ];

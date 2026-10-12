@@ -357,14 +357,14 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Große Entdecker (1487–1597)',
         },
         summary: {
-          ro: 'De la Diaz la Barents: șase navigatori care au găsit drumuri noi pe mare. Urmărește-le traseele pe harta lumii.',
-          de: 'Von Diaz bis Barents: sechs Seefahrer, die neue Seewege fanden. Verfolge ihre Routen auf der Weltkarte.',
+          ro: 'De la Diaz la Barents: șase navigatori și traseele lor pe harta lumii. Apoi caravela, imperiile coloniale, mayașii, aztecii și incașii, schimbul dintre lumi, comerțul triunghiular, urmările și evaluarea din manual.',
+          de: 'Von Diaz bis Barents: sechs Seefahrer und ihre Routen auf der Weltkarte. Dann die Karavelle, die Kolonialreiche, Mayas, Azteken und Inkas, der Austausch zwischen den Welten, der Dreieckshandel, die Folgen und die Evaluation aus dem Buch.',
         },
         src: {
           ro: 'lectii/clasa-6/istorie/mari-exploratori.html',
           de: 'lectii/clasa-6/istorie/mari-exploratori.de.html',
         },
-        test: { questions: mariExploratoriTest, minutes: 5 },
+        test: { questions: mariExploratoriTest, minutes: 8 },
       },
     ],
   },

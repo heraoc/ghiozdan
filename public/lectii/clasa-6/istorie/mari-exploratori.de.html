@@ -142,6 +142,106 @@ html{scroll-behavior:smooth}
 html.embed body{background:transparent}
 html.embed .wrap{padding:0 0 8px}
 html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+
+/* ===== Partea a doua: după manual, p. 14–23, și caiet ===== */
+.nx{--n-ok:#1f8a5b;--n-ok-soft:#e3f5ec;--n-bad:#c23b3b;--n-bad-soft:#fbe4e4;--n-es:#4f9d4f;--n-pt:#d4545b;--n-acc:#8b4fc6}
+.nx .n-part{margin-top:64px;padding-top:22px;border-top:2px solid var(--ink)}
+.nx .n-part h2{font-size:clamp(30px,4.4vw,44px);font-weight:800}
+.nx .n-part p{color:var(--muted);max-width:66ch;margin-top:8px;font-size:18px}
+.nx .n-sec{margin-top:52px}
+.nx .n-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.nx .n-step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.nx .n-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.nx .n-split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start}
+.nx .n-fig{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:8px}
+.nx .n-fig svg{display:block;width:100%;height:auto}
+.nx .n-card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;display:grid;gap:8px}
+.nx .n-card h3{font-size:22px}
+.nx .n-info{border-left:4px solid var(--n-acc);min-height:120px}
+.nx .n-doc{background:#fbf3e4;border:1px solid #ecd9b4;border-radius:8px;padding:12px 16px;font-style:italic}
+.nx .n-doc cite{display:block;font-style:normal;font-size:14px;color:var(--muted);margin-top:6px}
+.nx .n-rem{margin-top:16px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.nx .n-rem h3{font-size:20px;color:#9a5b00}
+.nx .n-rem ul,.nx .n-card ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.nx .n-btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font:700 16px var(--body);cursor:pointer}
+.nx .n-btn.ghost{background:transparent;color:var(--ink)}
+.nx .n-btn:disabled{opacity:.4;cursor:default}
+.nx .n-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.nx .n-acts{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.nx .n-tog{border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:6px 14px;font:700 15px var(--body);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.nx .n-tog[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.nx .n-tog i{width:14px;height:14px;border-radius:3px;display:inline-block;background:var(--sw,#999)}
+.nx .n-pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:6px 14px;font:500 16px var(--body);cursor:pointer;min-height:38px;text-align:left}
+.nx .n-pick:hover:not(:disabled){border-color:var(--muted)}
+.nx .n-pick.right{border-color:var(--n-ok);background:var(--n-ok);color:#fff}
+.nx .n-pick.wrong{border-color:var(--n-bad);background:var(--n-bad-soft);color:#a12f2f}
+.nx .n-pick[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:#fff}
+.nx .n-res{border-radius:10px;padding:10px 14px;font-weight:700}
+.nx .n-res.good{background:var(--n-ok-soft);color:#17744d}
+.nx .n-res.try{background:#fdf0d5;color:#8a5a00}
+.nx .n-check{margin-top:18px;background:var(--card);border:1px dashed #c9b3df;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.nx .n-check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--n-acc)}
+.nx .n-cq{display:grid;gap:6px}
+.nx .n-cq .q{font-weight:700}
+.nx .n-why{font-size:15px;color:var(--muted)}
+.nx .n-hot{cursor:pointer}
+.nx .n-hot circle{fill:var(--n-acc);stroke:#fff;stroke-width:3}
+.nx .n-hot text{fill:#fff;font:800 15px var(--body);text-anchor:middle;pointer-events:none}
+.nx .n-hot.on circle{fill:var(--ink)}
+.nx .n-hot:focus{outline:none}
+.nx .n-hot:focus-visible circle{stroke:var(--ink);stroke-width:4}
+.nx .n-sea{fill:#dbe9ee;stroke:#c3d6dd}
+.nx .n-grat{fill:none;stroke:#c3d6dd;stroke-width:.5}
+.nx .n-land{fill:#efe8d6;stroke:#b9ad8e;stroke-width:.4}
+.nx .n-es{fill:var(--n-es);fill-opacity:.62;stroke:#2f6b2f;stroke-width:.5}
+.nx .n-pt{fill:var(--n-pt);fill-opacity:.62;stroke:#8a2b31;stroke-width:.5}
+.nx .n-line{fill:none;stroke:#1b2530;stroke-width:2;stroke-dasharray:7 5}
+.nx .n-civ{fill:#c98a00;fill-opacity:.55;stroke:#7a5300;stroke-width:1.2;cursor:pointer}
+.nx .n-civ.on{fill-opacity:.85;stroke-width:2.5}
+.nx .n-arrow{fill:none;stroke-width:3.2;stroke-linecap:round}
+.nx .n-ml{font-weight:700;font-family:var(--body);paint-order:stroke;stroke:#fff;stroke-linejoin:round;fill:#1b2530}
+.nx .n-dot{stroke:#fff;stroke-width:1.2}
+.nx .n-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted);margin-top:8px}
+.nx .n-legend span{display:inline-flex;align-items:center;gap:6px}
+.nx .n-legend i{width:16px;height:12px;border-radius:2px;display:inline-block}
+.nx .n-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nx .n-col{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;display:grid;gap:6px;align-content:start;min-height:80px}
+.nx .n-col h4{margin:0;font:800 17px var(--display)}
+.nx .n-col .n-item{background:var(--sheet);border-radius:8px;padding:6px 10px;font-size:15px;animation:nxin .3s ease both}
+@keyframes nxin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.nx .n-big{font:800 26px/1.2 var(--display)}
+.nx .n-emoji{font-size:54px;line-height:1}
+.nx .n-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.nx .n-cards .n-card h3{font-size:19px}
+.nx .n-terms{display:flex;flex-wrap:wrap;gap:6px}
+.nx .n-terms span{border:1.5px solid var(--rule);border-radius:99px;padding:3px 10px;font-size:14px}
+.nx .n-terms span.on{border-color:var(--n-ok);background:var(--n-ok-soft);color:#17744d;font-weight:700}
+.nx textarea{width:100%;min-height:110px;border:1.5px solid var(--rule);border-radius:8px;padding:8px 10px;font:16px/1.5 var(--body);background:#fff}
+.nx .n-ev{display:grid;gap:14px}
+.nx .n-subj{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:10px}
+.nx .n-subj > h3{font-size:21px}
+.nx .n-it{display:grid;gap:6px;padding:8px 0;border-top:1px dashed var(--rule)}
+.nx .n-it .q{font-weight:500}
+.nx .n-it .q b{color:var(--muted);margin-right:4px}
+.nx .n-it .q small{color:var(--muted);font-weight:700;margin-left:6px}
+.nx .n-it.ok{background:linear-gradient(90deg,var(--n-ok-soft),transparent 60%)}
+.nx .n-it.bad{background:linear-gradient(90deg,var(--n-bad-soft),transparent 60%)}
+.nx .n-it .model{display:none;font-size:15px;color:var(--muted);background:var(--sheet);border-radius:8px;padding:8px 12px}
+.nx .n-ev.show .model{display:block}
+.nx .n-grade{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;background:var(--ink);color:#fff;border-radius:12px;padding:12px 18px;margin-top:12px}
+.nx .n-grade b{font:800 30px/1 var(--display)}
+.nx .n-sel{border:1.5px solid var(--rule);border-radius:8px;padding:5px 8px;background:#fff;font:15px var(--body);min-height:36px;max-width:100%}
+.nx .n-subj,.nx .n-it,.nx .n-it .n-row,.nx .n-it label{min-width:0;max-width:100%}
+.nx .n-diag{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:center}
+.nx .n-diag .n-col{min-height:110px}
+.nx .n-diag .mid{text-align:center;font-weight:700;border:2px solid var(--ink);border-radius:10px;padding:10px;background:var(--card)}
+.nx .n-diag .arr{font-size:26px;color:#8a2b31}
+.nx .n-bal{max-width:520px}
+.nx [hidden]{display:none!important}
+@media (max-width:820px){ .nx .n-split{grid-template-columns:1fr} .nx .n-diag{grid-template-columns:1fr} .nx .n-diag .arr{transform:rotate(90deg);justify-self:center} }
+@media (max-width:560px){ .nx .n-cols{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){ .nx .n-col .n-item{animation:none} }
+.nx .ro{display:none!important}
 </style>
 </head>
 <body>
@@ -292,6 +392,166 @@ html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:n
   <p class="map-note">Die Linien zeigen die Routen vereinfacht, so wie sie auf dem Arbeitsblatt beschrieben sind. Bei Vasco da Gama ist der große Bogen durch den Südatlantik eingezeichnet, den er wirklich gefahren ist.</p>
 </div>
 
+
+<div class="nx">
+<section class="n-part" aria-labelledby="n-part-t">
+  <p class="eyebrow"><span class="ro">Partea a doua · după manual și caiet</span><span class="de">Zweiter Teil · nach Buch und Heft</span></p>
+  <h2 id="n-part-t"><span class="ro">Ce au schimbat marile descoperiri?</span><span class="de">Welche Veränderungen brachten die großen Entdeckungen?</span></h2>
+  <p><span class="ro">Corăbiile cu care au navigat, cum și-au împărțit Portugalia și Spania lumea, ce s-a întâmplat cu mayașii, aztecii și incașii, ce plante și animale au trecut oceanul și ce urmări au avut descoperirile pentru europeni și pentru celelalte popoare. La final rezolvi evaluarea din manual.</span><span class="de">Die Schiffe, mit denen sie fuhren, wie Portugal und Spanien die Welt aufteilten, was mit den Mayas, Azteken und Inkas geschah, welche Pflanzen und Tiere über den Ozean kamen und welche Folgen die Entdeckungen für die Europäer und für die anderen Völker hatten. Am Ende löst du die Evaluation aus dem Buch.</span></p>
+</section>
+
+<!-- 1. Caravela -->
+<section class="n-sec" id="n-caravela" aria-labelledby="n-t1">
+  <h2 class="n-title" id="n-t1"><span class="n-step">1</span><span class="ro">Caravela, corabia descoperirilor</span><span class="de">Die Karavelle, das Schiff der Entdeckungen</span></h2>
+  <p class="n-sub"><span class="ro">Caravela a fost folosită în călătoriile din secolele XV–XVI. Apasă pe numere ca să afli ce rol avea fiecare parte.</span><span class="de">Die Karavelle wurde bei den Seefahrten des 15. und 16. Jahrhunderts eingesetzt. Tippe auf die Zahlen, um zu erfahren, wozu jedes Teil diente.</span></p>
+  <div class="n-split">
+    <div class="n-fig"><svg id="n-ship" viewBox="0 0 560 340" role="img"></svg></div>
+    <div class="n-card n-info" id="n-ship-info" aria-live="polite"></div>
+  </div>
+  <div class="n-check" id="n-c1"></div>
+</section>
+
+<!-- 2. Schema din caiet -->
+<section class="n-sec" id="n-schema" aria-labelledby="n-t2">
+  <h2 class="n-title" id="n-t2"><span class="n-step">2</span><span class="ro">Schema din caiet: cauze, țări, drumuri</span><span class="de">Das Schema aus dem Heft: Ursachen, Länder, Wege</span></h2>
+  <p class="n-sub"><span class="ro">Recapitulează cu schema din caiet. Pentru fiecare navigator, alege pe ce fel de drum a mers.</span><span class="de">Wiederhole mit dem Schema aus dem Heft. Wähle für jeden Seefahrer, welchen Weg er genommen hat.</span></p>
+  <div class="n-split">
+    <div class="n-card">
+      <h3><span class="ro">I. Cauzele</span><span class="de">I. Die Ursachen</span></h3>
+      <ul>
+        <li><span class="ro">Europenii voiau un drum nou spre India (turcii cereau taxe de la călători).</span><span class="de">Die Europäer wollten einen neuen Weg nach Indien finden (die Türken verlangten Taxen von den Reisenden).</span></li>
+        <li><span class="ro">Voiau să exploreze lumea și să-și completeze imaginea despre ea.</span><span class="de">Die Europäer wollten die Welt erkunden und das Weltbild vervollständigen.</span></li>
+        <li><span class="ro">Invenții tehnice care au făcut posibilă navigația: busola, hărțile, caravela.</span><span class="de">Neue technische Erfindungen, die das Segeln ermöglichten: Kompass, Karten, Karavelle.</span></li>
+      </ul>
+      <h3><span class="ro">II. Țările care au luat inițiativa</span><span class="de">II. Europäische Länder, die die Initiative ergriffen</span></h3>
+      <p><span class="ro">Portugalia și Spania, pentru că aveau acces la Oceanul Atlantic.</span><span class="de">Portugal und Spanien, weil sie Zugang zum Atlantischen Ozean hatten.</span></p>
+    </div>
+    <div class="n-card">
+      <h3><span class="ro">III. Drumurile</span><span class="de">III. Die Wege</span></h3>
+      <div id="n-routes" style="display:grid;gap:10px"></div>
+      <div class="n-res" id="n-routes-res" hidden aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Lumea împărțită -->
+<section class="n-sec" id="n-lumea" aria-labelledby="n-t3">
+  <h2 class="n-title" id="n-t3"><span class="n-step">3</span><span class="ro">Lumea împărțită: imperiile coloniale și civilizațiile precolumbiene</span><span class="de">Die geteilte Welt: Kolonialreiche und präkolumbische Zivilisationen</span></h2>
+  <p class="n-sub"><span class="ro">Prin Tratatul de la Tordesillas (1494), Portugalia și Spania și-au împărțit pământurile noi printr-o linie de graniță. Pornește și oprește straturile hărții. Apasă pe o civilizație ca s-o cunoști.</span><span class="de">Durch den Vertrag von Tordesillas (1494) teilten Portugal und Spanien die neuen Gebiete durch eine Grenzlinie auf. Schalte die Kartenebenen ein und aus. Tippe auf eine Zivilisation, um sie kennenzulernen.</span></p>
+  <div class="n-row" id="n-map-tog" role="group" style="margin-bottom:10px"></div>
+  <div class="n-row" id="n-map-view" role="group" style="margin-bottom:10px"></div>
+  <div class="n-split">
+    <div><div class="n-fig"><svg id="n-map" role="img"></svg></div><div class="n-legend" id="n-map-leg"></div></div>
+    <div class="n-card n-info" id="n-map-info" aria-live="polite"></div>
+  </div>
+  <div class="n-rem">
+    <h3><span class="ro">Reține</span><span class="de">Wichtiges</span></h3>
+    <ul>
+      <li><span class="ro">1494, Tratatul de la Tordesillas: au apărut primele imperii coloniale, al Spaniei și al Portugaliei.</span><span class="de">1494, Vertrag von Tordesillas: Es entstanden die ersten Kolonialreiche, das spanische und das portugiesische.</span></li>
+      <li><span class="ro">Mayașii, aztecii și incașii aveau civilizații agricole bazate pe cultura porumbului.</span><span class="de">Die Mayas, Azteken und Inkas hatten Agrarzivilisationen, gestützt auf den Maisanbau.</span></li>
+      <li><span class="ro">1519–1521 Hernán Cortés a cucerit Imperiul aztec; 1532 Francisco Pizarro a ocupat Imperiul incaș.</span><span class="de">1519–1521 eroberte Hernán Cortés das Aztekenreich; 1532 besetzte Francisco Pizarro das Inkareich.</span></li>
+    </ul>
+  </div>
+  <div class="n-check" id="n-c3"></div>
+</section>
+
+<!-- 4. Conchistadorii -->
+<section class="n-sec" id="n-conq" aria-labelledby="n-t4">
+  <h2 class="n-title" id="n-t4"><span class="n-step">4</span><span class="ro">Cum au putut câteva sute de conchistadori să învingă imperii întregi?</span><span class="de">Wie konnten einige hundert Konquistadoren ganze Reiche besiegen?</span></h2>
+  <p class="n-sub"><span class="ro">Cortés avea aproximativ 600 de soldați, iar Imperiul aztec avea în jur de 20 de milioane de locuitori. Pune pe cântar, unul câte unul, avantajele spaniolilor.</span><span class="de">Cortés hatte etwa 600 Soldaten, das Aztekenreich hatte etwa 20 Millionen Einwohner. Lege die Vorteile der Spanier nacheinander auf die Waage.</span></p>
+  <div class="n-split">
+    <div class="n-fig n-bal"><svg id="n-bal" viewBox="0 0 520 300" role="img"></svg></div>
+    <div class="n-card">
+      <div class="n-row" id="n-adv" role="group" style="display:grid;gap:6px"></div>
+      <div class="n-res" id="n-adv-res" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="n-doc" style="margin-top:16px">
+    <span class="ro">„Conchistadorii aveau un avantaj tehnic important față de războinicii indieni, mult mai numeroși. Europenii aveau armuri solide, arme de metal, inclusiv arme de foc, iar băștinașii aveau pumnale și săgeți din piatră. Năvălitorii aveau cai, pe care locuitorii Americii nu îi cunoșteau. În plus, spaniolii au profitat de dușmăniile dintre populațiile locale și i-au câștigat pe unii de partea lor.”</span><span class="de">„Die Konquistadoren hatten einen wichtigen technischen Vorteil gegenüber den zahlenmäßig stärkeren Kriegern der Indios. Die Europäer hatten solide Rüstungen, Metallwaffen, einschließlich Feuerwaffen, und die Einheimischen hatten Dolche und Pfeile aus Stein. Die Eindringlinge hatten Pferde, die den Bewohnern Amerikas nicht bekannt waren. Außerdem haben die Spanier von den Feindschaften unter den Lokalbevölkerungen profitiert und konnten so einige davon für sich gewinnen.“</span>
+    <cite>Reg Grant, <i><span class="ro">Sclavia</span><span class="de">Die Sklaverei</span></i></cite>
+  </div>
+  <h3 style="margin:22px 0 10px;font-size:22px"><span class="ro">Echipamentul, față în față</span><span class="de">Die Ausrüstung im Vergleich</span></h3>
+  <div class="n-cols" id="n-equip"></div>
+</section>
+
+<!-- 5. Schimbul -->
+<section class="n-sec" id="n-schimb" aria-labelledby="n-t5">
+  <h2 class="n-title" id="n-t5"><span class="n-step">5</span><span class="ro">Schimbul dintre Lumea Nouă și Lumea Veche</span><span class="de">Austausch zwischen der Neuen und der Alten Welt</span></h2>
+  <p class="n-sub"><span class="ro">Între America și Europa au trecut plante și animale în ambele direcții. Pentru fiecare, alege încotro a călătorit.</span><span class="de">Zwischen Amerika und Europa wurden Pflanzen und Tiere in beide Richtungen ausgetauscht. Wähle für jedes, wohin es gereist ist.</span></p>
+  <div class="n-split">
+    <div class="n-card" style="text-align:center;justify-items:center" id="n-ex-q"></div>
+    <div class="n-cols">
+      <div class="n-col"><h4><span class="ro">Din America în Europa</span><span class="de">Von Amerika nach Europa</span></h4><div id="n-ex-a" style="display:grid;gap:6px"></div></div>
+      <div class="n-col"><h4><span class="ro">Din Europa în America</span><span class="de">Von Europa nach Amerika</span></h4><div id="n-ex-e" style="display:grid;gap:6px"></div></div>
+    </div>
+  </div>
+  <h3 style="margin:22px 0 10px;font-size:22px"><span class="ro">Imaginează-ți că trăiești în Europa, în jurul anului 1400</span><span class="de">Stell dir vor, du lebst um 1400 in Europa</span></h3>
+  <div class="n-card" id="n-meal"></div>
+</section>
+
+<!-- 6. Misionare și exploatare -->
+<section class="n-sec" id="n-expl" aria-labelledby="n-t6">
+  <h2 class="n-title" id="n-t6"><span class="n-step">6</span><span class="ro">Misionare, exploatare și comerțul triunghiular</span><span class="de">Missionierung, Ausbeutung und Dreieckshandel</span></h2>
+  <p class="n-sub"><span class="ro">Stăpânirea spaniolă și portugheză a impus creștinismul. Prima misiune în Lumea Nouă a avut loc în 1523, în Noua Spanie (Mexic). Pământurile au fost împărțite în plantații mari, iar în minele de aur și de argint localnicii erau puși la muncă grea.</span><span class="de">Die spanische und portugiesische Herrschaft zwang das Christentum auf. Die erste Mission in der Neuen Welt fand 1523 in Neuspanien (Mexiko) statt. Die Ländereien wurden in große Plantagen aufgeteilt, und in den Gold- und Silberminen musste die Bevölkerung Schwerstarbeit leisten.</span></p>
+  <div class="n-doc">
+    <span class="ro">„Spaniolii au distrus aici zece regate mai mari decât Spania. În 40 de ani au murit din cauza lor peste 12 milioane de suflete, prin războaie nedrepte, prin diferite molime și prin muncă până la epuizare. Cauza acestor omoruri a fost foamea de aur și de îmbogățire, imposibil de oprit.”</span><span class="de">„Die Spanier haben hier zehn Reiche, größer als Spanien selbst, zerstört. Innerhalb von 40 Jahren starben ihretwegen über 12 Mio. Seelen durch ungerechte Kriege, verschiedene Seuchen und durch Ausbeutung bis zur Erschöpfung. Der Grund für diese Morde war der nicht zu bändigende Hunger nach Gold und Bereicherung der Christen.“</span>
+    <cite>Bartolomé de Las Casas (1484–1566), <span class="ro">misionar numit „Părintele indienilor”, care a apărat drepturile băștinașilor</span><span class="de">Missionar, „Vater der Indios“ genannt, der sich für die Rechte der Einheimischen einsetzte</span></cite>
+  </div>
+  <p class="n-sub" style="margin-top:16px"><span class="ro">Pentru că populația locală a scăzut puternic din cauza bolilor, a muncii grele și a abuzurilor, coloniștii au adus pentru muncă sclavi din Africa. Urmărește pe hartă cele trei drumuri ale comerțului triunghiular.</span><span class="de">Weil die Bevölkerung wegen der Seuchen, der harten Arbeit und der Missbräuche stark zurückging, brachten die Kolonisten Sklaven aus Afrika für die Arbeit. Verfolge auf der Karte die drei Wege des Dreieckshandels.</span></p>
+  <div class="n-split">
+    <div class="n-fig"><svg id="n-tri" role="img"></svg></div>
+    <div class="n-card">
+      <div class="n-row" id="n-tri-btn" role="group"></div>
+      <div id="n-tri-info" aria-live="polite" style="display:grid;gap:6px"></div>
+    </div>
+  </div>
+  <div class="n-rem">
+    <h3><span class="ro">Reține</span><span class="de">Wichtiges</span></h3>
+    <ul>
+      <li><span class="ro">Plantația: o suprafață agricolă mare pentru cultivarea unei singure plante (ceai, cafea, cacao, trestie-de-zahăr).</span><span class="de">Die Plantage: große landwirtschaftliche Fläche für den Anbau von Pflanzen (Tee, Kaffee, Kakao, Zuckerrohr).</span></li>
+      <li><span class="ro">Contribuția europenilor, creștinarea băștinașilor și amestecul culturilor au dus la formarea noii civilizații latino-americane.</span><span class="de">Der Beitrag der Europäer, die Christianisierung der Einheimischen und die Verschmelzung der Kulturen führten zur Bildung der neuen lateinamerikanischen Zivilisation.</span></li>
+    </ul>
+  </div>
+  <div class="n-check" id="n-c6"></div>
+</section>
+
+<!-- 7. Urmările -->
+<section class="n-sec" id="n-urmari" aria-labelledby="n-t7">
+  <h2 class="n-title" id="n-t7"><span class="n-step">7</span><span class="ro">Urmările descoperirilor</span><span class="de">Die Folgen der Entdeckungen</span></h2>
+  <p class="n-sub"><span class="ro">Completează schema din caiet: pentru cine a fost fiecare urmare?</span><span class="de">Vervollständige das Schema aus dem Heft: Für wen war jede Folge?</span></p>
+  <div class="n-split">
+    <div class="n-card" id="n-cons-q"></div>
+    <div class="n-cols">
+      <div class="n-col"><h4><span class="ro">Pentru europeni</span><span class="de">Für die Europäer</span></h4><div id="n-cons-e" style="display:grid;gap:6px"></div></div>
+      <div class="n-col"><h4><span class="ro">Pentru popoarele lumii</span><span class="de">Für die Völker aus der Welt</span></h4><div id="n-cons-w" style="display:grid;gap:6px"></div></div>
+    </div>
+  </div>
+  <h3 style="margin:22px 0 10px;font-size:22px"><span class="ro">Schimbări în Europa</span><span class="de">Veränderungen in Europa</span></h3>
+  <div class="n-cards" id="n-eu"></div>
+  <h3 style="margin:22px 0 10px;font-size:22px"><span class="ro">Părerea ta</span><span class="de">Deine Meinung</span></h3>
+  <div class="n-card">
+    <p><span class="ro">Care urmări ale marilor descoperiri ți se par pozitive și care negative? Scrie câteva rânduri. Încearcă să folosești cuvintele de mai jos: ele se colorează când le folosești.</span><span class="de">Welche Folgen der großen Entdeckungen findest du positiv, welche negativ? Schreib ein paar Zeilen. Versuche, die Wörter unten zu verwenden: Sie werden farbig, wenn du sie benutzt.</span></p>
+    <div class="n-terms" id="n-op-terms"></div>
+    <textarea id="n-op" aria-label="opinie"></textarea>
+    <div class="n-acts" style="margin-top:0"><button type="button" class="n-btn ghost" id="n-op-model"></button></div>
+    <div class="n-doc" id="n-op-text" hidden style="font-style:normal"></div>
+  </div>
+</section>
+
+<!-- 8. Evaluare -->
+<section class="n-sec" id="n-eval" aria-labelledby="n-t8">
+  <h2 class="n-title" id="n-t8"><span class="n-step">8</span><span class="ro">Evaluarea din manual, interactivă</span><span class="de">Die Evaluation aus dem Buch, interaktiv</span></h2>
+  <p class="n-sub"><span class="ro">Exercițiile de la paginile 22–23, cu punctajul din manual și 10 puncte din oficiu. La întrebările deschise compară cu modelul și bifează dacă ai scris aceleași idei.</span><span class="de">Die Aufgaben von S. 22–23, mit der Punktzahl aus dem Buch und 10 Punkten von Amts wegen. Bei den offenen Aufgaben vergleichst du mit dem Muster und kreuzt an, ob du dieselben Ideen geschrieben hast.</span></p>
+  <div class="n-ev" id="n-ev"></div>
+  <div class="n-acts">
+    <button type="button" class="n-btn" id="n-ev-check"></button>
+    <button type="button" class="n-btn ghost" id="n-ev-show"></button>
+    <button type="button" class="n-btn ghost" id="n-ev-reset"></button>
+  </div>
+  <div class="n-grade" id="n-ev-grade" hidden aria-live="polite"></div>
+</section>
+</div>
+
 <section class="gloss">
     <h2 class="section-title">Wichtige Begriffe</h2>
     <dl>
@@ -301,12 +561,23 @@ html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:n
       <div><dt>Skorbut</dt><dd>Gefährliche Krankheit durch Mangel an Vitamin C. Zahnfleisch blutet, Zähne fallen aus. Auf langen Fahrten starben viele Seeleute daran.</dd></div>
       <div><dt>Kaperbrief</dt><dd>Erlaubnis eines Herrschers, Schiffe eines feindlichen Landes zu überfallen. Drake segelte mit dem Einverständnis der englischen Königin.</dd></div>
       <div><dt>Kolonie</dt><dd>Ein Gebiet, das von einem fremden Land erobert und beherrscht wird.</dd></div>
+      <div><dt>Konquistador</dt><dd>Spanischer Eroberer des 15.–17. Jhs.</dd></div>
+      <div><dt>Kolonialreich</dt><dd>Gebiete, die von einem europäischen Staat (Metropole) beherrscht wurden.</dd></div>
+      <div><dt>Einheimische</dt><dd>Ureinwohner, Eingeborene.</dd></div>
+      <div><dt>präkolumbisch</dt><dd>Vor der Entdeckung Amerikas durch Kolumbus.</dd></div>
+      <div><dt>Indio</dt><dd>Bewohner Amerikas vor der Ankunft der Europäer.</dd></div>
+      <div><dt>Plantage</dt><dd>Große landwirtschaftliche Fläche für den Anbau von Pflanzen (Tee, Kaffee, Kakao, Zuckerrohr).</dd></div>
+      <div><dt>Ausbeutung</dt><dd>Hier: Ausnutzung der Völker der Neuen Welt durch die Eroberer.</dd></div>
+      <div><dt>Missionar</dt><dd>Beauftragter für die Verbreitung des Glaubens.</dd></div>
+      <div><dt>Archipel</dt><dd>Inselgruppe.</dd></div>
+      <div><dt>Dreieckshandel</dt><dd>Handel auf drei Wegen: Europa – Afrika – Amerika – Europa.</dd></div>
     </dl>
   </section>
 
 <footer class="foot">
   <p>Texte in den grauen Kästen: Arbeitsblatt „Die großen Entdeckungsfahrten“ (Cornelsen Verlag). Bilder: Wikimedia Commons. Die Porträts von Kolumbus, Diaz und Magellan wurden nach deren Tod angefertigt oder sind unsicher. Wie diese Männer wirklich aussahen, weiß niemand genau.</p>
   <p>Kartengrundlage: Natural Earth.</p>
+  <p>Zweiter Teil: nach dem Geschichtsbuch für die 6. Klasse, S. 14–23 (Lektionen über die großen Entdeckungen und ihre Folgen, Evaluation), und dem Schülerheft. Die Grenzen der Kolonialreiche auf der Karte sind vereinfacht, nach heutigen Ländergrenzen; die Gebiete der präkolumbischen Zivilisationen sind ungefähr.</p>
 </footer>
 </div>
 
@@ -345,5 +616,558 @@ html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:n
   });
 })();
 </script>
+<script src="../../lib/d3-7.8.5.min.js"></script>
+<script src="../../lib/topojson-client-3.1.0.min.js"></script>
+<script>
+/* Partea a doua: după manualul de Istorie, clasa a 6-a, p. 14–23, și caiet */
+(function () {
+'use strict';
+var L = document.documentElement.lang === 'de' ? 'de' : 'ro';
+var NS = 'http://www.w3.org/2000/svg';
+var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s) { return document.querySelector(s); }
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function el(tag, a, parent, text) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (text != null) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+var mobile = function () { return window.innerWidth < 600; };
+
+/** Întrebări scurte de verificare. */
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'n-cq'), opts = h('div', 'n-row'), why = h('p', 'n-why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('n-pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.textContent = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* ================= 1. Caravela ================= */
+(function () {
+  var svg = $('#n-ship'), info = $('#n-ship-info');
+  var g = el('g', {}, svg);
+  // apa
+  el('path', { d: 'M0 300 Q35 290 70 300 T140 300 T210 300 T280 300 T350 300 T420 300 T490 300 T560 300 L560 340 L0 340 Z', fill: '#cfe3f0' }, g);
+  // catarge
+  [[170, 232, 95], [300, 232, 40], [425, 232, 105]].forEach(function (m) { el('line', { x1: m[0], y1: m[1], x2: m[0], y2: m[2], stroke: '#6b4a2b', 'stroke-width': 5 }, g); });
+  // pânze triunghiulare (latine), cu vergile înclinate
+  [[170, 100, 108, 214, 238, 204, 230, 92], [300, 46, 210, 214, 398, 206, 360, 40], [425, 110, 368, 214, 492, 210, 470, 104]].forEach(function (s) {
+    el('polygon', { points: s[6] + ',' + s[7] + ' ' + s[2] + ',' + s[3] + ' ' + s[4] + ',' + s[5], fill: '#f3e3c3', stroke: '#9a7a4a', 'stroke-width': 2 }, g);
+    el('line', { x1: s[6], y1: s[7], x2: s[2], y2: s[3], stroke: '#6b4a2b', 'stroke-width': 3 }, g);
+    el('path', { d: 'M' + (s[2] + 30) + ' ' + (s[3] - 30) + ' l20 10 l-6 -20 m-8 50 l26 -12', fill: 'none', stroke: '#c9a46a', 'stroke-width': 1.2 }, g);
+  });
+  // cruce pe pânza mare
+  el('path', { d: 'M300 120 v40 M282 140 h36', stroke: '#b23a3a', 'stroke-width': 6 }, g);
+  // gabia (post de observație) și steagul
+  el('rect', { x: 286, y: 54, width: 28, height: 14, rx: 2, fill: '#8a5a32', stroke: '#5a3a1f' }, g);
+  el('path', { d: 'M300 40 L300 18 L330 26 L300 34', fill: '#b23a3a', stroke: '#6b4a2b' }, g);
+  // corpul corabiei
+  el('path', { d: 'M40 205 L130 205 L135 228 L470 228 L522 214 Q500 292 420 300 L140 300 Q70 296 40 205 Z', fill: '#9a6a3c', stroke: '#5a3a1f', 'stroke-width': 3 }, g);
+  el('path', { d: 'M60 240 L505 240', stroke: '#5a3a1f', 'stroke-width': 1.5 }, g);
+  el('path', { d: 'M75 262 L490 262', stroke: '#5a3a1f', 'stroke-width': 1.2 }, g);
+  // cala cu provizii (secțiune)
+  el('rect', { x: 230, y: 246, width: 170, height: 46, rx: 6, fill: '#e9d3b0', stroke: '#5a3a1f', 'stroke-dasharray': '5 4' }, g);
+  [252, 290, 328, 366].forEach(function (x) { el('ellipse', { cx: x, cy: 272, rx: 15, ry: 16, fill: '#b07a44', stroke: '#5a3a1f' }, g); el('line', { x1: x - 15, y1: 268, x2: x + 15, y2: 268, stroke: '#5a3a1f' }, g); });
+  // cârma
+  el('path', { d: 'M44 214 L30 286 L52 292 L60 222 Z', fill: '#7a5230', stroke: '#5a3a1f', 'stroke-width': 2 }, g);
+  // busola pe puntea din spate
+  el('circle', { cx: 100, cy: 196, r: 8, fill: '#fff', stroke: '#5a3a1f', 'stroke-width': 2 }, g);
+  el('path', { d: 'M100 190 L103 196 L100 202 L97 196 Z', fill: '#b23a3a' }, g);
+  var P = [
+    { x: 330, y: 62, t: { ro: 'Catargul principal, cu post de observație', de: 'Der Hauptmast mit Ausguck' },
+      d: { ro: 'Sus, pe catarg, stătea un marinar de veghe. De acolo vedea mult mai departe decât de pe punte: uscatul, stâncile sau alte corăbii. Pe 12 octombrie 1492, marinarul Rodrigo de Triana a văzut primul uscatul, chiar înaintea lui Columb.', de: 'Oben am Mast saß ein Matrose als Ausguck. Von dort sah er viel weiter als vom Deck: Land, Felsen oder andere Schiffe. Am 12. Oktober 1492 sah der Seemann Rodrigo de Triana als Erster das Festland, noch vor Kolumbus.' } },
+    { x: 250, y: 168, t: { ro: 'Pânza triunghiulară', de: 'Das dreieckige Segel' },
+      d: { ro: 'Pânzele triunghiulare se rotesc ușor după vânt. Cu ele, caravela era ușor de manevrat și putea înainta în zigzag chiar și împotriva vântului.', de: 'Dreieckige Segel lassen sich leicht nach dem Wind drehen. Damit war die Karavelle leicht zu manövrieren und konnte im Zickzack sogar gegen den Wind fahren.' } },
+    { x: 400, y: 252, t: { ro: 'Rezerva de hrană', de: 'Die Vorräte' },
+      d: { ro: 'În cală se țineau butoaie cu apă, pesmeți, carne sărată și vin. Drumurile durau luni întregi. Fără fructe și legume proaspete, mulți marinari se îmbolnăveau de scorbut.', de: 'Im Laderaum lagerten Fässer mit Wasser, Schiffszwieback, Pökelfleisch und Wein. Die Reisen dauerten Monate. Ohne frisches Obst und Gemüse erkrankten viele Seeleute an Skorbut.' } },
+    { x: 28, y: 252, t: { ro: 'Cârma', de: 'Das Ruder' },
+      d: { ro: 'Cârma de la pupa (partea din spate) schimba direcția corabiei. Cârmaciul o mișca dintr-o bară de lemn.', de: 'Das Ruder am Heck (hinten) änderte die Richtung des Schiffes. Der Steuermann bewegte es mit einer Holzstange.' } },
+    { x: 100, y: 168, t: { ro: 'Busola și astrolabul', de: 'Kompass und Astrolabium' },
+      d: { ro: 'Busola arăta mereu nordul. Cu astrolabul, marinarii măsurau cât de sus e Soarele sau o stea și aflau cât de departe sunt spre nord sau spre sud. Împreună cu hărțile, acestea au făcut posibile drumurile lungi pe ocean.', de: 'Der Kompass zeigte immer nach Norden. Mit dem Astrolabium maßen die Seeleute, wie hoch die Sonne oder ein Stern steht, und erfuhren so, wie weit nördlich oder südlich sie waren. Zusammen mit den Karten ermöglichten sie lange Fahrten über den Ozean.' } },
+    { x: 500, y: 262, t: { ro: 'Corpul mic și ușor', de: 'Der kleine, leichte Rumpf' },
+      d: { ro: 'Caravela era mică (20–30 m) și nu se afunda mult în apă. Putea naviga aproape de țărm și pe râuri, ca să exploreze coastele necunoscute.', de: 'Die Karavelle war klein (20–30 m) und hatte wenig Tiefgang. Sie konnte nahe an der Küste und auf Flüssen fahren, um unbekannte Küsten zu erkunden.' } }
+  ];
+  var hs = P.map(function (p, i) {
+    var hg = el('g', { class: 'n-hot', tabindex: 0, role: 'button', 'aria-label': T(p.t) }, svg);
+    el('circle', { cx: p.x, cy: p.y, r: 15 }, hg); el('text', { x: p.x, y: p.y + 5 }, hg, i + 1);
+    function show() { hs.forEach(function (x) { x.classList.toggle('on', x === hg); }); info.innerHTML = '<h3>' + (i + 1) + '. ' + T(p.t) + '</h3><p>' + T(p.d) + '</p>'; }
+    hg.addEventListener('click', show); hg.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(); } });
+    return hg;
+  });
+  svg.setAttribute('aria-label', tx('Desenul unei caravele', 'Zeichnung einer Karavelle'));
+  info.innerHTML = '<h3>' + tx('Caravela', 'Die Karavelle') + '</h3><p>' + tx('Apasă pe un număr de pe desen.', 'Tippe auf eine Zahl in der Zeichnung.') + '</p>';
+})();
+Check($('#n-c1'), [
+  { q: { ro: 'De ce a fost caravela atât de importantă pentru marile călătorii?', de: 'Warum war die Karavelle für die großen Seefahrten so wichtig?' },
+    o: [{ ro: 'era cea mai mare corabie a vremii', de: 'sie war das größte Schiff ihrer Zeit' }, { ro: 'era ușor de manevrat și putea înainta chiar împotriva vântului', de: 'sie war leicht zu manövrieren und konnte sogar gegen den Wind fahren' }, { ro: 'avea vâslași pe trei rânduri', de: 'sie hatte Ruderer in drei Reihen' }], a: 1,
+    why: { ro: 'Pânzele triunghiulare și corpul ușor o făceau potrivită pentru drumuri lungi și coaste necunoscute.', de: 'Die dreieckigen Segel und der leichte Rumpf machten sie geeignet für lange Fahrten und unbekannte Küsten.' },
+    hint: { ro: 'Uită-te la pânzele triunghiulare (numărul 2).', de: 'Schau dir die dreieckigen Segel an (Nummer 2).' } },
+  { q: { ro: 'Jurnalul lui Columb povestește: marinarii văd o lumină și coboară pânzele până se face ziuă; vineri ajung la o insulă mică din Bahamas. Ce eveniment descrie?', de: 'Das Reisetagebuch des Kolumbus erzählt: Die Seeleute sehen ein Licht und senken die Segel bis zum Tageslicht; an einem Freitag erreichen sie eine kleine Insel in den Bahamas. Welches Ereignis beschreibt es?' },
+    o: [{ ro: 'sosirea în Lumea Nouă, în octombrie 1492', de: 'die Ankunft in der Neuen Welt im Oktober 1492' }, { ro: 'întoarcerea în Spania', de: 'die Rückkehr nach Spanien' }, { ro: 'ocolul Africii', de: 'die Umsegelung Afrikas' }], a: 0,
+    why: { ro: 'Pe 12 octombrie 1492, Columb a ajuns pe insula Guanahani, pe care a numit-o San Salvador.', de: 'Am 12. Oktober 1492 erreichte Kolumbus die Insel Guanahani, die er San Salvador nannte.' } }
+]);
+
+/* ================= 2. Drumurile din schemă ================= */
+(function () {
+  var host = $('#n-routes'), res = $('#n-routes-res');
+  var CAT = [['A', { ro: 'A. Ocolul Africii', de: 'A. Afrikaumsegelung' }], ['B', { ro: 'B. Spre vest, peste Atlantic', de: 'B. Nach Westen segeln' }], ['C', { ro: 'C. Înconjurul lumii', de: 'C. Weltumsegelung' }]];
+  var E = [
+    ['Bartolomeu Diaz', 'A', { ro: 'Portugalia, 1488: Capul Bunei Speranțe.', de: 'Portugal, 1488: Kap der Guten Hoffnung.' }],
+    ['Vasco da Gama', 'A', { ro: 'Portugalia, 1498: a ajuns în India.', de: 'Portugal, 1498: erreichte Indien.' }],
+    [tx('Cristofor Columb', 'Christoph Kolumbus'), 'B', { ro: 'Spania, 1492: a ajuns în America.', de: 'Spanien, 1492: erreichte Amerika.' }],
+    ['Fernando Magellan', 'C', { ro: 'Spania, 1519–1522: prima călătorie în jurul lumii.', de: 'Spanien, 1519–1522: die erste Weltumsegelung.' }],
+    ['Francis Drake', 'C', { ro: 'Anglia, 1577–1580: a doua călătorie în jurul lumii.', de: 'England, 1577–1580: die zweite Weltumsegelung.' }]
+  ];
+  var done = 0;
+  E.forEach(function (e) {
+    var row = h('div', '', '<b>' + e[0] + '</b>'), opts = h('div', 'n-row'), note = h('p', 'n-why');
+    var bs = CAT.map(function (c) {
+      var b = btn('n-pick', T(c[1]));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('wrong'); });
+        if (c[0] === e[1]) {
+          b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); note.textContent = '✓ ' + T(e[2]); done++;
+          if (done === E.length) { res.hidden = false; res.className = 'n-res good'; res.textContent = '🎉 ' + tx('Corect! Portughezii au ocolit Africa, spaniolii au mers spre vest, iar Magellan și Drake au înconjurat lumea.', 'Richtig! Die Portugiesen umsegelten Afrika, die Spanier fuhren nach Westen, und Magellan und Drake umsegelten die Welt.'); }
+        } else { b.classList.add('wrong'); note.textContent = tx('Nu chiar. Amintește-ți încotro a navigat: spre sud, de-a lungul Africii, sau spre vest?', 'Nicht ganz. Erinnere dich, wohin er fuhr: nach Süden an Afrika entlang oder nach Westen?'); }
+      };
+      opts.appendChild(b); return b;
+    });
+    row.appendChild(opts); row.appendChild(note); host.appendChild(row);
+  });
+})();
+
+/* ================= 3. Harta: imperii, civilizații, cuceriri ================= */
+var GEO = Promise.all([
+  fetch('../../lib/land-50m.json').then(function (r) { return r.json(); }),
+  fetch('../../lib/countries-110m.json').then(function (r) { return r.json(); })
+]).then(function (res) {
+  return { land: topojson.feature(res[0], res[0].objects.land), countries: topojson.feature(res[1], res[1].objects.countries).features };
+});
+/** Poligon sferic cu orientarea corectă pentru d3. */
+function area(coords) { var f = { type: 'Polygon', coordinates: [coords.concat([coords[0]])] }; if (d3.geoArea(f) > 2 * Math.PI) f.coordinates[0].reverse(); return f; }
+/** Curbă între două puncte (lon, lat), cu un punct de control. */
+function curve(a, c, b, n) { var pts = []; n = n || 40; for (var i = 0; i <= n; i++) { var t = i / n, u = 1 - t; pts.push([u * u * a[0] + 2 * u * t * c[0] + t * t * b[0], u * u * a[1] + 2 * u * t * c[1] + t * t * b[1]]); } return { type: 'LineString', coordinates: pts }; }
+function marker(svg, id, color) {
+  var d = svg.select('defs'); if (d.empty()) d = svg.append('defs');
+  d.append('marker').attr('id', id).attr('viewBox', '0 0 10 10').attr('refX', 7).attr('refY', 5).attr('markerWidth', 4.5).attr('markerHeight', 4.5).attr('orient', 'auto')
+    .append('path').attr('d', 'M0 0 L10 5 L0 10 z').attr('fill', color);
+}
+(function () {
+  var svg = d3.select('#n-map'), info = $('#n-map-info'), leg = $('#n-map-leg');
+  var ES = ['484', '320', '084', '340', '222', '558', '188', '591', '192', '214', '332', '630', '388', '170', '862', '218', '604', '068', '152', '032', '600', '858', '608'];
+  var PT = ['076', '024', '508', '624'];
+  var POSTS = [[73.8, 15.5, 'Goa'], [102.25, 2.2, 'Malacca'], [113.55, 22.2, 'Macao'], [56.45, 27.1, 'Ormuz'], [39.66, -4.05, 'Mombasa'], [-1.35, 5.08, 'Elmina'], [-23.6, 15.1, tx('Capul Verde', 'Kap Verde')], [127.4, 0.8, tx('Moluce', 'Molukken')]];
+  var CIV = {
+    maya: { n: { ro: 'Mayașii', de: 'Die Mayas' }, c: [-89.2, 18.6], lab: [-85.6, 16.6],
+      a: [[-91.6, 21.6], [-87, 21.6], [-86.7, 18.2], [-88.3, 15.4], [-91.5, 14.4], [-92.6, 16.8], [-91, 18.8]],
+      d: { ro: 'Trăiau în Peninsula Yucatán. Aveau cunoștințe avansate de matematică și astronomie. Orașele lor aveau mai ales un caracter religios și erau dominate de piramide în trepte, construite din piatră (de exemplu Tulum).', de: 'Sie waren auf der Halbinsel Yukatan ansässig und hatten fortgeschrittene mathematische und astronomische Kenntnisse. Ihre Städte hatten vorwiegend religiösen Charakter und waren von aus Stein errichteten Stufenpyramiden geprägt (zum Beispiel Tulum).' } },
+    azt: { n: { ro: 'Aztecii', de: 'Die Azteken' }, c: [-99.13, 19.43], lab: [-106, 16.2],
+      a: [[-105, 21.2], [-98.5, 22.4], [-96, 19.4], [-94.2, 18], [-92.4, 14.8], [-96.5, 15.6], [-101, 17.2], [-104.8, 19]],
+      d: { ro: 'Un popor de războinici. Au întemeiat orașul Tenochtitlan (azi Ciudad de México), centrul unui imperiu în care trăiau zeci de popoare. Spaniolii au fost impresionați de „mulțimea de oameni, de mărfurile din piață și de ordinea perfectă”. Hernán Cortés a cucerit imperiul în 1519–1521.', de: 'Ein Kriegervolk, das die Stadt Tenochtitlan (heute Mexiko-Stadt) gegründet hat. Sie war der Mittelpunkt eines Reiches, in dem Dutzende von Völkern lebten. Die Spanier waren „von der Menschenmenge, den Waren am Markt und der perfekten Ordnung“ beeindruckt. Hernán Cortés eroberte das Reich 1519–1521.' } },
+    inca: { n: { ro: 'Incașii', de: 'Die Inkas' }, c: [-71.97, -13.53], lab: [-66, -18],
+      a: [[-80.6, 1.2], [-77.2, 1.2], [-74.5, -7], [-69.2, -13.5], [-65.6, -19.5], [-66.2, -27.5], [-69.6, -35.2], [-72, -35.2], [-70.6, -24], [-71.2, -18.5], [-76, -14.2], [-80.2, -6], [-81.3, -3.4]],
+      d: { ro: 'Un grup de popoare care au întemeiat un imperiu de-a lungul coastei de vest a Americii de Sud, în Munții Anzi. Conducătorul statului era Sapa Inca (regele). Francisco Pizarro a ocupat imperiul în 1532, cu doar 180 de oameni.', de: 'Eine Gruppe von Völkern, die ein Reich entlang der Westküste Südamerikas, in den Anden, gegründet hatten. Das Staatsoberhaupt war der Sapa Inka (der König). Francisco Pizarro besetzte das Reich 1532 mit nur 180 Mann.' } }
+  };
+  var CONQ = [
+    { n: 'Cortés, 1519–1521', col: '#8a2b31', p: [[-80.3, 21.9], [-86.9, 20.4], [-96.13, 19.2], [-99.13, 19.43]], lab: [-86, 27.5] },
+    { n: 'Pizarro, 1532–1533', col: '#6a3fa0', p: [[-79.52, 8.98], [-80.45, -3.57], [-78.52, -7.16], [-71.97, -13.53]], lab: [-92, -5] }
+  ];
+  var on = { emp: true, tor: true, civ: true, conq: false }, view = 'am', sel = null, G;
+  var TOG = [['emp', { ro: 'Imperii coloniale', de: 'Kolonialreiche' }, '#4f9d4f'], ['tor', { ro: 'Linia de la Tordesillas', de: 'Grenzlinie von Tordesillas' }, '#1b2530'], ['civ', { ro: 'Civilizații precolumbiene', de: 'Präkolumbische Zivilisationen' }, '#c98a00'], ['conq', { ro: 'Cuceririle', de: 'Die Eroberungen' }, '#8a2b31']];
+  var tg = $('#n-map-tog');
+  TOG.forEach(function (t) {
+    var b = btn('n-tog', '<i style="--sw:' + t[2] + '"></i>' + T(t[1])); b.setAttribute('aria-pressed', on[t[0]] ? 'true' : 'false');
+    b.onclick = function () { on[t[0]] = !on[t[0]]; b.setAttribute('aria-pressed', on[t[0]] ? 'true' : 'false'); draw(); };
+    tg.appendChild(b);
+  });
+  var vg = $('#n-map-view'), vbs = [['w', { ro: 'Toată lumea', de: 'Ganze Welt' }], ['am', { ro: 'America', de: 'Amerika' }]].map(function (v) {
+    var b = btn('n-tog', T(v[1])); b.setAttribute('aria-pressed', v[0] === view ? 'true' : 'false');
+    b.onclick = function () { view = v[0]; vbs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); draw(); };
+    vg.appendChild(b); return b;
+  });
+  function intro() {
+    info.innerHTML = '<h3>' + tx('Cum citești harta', 'So liest du die Karte') + '</h3><ul>' +
+      '<li>' + tx('<b>Verde</b>: teritorii stăpânite de Spania la sfârșitul secolului al XVI-lea (simplificat, după granițele de azi).', '<b>Grün</b>: von Spanien beherrschte Gebiete am Ende des 16. Jahrhunderts (vereinfacht, nach heutigen Grenzen).') + '</li>' +
+      '<li>' + tx('<b>Roșu</b>: Imperiul portughez: Brazilia, coaste ale Africii și porturi comerciale în Asia (puncte).', '<b>Rot</b>: das portugiesische Kolonialreich: Brasilien, Küsten Afrikas und Handelshäfen in Asien (Punkte).') + '</li>' +
+      '<li>' + tx('<b>Linia punctată</b>: granița din Tratatul de la Tordesillas (1494). Ce se descoperea la vest de ea era al Spaniei, ce era la est, al Portugaliei. De aceea în Brazilia se vorbește azi portugheza.', '<b>Gestrichelte Linie</b>: die Grenze aus dem Vertrag von Tordesillas (1494). Was westlich davon entdeckt wurde, gehörte Spanien, was östlich lag, Portugal. Deshalb spricht man in Brasilien heute Portugiesisch.') + '</li>' +
+      '<li>' + tx('Apasă pe zonele aurii ca să afli despre mayași, azteci și incași.', 'Tippe auf die goldenen Flächen, um mehr über Mayas, Azteken und Inkas zu erfahren.') + '</li></ul>';
+  }
+  function showCiv(k) { sel = k; var c = CIV[k]; info.innerHTML = '<h3>' + T(c.n) + '</h3><p>' + T(c.d) + '</p>'; draw(); }
+  function draw() {
+    if (!G) return;
+    var m = mobile(), W = m ? 600 : 960, H = view === 'am' ? (m ? 760 : 620) : (m ? 400 : 500);
+    var proj = view === 'am'
+      ? d3.geoNaturalEarth1().rotate([75, 0]).fitExtent([[10, 10], [W - 10, H - 10]], { type: 'MultiPoint', coordinates: [[-118, 30], [-34, 30], [-118, -55], [-34, -55], [-76, 32]] })
+      : d3.geoNaturalEarth1().rotate([-10, 0]).fitExtent([[6, 6], [W - 6, H - 6]], { type: 'Sphere' });
+    var path = d3.geoPath(proj), fs = view === 'am' ? (m ? 22 : 15) : (m ? 17 : 12);
+    svg.attr('viewBox', '0 0 ' + W + ' ' + H).selectAll('*').remove();
+    marker(svg, 'n-ar1', '#8a2b31'); marker(svg, 'n-ar2', '#6a3fa0');
+    var g = svg.append('g');
+    g.append('path').datum({ type: 'Sphere' }).attr('class', 'n-sea').attr('d', path);
+    g.append('path').datum(d3.geoGraticule10()).attr('class', 'n-grat').attr('d', path);
+    g.append('path').datum(G.land).attr('class', 'n-land').attr('d', path);
+    if (on.emp) {
+      G.countries.forEach(function (f) {
+        var c = ES.indexOf(f.id) >= 0 ? 'n-es' : PT.indexOf(f.id) >= 0 ? 'n-pt' : null;
+        if (c) g.append('path').datum(f).attr('class', c).attr('d', path);
+      });
+      POSTS.forEach(function (p) { var q = proj([p[0], p[1]]); if (!q) return; g.append('circle').attr('class', 'n-dot').attr('cx', q[0]).attr('cy', q[1]).attr('r', m ? 7 : 4.5).attr('fill', '#d4545b'); if (view === 'w' && !m) g.append('text').attr('class', 'n-ml').attr('x', q[0] + 6).attr('y', q[1] - 4).style('font-size', '11px').style('stroke-width', '3px').text(p[2]); });
+    }
+    function lab(lonlat, text, size, anchor) { var q = proj(lonlat); if (!q) return; g.append('text').attr('class', 'n-ml').attr('x', q[0]).attr('y', q[1]).attr('text-anchor', anchor || 'middle').style('font-size', size + 'px').style('stroke-width', size / 4 + 'px').text(text); }
+    if (on.tor) {
+      var line = { type: 'LineString', coordinates: d3.range(-80, 81, 2).map(function (y) { return [-46.6, y]; }) };
+      g.append('path').datum(line).attr('class', 'n-line').attr('d', path);
+      lab([-44.5, view === 'am' ? 26 : 50], 'Tordesillas 1494', fs, 'start');
+      if (view === 'w') { g.append('path').datum({ type: 'LineString', coordinates: d3.range(-80, 81, 2).map(function (y) { return [144.5, y]; }) }).attr('class', 'n-line').attr('d', path); lab([142, -58], 'Zaragoza 1529', fs, 'end'); }
+      lab([view === 'am' ? -95 : -115, view === 'am' ? -35 : -50], tx('SPANIA ←', 'SPANIEN ←'), fs + 1);
+      lab([view === 'am' ? -20 : 15, view === 'am' ? -35 : -50], tx('→ PORTUGALIA', '→ PORTUGAL'), fs + 1);
+    }
+    if (on.civ) {
+      Object.keys(CIV).forEach(function (k) {
+        var c = CIV[k];
+        g.append('path').datum(area(c.a)).attr('class', 'n-civ' + (sel === k ? ' on' : '')).attr('d', path).attr('tabindex', 0).attr('role', 'button').attr('aria-label', T(c.n))
+          .on('click', function () { showCiv(k); }).on('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showCiv(k); } });
+        if (view === 'am') lab(c.lab, T(c.n), fs + 1, k === 'azt' ? 'end' : 'start');
+      });
+    }
+    if (on.conq) {
+      CONQ.forEach(function (c, i) {
+        g.append('path').datum({ type: 'LineString', coordinates: c.p }).attr('class', 'n-arrow').attr('stroke', c.col).attr('d', path).attr('marker-end', 'url(#n-ar' + (i + 1) + ')');
+        var q = proj(c.lab); if (q && view === 'am') g.append('text').attr('class', 'n-ml').attr('x', q[0]).attr('y', q[1]).attr('text-anchor', 'middle').style('font-size', fs + 'px').style('stroke-width', fs / 4 + 'px').attr('fill', c.col).text(c.n);
+      });
+    }
+    svg.attr('aria-label', tx('Harta imperiilor coloniale', 'Karte der Kolonialreiche'));
+    leg.innerHTML = (on.emp ? '<span><i style="background:#4f9d4f"></i>' + tx('Imperiul colonial spaniol', 'Kolonialreich Spaniens') + '</span><span><i style="background:#d4545b"></i>' + tx('Imperiul colonial portughez', 'Kolonialreich Portugals') + '</span>' : '') +
+      (on.civ ? '<span><i style="background:#c98a00"></i>' + tx('Mayași, azteci, incași', 'Mayas, Azteken, Inkas') + '</span>' : '');
+  }
+  intro();
+  GEO.then(function (geo) { G = geo; draw(); });
+  var lastM = mobile(); window.addEventListener('resize', function () { if (mobile() !== lastM) { lastM = mobile(); draw(); } });
+})();
+Check($('#n-c3'), [
+  { q: { ro: 'Ce state și-au împărțit pământurile noi prin Tratatul de la Tordesillas (1494)?', de: 'Welche Staaten teilten durch den Vertrag von Tordesillas (1494) die neuen Gebiete auf?' },
+    o: [{ ro: 'Anglia și Franța', de: 'England und Frankreich' }, { ro: 'Spania și Portugalia', de: 'Spanien und Portugal' }, { ro: 'Spania și Olanda', de: 'Spanien und die Niederlande' }], a: 1,
+    why: { ro: 'Așa au apărut primele imperii coloniale, al Spaniei și al Portugaliei.', de: 'So entstanden die ersten Kolonialreiche, das spanische und das portugiesische.' },
+    hint: { ro: 'Uită-te la cele două culori de pe hartă.', de: 'Schau dir die beiden Farben auf der Karte an.' } },
+  { q: { ro: 'Pe ce popor l-a cucerit Francisco Pizarro?', de: 'Welches Volk eroberte Francisco Pizarro?' },
+    o: [{ ro: 'pe azteci', de: 'die Azteken' }, { ro: 'pe mayași', de: 'die Mayas' }, { ro: 'pe incași', de: 'die Inkas' }], a: 2,
+    why: { ro: 'În 1532, Pizarro a ocupat cu 180 de oameni Imperiul incaș din Munții Anzi.', de: '1532 besetzte Pizarro mit 180 Mann das Inkareich in den Anden.' },
+    hint: { ro: 'Pornește stratul „Cuceririle” și urmărește săgeata violet.', de: 'Schalte die Ebene „Die Eroberungen“ ein und folge dem violetten Pfeil.' } }
+]);
+
+/* ================= 4. Cântarul avantajelor ================= */
+(function () {
+  var svg = $('#n-bal'), host = $('#n-adv'), res = $('#n-adv-res');
+  var F = [
+    { n: { ro: 'Arme de metal și arme de foc', de: 'Metallwaffen und Feuerwaffen' }, w: 2, d: { ro: 'Săbii de oțel, archebuze și tunuri, față de pumnale și săgeți cu vârf de piatră.', de: 'Stahlschwerter, Arkebusen und Kanonen gegen Dolche und Pfeile mit Steinspitzen.' } },
+    { n: { ro: 'Armuri solide', de: 'Solide Rüstungen' }, w: 1, d: { ro: 'Coifuri și platoșe de oțel, prin care săgețile treceau greu.', de: 'Helme und Brustpanzer aus Stahl, durch die Pfeile kaum hindurchkamen.' } },
+    { n: { ro: 'Caii', de: 'Die Pferde' }, w: 1.5, d: { ro: 'Băștinașii nu mai văzuseră niciodată cai. Călăreții erau rapizi și îi speriau pe războinici.', de: 'Die Einheimischen hatten nie Pferde gesehen. Die Reiter waren schnell und erschreckten die Krieger.' } },
+    { n: { ro: 'Aliații indieni', de: 'Die verbündeten Indios' }, w: 2.5, d: { ro: 'Spaniolii au profitat de dușmăniile dintre popoare. Mii de războinici din popoarele supuse de azteci au luptat alături de Cortés.', de: 'Die Spanier nutzten die Feindschaften zwischen den Völkern. Tausende Krieger der von den Azteken unterworfenen Völker kämpften an der Seite von Cortés.' } },
+    { n: { ro: 'Bolile aduse din Europa', de: 'Die aus Europa eingeschleppten Seuchen' }, w: 3, d: { ro: 'Variola și alte boli, necunoscute în America, au ucis o mare parte din localnici, mai mult decât războaiele.', de: 'Pocken und andere in Amerika unbekannte Krankheiten töteten einen großen Teil der Einheimischen, mehr als die Kriege.' } }
+  ];
+  var st = F.map(function () { return false; });
+  F.forEach(function (f, i) {
+    var b = btn('n-tog', T(f.n)); b.setAttribute('aria-pressed', 'false'); b.style.justifyContent = 'flex-start';
+    b.onclick = function () { st[i] = !st[i]; b.setAttribute('aria-pressed', st[i] ? 'true' : 'false'); draw(i); };
+    host.appendChild(b);
+  });
+  function draw(last) {
+    var left = 1 + F.reduce(function (s, f, i) { return s + (st[i] ? f.w : 0); }, 0), right = 7;
+    var ang = Math.max(-14, Math.min(14, (right - left) * 3));
+    svg.innerHTML = '';
+    el('path', { d: 'M260 280 L240 120 L280 120 Z', fill: '#8a7350' }, svg);
+    el('rect', { x: 200, y: 278, width: 120, height: 12, rx: 4, fill: '#6b5a3c' }, svg);
+    var g = el('g', { transform: 'rotate(' + ang + ' 260 120)', style: reduce ? '' : 'transition:transform .5s' }, svg);
+    el('line', { x1: 60, y1: 120, x2: 460, y2: 120, stroke: '#4a3c26', 'stroke-width': 8, 'stroke-linecap': 'round' }, g);
+    [[80, '#4f9d4f', tx('Conchistadori: ~600', 'Konquistadoren: ~600')], [440, '#c98a00', tx('Azteci: ~20 milioane', 'Azteken: ~20 Millionen')]].forEach(function (p, k) {
+      var cg = el('g', { transform: 'rotate(' + (-ang) + ' ' + p[0] + ' 120)' }, g);
+      el('line', { x1: p[0], y1: 120, x2: p[0] - 40, y2: 190, stroke: '#4a3c26', 'stroke-width': 2 }, cg);
+      el('line', { x1: p[0], y1: 120, x2: p[0] + 40, y2: 190, stroke: '#4a3c26', 'stroke-width': 2 }, cg);
+      el('path', { d: 'M' + (p[0] - 55) + ' 190 Q' + p[0] + ' 220 ' + (p[0] + 55) + ' 190 Z', fill: p[1], stroke: '#4a3c26', 'stroke-width': 2 }, cg);
+      var n = k ? 14 : 1 + st.filter(Boolean).length;
+      for (var i = 0; i < Math.min(n, 14); i++) el('circle', { cx: p[0] - 36 + (i % 7) * 12, cy: 180 - Math.floor(i / 7) * 12, r: 5, fill: k ? '#7a5300' : (i === 0 ? '#2f6b2f' : '#1b2530') }, cg);
+      el('text', { x: k ? p[0] + 70 : p[0] - 70, y: 245, 'text-anchor': k ? 'end' : 'start', style: 'font:700 ' + (mobile() ? 20 : 15) + 'px var(--body)', fill: '#1b2530' }, cg, p[2]);
+    });
+    svg.setAttribute('aria-label', tx('Cântar: avantajele spaniolilor', 'Waage: die Vorteile der Spanier'));
+    var n = st.filter(Boolean).length;
+    res.className = 'n-res ' + (n === F.length ? 'good' : 'try');
+    res.innerHTML = (last != null && st[last] ? '<b>' + T(F[last].n) + ':</b> ' + T(F[last].d) + '<br>' : '') +
+      (n === F.length ? '🎉 ' + tx('Toate la un loc explică victoria: armele și caii, dar mai ales aliații și bolile. Singuri, cei 600 de soldați nu ar fi putut cuceri imperiul.', 'Alle zusammen erklären den Sieg: Waffen und Pferde, vor allem aber die Verbündeten und die Seuchen. Allein hätten die 600 Soldaten das Reich nicht erobern können.')
+        : tx('Avantaje puse pe cântar: ', 'Vorteile auf der Waage: ') + n + ' / ' + F.length + '.');
+  }
+  draw();
+  var eq = $('#n-equip');
+  [[{ ro: 'Conchistadorii', de: 'Die Konquistadoren' }, { ro: ['coif de metal și armură (platoșă) de oțel', 'sabie și lance de oțel', 'archebuză (armă de foc) și arbaletă', 'tunuri mici', 'cai și câini de luptă', 'luptau călare și trăgeau de la distanță'], de: ['Metallhelm und Brustpanzer aus Stahl', 'Stahlschwert und Lanze', 'Arkebuse (Feuerwaffe) und Armbrust', 'kleine Kanonen', 'Pferde und Kampfhunde', 'kämpften zu Pferd und schossen aus der Ferne'] }],
+   [{ ro: 'Războinicii indieni', de: 'Die Krieger der Indios' }, { ro: ['armuri din bumbac matlasat', 'bâte de lemn cu tăișuri de obsidian (piatră vulcanică)', 'sulițe și săgeți cu vârf de piatră, praștii', 'scuturi din lemn și pene', 'fără cai și fără fier', 'luptau pe jos; aztecii încercau mai ales să ia prizonieri'], de: ['Rüstungen aus gestepptem Baumwollstoff', 'Holzkeulen mit Schneiden aus Obsidian (Vulkanstein)', 'Speere und Pfeile mit Steinspitzen, Schleudern', 'Schilde aus Holz und Federn', 'keine Pferde und kein Eisen', 'kämpften zu Fuß; die Azteken versuchten vor allem, Gefangene zu machen'] }]
+  ].forEach(function (c) { var col = h('div', 'n-col', '<h4>' + T(c[0]) + '</h4>'); T(c[1]).forEach(function (s) { col.appendChild(h('div', 'n-item', s)); }); eq.appendChild(col); });
+})();
+
+/* ================= 5. Schimbul ================= */
+(function () {
+  var q = $('#n-ex-q'), ca = $('#n-ex-a'), ce = $('#n-ex-e');
+  var IT = shuffle([
+    ['🌽', { ro: 'porumb', de: 'Mais' }, 'a'], ['🥔', { ro: 'cartofi', de: 'Kartoffeln' }, 'a'], ['🍅', { ro: 'roșii', de: 'Tomaten' }, 'a'], ['🥜', { ro: 'arahide', de: 'Erdnüsse' }, 'a'],
+    ['🌶️', { ro: 'ardei', de: 'Paprika' }, 'a'], ['🍫', { ro: 'cacao', de: 'Kakao' }, 'a'], ['🍂', { ro: 'tutun', de: 'Tabak' }, 'a'], ['🦃', { ro: 'curcani', de: 'Truthähne' }, 'a'],
+    ['🐎', { ro: 'cai', de: 'Pferde' }, 'e'], ['🐖', { ro: 'porci', de: 'Schweine' }, 'e'], ['🐑', { ro: 'oi', de: 'Schafe' }, 'e'], ['🐄', { ro: 'vite', de: 'Rinder' }, 'e'],
+    ['🌾', { ro: 'secară', de: 'Roggen' }, 'e'], ['🍚', { ro: 'orez', de: 'Reis' }, 'e'], ['🍇', { ro: 'viță-de-vie', de: 'Weinreben' }, 'e'], ['🎋', { ro: 'trestie-de-zahăr', de: 'Zuckerrohr' }, 'e']
+  ]), i = 0, first = 0, miss = false;
+  function show() {
+    q.innerHTML = '';
+    if (i >= IT.length) {
+      q.appendChild(h('p', 'n-big', '🎉 ' + first + ' / ' + IT.length));
+      q.appendChild(h('p', '', tx('Corecte din prima. Orezul și trestia-de-zahăr veneau, de fapt, din Asia, dar europenii le-au dus în America, unde au apărut plantațiile de trestie-de-zahăr.', 'beim ersten Mal richtig. Reis und Zuckerrohr stammen eigentlich aus Asien, aber die Europäer brachten sie nach Amerika, wo Zuckerrohrplantagen entstanden.')));
+      var r = btn('n-btn ghost', tx('Din nou', 'Noch einmal')); r.onclick = function () { i = 0; first = 0; ca.innerHTML = ce.innerHTML = ''; IT = shuffle(IT); show(); }; q.appendChild(r);
+      return;
+    }
+    var it = IT[i]; miss = false;
+    q.appendChild(h('p', 'n-why', (i + 1) + ' / ' + IT.length));
+    q.appendChild(h('div', 'n-emoji', it[0]));
+    q.appendChild(h('p', 'n-big', T(it[1])));
+    var row = h('div', 'n-row'), fb = h('p', 'n-why'); fb.setAttribute('aria-live', 'polite');
+    [['a', tx('America → Europa', 'Amerika → Europa')], ['e', tx('Europa → America', 'Europa → Amerika')]].forEach(function (o) {
+      var b = btn('n-pick', o[1]);
+      b.onclick = function () {
+        if (o[0] === it[2]) { if (!miss) first++; (it[2] === 'a' ? ca : ce).appendChild(h('div', 'n-item', it[0] + ' ' + T(it[1]))); i++; show(); }
+        else { miss = true; b.classList.add('wrong'); fb.textContent = it[2] === 'a' ? tx('Gândește-te: europenii îl cunoșteau înainte de 1492?', 'Überlege: Kannten die Europäer es vor 1492?') : tx('Gândește-te: exista în America înainte să vină europenii?', 'Überlege: Gab es das in Amerika, bevor die Europäer kamen?'); }
+      };
+      row.appendChild(b);
+    });
+    q.appendChild(row); q.appendChild(fb);
+  }
+  show();
+  // masa din 1400
+  var host = $('#n-meal');
+  var M = [
+    [{ ro: 'pâine de grâu', de: 'Weizenbrot' }, true], [{ ro: 'mămăligă', de: 'Maisbrei (Polenta)' }, false, { ro: 'porumbul', de: 'der Mais' }], [{ ro: 'cartofi prăjiți', de: 'Pommes frites' }, false, { ro: 'cartofii', de: 'die Kartoffeln' }],
+    [{ ro: 'brânză', de: 'Käse' }, true], [{ ro: 'ciocolată caldă', de: 'heiße Schokolade' }, false, { ro: 'cacaoa', de: 'der Kakao' }], [{ ro: 'supă de roșii', de: 'Tomatensuppe' }, false, { ro: 'roșiile', de: 'die Tomaten' }],
+    [{ ro: 'mere', de: 'Äpfel' }, true], [{ ro: 'friptură de porc', de: 'Schweinebraten' }, true], [{ ro: 'friptură de curcan', de: 'Truthahnbraten' }, false, { ro: 'curcanii', de: 'die Truthähne' }],
+    [{ ro: 'varză', de: 'Kohl' }, true], [{ ro: 'ardei umpluți', de: 'gefüllte Paprika' }, false, { ro: 'ardeii', de: 'die Paprika' }], [{ ro: 'ciorbă de fasole', de: 'Bohnensuppe' }, false, { ro: 'fasolea', de: 'die Gartenbohnen' }]
+  ];
+  host.appendChild(h('p', '', tx('Ce ar fi putut fi pe masa ta? Alege mâncărurile, apoi verifică.', 'Was hätte auf deinem Tisch stehen können? Wähle die Speisen aus und prüfe dann.')));
+  var row = h('div', 'n-row'), bs = M.map(function (m) { var b = btn('n-pick', T(m[0])); b.setAttribute('aria-pressed', 'false'); b.onclick = function () { b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); b.classList.remove('right', 'wrong'); }; row.appendChild(b); return b; });
+  host.appendChild(row);
+  var res = h('div', 'n-res'); res.hidden = true; res.setAttribute('aria-live', 'polite');
+  var c = btn('n-btn', tx('Verifică', 'Prüfen')), act = h('div', 'n-acts'); act.appendChild(c); host.appendChild(act); host.appendChild(res);
+  c.onclick = function () {
+    var ok = true, why = [];
+    bs.forEach(function (b, k) {
+      var p = b.getAttribute('aria-pressed') === 'true', m = M[k];
+      b.classList.remove('right', 'wrong');
+      if (p && m[1]) b.classList.add('right');
+      if (p && !m[1]) { b.classList.add('wrong'); ok = false; why.push(T(m[0]) + ' (' + T(m[2]) + tx(': din America', ': aus Amerika') + ')'); }
+      if (!p && m[1]) ok = false;
+    });
+    res.hidden = false; res.className = 'n-res ' + (ok ? 'good' : 'try');
+    res.textContent = ok ? '🎉 ' + tx('Corect! În 1400 nu existau în Europa porumb, cartofi, roșii, ardei, cacao, curcani și fasolea comună. Bucătăria de azi ar fi fost foarte diferită.', 'Richtig! Um 1400 gab es in Europa keinen Mais, keine Kartoffeln, Tomaten, Paprika, keinen Kakao, keine Truthähne und keine Gartenbohnen. Die heutige Küche wäre ganz anders.')
+      : (why.length ? tx('Nu se putea: ', 'Das ging nicht: ') + why.join('; ') + '. ' : '') + tx('Mai sunt mâncăruri europene vechi pe care nu le-ai ales.', 'Es gibt noch alte europäische Speisen, die du nicht gewählt hast.');
+  };
+})();
+
+/* ================= 6. Comerțul triunghiular ================= */
+(function () {
+  var svg = d3.select('#n-tri'), bh = $('#n-tri-btn'), info = $('#n-tri-info'), cur = 0, G;
+  var EU = [-2, 47], AF = [4, 5], AM = [-72, 17];
+  var R = [
+    { c: '#6a3fa0', p: curve(EU, [-22, 22], AF), n: { ro: 'Drumul 1: din Europa în Africa', de: 'Weg 1: von Europa nach Afrika' }, d: { ro: 'Negustorii aduceau din Europa mărfuri ieftine: stofe, unelte, arme, mărgele, alcool. În Africa le schimbau pe oameni luați cu forța și transformați în sclavi.', de: 'Die Händler brachten Billigwaren aus Europa: Stoffe, Werkzeuge, Waffen, Glasperlen, Alkohol. In Afrika tauschten sie diese gegen Menschen, die verschleppt und zu Sklaven gemacht wurden.' } },
+    { c: '#8a2b31', p: curve(AF, [-30, -6], AM), n: { ro: 'Drumul 2: din Africa în America', de: 'Weg 2: von Afrika nach Amerika' }, d: { ro: 'Sclavii erau înghesuiți în calele corăbiilor, în condiții îngrozitoare; mulți mureau pe drum. În America erau vânduți proprietarilor de plantații și de mine.', de: 'Die Sklaven wurden unter schrecklichen Bedingungen in den Laderäumen zusammengepfercht; viele starben unterwegs. In Amerika wurden sie an Plantagen- und Minenbesitzer verkauft.' } },
+    { c: '#c0392b', p: curve(AM, [-48, 44], EU), n: { ro: 'Drumul 3: din America în Europa', de: 'Weg 3: von Amerika nach Europa' }, d: { ro: 'Produsele muncii sclavilor și ale băștinașilor (zahăr, tutun, cafea, bumbac, aur și argint) erau vândute scump în Europa.', de: 'Die Erzeugnisse der Sklaven und der Einheimischen (Zucker, Tabak, Kaffee, Baumwolle, Gold und Silber) wurden teuer in Europa verkauft.' } }
+  ];
+  [0, 1, 2, 3].forEach(function (k) {
+    var b = btn('n-tog', k ? tx('Drumul ', 'Weg ') + k : tx('Toate', 'Alle')); b.setAttribute('aria-pressed', k === cur ? 'true' : 'false');
+    b.onclick = function () { cur = k; [].forEach.call(bh.children, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); draw(); };
+    bh.appendChild(b);
+  });
+  function draw() {
+    if (!G) return;
+    var m = mobile(), W = m ? 560 : 700, H = m ? 600 : 520, fs = m ? 24 : 16;
+    var proj = d3.geoNaturalEarth1().rotate([35, 0]).fitExtent([[10, 10], [W - 10, H - 10]], { type: 'MultiPoint', coordinates: [[-98, 50], [22, 50], [-98, -30], [22, -30], [-35, 58]] });
+    var path = d3.geoPath(proj);
+    svg.attr('viewBox', '0 0 ' + W + ' ' + H).selectAll('*').remove();
+    R.forEach(function (r, i) { marker(svg, 'n-tr' + i, r.c); });
+    svg.append('path').datum({ type: 'Sphere' }).attr('class', 'n-sea').attr('d', path);
+    svg.append('path').datum(d3.geoGraticule10()).attr('class', 'n-grat').attr('d', path);
+    svg.append('path').datum(G.land).attr('class', 'n-land').attr('d', path);
+    R.forEach(function (r, i) {
+      var p = svg.append('path').datum(r.p).attr('class', 'n-arrow').attr('stroke', r.c).attr('stroke-width', m ? 6 : 4).attr('d', path).attr('marker-end', 'url(#n-tr' + i + ')')
+        .attr('opacity', cur && cur !== i + 1 ? 0.15 : 1);
+      if (!reduce && cur === i + 1) { var len = p.node().getTotalLength(); p.attr('stroke-dasharray', len).attr('stroke-dashoffset', len).transition().duration(1200).attr('stroke-dashoffset', 0); }
+      var mid = proj(r.p.coordinates[20]);
+      svg.append('circle').attr('cx', mid[0]).attr('cy', mid[1]).attr('r', m ? 18 : 13).attr('fill', r.c).attr('opacity', cur && cur !== i + 1 ? 0.25 : 1);
+      svg.append('text').attr('x', mid[0]).attr('y', mid[1] + (m ? 8 : 5)).attr('text-anchor', 'middle').attr('fill', '#fff').style('font', '800 ' + (m ? 22 : 15) + 'px var(--body)').text(i + 1);
+    });
+    [[EU, tx('EUROPA', 'EUROPA'), [10, -14]], [AF, tx('AFRICA', 'AFRIKA'), [24, 28]], [AM, tx('AMERICA', 'AMERIKA'), [-10, -18]]].forEach(function (p) {
+      var q = proj(p[0]); svg.append('circle').attr('cx', q[0]).attr('cy', q[1]).attr('r', m ? 7 : 5).attr('fill', '#1b2530');
+      svg.append('text').attr('class', 'n-ml').attr('x', q[0] + p[2][0]).attr('y', q[1] + p[2][1]).attr('text-anchor', 'middle').style('font-size', fs + 'px').style('stroke-width', fs / 4 + 'px').text(p[1]);
+    });
+    svg.attr('aria-label', tx('Harta comerțului triunghiular', 'Karte des Dreieckshandels'));
+    info.innerHTML = (cur ? [R[cur - 1]] : R).map(function (r) { return '<p><b style="color:' + r.c + '">' + T(r.n) + '.</b> ' + T(r.d) + '</p>'; }).join('');
+  }
+  GEO.then(function (g) { G = g; draw(); });
+  var lastM = mobile(); window.addEventListener('resize', function () { if (mobile() !== lastM) { lastM = mobile(); draw(); } });
+})();
+Check($('#n-c6'), [
+  { q: { ro: 'Ce se transporta pe drumul 2 al comerțului triunghiular?', de: 'Was wurde auf Weg 2 des Dreieckshandels transportiert?' },
+    o: [{ ro: 'mărfuri ieftine din Europa', de: 'Billigwaren aus Europa' }, { ro: 'zahăr și tutun spre Europa', de: 'Zucker und Tabak nach Europa' }, { ro: 'sclavi din Africa spre America', de: 'Sklaven aus Afrika nach Amerika' }], a: 2,
+    why: { ro: 'Sclavii erau vânduți în America proprietarilor de plantații și de mine.', de: 'Die Sklaven wurden in Amerika an Plantagen- und Minenbesitzer verkauft.' },
+    hint: { ro: 'Apasă pe „Drumul 2” și citește.', de: 'Tippe auf „Weg 2“ und lies.' } },
+  { q: { ro: 'Cine a fost numit „Părintele indienilor”?', de: 'Wer wurde „Vater der Indios“ genannt?' },
+    o: [{ ro: 'Bartolomé de Las Casas', de: 'Bartolomé de Las Casas' }, { ro: 'Hernán Cortés', de: 'Hernán Cortés' }, { ro: 'Francisco Pizarro', de: 'Francisco Pizarro' }], a: 0,
+    why: { ro: 'Misionarul Las Casas a descris suferințele băștinașilor și a cerut respectarea drepturilor lor.', de: 'Der Missionar Las Casas beschrieb das Leid der Einheimischen und forderte die Einhaltung ihrer Rechte.' } }
+]);
+
+/* ================= 7. Urmările ================= */
+(function () {
+  var q = $('#n-cons-q'), ce = $('#n-cons-e'), cw = $('#n-cons-w');
+  var C = shuffle([
+    [{ ro: 'răspândirea culturii europene', de: 'Verbreitung der europäischen Kultur' }, 'e'],
+    [{ ro: 'creștinarea lumii', de: 'die Christianisierung der Welt' }, 'e'],
+    [{ ro: 'specii noi de plante și de animale', de: 'neue Pflanzen- und Tierarten' }, 'e'],
+    [{ ro: 'teritoriile descoperite au devenit colonii', de: 'die neuentdeckten Gebiete wurden zu Kolonien' }, 'e'],
+    [{ ro: 'resurse (aur, argint, produse) pentru europeni', de: 'Ressourcen (Gold, Silber, Waren) für Europäer' }, 'e'],
+    [{ ro: 'o imagine completă despre lume', de: 'ein vollständiges Weltbild' }, 'e'],
+    [{ ro: 'au preluat elemente ale civilizației europene (unelte, animale, plante)', de: 'sie übernahmen Elemente der europäischen Zivilisation (Werkzeuge, Tiere, Pflanzen)' }, 'w'],
+    [{ ro: 'și-au pierdut libertatea, identitatea și cultura', de: 'sie haben ihre Freiheit, Identität und Kultur verloren' }, 'w'],
+    [{ ro: 'și-au pierdut treptat resursele', de: 'sie haben schrittweise ihre Ressourcen verloren' }, 'w'],
+    [{ ro: 'amestecul culturii europene cu cea locală', de: 'Vermischung von europäischer und einheimischer Kultur' }, 'w']
+  ]), i = 0, first = 0, miss = false;
+  function show() {
+    q.innerHTML = '';
+    if (i >= C.length) {
+      q.appendChild(h('p', 'n-big', '🎉 ' + first + ' / ' + C.length));
+      q.appendChild(h('p', '', tx('Corecte din prima. Observă: multe câștiguri ale europenilor au fost pierderi pentru celelalte popoare.', 'beim ersten Mal richtig. Beachte: Viele Gewinne der Europäer waren Verluste für die anderen Völker.')));
+      return;
+    }
+    var it = C[i]; miss = false;
+    q.appendChild(h('p', 'n-why', (i + 1) + ' / ' + C.length));
+    q.appendChild(h('p', 'n-big', T(it[0])));
+    var row = h('div', 'n-row'), fb = h('p', 'n-why'); fb.setAttribute('aria-live', 'polite');
+    [['e', tx('pentru europeni', 'für die Europäer')], ['w', tx('pentru popoarele lumii', 'für die Völker aus der Welt')]].forEach(function (o) {
+      var b = btn('n-pick', o[1]);
+      b.onclick = function () {
+        if (o[0] === it[1]) { if (!miss) first++; (it[1] === 'e' ? ce : cw).appendChild(h('div', 'n-item', T(it[0]))); i++; show(); }
+        else { miss = true; b.classList.add('wrong'); fb.textContent = tx('Întreabă-te: cine câștigă și cine pierde?', 'Frag dich: Wer gewinnt und wer verliert?'); }
+      };
+      row.appendChild(b);
+    });
+    q.appendChild(row); q.appendChild(fb);
+  }
+  show();
+  var eu = $('#n-eu');
+  [['⚓', { ro: 'Comerțul se mută în Atlantic', de: 'Der Handel zieht in den Atlantik' }, { ro: 'Au câștigat statele cu ieșire la ocean: Portugalia, Spania, Anglia, Franța, Țările de Jos. Comerțul înfloritor din Marea Mediterană a decăzut treptat.', de: 'Gewinner waren die Staaten mit direktem Zugang zum Ozean: Portugal, Spanien, England, Frankreich, die Niederlande. Der blühende Handel im Mittelmeerraum verfiel allmählich.' }],
+   ['🪙', { ro: 'Aur și argint din America', de: 'Gold und Silber aus Amerika' }, { ro: 'Metalele prețioase aduse în cantități mari au ajutat economia Europei, dar au și scumpit mărfurile de zi cu zi.', de: 'Die in großen Mengen gebrachten Edelmetalle trugen zur Entwicklung der Wirtschaft Europas bei, aber auch zur Verteuerung alltäglicher Waren.' }],
+   ['🥔', { ro: 'Hrană nouă', de: 'Neue Nahrung' }, { ro: 'Porumbul, cartofii și roșiile au îmbogățit hrana europenilor.', de: 'Mais, Kartoffeln und Tomaten erweiterten das Nahrungsmittelangebot der Europäer.' }],
+   ['🔭', { ro: 'Știința progresează', de: 'Die Wissenschaft macht Fortschritte' }, { ro: 'Noile cunoștințe despre pământuri, popoare, plante și animale au dus la un progres clar al științei.', de: 'Die neuen Kenntnisse über Länder, Völker, Pflanzen und Tiere führten zu einem deutlichen Fortschritt der Wissenschaft.' }]
+  ].forEach(function (c) { eu.appendChild(h('div', 'n-card', '<div class="n-emoji" style="font-size:36px">' + c[0] + '</div><h3>' + T(c[1]) + '</h3><p>' + T(c[2]) + '</p>')); });
+  // părerea ta
+  var TERMS = L === 'de' ? [['das Wissen', /wissen/], ['die Zivilisation', /zivilisation/], ['das Volk', /volk|völker/], ['die Seefahrt', /seefahrt/], ['die Ausbeutung', /ausbeut/], ['die Missionierung', /mission/]]
+    : [['cunoașterea', /cunoa|cunost/], ['civilizația', /civiliza/], ['poporul', /popo/], ['navigația', /naviga/], ['exploatarea', /exploat/], ['misionarea', /misiona|crestin/]];
+  var th = $('#n-op-terms'), ta = $('#n-op'), spans = TERMS.map(function (t) { var s = h('span', '', t[0]); th.appendChild(s); return s; });
+  function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ă/g, 'a'); }
+  ta.addEventListener('input', function () { var v = L === 'de' ? ta.value.toLowerCase() : norm(ta.value); TERMS.forEach(function (t, k) { spans[k].classList.toggle('on', t[1].test(v)); }); });
+  var mb = $('#n-op-model'), mt = $('#n-op-text');
+  mb.textContent = tx('Arată un exemplu de răspuns', 'Ein Beispiel zeigen');
+  mt.textContent = tx('Exemplu: Marile descoperiri au adus multă cunoaștere: europenii au aflat cum arată lumea, iar navigația a progresat. Au apărut plante noi și schimburi între continente. Pentru multe popoare însă, urmările au fost negative: civilizații vechi au dispărut, iar exploatarea și bolile au omorât milioane de oameni. Misionarea le-a impus o religie străină. Cred că descoperirile au fost importante, dar felul în care europenii s-au purtat cu celelalte popoare a fost nedrept.',
+    'Beispiel: Die großen Entdeckungen brachten viel Wissen: Die Europäer erfuhren, wie die Welt aussieht, und die Seefahrt machte Fortschritte. Neue Pflanzen und der Austausch zwischen den Kontinenten entstanden. Für viele Völker waren die Folgen aber negativ: Alte Zivilisationen verschwanden, Ausbeutung und Seuchen töteten Millionen Menschen. Die Missionierung zwang ihnen eine fremde Religion auf. Ich finde die Entdeckungen wichtig, aber wie die Europäer mit den anderen Völkern umgingen, war ungerecht.');
+  mb.onclick = function () { mt.hidden = !mt.hidden; };
+})();
+
+/* ================= 8. Evaluarea din manual ================= */
+(function () {
+  var host = $('#n-ev'), items = [];
+  function subj(title, pts, intro) { var s = h('div', 'n-subj'); s.appendChild(h('h3', '', title)); if (intro) s.appendChild(intro); host.appendChild(s); return s; }
+  function item(parent, num, q, pts, model) {
+    var it = h('div', 'n-it'); it.appendChild(h('p', 'q', '<b>' + num + '</b>' + q + '<small>' + pts + 'p</small>'));
+    var body = h('div', 'n-row'); it.appendChild(body);
+    if (model) it.appendChild(h('p', 'model', '✓ ' + model));
+    parent.appendChild(it); return { it: it, body: body };
+  }
+  function choice(parent, num, q, opts, correct, pts, why) {
+    var o = item(parent, num, q, pts, why), sel = null;
+    var bs = opts.map(function (t, i) { var b = btn('n-pick', t); b.setAttribute('aria-pressed', 'false'); b.onclick = function () { sel = i; bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }; o.body.appendChild(b); return b; });
+    items.push({ it: o.it, pts: pts, score: function () { return sel === correct ? pts : 0; }, reset: function () { sel = null; bs.forEach(function (x) { x.setAttribute('aria-pressed', 'false'); }); } });
+  }
+  function multi(parent, num, q, opts, good, pts, why) {
+    var o = item(parent, num, q, pts, why), st = opts.map(function () { return false; });
+    var bs = opts.map(function (t, i) { var b = btn('n-pick', t); b.setAttribute('aria-pressed', 'false'); b.onclick = function () { st[i] = !st[i]; b.setAttribute('aria-pressed', st[i] ? 'true' : 'false'); }; o.body.appendChild(b); return b; });
+    items.push({ it: o.it, pts: pts, score: function () { var ok = 0, bad = 0; st.forEach(function (s, i) { if (s) { if (good.indexOf(i) >= 0) ok++; else bad++; } }); return Math.max(0, ok * pts / good.length - bad * pts / good.length); }, reset: function () { st = st.map(function () { return false; }); bs.forEach(function (x) { x.setAttribute('aria-pressed', 'false'); }); } });
+  }
+  function selects(parent, num, q, rows, pts, why) {
+    var o = item(parent, num, q, pts, why); o.body.style.display = 'grid';
+    var ss = rows.map(function (r) {
+      var line = h('label', 'n-row', '<span>' + r[0] + '</span>'), s = h('select', 'n-sel');
+      s.appendChild(h('option', '', '—')); r[1].forEach(function (t, i) { var op = h('option', '', t); op.value = i; s.appendChild(op); });
+      line.appendChild(s); o.body.appendChild(line); return s;
+    });
+    items.push({ it: o.it, pts: pts, score: function () { var ok = ss.filter(function (s, k) { return s.value === String(rows[k][2]); }).length; return ok * pts / rows.length; }, reset: function () { ss.forEach(function (s) { s.selectedIndex = 0; }); } });
+  }
+  function open(parent, num, q, pts, model, terms) {
+    var o = item(parent, num, q, pts, null), ta = h('textarea'); ta.setAttribute('aria-label', q.replace(/<[^>]+>/g, ''));
+    o.body.style.display = 'grid'; o.body.appendChild(ta);
+    var md = h('div', 'model'), cb = h('label', 'n-row', '<input type="checkbox"> ' + tx('Răspunsul meu conține ideile din model', 'Meine Antwort enthält die Ideen aus dem Muster'));
+    md.innerHTML = '✓ ' + model; md.appendChild(cb); o.it.appendChild(md);
+    var box = cb.querySelector('input');
+    items.push({ it: o.it, pts: pts, open: true, score: function () { return box.checked ? pts : 0; }, reset: function () { ta.value = ''; box.checked = false; } });
+  }
+  // Exercițiul 1
+  var i1 = h('p', 'n-why', tx('Harta Lumii Noi de Theodore de Bry (1596). În colțuri sunt desenați, în ordine: (1) Cristofor Columb, (2) Amerigo Vespucci, (3) Francisco Pizarro, (4) Fernando Magellan.', 'Die Karte der Neuen Welt von Theodore de Bry (1596). In den Ecken sind der Reihe nach dargestellt: (1) Christoph Kolumbus, (2) Amerigo Vespucci, (3) Franzisco Pizarro, (4) Fernando Magellan.'));
+  var s1 = subj(tx('Exercițiul 1. Harta și personajele ei', 'Übung 1. Die Karte und ihre Figuren'), 20, i1);
+  choice(s1, 'a.', tx('Continentul reprezentat pe hartă a fost numit în secolul al XVI-lea …', 'Der auf der Karte dargestellte Kontinent wurde im 16. Jh. … genannt.'), [tx('Australia', 'Australien'), tx('America', 'Amerika'), tx('Africa', 'Afrika')], 1, 5, tx('După navigatorul Amerigo Vespucci.', 'Nach dem Seefahrer Amerigo Vespucci.'));
+  choice(s1, 'b.', tx('Europeanul care a străbătut și a explorat primul Oceanul Pacific este figura cu numărul …', 'Der Europäer, der erstmals den Stillen Ozean entdeckte und erforschte, wird von der Figur mit der Ziffer … dargestellt.'), ['1', '2', '3', '4'], 3, 5, tx('Magellan a dat oceanului numele de Pacific (Liniștit).', 'Magellan gab dem Ozean den Namen Pazifik (Stiller Ozean).'));
+  choice(s1, 'c.', tx('Conchistadorul cu numărul 3 a condus cucerirea imperiului …', 'Der Konquistador mit der Ziffer 3 führte die Eroberung des Reiches der … an.'), [tx('mayașilor', 'Mayas'), tx('aztecilor', 'Azteken'), tx('incașilor', 'Inkas')], 2, 5, tx('Pizarro, 1532.', 'Pizarro, 1532.'));
+  choice(s1, 'd.', tx('Prima călătorie peste Atlantic a figurii cu numărul 1 a avut loc în secolul …', 'Die erste Reise über den Atlantik der Figur mit der Ziffer 1 fand im … Jh. statt.'), [tx('al XIV-lea', '14.'), tx('al XV-lea', '15.'), tx('al XVI-lea', '16.')], 1, 5, tx('1492 este în secolul al XV-lea.', '1492 gehört zum 15. Jahrhundert.'));
+  // Exercițiul 2
+  var i2 = h('div', '', '<div class="n-doc">' + tx('„În acest an, Înălțimile Voastre [regele Ferdinand de Aragon și regina Isabela de Castilia] m-au trimis în țările Indiilor de Vest, ca să aflu cum pot fi convertite popoarele de acolo la sfânta credință. Și pentru aceasta mi-au acordat onoarea ca de acum înainte să mă numesc Don, Mare Amiral al Oceanului, vicerege și guvernator pe viață al tuturor insulelor și al întregului continent pe care îl voi descoperi.”', '„In diesem Jahr schickten mich Eure Königlichen Hoheiten [König Ferdinand von Aragon und Königin Isabella von Kastilien] in die westindischen Länder, um zu erfahren, wie die dortigen Völker zum heiligen Glauben bekehrt werden können. Und dafür verliehen sie mir Ehren, dass ich von nun an Don heiße, großer Admiral des Ozeans, Vizekönig und Vizegouverneur auf Lebzeiten von allen Inseln und des gesamten Festlandes, das ich entdecken werde.“') + '<cite>' + tx('Cristofor Columb, scrisoare către regii Spaniei', 'Christoph Kolumbus, Brief an die Könige Spaniens') + '</cite></div><p class="n-why" style="margin-top:8px">' + tx('Tabloul „Prima călătorie a lui Columb peste Atlantic” (D. Puebla): Columb îngenunchează pe țărm; lângă el sunt un călugăr în rasă și marinari cu steaguri, dintre care unul are o cruce; localnicii privesc din spate, de sub copaci.', 'Das Gemälde „Erste Reise des Kolumbus über den Atlantik“ (D. Puebla): Kolumbus kniet am Ufer; neben ihm stehen ein Mönch in Kutte und Seeleute mit Fahnen, eine davon mit einem Kreuz; die Einheimischen schauen von hinten, unter den Bäumen, zu.') + '</p>');
+  var s2 = subj(tx('Exercițiul 2. Scrisoarea lui Columb', 'Übung 2. Der Brief des Kolumbus'), 30, i2);
+  choice(s2, 'a.', tx('Statul în serviciul căruia a navigat Columb peste Atlantic:', 'Der Staat, in dessen Diensten Kolumbus bei seinen Reisen über den Atlantik stand:'), [tx('Portugalia', 'Portugal'), tx('Spania', 'Spanien'), tx('Genova', 'Genua'), tx('Anglia', 'England')], 1, 5, tx('Regii Ferdinand și Isabela, regii Spaniei.', 'König Ferdinand und Königin Isabella, die Könige von Spanien.'));
+  choice(s2, 'b.', tx('Cuvintele care arată intenția lui Columb de a răspândi creștinismul:', 'Die Wörter, die die Absicht des Kolumbus zeigen, das Christentum zu verbreiten:'), [tx('„Mare Amiral al Oceanului”', '„großer Admiral des Ozeans“'), tx('„cum pot fi convertite popoarele de acolo la sfânta credință”', '„wie die dortigen Völker zum heiligen Glauben bekehrt werden können“'), tx('„întregul continent pe care îl voi descoperi”', '„des gesamten Festlandes, das ich entdecken werde“')], 1, 5, '');
+  multi(s2, 'c.', tx('Alege din tablou două elemente care simbolizează misionarea în Lumea Nouă:', 'Wähle im Gemälde zwei Elemente, welche die Missionierungsarbeit in der Neuen Welt symbolisieren:'), [tx('sabia', 'das Schwert'), tx('crucea de pe steag', 'das Kreuz auf der Fahne'), tx('corăbiile', 'die Schiffe'), tx('călugărul în rasă', 'der Mönch in der Kutte'), tx('copacii', 'die Bäume')], [1, 3], 10, tx('Crucea și călugărul (misionarul).', 'Das Kreuz und der Mönch (Missionar).'));
+  selects(s2, 'd.', tx('Din text: denumirea dată de Columb ținuturilor descoperite și o răsplată primită pentru asta.', 'Aus dem Text: die Bezeichnung, die Kolumbus den entdeckten Gebieten gegeben hat, und eine Belohnung dafür.'),
+    [[tx('Denumirea:', 'Bezeichnung:'), [tx('Lumea Nouă', 'die Neue Welt'), tx('țările Indiilor de Vest', 'die westindischen Länder'), tx('America', 'Amerika')], 1],
+     [tx('Răsplata:', 'Belohnung:'), [tx('o corabie de aur', 'ein goldenes Schiff'), tx('titlul de Mare Amiral al Oceanului', 'der Titel „großer Admiral des Ozeans“'), tx('pământuri în Portugalia', 'Ländereien in Portugal')], 1]], 10, tx('„țările Indiilor de Vest”; răsplăți: titlul de Don, Mare Amiral al Oceanului, vicerege și guvernator.', '„westindische Länder“; Belohnungen: Titel Don, großer Admiral des Ozeans, Vizekönig und Vizegouverneur.'));
+  // Exercițiul 3
+  var i3 = h('p', 'n-why', tx('Folosește textul lui Reg Grant din secțiunea 4 și ce ai învățat despre echipamente. (Imaginile din manual: A. Un călăreț spaniol cu aliații lui indieni; C. Conchistadori, secolul al XVI-lea.)', 'Nutze den Text von Reg Grant aus Abschnitt 4 und was du über die Ausrüstung gelernt hast. (Die Bilder im Buch: A. Spanischer Reiter mit seinen verbündeten Indios; C. Konquistadoren, 16. Jh.)'));
+  var s3 = subj(tx('Exercițiul 3. Conchistadorii', 'Übung 3. Die Konquistadoren'), 40, i3);
+  choice(s3, 'a.', tx('Explică termenul „conchistadori”:', 'Erkläre den Begriff „Konquistadoren“:'), [tx('negustori portughezi din Asia', 'portugiesische Händler in Asien'), tx('cuceritori spanioli din secolele XV–XVII', 'spanische Eroberer des 15.–17. Jhs.'), tx('preoți care răspândeau creștinismul', 'Priester, die das Christentum verbreiteten')], 1, 5, '');
+  open(s3, 'b.', tx('Descrie în cinci rânduri echipamentul unui conchistador.', 'Beschreibe in fünf Zeilen die Ausrüstung eines Konquistadors.'), 5,
+    tx('Conchistadorul purta un coif de metal și o armură (platoșă) de oțel. Lupta cu sabia și lancea de oțel și avea arme de foc (archebuze) sau arbalete. Mulți luptau călare. Spaniolii aduceau și tunuri mici și câini de luptă.', 'Der Konquistador trug einen Metallhelm und einen Brustpanzer aus Stahl. Er kämpfte mit Stahlschwert und Lanze und hatte Feuerwaffen (Arkebusen) oder Armbrüste. Viele kämpften zu Pferd. Die Spanier brachten auch kleine Kanonen und Kampfhunde mit.'));
+  multi(s3, 'c.', tx('Alege două diferențe adevărate între echipamentul și felul de a lupta al indienilor și al europenilor:', 'Wähle zwei richtige Unterschiede zwischen der Ausrüstung und den Kampfmethoden der Indios und der Europäer:'),
+    [tx('Europenii aveau arme de metal și de foc, indienii arme din piatră.', 'Die Europäer hatten Metall- und Feuerwaffen, die Indios Waffen aus Stein.'), tx('Indienii aveau tunuri mai mari.', 'Die Indios hatten größere Kanonen.'), tx('Europenii luptau și călare, indienii numai pe jos.', 'Die Europäer kämpften auch zu Pferd, die Indios nur zu Fuß.'), tx('Europenii nu purtau armuri.', 'Die Europäer trugen keine Rüstungen.')], [0, 2], 10, '');
+  var D = [
+    [tx('armele și armurile europenilor', 'die Waffen und Rüstungen der Europäer'), 0], [tx('caii, necunoscuți în America', 'die in Amerika unbekannten Pferde'), 0],
+    [tx('dușmăniile dintre popoarele locale', 'die Feindschaften unter den Lokalbevölkerungen'), 0], [tx('dispariția vechilor civilizații', 'das Verschwinden der alten Zivilisationen'), 1],
+    [tx('formarea imperiilor coloniale', 'die Entstehung der Kolonialreiche'), 1], [tx('răspândirea creștinismului în America', 'die Verbreitung des Christentums in Amerika'), 1]
+  ];
+  selects(s3, 'd.', tx('Diagramă: <b>cauze</b> → cucerirea popoarelor Americii de către europeni → <b>urmări</b>. Pune fiecare idee la locul ei.', 'Diagramm: <b>Ursachen</b> → die Eroberung der Völker Amerikas durch Europäer → <b>Folgen</b>. Ordne jede Idee zu.'),
+    D.map(function (d) { return [d[0], [tx('cauză', 'Ursache'), tx('urmare', 'Folge')], d[1]]; }), 10, tx('Cauze: armele, caii, dușmăniile locale. Urmări: dispariția civilizațiilor, imperiile coloniale, creștinarea.', 'Ursachen: Waffen, Pferde, Feindschaften. Folgen: Verschwinden der Zivilisationen, Kolonialreiche, Christianisierung.'));
+  open(s3, 'e.', tx('Spune-ți părerea despre urmările pozitive sau negative ale marilor descoperiri. Poți folosi: cunoașterea, civilizația, poporul, navigația, exploatarea, misionarea.', 'Äußere deine Meinung über die positiven oder negativen Folgen der großen Entdeckungen. Du kannst verwenden: das Wissen, die Zivilisation, das Volk, die Seefahrt, die Ausbeutung, die Missionierung.'), 10,
+    tx('Un răspuns bun numește cel puțin o urmare pozitivă (cunoaștere, navigație, schimb de plante) și una negativă (exploatare, dispariția civilizațiilor, misionare impusă) și spune ce crezi tu, cu un argument.', 'Eine gute Antwort nennt mindestens eine positive Folge (Wissen, Seefahrt, Austausch von Pflanzen) und eine negative (Ausbeutung, Verschwinden der Zivilisationen, aufgezwungene Missionierung) und sagt mit einer Begründung, was du denkst.'));
+  var chk = $('#n-ev-check'), sh = $('#n-ev-show'), rs = $('#n-ev-reset'), gr = $('#n-ev-grade');
+  chk.textContent = tx('Corectează', 'Korrigieren'); sh.textContent = tx('Arată rezolvările și modelele', 'Lösungen und Muster zeigen'); rs.textContent = tx('De la capăt', 'Von vorn');
+  chk.onclick = function () {
+    var pts = 0;
+    items.forEach(function (i) { var s = i.score(); pts += s; if (!i.open || $('#n-ev').classList.contains('show')) { i.it.classList.toggle('ok', s === i.pts); i.it.classList.toggle('bad', s < i.pts); } });
+    pts = Math.round(pts * 10) / 10; var total = pts + 10;
+    gr.hidden = false;
+    gr.innerHTML = '<span>' + tx('Punctaj', 'Punkte') + ': ' + String(pts).replace('.', ',') + ' + 10 ' + tx('din oficiu', 'von Amts wegen') + ' = <b>' + String(total).replace('.', ',') + '</b> / 100</span><span>' + tx('Nota', 'Note') + ': <b>' + String(Math.round(total) / 10).replace('.', ',') + '</b></span>' +
+      '<span>' + (host.classList.contains('show') ? '' : tx('Întrebările deschise (3b, 3e) se punctează după ce deschizi modelele.', 'Die offenen Aufgaben (3b, 3e) werden gezählt, wenn du die Muster öffnest.')) + '</span>';
+  };
+  sh.onclick = function () { host.classList.toggle('show'); sh.textContent = host.classList.contains('show') ? tx('Ascunde rezolvările', 'Lösungen verbergen') : tx('Arată rezolvările și modelele', 'Lösungen und Muster zeigen'); };
+  rs.onclick = function () { items.forEach(function (i) { i.reset(); i.it.classList.remove('ok', 'bad'); }); host.classList.remove('show'); gr.hidden = true; sh.textContent = tx('Arată rezolvările și modelele', 'Lösungen und Muster zeigen'); };
+})();
+})();
+</script>
+
 </body>
 </html>
