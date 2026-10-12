@@ -145,4 +145,54 @@ export const unitatiDeMasuraTest: Question[] = [
       de: 'Das Lichtjahr ist die Strecke, die Licht in einem Jahr zurücklegt, fast 9 460 Milliarden km.',
     },
   },
+  {
+    q: { ro: 'Un cub are latura de 5 cm. Ce volum are?', de: 'Ein Würfel hat eine Kantenlänge von 5 cm. Welches Volumen hat er?' },
+    options: [
+      { ro: '125 cm³', de: '125 cm³' },
+      { ro: '25 cm³', de: '25 cm³' },
+      { ro: '15 cm³', de: '15 cm³' },
+      { ro: '150 cm³', de: '150 cm³' },
+    ],
+    correct: 0,
+    explain: { ro: 'V = l³ = 5 · 5 · 5 = 125 cm³.', de: 'V = l³ = 5 · 5 · 5 = 125 cm³.' },
+  },
+  {
+    q: {
+      ro: 'Un paralelipiped are L = 2 dm, l = 5 cm și h = 40 mm. Ce volum are?',
+      de: 'Ein Quader hat L = 2 dm, B = 5 cm und H = 40 mm. Welches Volumen hat er?',
+    },
+    options: [
+      { ro: '400 cm³', de: '400 cm³' },
+      { ro: '0,4 L', de: '0,4 L' },
+      { ro: 'ambele variante de mai sus', de: 'beide Antworten oben' },
+      { ro: '400 L', de: '400 L' },
+    ],
+    correct: 2,
+    explain: { ro: 'În cm: 20 · 5 · 4 = 400 cm³ = 0,4 dm³ = 0,4 L. Ambele scrieri sunt corecte.', de: 'In cm: 20 · 5 · 4 = 400 cm³ = 0,4 dm³ = 0,4 L. Beide Schreibweisen sind richtig.' },
+  },
+  {
+    q: { ro: 'Câte cuburi cu latura de 10 cm încap într-o cutie de 30 cm × 20 cm × 20 cm?', de: 'Wie viele Würfel mit 10 cm Kantenlänge passen in eine Kiste von 30 cm × 20 cm × 20 cm?' },
+    options: [
+      { ro: '7', de: '7' },
+      { ro: '12', de: '12' },
+      { ro: '120', de: '120' },
+      { ro: '1 200', de: '1 200' },
+    ],
+    correct: 1,
+    explain: { ro: 'Pe muchii: 3 · 2 · 2 = 12. Sau: 12 000 cm³ : 1 000 cm³ = 12.', de: 'An den Kanten: 3 · 2 · 2 = 12. Oder: 12 000 cm³ : 1 000 cm³ = 12.' },
+  },
+  {
+    q: {
+      ro: 'În cilindrul gradat sunt 25 mL de apă. După ce scufunzi 10 bile identice, apa ajunge la 45 mL. Ce volum are o bilă?',
+      de: 'Im Messzylinder sind 25 mL Wasser. Nach dem Eintauchen von 10 gleichen Kugeln steigt es auf 45 mL. Welches Volumen hat eine Kugel?',
+    },
+    options: [
+      { ro: '20 cm³', de: '20 cm³' },
+      { ro: '4,5 cm³', de: '4,5 cm³' },
+      { ro: '2 cm³', de: '2 cm³' },
+      { ro: '7 cm³', de: '7 cm³' },
+    ],
+    correct: 2,
+    explain: { ro: 'V = 45 − 25 = 20 mL pentru 10 bile, deci 20 : 10 = 2 mL = 2 cm³ o bilă.', de: 'V = 45 − 25 = 20 mL für 10 Kugeln, also 20 : 10 = 2 mL = 2 cm³ pro Kugel.' },
+  },
 ];

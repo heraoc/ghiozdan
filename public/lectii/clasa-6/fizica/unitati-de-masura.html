@@ -180,6 +180,66 @@ section.block{margin-top:56px}
 .gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
 .foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
 
+
+/* 8–12. volumul cubului și al paralelipipedului, probleme (după caiet și manual, p. 28–29) */
+.vx{--good-soft:#e3f5ec;--bad-soft:#fbe4e4}
+.vx .fx{font:800 20px/1.3 var(--display)}
+.vx .fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.vx .fig svg{display:block;width:100%;height:auto}
+.vx .split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
+.vx .panel{display:grid;gap:10px}
+.vx .slider{display:grid;gap:2px}
+.vx .slider label{font-weight:700}
+.vx .slider input{width:100%;accent-color:var(--accent)}
+.vx .readout{background:var(--sheet);border-radius:10px;padding:10px 14px;display:grid;gap:4px}
+.vx .readout .eq{font:800 21px/1.3 var(--display)}
+.vx .readout .rule{font-size:15px;color:var(--muted)}
+.vx .c1{color:var(--blue)}
+.vx .remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.vx .chips{margin-bottom:10px}
+.vx .pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.vx .pick:hover:not(:disabled){border-color:var(--muted)}
+.vx .pick.right{border-color:var(--ok);background:var(--ok);color:#fff}
+.vx .pick.wrong{border-color:var(--bad);color:#a12f2f;background:var(--bad-soft)}
+.vx .albl{font:800 15px var(--body);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.vx .albl.big{font-size:18px}
+.vx .tick{font:700 11px var(--body);fill:#2f5d24}
+.vx .sol{display:grid;gap:8px}
+.vx .sol .line{display:grid;gap:2px;background:#fff;border:1px solid var(--rule);border-left:5px solid var(--blue);border-radius:8px;padding:8px 12px}
+.vx .sol .line.cur{background:#fff9d6;border-left-color:#e0a100;animation:vxin .3s ease both}
+.vx .sol .what{font-size:14.5px;font-weight:700;color:var(--muted)}
+.vx .sol .eqn{font:800 21px/1.3 var(--display)}
+.vx .sol .note{font-size:15px;color:var(--muted)}
+@keyframes vxin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.vx .ex{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:10px}
+.vx .row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.vx .vin{width:86px;font:800 20px/1 var(--display);text-align:center;padding:5px 6px;border:2px solid var(--rule);border-radius:10px;background:#fff}
+.vx .vin.wide{width:130px}
+.vx .vin.ok{border-color:var(--ok);background:var(--good-soft)}
+.vx .vin.bad{border-color:var(--bad);background:var(--bad-soft)}
+.vx .result{border-radius:10px;padding:10px 14px;font-weight:700}
+.vx .result.good{background:var(--good-soft);color:#17744d}
+.vx .result.try{background:#fdf0d5;color:#8a5a00}
+.vx .score{font-weight:700;color:var(--muted)}
+.vx .btn:disabled{opacity:.4;cursor:default}
+.vx .check{margin-top:18px;background:var(--card);border:1px dashed #e8cf8f;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.vx .check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.vx .cq{display:grid;gap:6px}
+.vx .cq .q{font-weight:700}
+.vx .cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.vx .cq .why{font-size:15px;color:var(--muted)}
+.vx .know{margin-top:12px;background:#eef4fd;border:1px solid #c9dbf5;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.vx .know h3{font-size:20px;color:#1f4f99}
+.vx .know ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.vx .subhead{margin:28px 0 10px;font-size:22px}
+.vx .tscroll{overflow-x:auto}
+.vx .vt{border-collapse:collapse;width:100%;min-width:560px}
+.vx .vt th,.vx .vt td{border:1px solid var(--rule);padding:6px 8px;text-align:left;vertical-align:middle}
+.vx .vt thead th{background:var(--sheet)}
+.vx .vt tbody th{font-weight:500;min-width:150px}
+@media (max-width:820px){ .vx .split{grid-template-columns:1fr} }
+@media (max-width:520px){ .vx .albl{font-size:20px} .vx .tick{font-size:14px} .vx .vt .vin.wide{width:100px} }
+
 @media (max-width:820px){
   .body-grid,.conv,.scale,.area,.vol,.lab{grid-template-columns:1fr}
   .tools{grid-template-columns:repeat(3,1fr)}
@@ -201,8 +261,8 @@ html.embed .head{padding-bottom:0;border-bottom:0}
   <p class="eyebrow"><span class="ro">Fizică · Clasa a 6-a</span><span class="de">Physik · Klasse 6</span></p>
   <h1><span class="ro">Unitățile de măsură: lungime, arie, volum</span><span class="de">Maßeinheiten: Länge, Fläche, Volumen</span></h1>
   <p class="lead">
-    <span class="ro">Ca să spunem cât de lung, cât de mare sau cât de încăpător este un corp, avem nevoie de unități de măsură pe care toată lumea le înțelege la fel. Vei vedea de unde vin, cum se trece de la una la alta și, mai ales, cât de mari sunt de fapt.</span>
-    <span class="de">Um zu sagen, wie lang, wie groß oder wie geräumig ein Körper ist, brauchen wir Maßeinheiten, die alle gleich verstehen. Du erfährst, woher sie kommen, wie man sie umrechnet und vor allem, wie groß sie wirklich sind.</span>
+    <span class="ro">Ca să spunem cât de lung, cât de mare sau cât de încăpător este un corp, avem nevoie de unități de măsură pe care toată lumea le înțelege la fel. Vei vedea de unde vin, cum se trece de la una la alta și, mai ales, cât de mari sunt de fapt. La final calculezi volumul cubului și al paralelipipedului și rezolvi probleme cu volume.</span>
+    <span class="de">Um zu sagen, wie lang, wie groß oder wie geräumig ein Körper ist, brauchen wir Maßeinheiten, die alle gleich verstehen. Du erfährst, woher sie kommen, wie man sie umrechnet und vor allem, wie groß sie wirklich sind. Am Ende berechnest du das Volumen von Würfel und Quader und löst Aufgaben mit Volumen.</span>
   </p>
   <div class="think">
     <span class="q">?</span>
@@ -360,9 +420,147 @@ html.embed .head{padding-bottom:0;border-bottom:0}
   </div>
 </section>
 
-<!-- 8. Antrenament -->
+<div class="vx">
+<!-- 1. Cub și paralelipiped -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">8</span><span class="ro">Volumul cubului și al paralelipipedului</span><span class="de">Das Volumen von Würfel und Quader</span></h2>
+  <p class="section-sub"><span class="ro">Volumul se află comparând corpul cu cuburi de volum cunoscut. Alege lungimea, lățimea și înălțimea, apoi umple cutia strat cu strat cu cubulețe de 1 cm³.</span><span class="de">Das Volumen bestimmt man, indem man den Körper mit Würfeln bekannten Volumens vergleicht. Wähle Länge, Breite und Höhe und fülle die Kiste Schicht für Schicht mit Würfelchen von 1 cm³.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="bx-svg" viewBox="0 0 520 330" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="bx-l"><span class="ro">Lungimea L</span><span class="de">Länge L</span> = <span id="bx-lv"></span> cm</label><input type="range" id="bx-l" min="1" max="8" value="5"></div>
+      <div class="slider"><label for="bx-w"><span class="ro">Lățimea l</span><span class="de">Breite B</span> = <span id="bx-wv"></span> cm</label><input type="range" id="bx-w" min="1" max="8" value="3"></div>
+      <div class="slider"><label for="bx-h"><span class="ro">Înălțimea h</span><span class="de">Höhe H</span> = <span id="bx-hv"></span> cm</label><input type="range" id="bx-h" min="1" max="8" value="4"></div>
+      <div class="slider"><label for="bx-k"><span class="ro">Straturi umplute</span><span class="de">Gefüllte Schichten</span>: <span id="bx-kv"></span></label><input type="range" id="bx-k" min="0" max="4" value="1"></div>
+      <div class="actions" style="margin-top:0"><button class="btn ghost" type="button" id="bx-cube"></button></div>
+      <div class="readout" id="bx-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Volumul se notează cu <b>V</b>; unitatea în SI este metrul cub: <span class="fx">[V]<sub>SI</sub> = m³</span>.</span><span class="de">Das Volumen bezeichnet man mit <b>V</b>; die SI-Einheit ist der Kubikmeter: <span class="fx">[V]<sub>SI</sub> = m³</span>.</span></li>
+      <li><span class="ro">Paralelipiped dreptunghic: <span class="fx">V = L · l · h</span> (lungime · lățime · înălțime).</span><span class="de">Quader: <span class="fx">V = L · B · H</span> (Länge · Breite · Höhe).</span></li>
+      <li><span class="ro">Cub (toate muchiile sunt egale, cu lungimea l): <span class="fx">V = l³</span>.</span><span class="de">Würfel (alle Kanten sind gleich lang, Kantenlänge l): <span class="fx">V = l³</span>.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c1"></div>
+</section>
+
+<!-- 2. Aceleași unități -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">9</span><span class="ro">Mai întâi aceleași unități, apoi înmulțim</span><span class="de">Erst gleiche Einheiten, dann multiplizieren</span></h2>
+  <p class="section-sub"><span class="ro">Dimensiunile vin adesea în unități diferite. Ele trebuie transformate în aceeași unitate înainte de înmulțire. Urmărește exemplul din caiet, apoi cere o problemă nouă și completează singur căsuțele.</span><span class="de">Die Maße sind oft in verschiedenen Einheiten angegeben. Sie müssen vor dem Multiplizieren in dieselbe Einheit umgerechnet werden. Verfolge das Beispiel aus dem Heft, hol dir dann eine neue Aufgabe und fülle die Kästchen selbst aus.</span></p>
+  <div class="chips" id="mu-chips" role="group"></div>
+  <div class="story" id="mu-story"></div>
+  <div class="split" style="margin-top:12px">
+    <div class="ex" id="mu-try"></div>
+    <div>
+      <div class="sol" id="mu-lines" aria-live="polite"></div>
+      <div class="actions">
+        <button class="btn ghost" type="button" id="mu-prev"></button>
+        <button class="btn" type="button" id="mu-next"></button>
+      </div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Unități diferite ⇒ le transformi întâi, ca să poți calcula.</span><span class="de">Verschiedene Maßeinheiten ⇒ erst umrechnen, damit man rechnen kann.</span></li>
+      <li><span class="ro"><span class="fx">cm · cm · cm = cm³</span>; o unitate de lungime la cub dă o unitate de volum.</span><span class="de"><span class="fx">cm · cm · cm = cm³</span>; eine Längeneinheit hoch drei ergibt eine Volumeneinheit.</span></li>
+      <li><span class="ro"><span class="fx">1 L = 1 dm³</span> și <span class="fx">1 mL = 1 cm³</span>.</span><span class="de"><span class="fx">1 L = 1 dm³</span> und <span class="fx">1 mL = 1 cm³</span>.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4. Câte cuburi încap? -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">10</span><span class="ro">Câte cuburi încap într-o cutie?</span><span class="de">Wie viele Würfel passen in eine Kiste?</span></h2>
+  <p class="section-sub"><span class="ro">Problema din caiet: o cutie de 1,2 m × 80 cm × 6 dm se umple cu cuburi cu latura de 20 cm. Schimbă dimensiunile și compară cele două metode: împărțirea volumelor și numărarea pe fiecare muchie.</span><span class="de">Die Aufgabe aus dem Heft: Eine Box von 1,2 m × 80 cm × 6 dm wird mit Würfeln von 20 cm Kantenlänge gefüllt. Ändere die Maße und vergleiche die beiden Methoden: Volumen teilen und an jeder Kante zählen.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="cb-svg" viewBox="0 0 520 330" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="cb-l">L = <span id="cb-lv"></span> cm</label><input type="range" id="cb-l" min="20" max="150" step="10" value="120"></div>
+      <div class="slider"><label for="cb-w"><span class="ro">l</span><span class="de">B</span> = <span id="cb-wv"></span> cm</label><input type="range" id="cb-w" min="20" max="100" step="10" value="80"></div>
+      <div class="slider"><label for="cb-h"><span class="ro">h</span><span class="de">H</span> = <span id="cb-hv"></span> cm</label><input type="range" id="cb-h" min="20" max="100" step="10" value="60"></div>
+      <div class="slider"><label for="cb-e"><span class="ro">Latura cubului</span><span class="de">Kantenlänge des Würfels</span> = <span id="cb-ev"></span> cm</label><input type="range" id="cb-e" min="10" max="40" step="5" value="20"></div>
+      <div class="readout" id="cb-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Numărul de cuburi = V<sub>cutie</sub> : V<sub>cub</sub>, <b>doar dacă</b> latura cubului încape exact în fiecare dimensiune a cutiei.</span><span class="de">Anzahl der Würfel = V<sub>Box</sub> : V<sub>Würfel</sub>, <b>nur wenn</b> die Kantenlänge genau in jedes Maß der Box passt.</span></li>
+      <li><span class="ro">Altfel numeri pe fiecare muchie câte cuburi întregi încap și înmulțești numerele.</span><span class="de">Sonst zählst du an jeder Kante, wie viele ganze Würfel passen, und multiplizierst diese Zahlen.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Corpuri solide în apă -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">11</span><span class="ro">Corpuri foarte mici și corpuri care plutesc</span><span class="de">Sehr kleine und schwimmende Körper</span></h2>
+  <p class="section-sub"><span class="ro">Ai văzut mai sus volumul unei pietre. Un corp scufundat împinge apa în sus cu exact volumul lui: <b>V<sub>corp</sub> = V<sub>2</sub> − V<sub>1</sub></b>. Alege un obiect și câte bucăți pui în cilindrul gradat.</span><span class="de">Oben hast du das Volumen eines Steins gesehen. Ein eingetauchter Körper verdrängt genau sein eigenes Volumen an Wasser: <b>V<sub>Körper</sub> = V<sub>2</sub> − V<sub>1</sub></b>. Wähle einen Gegenstand und wie viele Stück du in den Messzylinder legst.</span></p>
+  <div class="chips" id="dz-chips" role="group"></div>
+  <div class="split">
+    <div class="fig"><svg id="dz-svg" viewBox="0 0 520 360" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="dz-n"><span class="ro">Bucăți</span><span class="de">Stück</span>: <span id="dz-nv"></span></label><input type="range" id="dz-n" min="0" max="4" value="0"></div>
+      <div class="readout" id="dz-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <h3 class="subhead"><span class="ro">Vasul cu cubul de metal</span><span class="de">Das Gefäß mit dem Metallwürfel</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Un vas plin cu apă (12 cm × 10 cm × 10 cm) conține un cub de metal. Alege latura cubului și scoate-l: apa coboară cu volumul cubului.</span><span class="de">Ein mit Wasser gefülltes Gefäß (12 cm × 10 cm × 10 cm) enthält einen Metallwürfel. Wähle die Kantenlänge und zieh den Würfel heraus: Das Wasser sinkt um das Volumen des Würfels.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="vs-svg" viewBox="0 0 520 300" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="vs-a"><span class="ro">Latura cubului</span><span class="de">Kantenlänge</span> = <span id="vs-av"></span> cm</label><input type="range" id="vs-a" min="2" max="8" value="6"></div>
+      <div class="actions" style="margin-top:0"><button class="btn" type="button" id="vs-out-btn"></button></div>
+      <div class="readout" id="vs-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro"><span class="fx">V<sub>corp</sub> = V<sub>2</sub> − V<sub>1</sub></span>: nivelul cu corpul minus nivelul fără corp.</span><span class="de"><span class="fx">V<sub>Körper</sub> = V<sub>2</sub> − V<sub>1</sub></span>: Wasserstand mit Körper minus Wasserstand ohne Körper.</span></li>
+      <li><span class="ro">Corpurile foarte mici le măsori mai multe deodată și împarți la numărul lor: obții <b>volumul mediu</b>.</span><span class="de">Sehr kleine Körper misst du zu mehreren und teilst durch ihre Anzahl: So erhältst du das <b>durchschnittliche Volumen</b>.</span></li>
+      <li><span class="ro">Corpurile care plutesc (nuca) trebuie împinse complet sub apă, cu un ac sau o sârmă foarte subțire.</span><span class="de">Schwimmende Körper (Walnuss) muss man mit einer Nadel oder einem sehr dünnen Draht ganz unter Wasser drücken.</span></li>
+    </ul>
+  </div>
+  <div class="know">
+    <h3><span class="ro">Bine de știut</span><span class="de">Wusstest du, dass …?</span></h3>
+    <ul>
+      <li><span class="ro">Volumul Pământului ≈ 1,083 × 10¹² km³; volumul apei din Marea Neagră ≈ 547 000 km³.</span><span class="de">Das Erdvolumen ≈ 1,083 × 10¹² km³; das Wasservolumen des Schwarzen Meeres ≈ 547 000 km³.</span></li>
+      <li><span class="ro">Un om de 70 kg are aproximativ 5 litri de sânge; un bob de grâu are cam 5 mm³.</span><span class="de">Ein 70 kg schwerer Mensch hat etwa 5 Liter Blut; ein Weizenkorn hat etwa 5 mm³.</span></li>
+      <li><span class="ro">Sunt valori aproximative: fiecare om, fiecare bob e altfel, iar măsurătorile au mereu erori mici.</span><span class="de">Das sind ungefähre Werte: Jeder Mensch, jedes Korn ist anders, und Messungen haben immer kleine Fehler.</span></li>
+      <li><span class="ro">Experimentul cu zahăr: după dizolvare, volumul total crește mai puțin decât volumul cuburilor de zahăr măsurate cu rigla. Între granulele de zahăr e aer, iar particulele de zahăr se strecoară printre particulele de apă.</span><span class="de">Das Zuckerexperiment: Nach dem Auflösen nimmt das Gesamtvolumen weniger zu als das mit dem Lineal gemessene Volumen der Zuckerwürfel. Zwischen den Zuckerkörnern ist Luft, und die Zuckerteilchen schieben sich zwischen die Wasserteilchen.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c5"></div>
+</section>
+
+<!-- 6. Probleme rezolvate -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">12</span><span class="ro">Probleme rezolvate pas cu pas</span><span class="de">Aufgaben, Schritt für Schritt gelöst</span></h2>
+  <p class="section-sub"><span class="ro">Alege o problemă din caiet sau din manual și urmărește rezolvarea. Încearcă întâi singur, apoi apasă „Pasul următor”.</span><span class="de">Wähle eine Aufgabe aus dem Heft oder dem Buch und verfolge die Lösung. Versuche es zuerst allein und drücke dann „Nächster Schritt“.</span></p>
+  <div class="chips" id="pb-chips" role="group"></div>
+  <div class="story" id="pb-story"></div>
+  <div class="split" style="margin-top:12px">
+    <div class="fig"><svg id="pb-svg" viewBox="0 0 520 300" role="img"></svg></div>
+    <div>
+      <div class="sol" id="pb-lines" aria-live="polite"></div>
+      <div class="actions">
+        <button class="btn ghost" type="button" id="pb-prev"></button>
+        <button class="btn" type="button" id="pb-next"></button>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- 13. Antrenament -->
 <section class="block" aria-labelledby="t-drill">
-  <h2 class="section-title" id="t-drill"><span class="step">8</span><span class="ro">Antrenament: transformări</span><span class="de">Training: Umrechnen</span></h2>
+  <h2 class="section-title" id="t-drill"><span class="step">13</span><span class="ro">Antrenament: transformări</span><span class="de">Training: Umrechnen</span></h2>
   <p class="section-sub"><span class="ro">Exerciții noi la fiecare apăsare. Scrie rezultatul (poți folosi virgula) și verifică.</span><span class="de">Bei jedem Tippen neue Aufgaben. Gib das Ergebnis ein (Komma ist erlaubt) und prüfe.</span></p>
   <div class="card drill">
     <div class="tabs" id="drill-tabs"></div>
@@ -370,6 +568,15 @@ html.embed .head{padding-bottom:0;border-bottom:0}
     <div class="ans"><input id="drill-a" type="text" inputmode="decimal" aria-label="rezultat"><button class="btn" type="button" id="drill-check"><span class="ro">Verifică</span><span class="de">Prüfen</span></button><button class="btn ghost" type="button" id="drill-next"><span class="ro">Altul</span><span class="de">Neue Aufgabe</span></button></div>
     <p class="fb" id="drill-fb" aria-live="polite"></p>
     <p class="score" id="drill-score"></p>
+  </div>
+  <div class="vx">
+    <h3 class="subhead"><span class="ro">Din manual: ordonează crescător (ex. 1)</span><span class="de">Aus dem Buch: Ordne aufsteigend (Aufgabe 1)</span></h3>
+    <div class="ex" id="ord"></div>
+    <h3 class="subhead"><span class="ro">Din manual: completează tabelul (ex. 2)</span><span class="de">Aus dem Buch: Fülle die Tabelle aus (Aufgabe 2)</span></h3>
+    <div class="ex" id="tbl"></div>
+    <h3 class="subhead"><span class="ro">Probleme de volum, mereu altele</span><span class="de">Volumenaufgaben, immer neue</span></h3>
+    <p class="hint" style="margin-bottom:8px"><span class="ro">Volumul în litri, latura cubului, transformări, nivelul apei, cuburi în cutie. Poți scrie numere cu virgulă.</span><span class="de">Volumen in Litern, Kantenlänge des Würfels, Umrechnungen, Wasserstand, Würfel in der Kiste. Kommazahlen sind erlaubt.</span></p>
+    <div class="ex" id="px"></div>
   </div>
 </section>
 
@@ -382,7 +589,7 @@ html.embed .head{padding-bottom:0;border-bottom:0}
 </section>
 
 <footer class="foot">
-  <p><span class="ro">Surse: manualul de Fizică pentru clasa a 6-a (capitolul despre unitățile de măsură). Desenele sunt schematice și nu păstrează proporțiile reale, cu excepția pătratelor și cuburilor din secțiunile 5 și 6. Valorile istorice ale unităților vechi sunt aproximative și difereau de la o regiune la alta.</span><span class="de">Quellen: Physik-Lehrbuch für Klasse 6 (Kapitel über Maßeinheiten). Die Zeichnungen sind schematisch und nicht maßstabsgetreu, außer den Quadraten und Würfeln in den Abschnitten 5 und 6. Die historischen Werte der alten Einheiten sind Näherungen und waren von Region zu Region verschieden.</span></p>
+  <p><span class="ro">Surse: manualul de Fizică pentru clasa a 6-a (capitolul despre unitățile de măsură). Desenele sunt schematice și nu păstrează proporțiile reale, cu excepția pătratelor și cuburilor din secțiunile 5 și 6. Valorile istorice ale unităților vechi sunt aproximative și difereau de la o regiune la alta. Secțiunile 8–12 și aplicațiile de la final urmează caietul („Das Volumen”) și manualul, p. 28–29 („Das direkte Messen des Volumens”). Problema cu vasul și cubul de metal are alte dimensiuni decât în caiet: acolo cubul de 6 cm nu ar fi încăput într-un vas lat de 4 cm.</span><span class="de">Quellen: Physik-Lehrbuch für Klasse 6 (Kapitel über Maßeinheiten). Die Zeichnungen sind schematisch und nicht maßstabsgetreu, außer den Quadraten und Würfeln in den Abschnitten 5 und 6. Die historischen Werte der alten Einheiten sind Näherungen und waren von Region zu Region verschieden. Die Abschnitte 8–12 und die Anwendungen am Ende folgen dem Heft („Das Volumen“) und dem Buch, S. 28–29 („Das direkte Messen des Volumens“). Die Aufgabe mit dem Gefäß und dem Metallwürfel hat andere Maße als im Heft: Dort hätte der 6-cm-Würfel nicht in ein nur 4 cm breites Gefäß gepasst.</span></p>
 </footer>
 </div>
 
@@ -875,8 +1082,631 @@ TOOLS.forEach(function (t) { $('tools').appendChild(h('div', 'tool', '<svg viewB
  ['lungime', 'die Länge'], ['metru', 'der Meter'], ['riglă', 'das Lineal'], ['aria', 'der Flächeninhalt'], ['metru pătrat', 'der Quadratmeter'], ['hectar / ar', 'das Hektar / das Ar'],
  ['volum', 'das Volumen'], ['metru cub', 'der Kubikmeter'], ['litru / mililitru', 'der Liter / der Milliliter'], ['cilindru gradat', 'der Messzylinder'], ['pahar Erlenmeyer', 'der Erlenmeyerkolben'],
  ['pipetă', 'die Pipette'], ['cană gradată', 'der Messbecher'], ['menisc', 'der Meniskus'], ['an-lumină', 'das Lichtjahr'], ['cot', 'die Elle'], ['palmă', 'die Handbreite'],
- ['picior', 'der Fuß'], ['pas', 'der Schritt'], ['milă', 'die Meile'], ['etalon', 'das Normal (Urmeter)']
+ ['picior', 'der Fuß'], ['pas', 'der Schritt'], ['milă', 'die Meile'], ['etalon', 'das Normal (Urmeter)'],
+ ['transformări', 'die Umrechnungen'], ['numărul de trepte', 'die Schrittanzahl'], ['cub', 'der Würfel'], ['paralelipiped dreptunghic', 'der Quader'],
+ ['muchie', 'die Kante'], ['latura cubului', 'die Kantenlänge'], ['lățime', 'die Breite'], ['înălțime', 'die Höhe'], ['vas', 'das Gefäß'],
+ ['balon cotat', 'die Messflasche'], ['diviziune', 'der Teilstrich'], ['nivelul apei', 'der Wasserstand'], ['a scufunda', 'eintauchen'],
+ ['corp solid', 'der feste Körper'], ['volum mediu', 'das durchschnittliche Volumen']
 ].forEach(function (p) { var d = h('div'); d.appendChild(h('dt', '', p[0])); d.appendChild(h('dd', '', p[1])); $('gloss').appendChild(d); });
+})();
+</script>
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+function rint(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+var COL = { 1: '#2f6fd6', 2: '#e8871e', 3: '#1f8a5b', 4: '#8e44ad' };
+var SOFT = { 1: '#dfe9fb', 2: '#fde7cc', 3: '#dcf1e6', 4: '#efe2f6' };
+
+/* ---------- desen: semidrepte și unghiuri (grade măsurate în sens trigonometric) ---------- */
+function P(o, deg, r) { var a = deg * Math.PI / 180; return [o[0] + r * Math.cos(a), o[1] - r * Math.sin(a)]; }
+function ray(svg, o, deg, len, name, opt) {
+  opt = opt || {};
+  var p = P(o, deg, len);
+  el('line', { x1: o[0], y1: o[1], x2: p[0], y2: p[1], stroke: opt.c || '#1f2430', 'stroke-width': opt.w || 2.5, 'stroke-dasharray': opt.dash || '', 'stroke-linecap': 'round' }, svg);
+  if (opt.dot !== false) el('circle', { cx: p[0], cy: p[1], r: 3.5, fill: opt.c || '#1f2430' }, svg);
+  if (name) { var q = P(o, deg, len + 18); el('text', { x: q[0], y: q[1] + 6, 'text-anchor': 'middle', class: 'plbl', fill: opt.c || '#1f2430' }, svg, name); }
+}
+function sector(svg, o, d1, d2, r, n, text, tr) {
+  var span = ((d2 - d1) % 360 + 360) % 360;
+  var a = P(o, d1, r), b = P(o, d1 + span, r);
+  el('path', { d: 'M' + o[0] + ' ' + o[1] + ' L' + a[0] + ' ' + a[1] + ' A' + r + ' ' + r + ' 0 ' + (span > 180 ? 1 : 0) + ' 0 ' + b[0] + ' ' + b[1] + ' Z', fill: SOFT[n], stroke: COL[n], 'stroke-width': 2, opacity: .9 }, svg);
+  if (text) { var m = P(o, d1 + span / 2, tr || r + 20); el('text', { x: m[0], y: m[1] + 5, 'text-anchor': 'middle', class: 'albl', fill: COL[n] }, svg, text); }
+}
+/** Punctul O; eticheta merge în direcția `deg` (în golul dintre semidrepte), dacă e dată. */
+function dotO(svg, o, deg) {
+  el('circle', { cx: o[0], cy: o[1], r: 4.5, fill: '#1f2430' }, svg);
+  if (deg == null) { el('text', { x: o[0] + 6, y: o[1] + 22, class: 'plbl' }, svg, 'O'); return; }
+  var q = P(o, deg, 22); el('text', { x: q[0], y: q[1] + 6, 'text-anchor': 'middle', class: 'plbl' }, svg, 'O');
+}
+
+/** Întrebări scurte de verificare. */
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.textContent = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+
+/** Pași „Înapoi / Pasul următor”; pasul -1 = niciun pas afișat încă. */
+function Stepper(host, prev, next, onStep) {
+  var steps = [], i = 0;
+  prev.textContent = '← ' + tx('Înapoi', 'Zurück');
+  function show() {
+    host.innerHTML = '';
+    for (var k = 0; k <= i && k < steps.length; k++) {
+      var s = steps[k], d = h('div', 'line' + (k === i ? ' cur' : ''));
+      d.appendChild(h('span', 'what', s.w));
+      if (s.e) d.appendChild(h('span', 'eqn', s.e));
+      if (s.n) d.appendChild(h('span', 'note', s.n));
+      host.appendChild(d);
+    }
+    prev.disabled = i <= (steps.start || 0);
+    next.disabled = i >= steps.length - 1;
+    next.textContent = i < 0 ? tx('Arată primul pas', 'Ersten Schritt zeigen') + ' →' : tx('Pasul următor', 'Nächster Schritt') + ' →';
+    if (onStep) onStep(i);
+  }
+  prev.onclick = function () { if (i > (steps.start || 0)) { i--; show(); } };
+  next.onclick = function () { if (i < steps.length - 1) { i++; show(); } };
+  return {
+    set: function (s, start) { steps = s; steps.start = start; i = start; show(); },
+    keep: function (s) { s.start = steps.start; steps = s; i = Math.min(i, s.length - 1); show(); },
+    last: function () { i = steps.length - 1; show(); },
+    get i() { return i; }
+  };
+}
+/** Unghi colorat semitransparent (pentru suprapuneri). */
+function wedge(svg, o, d1, d2, r, n, op) {
+  var span = ((d2 - d1) % 360 + 360) % 360, a = P(o, d1, r), b = P(o, d1 + span, r);
+  el('path', { d: 'M' + o[0] + ' ' + o[1] + ' L' + a[0] + ' ' + a[1] + ' A' + r + ' ' + r + ' 0 ' + (span > 180 ? 1 : 0) + ' 0 ' + b[0] + ' ' + b[1] + ' Z', fill: COL[n], 'fill-opacity': op || 0.4, stroke: 'none' }, svg);
+}
+function arc(svg, c, r, d1, d2, opt) {
+  opt = opt || {};
+  var a = P(c, d1, r), b = P(c, d2, r);
+  el('path', { d: 'M' + a[0] + ' ' + a[1] + ' A' + r + ' ' + r + ' 0 ' + (d2 - d1 > 180 ? 1 : 0) + ' 0 ' + b[0] + ' ' + b[1], fill: 'none', stroke: opt.c || '#7a6f5a', 'stroke-width': opt.w || 1.8, 'stroke-dasharray': opt.dash || '5 4' }, svg);
+}
+function pt(svg, p, name, dx, dy, c) {
+  el('circle', { cx: p[0], cy: p[1], r: 4.5, fill: c || '#1f2430' }, svg);
+  if (name) el('text', { x: p[0] + (dx || 0), y: p[1] + (dy || 0), 'text-anchor': 'middle', class: 'plbl', fill: c || '#1f2430' }, svg, name);
+}
+function rightMark(svg, o, d, s) {
+  var a = P(o, d, s), b = P(o, d + 90, s), c = P(a, d + 90, s);
+  el('path', { d: 'M' + a[0] + ' ' + a[1] + ' L' + c[0] + ' ' + c[1] + ' L' + b[0] + ' ' + b[1], fill: 'none', stroke: '#1f2430', 'stroke-width': 1.6 }, svg);
+}
+function chips(host, items, cur, onPick) {
+  host.innerHTML = '';
+  var bs = items.map(function (it) {
+    var b = btn('chip', it[1]); b.setAttribute('aria-pressed', it[0] === cur ? 'true' : 'false');
+    b.onclick = function () { bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); onPick(it[0]); };
+    host.appendChild(b); return b;
+  });
+}
+function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+
+
+/* ---------- numere ---------- */
+var SUP = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻' };
+function grp(s) { return s.length > 4 ? s.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : s; }
+/** Număr scris românește/nemțește: virgulă zecimală, spații între grupe; foarte mare/mic → · 10ⁿ. */
+function fmt(x) {
+  if (!isFinite(x)) return '—';
+  var r = +(+x).toPrecision(12), neg = r < 0; r = Math.abs(r);
+  if (r !== 0 && (r >= 1e12 || r < 1e-7)) {
+    var e = Math.floor(Math.log10(r)), m = +(r / Math.pow(10, e)).toPrecision(10);
+    if (m >= 10) { m /= 10; e++; }
+    return (neg ? '−' : '') + (m === 1 ? '' : String(m).replace('.', ',') + ' · ') + '10' + String(e).split('').map(function (c) { return SUP[c]; }).join('');
+  }
+  var s = r.toFixed(10).replace(/0+$/, '').replace(/\.$/, ''), p = s.split('.');
+  return (neg ? '−' : '') + grp(p[0]) + (p[1] ? ',' + p[1] : '');
+}
+function num(s) { s = String(s).replace(/[\s ]/g, '').replace(',', '.'); return s === '' ? NaN : Number(s); }
+function same(a, b) { return isFinite(a) && Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(b)); }
+function inputBox(label) { var i = h('input', 'vin'); i.inputMode = 'decimal'; i.autocomplete = 'off'; i.setAttribute('aria-label', label); return i; }
+
+/* ---------- desen izometric ---------- */
+function iso(o, s, x, y, z) { return [o[0] + (x - y) * 0.866 * s, o[1] + (x + y) * 0.5 * s - z * s]; }
+function poly(svg, pts, a) { a.points = pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '); return el('polygon', a, svg); }
+function seg(svg, p, q, a) { a.x1 = p[0]; a.y1 = p[1]; a.x2 = q[0]; a.y2 = q[1]; return el('line', a, svg); }
+/** Încadrează o cutie L × W × H în desen: scara și originea. */
+function fit(L, W, H, wmax, hmax, cx, cy) {
+  var s = Math.min(wmax / ((L + W) * 0.866), hmax / ((L + W) * 0.5 + H));
+  return { s: s, o: [cx - (L - W) * 0.866 * s / 2, cy - ((L + W) * 0.5 * s - H * s) / 2] };
+}
+var FACE = { top: '#fde6a8', right: '#f2c14e', left: '#e0a62a', line: '#9a6b00' };
+/** Bloc plin cu caroiaj la fiecare `st` unități. */
+function block(svg, o, s, L, W, H, st, col) {
+  col = col || FACE;
+  var P3 = function (x, y, z) { return iso(o, s, x, y, z); };
+  poly(svg, [P3(0, 0, H), P3(L, 0, H), P3(L, W, H), P3(0, W, H)], { fill: col.top, stroke: col.line, 'stroke-width': 1.5 });
+  poly(svg, [P3(L, 0, 0), P3(L, W, 0), P3(L, W, H), P3(L, 0, H)], { fill: col.right, stroke: col.line, 'stroke-width': 1.5 });
+  poly(svg, [P3(0, W, 0), P3(L, W, 0), P3(L, W, H), P3(0, W, H)], { fill: col.left, stroke: col.line, 'stroke-width': 1.5 });
+  if (!st) return;
+  var g = { stroke: col.line, 'stroke-width': 0.8, 'stroke-opacity': 0.7 }, k;
+  for (k = st; k < L - 1e-9; k += st) { seg(svg, P3(k, 0, H), P3(k, W, H), g); seg(svg, P3(k, W, 0), P3(k, W, H), g); }
+  for (k = st; k < W - 1e-9; k += st) { seg(svg, P3(0, k, H), P3(L, k, H), g); seg(svg, P3(L, k, 0), P3(L, k, H), g); }
+  for (k = st; k < H - 1e-9; k += st) { seg(svg, P3(L, 0, k), P3(L, W, k), g); seg(svg, P3(0, W, k), P3(L, W, k), g); }
+}
+/** Conturul unei cutii (muchiile ascunse punctate). */
+function wire(svg, o, s, L, W, H) {
+  var P3 = function (x, y, z) { return iso(o, s, x, y, z); }, a = { stroke: '#5a6270', 'stroke-width': 1.6, fill: 'none' }, d = { stroke: '#9aa0a6', 'stroke-width': 1.3, 'stroke-dasharray': '5 5' };
+  seg(svg, P3(0, 0, 0), P3(L, 0, 0), d); seg(svg, P3(0, 0, 0), P3(0, W, 0), d); seg(svg, P3(0, 0, 0), P3(0, 0, H), d);
+  poly(svg, [P3(0, 0, H), P3(L, 0, H), P3(L, W, H), P3(0, W, H)], a);
+  seg(svg, P3(L, 0, 0), P3(L, W, 0), a); seg(svg, P3(0, W, 0), P3(L, W, 0), a);
+  seg(svg, P3(L, 0, 0), P3(L, 0, H), a); seg(svg, P3(L, W, 0), P3(L, W, H), a); seg(svg, P3(0, W, 0), P3(0, W, H), a);
+}
+function dimLabels(svg, o, s, L, W, H, tl, tw, th) {
+  var a = iso(o, s, L / 2, W, 0), b = iso(o, s, L, W / 2, 0), c = iso(o, s, L, 0, H / 2);
+  el('text', { x: a[0] - 14, y: a[1] + 26, 'text-anchor': 'middle', class: 'albl', fill: '#2f6fd6' }, svg, tl);
+  el('text', { x: b[0] + 18, y: b[1] + 24, 'text-anchor': 'middle', class: 'albl', fill: '#1f8a5b' }, svg, tw);
+  el('text', { x: c[0] + 12, y: c[1] + 5, 'text-anchor': 'start', class: 'albl', fill: '#8e44ad' }, svg, th);
+}
+var LL = { l: tx('L', 'L'), w: tx('l', 'B'), h: tx('h', 'H') };
+
+/* ================= 1. Cub și paralelipiped ================= */
+(function () {
+  var svg = $('#bx-svg'), il = $('#bx-l'), iw = $('#bx-w'), ih = $('#bx-h'), ik = $('#bx-k'), out = $('#bx-out'), cube = $('#bx-cube');
+  cube.textContent = tx('Fă-l cub (4 × 4 × 4)', 'Mach einen Würfel (4 × 4 × 4)');
+  cube.onclick = function () { il.value = iw.value = ih.value = 4; ik.value = 4; draw(); };
+  function draw() {
+    var L = +il.value, W = +iw.value, H = +ih.value;
+    ik.max = H; if (+ik.value > H) ik.value = H;
+    var k = +ik.value, f = fit(L, W, H, 400, 250, 250, 175);
+    ['l', 'w', 'h'].forEach(function (c, i) { $('#bx-' + c + 'v').textContent = [L, W, H][i]; });
+    $('#bx-kv').textContent = k + ' / ' + H;
+    svg.innerHTML = '';
+    wire(svg, f.o, f.s, L, W, H);
+    if (k) block(svg, f.o, f.s, L, W, k, 1);
+    wire(svg, f.o, f.s, L, W, H);
+    dimLabels(svg, f.o, f.s, L, W, H, LL.l + ' = ' + L + ' cm', LL.w + ' = ' + W + ' cm', LL.h + ' = ' + H + ' cm');
+    svg.setAttribute('aria-label', L + ' × ' + W + ' × ' + H + ' cm');
+    var cubic = L === W && W === H, V = L * W * H;
+    out.innerHTML = '<span class="eq">' + tx('Un strat', 'Eine Schicht') + ': ' + L + ' · ' + W + ' = ' + (L * W) + ' ' + tx('cubulețe', 'Würfelchen') + '</span>' +
+      '<span class="eq">' + H + ' ' + tx('straturi', 'Schichten') + ': ' + (L * W) + ' · ' + H + ' = ' + V + ' ' + tx('cubulețe', 'Würfelchen') + '</span>' +
+      '<span class="eq c1">' + (cubic ? 'V = l³ = ' + L + '³ = ' + V + ' cm³' : 'V = ' + LL.l + ' · ' + LL.w + ' · ' + LL.h + ' = ' + L + ' · ' + W + ' · ' + H + ' = ' + V + ' cm³') + '</span>' +
+      '<span class="rule">' + (k < H ? tx('Umplute până acum: ', 'Bisher gefüllt: ') + (L * W * k) + ' cm³. ' + tx('Mută glisorul „Straturi umplute” până sus.', 'Schiebe den Regler „Gefüllte Schichten“ ganz nach oben.') : cubic ? tx('Cub: toate muchiile sunt egale.', 'Würfel: Alle Kanten sind gleich lang.') : tx('Cutia este plină.', 'Die Kiste ist voll.')) + '</span>';
+  }
+  [il, iw, ih, ik].forEach(function (i) { i.addEventListener('input', draw); });
+  draw();
+})();
+Check($('#c1'), [
+  { q: { ro: 'Un cub are latura de 3 cm. Care este volumul lui?', de: 'Ein Würfel hat eine Kantenlänge von 3 cm. Wie groß ist sein Volumen?' },
+    o: [{ ro: '9 cm³', de: '9 cm³' }, { ro: '27 cm³', de: '27 cm³' }, { ro: '18 cm³', de: '18 cm³' }], a: 1,
+    why: { ro: 'V = l³ = 3 · 3 · 3 = 27 cm³.', de: 'V = l³ = 3 · 3 · 3 = 27 cm³.' },
+    hint: { ro: 'La cub înmulțești latura cu ea însăși de trei ori, nu de două.', de: 'Beim Würfel multiplizierst du die Kante dreimal mit sich selbst, nicht zweimal.' } },
+  { q: { ro: 'Un paralelipiped are 5 cm, 4 cm și 2 cm. Câte cubulețe de 1 cm³ încap în el?', de: 'Ein Quader hat 5 cm, 4 cm und 2 cm. Wie viele Würfelchen von 1 cm³ passen hinein?' },
+    o: [{ ro: '11', de: '11' }, { ro: '20', de: '20' }, { ro: '40', de: '40' }], a: 2,
+    why: { ro: 'Un strat are 5 · 4 = 20 de cubulețe, iar 2 straturi au 40.', de: 'Eine Schicht hat 5 · 4 = 20 Würfelchen, 2 Schichten haben 40.' },
+    hint: { ro: 'Câte cubulețe are un strat? Câte straturi sunt?', de: 'Wie viele Würfelchen hat eine Schicht? Wie viele Schichten gibt es?' } }
+]);
+
+/* ================= 2. Aceleași unități ================= */
+(function () {
+  var story = $('#mu-story'), tryBox = $('#mu-try'), pr;
+  var st = Stepper($('#mu-lines'), $('#mu-prev'), $('#mu-next'));
+  var U = { dm: 10, cm: 1, mm: 0.1 };
+  function show(d) { return fmt(d.cm / U[d.u]) + ' ' + d.u; }
+  function make() {
+    for (;;) {
+      var ds = [0, 1, 2].map(function () {
+        var u = ['dm', 'cm', 'mm'][rint(0, 2)], cm = u === 'dm' ? rint(8, 30) : rint(3, 25);
+        return { cm: cm, u: u };
+      });
+      var us = ds.map(function (d) { return d.u; });
+      if (us[0] === us[1] && us[1] === us[2]) continue;
+      return ds;
+    }
+  }
+  function names() { return [LL.l, LL.w, LL.h]; }
+  function steps(ds) {
+    var V = ds[0].cm * ds[1].cm * ds[2].cm, nm = names();
+    var conv = ds.filter(function (d) { return d.u !== 'cm'; }).map(function (d) {
+      var i = ds.indexOf(d); return nm[i] + ' = ' + show(d) + ' = ' + (d.u === 'dm' ? fmt(d.cm / 10) + ' · 10' : fmt(d.cm * 10) + ' : 10') + ' = ' + d.cm + ' cm';
+    });
+    return [
+      { w: tx('Transformăm totul în cm', 'Alles in cm umrechnen'), e: conv.join('; '), n: tx('1 dm = 10 cm, 1 cm = 10 mm.', '1 dm = 10 cm, 1 cm = 10 mm.') },
+      { w: tx('Calculăm volumul', 'Volumen berechnen'), e: 'V = ' + ds.map(function (d) { return d.cm + ' cm'; }).join(' · ') + ' = ' + fmt(V) + ' cm³' },
+      { w: tx('Transformăm în litri', 'In Liter umrechnen'), e: fmt(V) + ' cm³ = ' + fmt(V) + ' : 1000 dm³ = ' + fmt(V / 1000) + ' dm³ = ' + fmt(V / 1000) + ' L', n: tx('1 dm³ = 1000 cm³ și 1 L = 1 dm³.', '1 dm³ = 1000 cm³ und 1 L = 1 dm³.') }
+    ];
+  }
+  function renderTry(ds) {
+    tryBox.innerHTML = ''; tryBox.hidden = false;
+    var ins = [], nm = names();
+    ds.forEach(function (d, i) {
+      var row = h('div', 'row'); row.appendChild(h('b', '', nm[i] + ' = ' + show(d)));
+      if (d.u !== 'cm') { row.appendChild(h('span', '', '=')); var x = inputBox(nm[i] + ' cm'); row.appendChild(x); row.appendChild(h('span', '', 'cm')); ins.push([x, d.cm]); }
+      tryBox.appendChild(row);
+    });
+    var V = ds[0].cm * ds[1].cm * ds[2].cm;
+    var r1 = h('div', 'row'), iv = inputBox('V cm³'), il = inputBox('V L');
+    r1.appendChild(h('b', '', 'V =')); r1.appendChild(iv); r1.appendChild(h('span', '', 'cm³ ='));
+    r1.appendChild(il); r1.appendChild(h('span', '', 'L'));
+    tryBox.appendChild(r1); ins.push([iv, V], [il, V / 1000]);
+    var c = btn('btn', tx('Verifică', 'Prüfen')), res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
+    var act = h('div', 'actions'); act.appendChild(c); tryBox.appendChild(act); tryBox.appendChild(res);
+    c.onclick = function () {
+      var ok = true;
+      ins.forEach(function (p) { var g = same(num(p[0].value), p[1]); p[0].className = 'vin ' + (g ? 'ok' : 'bad'); ok = ok && g; });
+      res.hidden = false;
+      if (ok) { res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! ', 'Richtig! ') + fmt(V) + ' cm³ = ' + fmt(V / 1000) + ' L.'; st.last(); }
+      else {
+        res.className = 'result try';
+        var bad = ins.filter(function (p) { return !same(num(p[0].value), p[1]); })[0][0];
+        res.textContent = bad === il ? tx('Indiciu: 1 L = 1 dm³ = 1000 cm³, deci împarți la 1000.', 'Tipp: 1 L = 1 dm³ = 1000 cm³, also durch 1000 teilen.')
+          : bad === iv ? tx('Indiciu: înmulțește cele trei dimensiuni, toate în cm.', 'Tipp: Multipliziere die drei Maße, alle in cm.')
+          : tx('Indiciu: 1 dm = 10 cm (înmulțești cu 10), 1 mm = 0,1 cm (împarți la 10).', 'Tipp: 1 dm = 10 cm (mal 10), 1 mm = 0,1 cm (durch 10).');
+      }
+    };
+  }
+  function load(ds, manual) {
+    pr = ds;
+    var nm = names();
+    story.textContent = tx('Un paralelipiped are ', 'Ein Quader hat ') + ds.map(function (d, i) { return nm[i] + ' = ' + show(d); }).join(', ') + '. ' + tx('Calculează volumul lui în litri.', 'Berechne sein Volumen in Litern.');
+    if (manual) { tryBox.hidden = true; tryBox.innerHTML = ''; } else renderTry(ds);
+    st.set(steps(ds), manual ? 0 : -1);
+  }
+  var NOTE = [{ cm: 12, u: 'dm' }, { cm: 8, u: 'cm' }, { cm: 9, u: 'mm' }];
+  chips($('#mu-chips'), [['m', tx('Exemplul din caiet', 'Das Beispiel aus dem Heft')], ['n', tx('Problemă nouă', 'Neue Aufgabe') + ' →']], 'm', function (w) { if (w === 'm') load(NOTE, true); else load(make(), false); });
+  load(NOTE, true);
+})();
+
+/* ================= 3. Scara transformărilor ================= */
+var UN = ['mm³', 'cm³', 'dm³', 'm³', 'dam³', 'hm³', 'km³'];
+/* Ordonare (manual, ex. 1) */
+(function () {
+  var host = $('#ord');
+  var IT = [['10 000 cm³', 0.01, '10 000 cm³ = 10 000 : 10⁶ m³ = 0,01 m³'], ['1 000 dm³', 1, '1 000 dm³ = 1 000 : 10³ m³ = 1 m³'], ['0,1 m³', 0.1, '0,1 m³'], ['5 dam³', 5000, '5 dam³ = 5 · 10³ m³ = 5 000 m³']];
+  function render() {
+    host.innerHTML = '';
+    host.appendChild(h('p', 'hint', tx('Apasă volumele de la cel mai mic la cel mai mare.', 'Tippe die Volumen vom kleinsten bis zum größten an.')));
+    var row = h('div', 'row'), left = IT.slice().sort(function (a, b) { return a[1] - b[1]; }), k = 0;
+    var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
+    IT.forEach(function (it) {
+      var b = btn('pick', it[0]);
+      b.onclick = function () {
+        if (it === left[k]) {
+          k++; b.classList.remove('wrong'); b.classList.add('right'); b.disabled = true; b.textContent = k + '. ' + it[0];
+          if (k === IT.length) { res.hidden = false; res.className = 'result good'; res.innerHTML = '🎉 ' + tx('Corect! Totul în m³:', 'Richtig! Alles in m³:') + '<br>' + left.map(function (x) { return x[2]; }).join('<br>'); }
+          else res.hidden = true;
+        } else {
+          b.classList.add('wrong'); res.hidden = false; res.className = 'result try';
+          res.textContent = tx('Nu acesta. Transformă toate volumele în aceeași unitate, de exemplu în m³, apoi compară.', 'Nicht dieses. Rechne alle Volumen in dieselbe Einheit um, zum Beispiel in m³, und vergleiche dann.');
+        }
+      };
+      row.appendChild(b);
+    });
+    host.appendChild(row); host.appendChild(res);
+    var r = btn('btn ghost', tx('De la capăt', 'Von vorn')); r.onclick = render;
+    var act = h('div', 'actions'); act.appendChild(r); host.appendChild(act);
+  }
+  render();
+})();
+
+/* Tabel (manual, ex. 2) */
+(function () {
+  var host = $('#tbl');
+  // [nume, m³, dm³, dam³, coloana dată]
+  var R = [
+    [tx('Cavitatea craniană a unui adult', 'Das Volumen der Schädelhöhle eines erwachsenen Menschen'), 0.0018, 1.8, 0.0000018, 0],
+    [tx('Sângele unui adult', 'Das Blutvolumen eines erwachsenen Menschen'), 0.005, 5, 0.000005, 1],
+    [tx('Corpul unui adult', 'Das Volumen eines erwachsenen Menschen'), 0.07, 70, 0.00007, 2]
+  ];
+  var wrapT = h('div', 'tscroll'), t = h('table', 'vt'), ins = [];
+  t.innerHTML = '<thead><tr><th>' + tx('Corpul', 'Körper') + '</th><th>m³</th><th>dm³</th><th>dam³</th></tr></thead>';
+  var tb = h('tbody');
+  R.forEach(function (r) {
+    var tr = h('tr'); tr.appendChild(h('th', '', r[0]));
+    [1, 2, 3].forEach(function (c) {
+      var td = h('td');
+      if (c - 1 === r[4]) td.appendChild(h('b', '', fmt(r[c])));
+      else { var i = inputBox(r[0] + ' ' + ['m³', 'dm³', 'dam³'][c - 1]); i.classList.add('wide'); td.appendChild(i); ins.push([i, r[c]]); }
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb); wrapT.appendChild(t); host.appendChild(wrapT);
+  var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
+  var c = btn('btn', tx('Verifică', 'Prüfen')), s = btn('btn ghost', tx('Arată răspunsurile', 'Lösungen zeigen'));
+  var act = h('div', 'actions'); act.appendChild(c); act.appendChild(s); host.appendChild(act); host.appendChild(res);
+  c.onclick = function () {
+    var good = 0;
+    ins.forEach(function (p) { var g = same(num(p[0].value), p[1]); p[0].className = 'vin wide ' + (g ? 'ok' : 'bad'); if (g) good++; });
+    res.hidden = false;
+    res.className = 'result ' + (good === ins.length ? 'good' : 'try');
+    res.textContent = good === ins.length ? '🎉 ' + tx('Toate corecte!', 'Alles richtig!') : good + ' / ' + ins.length + '. ' + tx('Indiciu: m³ → dm³: · 1000; m³ → dam³: : 1000.', 'Tipp: m³ → dm³: · 1000; m³ → dam³: : 1000.');
+  };
+  s.onclick = function () { ins.forEach(function (p) { p[0].value = fmt(p[1]).replace(/ /g, ''); }); c.onclick(); };
+})();
+
+/* ================= 4. Câte cuburi încap? ================= */
+(function () {
+  var svg = $('#cb-svg'), il = $('#cb-l'), iw = $('#cb-w'), ih = $('#cb-h'), ie = $('#cb-e'), out = $('#cb-out');
+  function draw() {
+    var L = +il.value, W = +iw.value, H = +ih.value, e = +ie.value;
+    $('#cb-lv').textContent = L; $('#cb-wv').textContent = W; $('#cb-hv').textContent = H; $('#cb-ev').textContent = e;
+    var nx = Math.floor(L / e), ny = Math.floor(W / e), nz = Math.floor(H / e), N = nx * ny * nz, Vb = L * W * H, Vc = e * e * e, q = Vb / Vc;
+    var f = fit(L, W, H, 400, 250, 250, 175);
+    svg.innerHTML = '';
+    wire(svg, f.o, f.s, L, W, H);
+    if (N) block(svg, f.o, f.s, nx * e, ny * e, nz * e, e, { top: '#f6b3b3', right: '#e57c7c', left: '#cf5b5b', line: '#8a2b2b' });
+    wire(svg, f.o, f.s, L, W, H);
+    dimLabels(svg, f.o, f.s, L, W, H, LL.l + ' = ' + L, LL.w + ' = ' + W, LL.h + ' = ' + H);
+    svg.setAttribute('aria-label', N + tx(' cuburi', ' Würfel'));
+    var exact = same(q, N);
+    out.innerHTML = '<span class="eq">V<sub>' + tx('cutie', 'Box') + '</sub> = ' + L + ' · ' + W + ' · ' + H + ' = ' + fmt(Vb) + ' cm³</span>' +
+      '<span class="eq">V<sub>' + tx('cub', 'Würfel') + '</sub> = ' + e + '³ = ' + fmt(Vc) + ' cm³</span>' +
+      '<span class="eq">V<sub>' + tx('cutie', 'Box') + '</sub> : V<sub>' + tx('cub', 'Würfel') + '</sub> = ' + fmt(+q.toFixed(3)) + '</span>' +
+      '<span class="eq c1">' + tx('Pe muchii: ', 'An den Kanten: ') + nx + ' · ' + ny + ' · ' + nz + ' = ' + N + ' ' + tx('cuburi', 'Würfel') + '</span>' +
+      '<span class="rule">' + (exact ? tx('Cele două metode dau același rezultat: latura cubului încape exact în fiecare dimensiune.', 'Beide Methoden ergeben dasselbe: Die Kante passt genau in jedes Maß.')
+        : '<b>' + tx('Atenție: împărțirea volumelor dă ' + fmt(+q.toFixed(3)) + ', dar încap doar ' + N + ' cuburi întregi. Rămâne spațiu gol.', 'Achtung: Das Teilen der Volumen ergibt ' + fmt(+q.toFixed(3)) + ', aber es passen nur ' + N + ' ganze Würfel hinein. Es bleibt leerer Raum.') + '</b>') + '</span>';
+  }
+  [il, iw, ih, ie].forEach(function (i) { i.addEventListener('input', draw); });
+  draw();
+})();
+Check($('#c4'), [
+  { q: { ro: 'O cutie are 50 cm × 40 cm × 40 cm. Câte cuburi cu latura de 20 cm încap în ea?', de: 'Eine Kiste misst 50 cm × 40 cm × 40 cm. Wie viele Würfel mit 20 cm Kantenlänge passen hinein?' },
+    o: [{ ro: '10', de: '10' }, { ro: '8', de: '8' }, { ro: '20', de: '20' }], a: 1,
+    why: { ro: 'Pe lungime încap doar 2 cuburi (50 : 20 = 2, rest 10), apoi 2 și 2: 2 · 2 · 2 = 8. Împărțirea volumelor (10) ar fi greșită aici.', de: 'In der Länge passen nur 2 Würfel (50 : 20 = 2 Rest 10), dann 2 und 2: 2 · 2 · 2 = 8. Das Teilen der Volumen (10) wäre hier falsch.' },
+    hint: { ro: 'Încearcă pe slidere: câte cuburi întregi încap pe lungimea de 50 cm?', de: 'Probiere es mit den Reglern: Wie viele ganze Würfel passen in 50 cm Länge?' } }
+]);
+
+/* ================= 5. Metoda scufundării ================= */
+(function () {
+  var svg = $('#dz-svg'), in_ = $('#dz-n'), out = $('#dz-out'), key = 'eraser';
+  var OB = {
+    eraser: { name: tx('Radieră', 'Radiergummi'), max: 3, cap: 50, div: 1, lab: 10, V1: 20, v: [8, 8, 8] },
+    ball: { name: tx('Bilă de metal', 'Metallkugel'), max: 4, cap: 50, div: 1, lab: 10, V1: 20, v: [4.2, 4.2, 4.2, 4.2] },
+    coin: { name: tx('Monedă de 10 bani', '10-Bani-Münze'), max: 30, cap: 50, div: 1, lab: 10, V1: 20, v: null, each: 0.4 },
+    nut: { name: tx('Nucă', 'Walnuss'), max: 4, cap: 100, div: 2, lab: 20, V1: 30, v: [15, 13, 18, 16], floats: true }
+  };
+  function vols(o, n) { var s = 0; for (var i = 0; i < n; i++) s += o.v ? o.v[i] : o.each; return s; }
+  function draw() {
+    var o = OB[key], n = Math.min(+in_.value, o.max);
+    $('#dz-nv').textContent = n;
+    var x0 = 180, x1 = 300, yb = 335, yt = 35, Y = function (v) { return yb - v / o.cap * (yb - yt); };
+    var Vtrue = o.V1 + vols(o, n), V2 = Math.round(Vtrue / o.div) * o.div;
+    svg.innerHTML = '';
+    // apă
+    el('rect', { x: x0, y: Y(Vtrue), width: x1 - x0, height: yb - Y(Vtrue), fill: '#cfe3fb' }, svg);
+    el('path', { d: 'M' + x0 + ' ' + (Y(Vtrue) - 4) + ' Q' + (x0 + x1) / 2 + ' ' + (Y(Vtrue) + 6) + ' ' + x1 + ' ' + (Y(Vtrue) - 4), fill: 'none', stroke: '#2f6fd6', 'stroke-width': 2 }, svg);
+    // corpuri
+    for (var i = 0; i < n; i++) {
+      if (key === 'coin') { var cy = yb - 6 - i * 4; el('ellipse', { cx: (x0 + x1) / 2, cy: cy, rx: 26, ry: 5, fill: '#d9b54a', stroke: '#8a6d12', 'stroke-width': 1 }, svg); }
+      else if (key === 'ball') el('circle', { cx: x0 + 22 + (i % 2) * 40 + (i > 1 ? 20 : 0), cy: yb - 18 - (i > 1 ? 34 : 0), r: 17, fill: '#9aa3ad', stroke: '#4d5560', 'stroke-width': 1.5 }, svg);
+      else if (key === 'eraser') el('rect', { x: x0 + 16 + (i % 2) * 44, y: yb - 26 - Math.floor(i / 2) * 28 - (i === 1 ? 0 : 0), width: 40, height: 24, rx: 4, fill: i % 2 ? '#e57c7c' : '#7cb3e5', stroke: '#333', 'stroke-width': 1 }, svg);
+      else { var nx = x0 + 30 + (i % 2) * 58, ny = Y(Vtrue) + 26 + Math.floor(i / 2) * 50; el('circle', { cx: nx, cy: ny, r: 22, fill: '#a5713a', stroke: '#5e3b17', 'stroke-width': 1.5 }, svg); el('path', { d: 'M' + (nx - 12) + ' ' + ny + ' Q' + nx + ' ' + (ny - 10) + ' ' + (nx + 12) + ' ' + ny, fill: 'none', stroke: '#5e3b17' }, svg); }
+    }
+    if (key === 'nut' && n) el('line', { x1: x1 - 20, y1: yt - 20, x2: x0 + 52, y2: Y(Vtrue) + 26, stroke: '#555', 'stroke-width': 1.5 }, svg);
+    // cilindru și scara
+    el('path', { d: 'M' + x0 + ' ' + (yt - 15) + ' L' + x0 + ' ' + yb + ' L' + x1 + ' ' + yb + ' L' + x1 + ' ' + (yt - 15), fill: 'none', stroke: '#1f2530', 'stroke-width': 3 }, svg);
+    el('rect', { x: x0 - 30, y: yb, width: x1 - x0 + 60, height: 10, rx: 3, fill: '#1f2530' }, svg);
+    for (var v = 0; v <= o.cap; v += o.div) {
+      var y = Y(v), big = v % o.lab === 0;
+      el('line', { x1: x1 - (big ? 26 : 12), y1: y, x2: x1, y2: y, stroke: '#1f2530', 'stroke-width': big ? 1.6 : 0.8 }, svg);
+      if (big) el('text', { x: x1 + 8, y: y + 5, class: 'tick' }, svg, v);
+    }
+    el('text', { x: x1 + 8, y: yt - 20, class: 'tick' }, svg, 'mL');
+    // V1 și V2
+    var y1 = Y(o.V1);
+    el('line', { x1: x0 - 70, y1: y1, x2: x0, y2: y1, stroke: '#1f8a5b', 'stroke-width': 2, 'stroke-dasharray': '6 4' }, svg);
+    el('text', { x: x0 - 74, y: y1 + 5, 'text-anchor': 'end', class: 'albl', fill: '#1f8a5b' }, svg, 'V₁ = ' + o.V1);
+    if (n) {
+      var y2 = Y(V2);
+      el('line', { x1: x1 + 40, y1: y2, x2: x1 + 110, y2: y2, stroke: '#c23b3b', 'stroke-width': 2, 'stroke-dasharray': '6 4' }, svg);
+      el('text', { x: x1 + 114, y: y2 + 5, class: 'albl', fill: '#c23b3b' }, svg, 'V₂ ≈ ' + fmt(V2));
+    }
+    svg.setAttribute('aria-label', tx('Cilindru gradat', 'Messzylinder') + ' ' + o.cap + ' mL');
+    var html = '<span class="eq">V₁ = ' + o.V1 + ' mL</span>';
+    if (!n) html += '<span class="rule">' + tx('Pune corpurile în cilindru cu glisorul.', 'Lege die Körper mit dem Regler in den Zylinder.') + '</span>';
+    else {
+      var dv = V2 - o.V1;
+      html += '<span class="eq">V₂ = ' + fmt(V2) + ' mL</span><span class="eq c1">V = V₂ − V₁ = ' + fmt(dv) + ' mL = ' + fmt(dv) + ' cm³</span>';
+      if (dv === 0) html += '<span class="rule"><b>' + tx('Creșterea este mai mică decât o diviziune (' + o.div + ' mL): nu se vede! Pune mai multe bucăți.', 'Der Anstieg ist kleiner als ein Teilstrich (' + o.div + ' mL): man sieht ihn nicht! Lege mehr Stück hinein.') + '</b></span>';
+      else if (n > 1) html += '<span class="eq">' + tx('Volumul mediu', 'Durchschnittliches Volumen') + ' = ' + fmt(dv) + ' : ' + n + ' = ' + fmt(+(dv / n).toFixed(2)) + ' cm³</span>';
+      html += '<span class="rule">' + (key === 'nut' ? tx('Nucile plutesc: le ținem sub apă cu un ac subțire. Fiecare nucă are alt volum, de aceea aflăm volumul mediu.', 'Walnüsse schwimmen: Wir halten sie mit einer dünnen Nadel unter Wasser. Jede Nuss hat ein anderes Volumen, deshalb bestimmen wir das durchschnittliche Volumen.')
+        : key === 'coin' ? tx('O diviziune are ' + o.div + ' mL. Cu cât pui mai multe monede, cu atât rezultatul mediu e mai precis.', 'Ein Teilstrich ist ' + o.div + ' mL. Je mehr Münzen, desto genauer der Durchschnitt.')
+        : tx('Citește nivelul la baza meniscului, cu ochiul la aceeași înălțime.', 'Lies den Wasserstand am unteren Rand des Meniskus ab, mit dem Auge auf gleicher Höhe.')) + '</span>';
+    }
+    out.innerHTML = html;
+  }
+  chips($('#dz-chips'), Object.keys(OB).map(function (k) { return [k, OB[k].name]; }), key, function (k) { key = k; in_.max = OB[k].max; in_.value = Math.min(+in_.value, OB[k].max); if (k === 'coin' && +in_.value < 1) in_.value = 1; draw(); });
+  in_.max = OB[key].max;
+  in_.addEventListener('input', draw); draw();
+})();
+
+/* Vasul cu cubul */
+var vessel = function (svg, a, out, level, opt) {
+  opt = opt || {};
+  var k = 22, x0 = 110, yb = 255, Lw = 12 * k, Hh = 10 * k, yl = yb - level * k;
+  svg.innerHTML = '';
+  el('rect', { x: x0, y: yl, width: Lw, height: yb - yl, fill: '#cfe3fb' }, svg);
+  if (!out) el('rect', { x: x0 + 3 * k, y: yb - a * k, width: a * k, height: a * k, fill: '#9aa3ad', stroke: '#4d5560', 'stroke-width': 2 }, svg);
+  else el('rect', { x: x0 + Lw + 40, y: yb - a * 10, width: a * 10, height: a * 10, fill: '#9aa3ad', stroke: '#4d5560', 'stroke-width': 2 }, svg);
+  el('path', { d: 'M' + x0 + ' ' + (yb - Hh - 10) + ' L' + x0 + ' ' + yb + ' L' + (x0 + Lw) + ' ' + yb + ' L' + (x0 + Lw) + ' ' + (yb - Hh - 10), fill: 'none', stroke: '#1f2530', 'stroke-width': 3 }, svg);
+  el('line', { x1: x0, y1: yb - Hh, x2: x0 - 18, y2: yb - Hh, stroke: '#5a6270' }, svg);
+  el('text', { x: x0 - 22, y: yb - Hh + 5, 'text-anchor': 'end', class: 'albl', fill: '#5a6270' }, svg, '10 cm');
+  if (level < 10) { el('line', { x1: x0 + Lw, y1: yl, x2: x0 + Lw + 18, y2: yl, stroke: '#2f6fd6', 'stroke-width': 2 }, svg); el('text', { x: x0 + Lw + 22, y: yl + 5, class: 'albl', fill: '#2f6fd6' }, svg, fmt(+level.toFixed(2)) + ' cm'); }
+  el('text', { x: x0 + Lw / 2, y: yb + 28, 'text-anchor': 'middle', class: 'albl', fill: '#5a6270' }, svg, 'L = 12 cm, ' + tx('l', 'B') + ' = 10 cm');
+  if (!out) el('text', { x: x0 + 3 * k + a * k / 2, y: yb - a * k / 2 + 5, 'text-anchor': 'middle', class: 'albl', fill: '#1f2530' }, svg, a + ' cm');
+  svg.setAttribute('aria-label', tx('Vas cu apă', 'Gefäß mit Wasser'));
+};
+(function () {
+  var svg = $('#vs-svg'), ia = $('#vs-a'), b = $('#vs-out-btn'), out = $('#vs-out'), removed = false;
+  function draw() {
+    var a = +ia.value, Vc = a * a * a, dh = Vc / 120, lv = removed ? 10 - dh : 10;
+    $('#vs-av').textContent = a;
+    b.textContent = removed ? tx('Pune cubul la loc', 'Würfel zurücklegen') : tx('Scoate cubul', 'Würfel herausziehen');
+    vessel(svg, a, removed, lv);
+    out.innerHTML = '<span class="eq">V<sub>' + tx('cub', 'Würfel') + '</sub> = ' + a + '³ = ' + Vc + ' cm³</span>' +
+      (removed ? '<span class="eq c1">Δh = ' + Vc + ' : (12 · 10) = ' + fmt(+dh.toFixed(3)) + ' cm</span><span class="eq">' + tx('Nivel nou', 'Neuer Wasserstand') + ': 10 − ' + fmt(+dh.toFixed(3)) + ' = ' + fmt(+(10 - dh).toFixed(3)) + ' cm</span>' : '') +
+      '<span class="rule">' + (removed ? tx('Apa care lipsește (12 · 10 · Δh) are exact volumul cubului.', 'Das fehlende Wasser (12 · 10 · Δh) hat genau das Volumen des Würfels.') : tx('Vasul este plin: apa și cubul ocupă împreună tot vasul.', 'Das Gefäß ist voll: Wasser und Würfel füllen zusammen das ganze Gefäß.')) + '</span>';
+  }
+  b.onclick = function () { removed = !removed; draw(); };
+  ia.addEventListener('input', draw); draw();
+})();
+Check($('#c5'), [
+  { q: { ro: 'În cilindrul gradat sunt 30 mL de apă. Cu o piatră scufundată, apa ajunge la 42 mL. Ce volum are piatra?', de: 'Im Messzylinder sind 30 mL Wasser. Mit einem eingetauchten Stein steigt es auf 42 mL. Welches Volumen hat der Stein?' },
+    o: [{ ro: '42 cm³', de: '42 cm³' }, { ro: '72 cm³', de: '72 cm³' }, { ro: '12 cm³', de: '12 cm³' }], a: 2,
+    why: { ro: 'V = V₂ − V₁ = 42 − 30 = 12 mL = 12 cm³.', de: 'V = V₂ − V₁ = 42 − 30 = 12 mL = 12 cm³.' },
+    hint: { ro: 'Ce parte din cei 42 mL este apa care era deja acolo?', de: 'Welcher Teil der 42 mL ist das Wasser, das schon da war?' } },
+  { q: { ro: 'Cum afli cel mai bine volumul unei agrafe de birou?', de: 'Wie bestimmst du am besten das Volumen einer Büroklammer?' },
+    o: [{ ro: 'o măsor cu rigla', de: 'mit dem Lineal messen' }, { ro: 'scufund 50 de agrafe și împart la 50', de: '50 Klammern eintauchen und durch 50 teilen' }, { ro: 'scufund o singură agrafă', de: 'eine einzige Klammer eintauchen' }], a: 1,
+    why: { ro: 'O singură agrafă ridică apa mai puțin de o diviziune. Multe agrafe dau o creștere vizibilă, iar media e precisă.', de: 'Eine Klammer hebt das Wasser um weniger als einen Teilstrich. Viele Klammern ergeben einen sichtbaren Anstieg, und der Durchschnitt ist genau.' },
+    hint: { ro: 'Gândește-te la moneda din cilindru: ce se întâmplă cu una singură?', de: 'Denk an die Münze im Zylinder: Was passiert bei einer einzigen?' } }
+]);
+
+/* ================= 6. Probleme rezolvate ================= */
+(function () {
+  var svg = $('#pb-svg'), story = $('#pb-story'), st;
+  var PB = {
+    vessel: {
+      t: tx('Un vas plin cu apă are dimensiunile L = 12 cm, l = 10 cm și h = 10 cm. În el se află un cub de metal. După ce cubul este scos, apa coboară până la 8,2 cm. Calculează latura cubului. (după caiet)', 'Ein mit Wasser gefülltes Gefäß hat die Maße L = 12 cm, B = 10 cm und H = 10 cm. Es enthält einen Metallwürfel. Nachdem der Würfel herausgezogen wird, sinkt der Wasserstand auf 8,2 cm. Berechne die Kantenlänge des Würfels. (nach dem Heft)'),
+      s: [
+        { w: tx('Ideea', 'Die Idee'), e: 'V<sub>' + tx('vas', 'Gefäß') + '</sub> = V<sub>' + tx('apă', 'Wasser') + '</sub> + V<sub>' + tx('cub', 'Würfel') + '</sub>', n: tx('Vasul era plin: apa și cubul ocupau împreună tot vasul.', 'Das Gefäß war voll: Wasser und Würfel füllten zusammen das ganze Gefäß.') },
+        { w: tx('Volumul vasului', 'Volumen des Gefäßes'), e: 'V<sub>' + tx('vas', 'Gefäß') + '</sub> = 12 · 10 · 10 = 1 200 cm³' },
+        { w: tx('Volumul apei rămase', 'Volumen des Wassers'), e: 'V<sub>' + tx('apă', 'Wasser') + '</sub> = 12 · 10 · 8,2 = 984 cm³' },
+        { w: tx('Volumul cubului', 'Volumen des Würfels'), e: 'V<sub>' + tx('cub', 'Würfel') + '</sub> = 1 200 − 984 = 216 cm³' },
+        { w: tx('Latura', 'Kantenlänge'), e: 'l³ = 216 = 6³ ⇒ l = 6 cm', n: tx('Verificare: 6 cm este mai puțin decât 10 cm, deci cubul chiar încape în vas.', 'Probe: 6 cm ist weniger als 10 cm, der Würfel passt also wirklich in das Gefäß.') }
+      ],
+      fig: function (i) { vessel(svg, 6, i >= 2, i >= 2 ? 8.2 : 10); }
+    },
+    bricks: {
+      t: tx('Câte cărămizi cu volumul de 120 cm³ sunt necesare pentru a construi un gard cu volumul de 0,6 m³? (manual, ex. 3)', 'Wie viele Ziegelsteine mit einem Volumen von 120 cm³ werden benötigt, um einen Zaun mit einem Volumen von 0,6 m³ zu bauen? (Buch, Aufgabe 3)'),
+      s: [
+        { w: tx('Aceeași unitate', 'Gleiche Einheit'), e: '0,6 m³ = 0,6 · 10⁶ cm³ = 600 000 cm³', n: tx('De la m³ la cm³ sunt 2 trepte: · 10⁶.', 'Von m³ zu cm³ sind es 2 Schritte: · 10⁶.') },
+        { w: tx('Împărțim', 'Wir teilen'), e: 'N = 600 000 : 120 = 5 000 ' + tx('de cărămizi', 'Ziegelsteine') },
+        { w: tx('Observație', 'Bemerkung'), e: tx('fără mortarul dintre cărămizi', 'ohne den Mörtel zwischen den Steinen'), n: tx('În realitate, o parte din gard este mortar, deci trebuie ceva mai puține cărămizi.', 'In Wirklichkeit ist ein Teil des Zauns Mörtel, man braucht also etwas weniger Ziegel.') }
+      ],
+      fig: function (i) {
+        svg.innerHTML = '';
+        for (var r = 0; r < 7; r++) for (var c = -1; c < 9; c++) {
+          var x = 40 + c * 52 + (r % 2 ? 26 : 0), y = 250 - r * 28;
+          if (x < 30 || x + 48 > 500) continue;
+          el('rect', { x: x, y: y, width: 48, height: 24, rx: 2, fill: (r + c) % 3 ? '#c8643c' : '#b5552f', stroke: '#e8ddd0', 'stroke-width': 2 }, svg);
+        }
+        el('text', { x: 260, y: 40, 'text-anchor': 'middle', class: 'albl big', fill: '#1f2530' }, svg, i >= 1 ? '5 000 × 120 cm³ = 0,6 m³' : '? × 120 cm³ = 0,6 m³');
+        svg.setAttribute('aria-label', tx('Gard de cărămizi', 'Ziegelzaun'));
+      }
+    },
+    rubik: {
+      t: tx('Volumul cubului Rubik este V = 185,193 cm³. Cât este volumul unuia dintre cubulețele colorate din care e făcut? (manual, ex. 5)', 'Das Volumen des Zauberwürfels beträgt V = 185,193 cm³. Wie groß ist das Volumen eines der kleinen farbigen Würfel, aus denen er besteht? (Buch, Aufgabe 5)'),
+      s: [
+        { w: tx('Câte cubulețe?', 'Wie viele Würfelchen?'), e: '3 · 3 · 3 = 27', n: tx('3 pe lungime, 3 pe lățime, 3 straturi.', '3 in der Länge, 3 in der Breite, 3 Schichten.') },
+        { w: tx('Împărțim', 'Wir teilen'), e: 'V<sub>' + tx('cubuleț', 'Würfelchen') + '</sub> = 185,193 : 27 = 6,859 cm³' },
+        { w: tx('Bonus: latura', 'Bonus: Kantenlänge'), e: '6,859 = 1,9³ ⇒ l = 1,9 cm', n: tx('Cubul mare are 3 · 1,9 = 5,7 cm, iar 5,7³ = 185,193 ✓', 'Der große Würfel hat 3 · 1,9 = 5,7 cm, und 5,7³ = 185,193 ✓') }
+      ],
+      fig: function () {
+        svg.innerHTML = '';
+        var f = fit(3, 3, 3, 300, 240, 260, 150), C = ['#c62828', '#f9a825', '#1565c0', '#2e7d32', '#ef6c00', '#fafafa'];
+        for (var x = 0; x < 3; x++) for (var y = 0; y < 3; y++) {
+          var P3 = function (a, b, c) { return iso(f.o, f.s, a, b, c); };
+          poly(svg, [P3(x, y, 3), P3(x + 1, y, 3), P3(x + 1, y + 1, 3), P3(x, y + 1, 3)], { fill: C[(x + 2 * y) % 6], stroke: '#111', 'stroke-width': 2.5 });
+          poly(svg, [P3(3, x, y), P3(3, x + 1, y), P3(3, x + 1, y + 1), P3(3, x, y + 1)], { fill: C[(x + y + 1) % 6], stroke: '#111', 'stroke-width': 2.5 });
+          poly(svg, [P3(x, 3, y), P3(x + 1, 3, y), P3(x + 1, 3, y + 1), P3(x, 3, y + 1)], { fill: C[(2 * x + y + 3) % 6], stroke: '#111', 'stroke-width': 2.5 });
+        }
+        svg.setAttribute('aria-label', tx('Cubul Rubik', 'Zauberwürfel'));
+      }
+    },
+    nut: {
+      t: tx('Alexander are un cană gradată în mililitri, apă și câteva nuci din grădina bunicilor. Cum poate afla volumul mediu al unei nuci? (manual, ex. 4)', 'Alexander hat einen in Milliliter geeichten Becher, Wasser und ein paar Walnüsse aus dem Garten seiner Großeltern. Wie sollte er das durchschnittliche Volumen einer Walnuss bestimmen? (Buch, Aufgabe 4)'),
+      s: [
+        { w: tx('Pasul 1', 'Schritt 1'), e: tx('toarnă apă și citește V₁', 'Wasser einfüllen und V₁ ablesen'), n: tx('Destulă apă ca să acopere nucile, dar să nu dea pe dinafară.', 'Genug Wasser, um die Nüsse zu bedecken, aber nicht so viel, dass es überläuft.') },
+        { w: tx('Pasul 2', 'Schritt 2'), e: tx('pune 5 nuci și împinge-le sub apă', '5 Nüsse hineinlegen und unter Wasser drücken'), n: tx('Nucile plutesc; le ții sub apă cu un ac sau o sârmă subțire, al cărei volum e foarte mic.', 'Walnüsse schwimmen; man hält sie mit einer Nadel oder einem dünnen Draht unter Wasser, dessen Volumen sehr klein ist.') },
+        { w: tx('Pasul 3', 'Schritt 3'), e: tx('citește V₂ ⇒ V<sub>5 nuci</sub> = V₂ − V₁', 'V₂ ablesen ⇒ V<sub>5 Nüsse</sub> = V₂ − V₁') },
+        { w: tx('Pasul 4', 'Schritt 4'), e: 'V<sub>' + tx('mediu', 'Durchschnitt') + '</sub> = (V₂ − V₁) : 5', n: tx('De ce mai multe nuci? Nucile sunt diferite, iar una singură ridică apa puțin, așa că o mică greșeală de citire ar conta mult.', 'Warum mehrere Nüsse? Die Nüsse sind verschieden, und eine einzige hebt das Wasser nur wenig, sodass ein kleiner Ablesefehler viel ausmachen würde.') }
+      ],
+      fig: function (i) {
+        svg.innerHTML = '';
+        var x0 = 170, x1 = 330, yb = 270, lv = i >= 1 ? 120 : 160;
+        el('rect', { x: x0, y: lv, width: x1 - x0, height: yb - lv, fill: '#cfe3fb' }, svg);
+        if (i >= 1) for (var k = 0; k < 5; k++) { var cx = x0 + 30 + (k % 3) * 50, cy = lv + 30 + Math.floor(k / 3) * 46; el('circle', { cx: cx, cy: cy, r: 20, fill: '#a5713a', stroke: '#5e3b17', 'stroke-width': 1.5 }, svg); }
+        if (i >= 1) el('line', { x1: x1 + 20, y1: 30, x2: x0 + 60, y2: lv + 30, stroke: '#555', 'stroke-width': 1.5 }, svg);
+        el('path', { d: 'M' + x0 + ' 50 L' + x0 + ' ' + yb + ' L' + x1 + ' ' + yb + ' L' + x1 + ' 50', fill: 'none', stroke: '#1f2530', 'stroke-width': 3 }, svg);
+        el('line', { x1: x0 - 50, y1: 160, x2: x0, y2: 160, stroke: '#1f8a5b', 'stroke-width': 2, 'stroke-dasharray': '6 4' }, svg);
+        el('text', { x: x0 - 54, y: 165, 'text-anchor': 'end', class: 'albl', fill: '#1f8a5b' }, svg, 'V₁');
+        if (i >= 2) { el('line', { x1: x1, y1: 120, x2: x1 + 50, y2: 120, stroke: '#c23b3b', 'stroke-width': 2, 'stroke-dasharray': '6 4' }, svg); el('text', { x: x1 + 54, y: 125, class: 'albl', fill: '#c23b3b' }, svg, 'V₂'); }
+        svg.setAttribute('aria-label', tx('Pahar gradat cu nuci', 'Messbecher mit Walnüssen'));
+      }
+    }
+  };
+  var cur = 'vessel';
+  function load(k) { cur = k; story.textContent = PB[k].t; st.set(PB[k].s, 0); }
+  st = Stepper($('#pb-lines'), $('#pb-prev'), $('#pb-next'), function (i) { PB[cur].fig(i); });
+  chips($('#pb-chips'), [['vessel', tx('Vasul cu cubul', 'Gefäß mit Würfel')], ['bricks', tx('Cărămizile', 'Ziegelsteine')], ['rubik', tx('Cubul Rubik', 'Zauberwürfel')], ['nut', tx('Volumul unei nuci', 'Volumen einer Walnuss')]], 'vessel', load);
+  load('vessel');
+})();
+
+/* ================= 7. Exersează ================= */
+(function () {
+  var host = $('#px'), good = 0, total = 0, last = '';
+  var GEN = {
+    litri: function () {
+      var a = rint(3, 25), b = rint(3, 25), c = rint(3, 25), V = a * b * c;
+      return { q: tx('Un acvariu are ' + a + ' cm × ' + (b * 10) + ' mm × ' + fmt(c / 10) + ' dm. Câți litri de apă încap în el?', 'Ein Aquarium misst ' + a + ' cm × ' + (b * 10) + ' mm × ' + fmt(c / 10) + ' dm. Wie viele Liter Wasser passen hinein?'), a: V / 1000, u: 'L',
+        s: a + ' · ' + b + ' · ' + c + ' = ' + fmt(V) + ' cm³ = ' + fmt(V / 1000) + ' L', hint: tx('Transformă totul în cm, înmulțește, apoi împarte la 1000.', 'Rechne alles in cm um, multipliziere und teile dann durch 1000.') };
+    },
+    latura: function () { var a = rint(2, 12); return { q: tx('Un cub are volumul de ' + fmt(a * a * a) + ' cm³. Cât măsoară latura lui?', 'Ein Würfel hat ein Volumen von ' + fmt(a * a * a) + ' cm³. Wie lang ist seine Kante?'), a: a, u: 'cm', s: a + '³ = ' + fmt(a * a * a) + ' ⇒ l = ' + a + ' cm', hint: tx('Caută numărul care, înmulțit de trei ori cu el însuși, dă volumul.', 'Suche die Zahl, die dreimal mit sich selbst multipliziert das Volumen ergibt.') }; },
+    conv: function () {
+      var i = rint(0, 6), j, v = [2.5, 0.4, 3, 12, 0.75, 1.2, 0.05][rint(0, 6)];
+      do { j = rint(Math.max(0, i - 2), Math.min(6, i + 2)); } while (j === i);
+      var r = v * Math.pow(10, 3 * (i - j));
+      return { q: tx('Transformă: ', 'Rechne um: ') + fmt(v) + ' ' + UN[i] + ' = ? ' + UN[j], a: r, u: UN[j], s: fmt(v) + ' ' + UN[i] + ' = ' + fmt(r) + ' ' + UN[j] + ' (' + (Math.abs(i - j) === 1 ? tx('1 treaptă', '1 Schritt') : Math.abs(i - j) + tx(' trepte', ' Schritte')) + ')', hint: i > j ? tx('Spre unități mai mici înmulțești cu 1000 la fiecare treaptă.', 'Zu kleineren Einheiten: pro Schritt mal 1000.') : tx('Spre unități mai mari împarți la 1000 la fiecare treaptă.', 'Zu größeren Einheiten: pro Schritt durch 1000.') };
+    },
+    nivel: function () { var L = [20, 25, 30, 40][rint(0, 3)], W = [10, 20][rint(0, 1)], dh = rint(1, 8) / 2, V = L * W * dh; return { q: tx('Un acvariu are baza de ' + L + ' cm × ' + W + ' cm. Pui în el o piatră de ' + fmt(V) + ' cm³. Cu câți centimetri crește nivelul apei?', 'Ein Aquarium hat eine Grundfläche von ' + L + ' cm × ' + W + ' cm. Du legst einen Stein von ' + fmt(V) + ' cm³ hinein. Um wie viele Zentimeter steigt der Wasserstand?'), a: dh, u: 'cm', s: fmt(V) + ' : (' + L + ' · ' + W + ') = ' + fmt(dh) + ' cm', hint: tx('Volumul pietrei = ' + L + ' · ' + W + ' · Δh.', 'Volumen des Steins = ' + L + ' · ' + W + ' · Δh.') }; },
+    cutie: function () { var e = [5, 10, 20][rint(0, 2)], nx = rint(2, 6), ny = rint(2, 5), nz = rint(2, 4); return { q: tx('O cutie are ' + fmt(nx * e / 10) + ' dm × ' + (ny * e) + ' cm × ' + (nz * e * 10) + ' mm. Câte cuburi cu latura de ' + e + ' cm încap în ea?', 'Eine Kiste misst ' + fmt(nx * e / 10) + ' dm × ' + (ny * e) + ' cm × ' + (nz * e * 10) + ' mm. Wie viele Würfel mit ' + e + ' cm Kantenlänge passen hinein?'), a: nx * ny * nz, u: '', s: nx + ' · ' + ny + ' · ' + nz + ' = ' + (nx * ny * nz), hint: tx('Transformă în cm și vezi câte cuburi încap pe fiecare muchie.', 'Rechne in cm um und schau, wie viele Würfel an jede Kante passen.') }; },
+    cilindru: function () { var v1 = rint(2, 6) * 10, d = rint(3, 25); return { q: tx('În cilindrul gradat sunt ' + v1 + ' mL de apă. După ce scufunzi un corp, apa urcă la ' + (v1 + d) + ' mL. Ce volum are corpul (în cm³)?', 'Im Messzylinder sind ' + v1 + ' mL Wasser. Nach dem Eintauchen eines Körpers steigt es auf ' + (v1 + d) + ' mL. Welches Volumen hat der Körper (in cm³)?'), a: d, u: 'cm³', s: (v1 + d) + ' − ' + v1 + ' = ' + d + ' mL = ' + d + ' cm³', hint: tx('V = V₂ − V₁, iar 1 mL = 1 cm³.', 'V = V₂ − V₁, und 1 mL = 1 cm³.') }; }
+  };
+  var KEYS = Object.keys(GEN);
+  function render() {
+    var key; do { key = KEYS[rint(0, KEYS.length - 1)]; } while (key === last); last = key;
+    var p = GEN[key](), counted = false;
+    host.innerHTML = '';
+    var sc = h('span', 'score', tx('Corecte: ', 'Richtig: ') + good + ' / ' + total);
+    host.appendChild(sc);
+    host.appendChild(h('div', 'story', p.q));
+    var row = h('div', 'row'), ia = inputBox(tx('răspuns', 'Antwort')); ia.classList.add('wide');
+    row.appendChild(ia); if (p.u) row.appendChild(h('span', '', p.u)); host.appendChild(row);
+    var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
+    var act = h('div', 'actions'), c = btn('btn', tx('Verifică', 'Prüfen')), s = btn('btn ghost', tx('Arată rezolvarea', 'Lösung zeigen')), nx = btn('btn ghost', tx('Altă problemă', 'Neue Aufgabe') + ' →');
+    act.appendChild(c); act.appendChild(s); act.appendChild(nx); host.appendChild(act); host.appendChild(res);
+    function count(ok) { if (!counted) { counted = true; total++; if (ok) good++; sc.textContent = tx('Corecte: ', 'Richtig: ') + good + ' / ' + total; } }
+    c.onclick = function () {
+      var ok = same(num(ia.value), p.a);
+      ia.className = 'vin wide ' + (ok ? 'ok' : 'bad'); res.hidden = false; count(ok);
+      if (ok) { res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! ', 'Richtig! ') + p.s; }
+      else { res.className = 'result try'; res.textContent = tx('Indiciu: ', 'Tipp: ') + p.hint; }
+    };
+    s.onclick = function () { count(false); ia.value = fmt(p.a).replace(/ /g, ''); ia.className = 'vin wide'; res.hidden = false; res.className = 'result good'; res.textContent = p.s; };
+    nx.onclick = render;
+    ia.addEventListener('keydown', function (e) { if (e.key === 'Enter') c.onclick(); });
+  }
+  render();
+})();
+
 })();
 </script>
 </body>

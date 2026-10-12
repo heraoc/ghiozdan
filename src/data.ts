@@ -288,11 +288,11 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Maßeinheiten: Länge, Fläche, Volumen',
         },
         summary: {
-          ro: 'De la cot și palmă la metru, prefixele, o călătorie de la nanometri la Univers, metrul pătrat și litrul.',
-          de: 'Von Elle und Handbreite zum Meter, die Vorsätze, eine Reise von Nanometern bis zum Universum, Quadratmeter und Liter.',
+          ro: 'De la cot și palmă la metru, prefixele, o călătorie de la nanometri la Univers, metrul pătrat și litrul, volumul cubului și al paralelipipedului și probleme cu volume.',
+          de: 'Von Elle und Handbreite zum Meter, die Vorsätze, eine Reise von Nanometern bis zum Universum, Quadratmeter und Liter, das Volumen von Würfel und Quader und Aufgaben mit Volumen.',
         },
         src: 'lectii/clasa-6/fizica/unitati-de-masura.html',
-        test: { questions: unitatiDeMasuraTest, minutes: 8 },
+        test: { questions: unitatiDeMasuraTest, minutes: 10 },
       },
     ],
     geo: [
