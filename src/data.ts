@@ -52,6 +52,8 @@ export interface Lesson {
    * altfel, câte o pagină pentru fiecare limbă.
    */
   src: string | Text;
+  /** Lecție încheiată (citită): apare gri și după cele active. */
+  done?: boolean;
   /** Testul de la finalul lecției (opțional). */
   test?: { questions: Question[]; minutes: number };
 }
@@ -169,6 +171,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Die Organe einer Blütenpflanze, die Gewebe in Blatt, Stängel und Wurzel und der Weg der Nährlösungen durch die Pflanze.',
         },
         src: 'lectii/clasa-6/biologie/organismul-plantei.html',
+        done: true,
         test: { questions: organismulPlanteiTest, minutes: 8 },
       },
       {
@@ -182,6 +185,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Von der Zelle zum Organismus: Gewebe, Organe und die zehn Organsysteme des Menschen, am Körper gezeigt.',
         },
         src: 'lectii/clasa-6/biologie/organismul-omului.html',
+        done: true,
         test: { questions: organismulOmuluiTest, minutes: 8 },
       },
       {
@@ -195,6 +199,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Autotroph und heterotroph, Fotosynthese, äußere und innere Struktur des Blattes, insektenfressende Pflanzen, Saprotrophe, Symbiose und Parasitismus.',
         },
         src: 'lectii/clasa-6/biologie/nutritia.html',
+        done: true,
         test: { questions: nutritiaTest, minutes: 8 },
       },
       {
@@ -208,6 +213,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Die Teile des Blattes, seine Form als Anpassung an den Lebensraum, das Experiment „Warum sind Blätter grün?“, die Gewebeschichten und die Epidermis.',
         },
         src: 'lectii/clasa-6/biologie/frunza.html',
+        done: true,
         test: { questions: frunzaTest, minutes: 8 },
       },
       {
@@ -221,6 +227,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Die Gleichung der Fotosynthese, wo Wasser, Kohlendioxid und Licht hineingehen, wo der Zucker entsteht, wo der Sauerstoff hinausgeht, wie das Blatt hilft und warum sie für alle Lebewesen wichtig ist.',
         },
         src: 'lectii/clasa-6/biologie/fotosinteza.html',
+        done: true,
         test: { questions: fotosintezaTest, minutes: 8 },
       },
     ],
@@ -236,6 +243,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Elemente, Gleichheit, Teilmengen, endliche und unendliche Mengen, dann Vereinigung, Durchschnitt und Differenz: im Diagramm, in einem Mengenlabor und mit Übungen.',
         },
         src: 'lectii/clasa-6/algebra/operatii-cu-multimi.html',
+        done: true,
         test: { questions: operatiiCuMultimiTest, minutes: 8 },
       },
     ],
@@ -251,6 +259,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Supplement und Komplement, Aufgaben mit Verhältnissen (Methode mit k), wann zwei Winkel benachbart sind, und die Konstruktion der Winkelhalbierenden mit Winkelmesser oder mit Lineal und Zirkel.',
         },
         src: 'lectii/clasa-6/geometrie/adiacente-bisectoarea.html',
+        done: true,
         test: { questions: adiacenteBisectoareaTest, minutes: 8 },
       },
       {
@@ -264,6 +273,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Der Winkel zwischen den Uhrzeigern zu jeder Uhrzeit, der Bogen des Stundenzeigers und die Teile des Kreises: Radius, Sehne, Durchmesser, Bögen.',
         },
         src: 'lectii/clasa-6/geometrie/ceasul-si-arcele.html',
+        done: true,
         test: { questions: ceasulSiArceleTest, minutes: 8 },
       },
       {
@@ -277,6 +287,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Benachbarte Winkel, Komplement- und Supplementwinkel, Scheitelwinkel, Winkel um einen Punkt, die Winkelhalbierende, die Methode mit x und die Prüfung aus dem Buch, interaktiv.',
         },
         src: 'lectii/clasa-6/geometrie/unghiuri.html',
+        done: true,
         test: { questions: unghiuriTest, minutes: 8 },
       },
     ],
@@ -292,6 +303,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Von Elle und Handbreite zum Meter, die Vorsätze, eine Reise von Nanometern bis zum Universum, Quadratmeter und Liter, das Volumen von Würfel und Quader und Aufgaben mit Volumen.',
         },
         src: 'lectii/clasa-6/fizica/unitati-de-masura.html',
+        done: true,
         test: { questions: unitatiDeMasuraTest, minutes: 10 },
       },
     ],
@@ -307,6 +319,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Von Himilkon und Pytheas bis zu den Wikingern und Magellan: wer die Welt erkundete, warum, wann, woher und wohin, auf interaktiven Karten.',
         },
         src: 'lectii/clasa-6/geografie/descoperirea-lumii.html',
+        done: true,
         test: { questions: descoperireaLumiiTest, minutes: 8 },
       },
       {
@@ -320,6 +333,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Entdeckerstunde: die Organisation der Wikinger, ihre Schiffe, Navigation ohne Kompass und die Reisen von Erik dem Roten und Leif Eriksson.',
         },
         src: 'lectii/clasa-6/geografie/vikingii.html',
+        done: true,
         test: { questions: vikingiiTest, minutes: 8 },
       },
       {
@@ -333,6 +347,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Von der Nordostpassage bis zum Südpol, von der Kon-Tiki bis zum Everest: wer, wann, woher und wohin. Verfolge die Wege auf Polkarten und vervollständige die Tabelle aus dem Heft.',
         },
         src: 'lectii/clasa-6/geografie/polii-si-oceanele.html',
+        done: true,
         test: { questions: poliiSiOceaneleTest, minutes: 6 },
       },
     ],
@@ -348,6 +363,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Fast 30 Jahre unterwegs, von Tanger bis nach China und Mali. Folge der Route auf der Karte, Station für Station.',
         },
         src: 'lectii/clasa-6/istorie/ibn-battuta.html',
+        done: true,
         test: { questions: ibnBattutaTest, minutes: 5 },
       },
       {
@@ -364,6 +380,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           ro: 'lectii/clasa-6/istorie/mari-exploratori.html',
           de: 'lectii/clasa-6/istorie/mari-exploratori.de.html',
         },
+        done: true,
         test: { questions: mariExploratoriTest, minutes: 8 },
       },
     ],

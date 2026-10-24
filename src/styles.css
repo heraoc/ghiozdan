@@ -480,6 +480,20 @@ button {
   transition: transform 0.15s, box-shadow 0.15s;
 }
 
+.lesson-card.is-done {
+  background: #f6f8f8;
+  border-top-color: #cfd8d6;
+  box-shadow: none;
+  outline: 1px solid var(--line);
+}
+
+.lesson-card.is-done .lesson-no,
+.lesson-card.is-done .lesson-title,
+.lesson-card.is-done .lesson-summary,
+.lesson-card.is-done .lesson-cta {
+  color: var(--subtle);
+}
+
 .lesson-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--card-shadow-hover);

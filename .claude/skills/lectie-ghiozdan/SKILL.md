@@ -86,7 +86,7 @@ Variază poziția răspunsului corect.
 numerotate automat în ordinea creării: „Lecția 1”, „Lecția 2”…; o mutăm mai sus doar dacă cere
 utilizatorul, de exemplu ca o recapitulare să rămână după lecțiile recapitulate), adaugă
 `{ slug, title: {ro,de}, summary: {ro,de}, src: 'lectii/…/{slug}.html', test: { questions, minutes } }`
-și importul testului. Numărul de lecții de pe carduri, căutarea și tabul Teste se actualizează singure.
+și importul testului. Lecțiile noi sunt active (fără `done`) și apar mereu primele; când utilizatorul spune că o lecție e citită/încheiată, adaugă `done: true` – va apărea gri, după cele active, păstrându-și numărul. Numărul de lecții de pe carduri, căutarea și tabul Teste se actualizează singure.
 Dacă materia nu există la acea clasă, adaug-o în `SUBJECTS` (iconiță + culoare din `PALETTE`).
 
 ## 4. Verificare înainte de publicare

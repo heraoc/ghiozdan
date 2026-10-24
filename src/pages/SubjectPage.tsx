@@ -8,6 +8,11 @@ export function SubjectPage({ grade, slug }: { grade: Grade; slug: string }) {
   const subject = getSubject(grade, slug);
   if (!subject) return <NotFound />;
 
+  // Lecțiile active (necitite) urcă în față; cele încheiate coboară, în ordinea originală.
+  const ordered = subject.lessons
+    .map((l, i) => ({ l, no: i + 1 }))
+    .sort((a, b) => Number(!!a.l.done) - Number(!!b.l.done));
+
   const tint = { '--c': subject.color, '--soft': subject.soft } as CSSProperties;
   return (
     <main className="main" style={tint}>
@@ -26,9 +31,12 @@ export function SubjectPage({ grade, slug }: { grade: Grade; slug: string }) {
 
       {subject.lessons.length ? (
         <div className="lesson-list">
-          {subject.lessons.map((l, i) => (
-            <a key={l.slug} className="lesson-card" href={lessonHref(grade, subject, l)}>
-              <span className="lesson-no">{t.lessonNo(i + 1)}</span>
+          {ordered.map(({ l, no }) => (
+            <a key={l.slug} className={`lesson-card${l.done ? ' is-done' : ''}`} href={lessonHref(grade, subject, l)}>
+              <span className="lesson-no">
+                {t.lessonNo(no)}
+                {l.done && <span className="lesson-done-mark"> · ✓ {t.lessonDone}</span>}
+              </span>
               <h2 className="lesson-title">{l.title[lang]}</h2>
               <p className="lesson-summary">{l.summary[lang]}</p>
               <span className="lesson-cta">{t.openLesson} →</span>
