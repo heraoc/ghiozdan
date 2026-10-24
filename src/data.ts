@@ -254,11 +254,11 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Teilbarkeit, Primzahlen, Primfaktoren',
         },
         summary: {
-          ro: 'Divizibilitatea în ℕ, divizori și multipli, numere prime și compuse (ciurul lui Eratostene), descompunerea în factori primi, produse de puteri și probleme ca în caiet.',
-          de: 'Teilbarkeit in ℕ, Teiler und Vielfache, Primzahlen und zusammengesetzte Zahlen (Sieb des Eratosthenes), Primfaktorzerlegung, Produkte von Potenzen und Aufgaben wie im Heft.',
+          ro: 'Divizibilitatea în ℕ, divizori și multipli, numere prime și compuse (ciurul lui Eratostene), descompunerea în factori primi (algoritmul din manual), numărul divizorilor, produse de puteri și probleme ca în caiet.',
+          de: 'Teilbarkeit in ℕ, Teiler und Vielfache, Primzahlen und zusammengesetzte Zahlen (Sieb des Eratosthenes), Primfaktorzerlegung (Algorithmus aus dem Buch), Anzahl der Teiler, Produkte von Potenzen und Aufgaben wie im Heft.',
         },
         src: 'lectii/clasa-6/algebra/numere-prime.html',
-        test: { questions: numerePrimeTest, minutes: 10 },
+        test: { questions: numerePrimeTest, minutes: 12 },
       },
     ],
     gmt: [

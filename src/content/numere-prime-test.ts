@@ -114,4 +114,32 @@ export const numerePrimeTest: Question[] = [
       de: 'Die Primteiler sind die Basen der Potenzen: 2, 3 und 5. Die Exponenten (3, 1, 2) zeigen, wie oft jeder vorkommt, nicht wie viele verschiedene es sind.',
     },
   },
+  {
+    q: { ro: 'Câți divizori naturali are numărul n = 2³ · 3²?', de: 'Wie viele natürliche Teiler hat die Zahl n = 2³ · 3²?' },
+    options: [
+      { ro: '5', de: '5' },
+      { ro: '12', de: '12' },
+      { ro: '6', de: '6' },
+      { ro: '72', de: '72' },
+    ],
+    correct: 1,
+    explain: {
+      ro: 'Adăugăm 1 la fiecare exponent și înmulțim: (3 + 1) · (2 + 1) = 4 · 3 = 12. Nu adunăm exponenții și nu calculăm n.',
+      de: 'Wir addieren 1 zu jedem Exponenten und multiplizieren: (3 + 1) · (2 + 1) = 4 · 3 = 12. Wir addieren nicht die Exponenten und berechnen auch nicht n.',
+    },
+  },
+  {
+    q: { ro: 'Cum arăți că 113 este număr prim?', de: 'Wie zeigst du, dass 113 eine Primzahl ist?' },
+    options: [
+      { ro: 'Verifici că nu se împarte exact la 2, 3, 5 și 7 (pentru că 11² = 121 > 113)', de: 'Du prüfst, dass es nicht durch 2, 3, 5 und 7 teilbar ist (weil 11² = 121 > 113)' },
+      { ro: 'Verifici că e impar', de: 'Du prüfst, dass es ungerade ist' },
+      { ro: 'Îl împarți doar la 3', de: 'Du teilst nur durch 3' },
+      { ro: 'Verifici că se termină în 3', de: 'Du prüfst, dass es auf 3 endet' },
+    ],
+    correct: 0,
+    explain: {
+      ro: 'Încercăm numerele prime p cu p² ≤ 113, adică 2, 3, 5, 7. Niciunul nu îl împarte exact, deci 113 este prim. Un număr impar sau care se termină în 3 poate fi compus (de ex. 63).',
+      de: 'Wir probieren die Primzahlen p mit p² ≤ 113, also 2, 3, 5, 7. Keine teilt genau, also ist 113 prim. Eine ungerade Zahl oder eine, die auf 3 endet, kann zusammengesetzt sein (z. B. 63).',
+    },
+  },
 ];

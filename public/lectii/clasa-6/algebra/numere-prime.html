@@ -204,8 +204,9 @@ html.embed .head{padding-bottom:0;border-bottom:0}
     <a href="#s2"><b>2</b><span class="ro">Divizori și multipli</span><span class="de">Teiler und Vielfache</span></a>
     <a href="#s3"><b>3</b><span class="ro">Prime și compuse</span><span class="de">Prim und zusammengesetzt</span></a>
     <a href="#s4"><b>4</b><span class="ro">Descompunerea în factori primi</span><span class="de">Primfaktorzerlegung</span></a>
-    <a href="#s5"><b>5</b><span class="ro">Probleme cu divizibilitate</span><span class="de">Teilbarkeitsaufgaben</span></a>
-    <a href="#s6"><b>6</b><span class="ro">Exersează</span><span class="de">Üben</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Câți divizori are un număr?</span><span class="de">Wie viele Teiler hat eine Zahl?</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Probleme cu divizibilitate</span><span class="de">Teilbarkeitsaufgaben</span></a>
+    <a href="#s7"><b>7</b><span class="ro">Exersează</span><span class="de">Üben</span></a>
   </nav>
 </header>
 
@@ -277,9 +278,22 @@ html.embed .head{padding-bottom:0;border-bottom:0}
       <div class="readout" id="p-out" aria-live="polite"></div>
     </div>
   </div>
+  <h3 class="sub-title"><span class="ro">Cum arăți că un număr este prim?</span><span class="de">Wie zeigt man, dass eine Zahl prim ist?</span></h3>
+  <p class="section-sub" style="margin-bottom:10px"><span class="ro">Împarte numărul pe rând la numerele prime 2, 3, 5, 7, … și oprește-te când pătratul numărului prim încercat depășește numărul: dacă nu s-a împărțit exact până atunci, numărul este prim. Scrie un număr sau alege unul din manual.</span><span class="de">Teile die Zahl der Reihe nach durch die Primzahlen 2, 3, 5, 7, … und höre auf, wenn das Quadrat der probierten Primzahl größer als die Zahl ist: Ging die Division bis dahin nie auf, ist die Zahl prim. Schreibe eine Zahl oder wähle eine aus dem Buch.</span></p>
+  <div class="chips" id="t-pre" role="group"></div>
+  <div class="actions" style="margin:0 0 10px">
+    <label for="t-in" style="font-weight:700"><span class="ro">Numărul:</span><span class="de">Die Zahl:</span></label>
+    <input id="t-in" type="text" inputmode="numeric" maxlength="4" value="109" style="width:90px;text-align:center;border:2px solid var(--rule);border-radius:8px;padding:6px;font:800 19px var(--display)">
+    <button type="button" class="btn" id="t-go"><span class="ro">Verifică</span><span class="de">Prüfen</span></button>
+  </div>
+  <div class="readout" id="t-out" aria-live="polite"></div>
   <div class="remember">
     <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
     <ul>
+      <li><span class="ro"><b>Din manual:</b> dacă n ≥ 2 are numai divizori improprii, atunci n este prim. Orice număr par de forma 2p, cu p > 1, are cel puțin trei divizori (1, p, 2p), deci este compus.</span><span class="de"><b>Aus dem Buch:</b> Hat n ≥ 2 nur unechte Teiler, dann ist n prim. Jede gerade Zahl der Form 2p mit p > 1 hat mindestens drei Teiler (1, p, 2p), ist also zusammengesetzt.</span></li>
+      <li><span class="ro">Orice pătrat perfect, diferit de 0 și 1, are cel puțin trei divizori: dacă n = p², atunci {1, p, p²} ⊂ D<sub>n</sub>. De aceea 961 = 31² este compus.</span><span class="de">Jede Quadratzahl außer 0 und 1 hat mindestens drei Teiler: Ist n = p², dann gilt {1, p, p²} ⊂ D<sub>n</sub>. Darum ist 961 = 31² zusammengesetzt.</span></li>
+      <li><span class="ro">Un număr natural n ≥ 2 care nu se împarte la niciun număr prim p cu p² ≤ n este prim.</span><span class="de">Eine natürliche Zahl n ≥ 2, die durch keine Primzahl p mit p² ≤ n teilbar ist, ist prim.</span></li>
+      <li><span class="ro">Un număr natural n ≥ 2 care nu este prim este <b>compus</b> (are și divizori proprii).</span><span class="de">Eine natürliche Zahl n ≥ 2, die nicht prim ist, ist <b>zusammengesetzt</b> (hat auch echte Teiler).</span></li>
       <li><span class="ro">Un număr natural cu <b>exact doi divizori</b> (cei improprii, 1 și el însuși) se numește <b>număr prim</b>. Numerele care nu sunt prime sunt <b>neprime</b>.</span><span class="de">Eine natürliche Zahl mit <b>genau zwei Teilern</b> (den unechten, 1 und sie selbst) heißt <b>Primzahl</b>. Zahlen, die keine Primzahlen sind, heißen <b>Nichtprimzahlen</b>.</span></li>
       <li><span class="ro">Un număr cu <b>cel puțin trei divizori</b> este <b>compus</b>. Numerele 0 și 1 sunt neprime, dar nu sunt compuse.</span><span class="de">Eine Zahl mit <b>mindestens drei Teilern</b> ist <b>zusammengesetzt</b>. Die Zahlen 0 und 1 sind keine Primzahlen, aber auch nicht zusammengesetzt.</span></li>
       <li><span class="ro">Șirul numerelor prime: <span class="fx">2, 3, 5, 7, 11, 13, 17, 19, …</span> Numărul 2 este singurul număr prim <b>par</b>; toate celelalte sunt impare.</span><span class="de">Die Folge der Primzahlen: <span class="fx">2, 3, 5, 7, 11, 13, 17, 19, …</span> Die Zahl 2 ist die einzige <b>gerade</b> Primzahl; alle anderen sind ungerade.</span></li>
@@ -309,6 +323,16 @@ html.embed .head{padding-bottom:0;border-bottom:0}
     </div>
   </div>
 
+  <div class="remember">
+    <h3><span class="ro">Algoritmul de descompunere (din manual)</span><span class="de">Der Zerlegungsalgorithmus (aus dem Buch)</span></h3>
+    <ul>
+      <li><span class="ro"><b>I.</b> Identificăm un divizor prim al numărului dat și calculăm câtul dintre număr și acest divizor.</span><span class="de"><b>I.</b> Wir suchen einen Primteiler der gegebenen Zahl und berechnen den Quotienten aus der Zahl und diesem Teiler.</span></li>
+      <li><span class="ro"><b>II.</b> Identificăm un divizor prim al câtului obținut și împărțim câtul la el.</span><span class="de"><b>II.</b> Wir suchen einen Primteiler des erhaltenen Quotienten und teilen den Quotienten durch ihn.</span></li>
+      <li><span class="ro"><b>III.</b> Continuăm până obținem câtul 1, apoi scriem numărul ca produs de puteri de numere prime.</span><span class="de"><b>III.</b> Wir machen weiter, bis der Quotient 1 ist, und schreiben die Zahl dann als Produkt von Primzahlpotenzen.</span></li>
+      <li><span class="ro">Descompunerea este <b>unică</b>, făcând abstracție de ordinea factorilor. De aceea, dacă începi cu alt divizor prim, ajungi la același rezultat (ex.: 210 = 2 · 3 · 5 · 7, 462 = 2 · 3 · 7 · 11, 858 = 2 · 3 · 11 · 13, 4845 = 3 · 5 · 17 · 19).</span><span class="de">Die Zerlegung ist <b>eindeutig</b>, abgesehen von der Reihenfolge der Faktoren. Darum kommst du zum selben Ergebnis, auch wenn du mit einem anderen Primteiler beginnst (z. B.: 210 = 2 · 3 · 5 · 7, 462 = 2 · 3 · 7 · 11, 858 = 2 · 3 · 11 · 13, 4845 = 3 · 5 · 17 · 19).</span></li>
+    </ul>
+  </div>
+
   <h3 class="sub-title"><span class="ro">Acum conduci tu descompunerea</span><span class="de">Jetzt führst du die Zerlegung</span></h3>
   <p class="section-sub" style="margin-bottom:10px"><span class="ro">Alege un număr prim care divide numărul din dreapta. Ordinea nu contează: rezultatul final este același, scris la fel.</span><span class="de">Wähle eine Primzahl, die die Zahl rechts teilt. Die Reihenfolge spielt keine Rolle: Das Endergebnis ist dasselbe.</span></p>
   <div class="ex" id="g-ex"></div>
@@ -319,6 +343,15 @@ html.embed .head{padding-bottom:0;border-bottom:0}
       <li><span class="ro">Orice număr natural compus poate fi descompus în produs de puteri ale unor numere prime: <span class="fx">n = p<sub>1</sub><sup>l<sub>1</sub></sup> · p<sub>2</sub><sup>l<sub>2</sub></sup> · … · p<sub>k</sub><sup>l<sub>k</sub></sup></span>, unde p<sub>1</sub>, p<sub>2</sub>, …, p<sub>k</sub> sunt numere prime (diferite), iar l<sub>1</sub>, l<sub>2</sub>, …, l<sub>k</sub> sunt numere naturale nenule (exponenții).</span><span class="de">Jede zusammengesetzte natürliche Zahl lässt sich als Produkt von Potenzen von Primzahlen schreiben: <span class="fx">n = p<sub>1</sub><sup>l<sub>1</sub></sup> · p<sub>2</sub><sup>l<sub>2</sub></sup> · … · p<sub>k</sub><sup>l<sub>k</sub></sup></span>, wobei p<sub>1</sub>, p<sub>2</sub>, …, p<sub>k</sub> (verschiedene) Primzahlen sind und l<sub>1</sub>, l<sub>2</sub>, …, l<sub>k</sub> von 0 verschiedene natürliche Zahlen (die Exponenten).</span></li>
       <li><span class="ro">Exponentul unui factor prim arată de câte ori apare el în coloana din dreapta. Exponentul 1 se poate scrie sau omite: 5 = 5<sup>1</sup>.</span><span class="de">Der Exponent eines Primfaktors zeigt, wie oft er in der rechten Spalte vorkommt. Der Exponent 1 darf geschrieben oder weggelassen werden: 5 = 5<sup>1</sup>.</span></li>
     </ul>
+  </div>
+
+  <h3 class="sub-title"><span class="ro">Scurtătură: numere care se termină cu zerouri</span><span class="de">Abkürzung: Zahlen mit Endnullen</span></h3>
+  <p class="section-sub" style="margin-bottom:10px"><span class="ro">Dacă numărul se împarte la o putere a lui 10, folosim <b>10<sup>n</sup> = 2<sup>n</sup> · 5<sup>n</sup></b>. Alege un număr și apasă „Pasul următor”.</span><span class="de">Ist die Zahl durch eine Zehnerpotenz teilbar, nutzen wir <b>10<sup>n</sup> = 2<sup>n</sup> · 5<sup>n</sup></b>. Wähle eine Zahl und drücke „Nächster Schritt“.</span></p>
+  <div class="chips" id="z-pre" role="group"></div>
+  <div class="readout" id="z-out" aria-live="polite"></div>
+  <div class="actions">
+    <button type="button" class="btn ghost" id="z-back">← <span class="ro">Înapoi</span><span class="de">Zurück</span></button>
+    <button type="button" class="btn" id="z-next"><span class="ro">Pasul următor</span><span class="de">Nächster Schritt</span> →</button>
   </div>
 
   <h3 class="sub-title"><span class="ro">Produse de puteri: adună exponenții</span><span class="de">Produkte von Potenzen: Exponenten addieren</span></h3>
@@ -338,9 +371,33 @@ html.embed .head{padding-bottom:0;border-bottom:0}
   <div class="check" id="c4"></div>
 </section>
 
-<!-- 5. Probleme -->
+<!-- 5. Numărul divizorilor -->
 <section class="block" id="s5" aria-labelledby="t5">
-  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Probleme cu divizibilitate</span><span class="de">Teilbarkeitsaufgaben</span></h2>
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Câți divizori are un număr?</span><span class="de">Wie viele Teiler hat eine Zahl?</span></h2>
+  <p class="section-sub"><span class="ro">Dacă n = a<sup>x</sup> · b<sup>y</sup>, orice divizor al lui n are forma a<sup>i</sup> · b<sup>j</sup>, cu i de la 0 la x și j de la 0 la y. Așezăm toți divizorii într-un tabel: pe fiecare rând sunt x + 1 divizori și sunt y + 1 rânduri. Alege numerele prime a și b și mută glisoarele pentru x și y.</span><span class="de">Ist n = a<sup>x</sup> · b<sup>y</sup>, hat jeder Teiler von n die Form a<sup>i</sup> · b<sup>j</sup> mit i von 0 bis x und j von 0 bis y. Wir ordnen alle Teiler in einer Tabelle: In jeder Zeile stehen x + 1 Teiler, und es gibt y + 1 Zeilen. Wähle die Primzahlen a und b und bewege die Regler für x und y.</span></p>
+  <div class="chips" id="n-pre" role="group"></div>
+  <div class="split">
+    <div style="overflow-x:auto"><table class="tbl" id="n-tbl"></table></div>
+    <div class="panel">
+      <div class="slider"><label for="n-x">x = <span id="n-xv"></span></label><input type="range" id="n-x" min="0" max="5" value="3"></div>
+      <div class="slider"><label for="n-y">y = <span id="n-yv"></span></label><input type="range" id="n-y" min="0" max="4" value="2"></div>
+      <div class="readout" id="n-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Numărul divizorilor naturali ai lui n = a<sup>x</sup> · b<sup>y</sup> este <span class="fx">(x + 1) · (y + 1)</span>: x + 1 divizori pe rând, de y + 1 ori.</span><span class="de">Die Anzahl der natürlichen Teiler von n = a<sup>x</sup> · b<sup>y</sup> ist <span class="fx">(x + 1) · (y + 1)</span>: x + 1 Teiler pro Zeile, und y + 1 Zeilen.</span></li>
+      <li><span class="ro">În general, pentru n = a<sub>1</sub><sup>x<sub>1</sub></sup> · a<sub>2</sub><sup>x<sub>2</sub></sup> · … · a<sub>k</sub><sup>x<sub>k</sub></sup>, numărul divizorilor este <span class="fx">(x<sub>1</sub> + 1) · (x<sub>2</sub> + 1) · … · (x<sub>k</sub> + 1)</span>.</span><span class="de">Allgemein gilt für n = a<sub>1</sub><sup>x<sub>1</sub></sup> · a<sub>2</sub><sup>x<sub>2</sub></sup> · … · a<sub>k</sub><sup>x<sub>k</sub></sup>: Die Anzahl der Teiler ist <span class="fx">(x<sub>1</sub> + 1) · (x<sub>2</sub> + 1) · … · (x<sub>k</sub> + 1)</span>.</span></li>
+      <li><span class="ro">Exemplu: 280 = 2<sup>3</sup> · 5 · 7 are (3 + 1) · (1 + 1) · (1 + 1) = 16 divizori. Din manual: 24200 = 2<sup>3</sup> · 5<sup>2</sup> · 11<sup>2</sup> are 4 · 3 · 3 = 36 de divizori.</span><span class="de">Beispiel: 280 = 2<sup>3</sup> · 5 · 7 hat (3 + 1) · (1 + 1) · (1 + 1) = 16 Teiler. Aus dem Buch: 24200 = 2<sup>3</sup> · 5<sup>2</sup> · 11<sup>2</sup> hat 4 · 3 · 3 = 36 Teiler.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c6"></div>
+</section>
+
+<!-- 6. Probleme -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Probleme cu divizibilitate</span><span class="de">Teilbarkeitsaufgaben</span></h2>
   <h3 class="sub-title" style="margin-top:12px"><span class="ro">Problema 1: suma puterilor lui 2</span><span class="de">Aufgabe 1: Summe der Zweierpotenzen</span></h3>
   <p class="section-sub"><span class="ro">În caiet: arată că n = 2 + 2<sup>2</sup> + 2<sup>3</sup> + … + 2<sup>60</sup> este divizibil cu primele trei numere prime consecutive (2, 3, 5). Aici lucrăm cu mai puțini termeni, ca să vezi ideea. <b>Grupează termenii</b> și scoate factorul comun din fiecare grup. Alege numărul de termeni și felul de grupare.</span><span class="de">Im Heft: Zeige, dass n = 2 + 2<sup>2</sup> + 2<sup>3</sup> + … + 2<sup>60</sup> durch die ersten drei aufeinanderfolgenden Primzahlen (2, 3, 5) teilbar ist. Hier arbeiten wir mit weniger Summanden, damit du die Idee siehst. <b>Fasse die Summanden zu Gruppen zusammen</b> und klammere in jeder Gruppe den gemeinsamen Faktor aus. Wähle die Anzahl der Summanden und die Art der Gruppierung.</span></p>
   <div class="actions" style="margin:0 0 10px">
@@ -368,19 +425,19 @@ html.embed .head{padding-bottom:0;border-bottom:0}
 </section>
 
 <!-- 6. Exersează -->
-<section class="block" id="s6" aria-labelledby="t6">
-  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Exersează: descompune tu</span><span class="de">Üben: zerlege selbst</span></h2>
+<section class="block" id="s7" aria-labelledby="t7">
+  <h2 class="section-title" id="t7"><span class="step">7</span><span class="ro">Exersează: descompune tu</span><span class="de">Üben: zerlege selbst</span></h2>
   <p class="section-sub"><span class="ro">Scrie exponentul fiecărui număr prim. Dacă un număr prim nu apare, scrie 0 (sau lasă gol). Prima cerință este un număr, a doua un produs de puteri. Apasă „Verifică”.</span><span class="de">Schreibe den Exponenten jeder Primzahl. Kommt eine Primzahl nicht vor, schreibe 0 (oder lasse das Feld leer). Die erste Aufgabe ist eine Zahl, die zweite ein Produkt von Potenzen. Drücke „Prüfen“.</span></p>
   <div class="ex" id="px"></div>
 </section>
 
-<section class="block" aria-labelledby="t7">
-  <h2 class="section-title" id="t7"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+<section class="block" aria-labelledby="t8">
+  <h2 class="section-title" id="t8"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
   <div class="gloss-head" style="margin-top:14px"><span>Română</span><span>Deutsch</span></div>
   <dl class="gloss" id="gloss"></dl>
 </section>
 
-<p class="foot"><span class="ro">După caietul de Matematică, clasa a 6-a (lecțiile din 14, 16 și 19 octombrie 2026): divizibilitatea numerelor naturale, numere prime și compuse, descompunerea în factori primi, exerciții. Testul de mai jos verifică ce ai învățat; pentru calcule poți folosi ciorna.</span><span class="de">Nach dem Mathematikheft der 6. Klasse (Stunden vom 14., 16. und 19. Oktober 2026): Teilbarkeit natürlicher Zahlen, Primzahlen und zusammengesetzte Zahlen, Primfaktorzerlegung, Übungen. Der Test unten prüft, was du gelernt hast; für Rechnungen kannst du den Notizblock benutzen.</span></p>
+<p class="foot"><span class="ro">După caietul de Matematică, clasa a 6-a (lecțiile din 14, 16 și 19 octombrie 2026) și manualul de Matematică, clasa a VI-a (pag. 34–35: algoritmul de descompunere, scurtătura cu 10<sup>n</sup>, numărul divizorilor): divizibilitatea numerelor naturale, numere prime și compuse, descompunerea în factori primi, exerciții. Testul de mai jos verifică ce ai învățat; pentru calcule poți folosi ciorna.</span><span class="de">Nach dem Mathematikheft der 6. Klasse (Stunden vom 14., 16. und 19. Oktober 2026) und dem Mathematikbuch der 6. Klasse (S. 34–35: Zerlegungsalgorithmus, Abkürzung mit 10<sup>n</sup>, Anzahl der Teiler): Teilbarkeit natürlicher Zahlen, Primzahlen und zusammengesetzte Zahlen, Primfaktorzerlegung, Übungen. Der Test unten prüft, was du gelernt hast; für Rechnungen kannst du den Notizblock benutzen.</span></p>
 </div>
 
 <script>
@@ -611,11 +668,33 @@ Check($('#c3'), [
     hint: { ro: 'Numără divizorii: un număr prim are exact doi.', de: 'Zähle die Teiler: Eine Primzahl hat genau zwei.' } }
 ]);
 
+/* Este prim? */
+(function () {
+  var inp = $('#t-in'), out = $('#t-out'), PR = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+  [109, 113, 91, 59, 961].forEach(function (v) { var c = btn('chip', String(v)); c.onclick = function () { inp.value = v; go(); }; $('#t-pre').appendChild(c); });
+  $('#t-go').onclick = go; inp.onkeydown = function (e) { if (e.key === 'Enter') go(); };
+  function go() {
+    var n = parseInt(inp.value, 10);
+    if (!(n >= 2 && n <= 9999)) { out.innerHTML = '<div class="rule">' + tx('Scrie un număr natural între 2 și 9999.', 'Schreibe eine natürliche Zahl von 2 bis 9999.') + '</div>'; return; }
+    var rows = '', hit = 0;
+    for (var i = 0; i < PR.length && PR[i] * PR[i] <= n; i++) {
+      var p = PR[i], r = n % p;
+      rows += '<div class="rule">' + n + ' : ' + p + ' → ' + tx('rest', 'Rest') + ' ' + r + (r === 0 ? ' <span class="no-t">⇒ ' + p + ' | ' + n + '</span>' : '') + '</div>';
+      if (r === 0) { hit = p; break; }
+    }
+    var next = PR[i];
+    var fin = hit ? '<div class="eq no-t">' + n + ' = ' + hit + ' · ' + (n / hit) + ' → ' + tx('număr compus', 'zusammengesetzte Zahl') + '</div>'
+      : '<div class="rule">' + (next ? next + '² = ' + next * next + ' > ' + n + tx(': ne oprim.', ': wir hören auf.') : '') + '</div><div class="eq ok-t">' + n + ' → ' + tx('număr prim', 'Primzahl') + '</div>';
+    out.innerHTML = rows + fin;
+  }
+  go();
+})();
+
 /* ================= 4. Descompunerea ================= */
 (function () {
   var cur = 444, r = 0, rows = [];
   var bar = $('#f-bar'), msg = $('#f-msg'), res = $('#f-res');
-  [35, 40, 444, 6006, 80080].forEach(function (v) {
+  [35, 40, 210, 444, 858, 4845, 6006, 80080].forEach(function (v) {
     var c = btn('chip', String(v)); c.dataset.v = v;
     c.onclick = function () { cur = v; r = 0; build(); render(); };
     $('#f-pre').appendChild(c);
@@ -713,6 +792,70 @@ Check($('#c3'), [
   }
   render();
 })();
+/* scurtătura cu 10^n */
+(function () {
+  var cur = 36000, st = 0, out = $('#z-out');
+  [280, 24200, 36000, 1050000].forEach(function (v) {
+    var c = btn('chip', String(v)); c.dataset.v = v; c.onclick = function () { cur = v; st = 0; render(); }; $('#z-pre').appendChild(c);
+  });
+  $('#z-back').onclick = function () { st = Math.max(0, st - 1); render(); };
+  $('#z-next').onclick = function () { st = Math.min(4, st + 1); render(); };
+  function render() {
+    Array.prototype.forEach.call($('#z-pre').children, function (c) { c.setAttribute('aria-pressed', +c.dataset.v === cur ? 'true' : 'false'); });
+    var k = 0, m = cur; while (m % 10 === 0) { m /= 10; k++; }
+    var fm = fact(m), tot = {}; keys(fm).forEach(function (p) { tot[p] = fm[p]; });
+    tot[2] = (tot[2] || 0) + k; tot[5] = (tot[5] || 0) + k;
+    var L = [];
+    L.push('<div class="eq">' + cur + '</div>');
+    if (st >= 1) L.push('<div class="rule">1. ' + tx('Scoatem puterea lui 10: ', 'Wir klammern die Zehnerpotenz aus: ') + '<b>' + cur + ' = ' + m + ' · 10' + (k > 1 ? '<sup>' + k + '</sup>' : '') + '</b></div>');
+    if (st >= 2) L.push('<div class="rule">2. ' + tx('Descompunem restul: ', 'Wir zerlegen den Rest: ') + '<b>' + m + (m > 1 ? ' = ' + prodStr(fm) : '') + '</b></div>');
+    if (st >= 3) L.push('<div class="rule">3. ' + tx('Înlocuim 10', 'Wir ersetzen 10') + (k > 1 ? '<sup>' + k + '</sup>' : '') + ' ' + tx('cu', 'durch') + ' <b>2' + (k > 1 ? '<sup>' + k + '</sup>' : '') + ' · 5' + (k > 1 ? '<sup>' + k + '</sup>' : '') + '</b></div>');
+    if (st >= 4) L.push('<div class="eq ok-t">4. ' + tx('Adunăm exponenții aceluiași număr prim: ', 'Wir addieren die Exponenten derselben Primzahl: ') + cur + ' = ' + prodStr(tot) + '</div>');
+    out.innerHTML = L.join('');
+    $('#z-back').disabled = st === 0; $('#z-next').disabled = st === 4;
+  }
+  render();
+})();
+/* ================= 5. Numărul divizorilor ================= */
+(function () {
+  var A = 2, B = 3, x = 3, y = 2, sx = $('#n-x'), sy = $('#n-y'), tbl = $('#n-tbl'), out = $('#n-out');
+  [[2, 3], [2, 5], [3, 5], [2, 7]].forEach(function (p) {
+    var c = btn('chip', 'a = ' + p[0] + ', b = ' + p[1]); c.dataset.k = p.join(',');
+    c.onclick = function () { A = p[0]; B = p[1]; render(); }; $('#n-pre').appendChild(c);
+  });
+  sx.oninput = function () { x = +sx.value; render(); };
+  sy.oninput = function () { y = +sy.value; render(); };
+  function render() {
+    Array.prototype.forEach.call($('#n-pre').children, function (c) { c.setAttribute('aria-pressed', c.dataset.k === A + ',' + B ? 'true' : 'false'); });
+    $('#n-xv').textContent = x; $('#n-yv').textContent = y;
+    var i, j, html = '<thead><tr><th>' + tx('rând', 'Zeile') + '</th>';
+    for (i = 0; i <= x; i++) html += '<th class="num-c">' + A + (i > 1 ? '<sup>' + i + '</sup>' : '') + (i === 0 ? '⁰=1' : '') + '</th>';
+    html += '</tr></thead><tbody>';
+    for (j = 0; j <= y; j++) {
+      html += '<tr><td class="fx">·' + (j === 0 ? '1' : B + (j > 1 ? '<sup>' + j + '</sup>' : '')) + '</td>';
+      for (i = 0; i <= x; i++) html += '<td class="num-c">' + Math.pow(A, i) * Math.pow(B, j) + '</td>';
+      html += '</tr>';
+    }
+    tbl.innerHTML = html + '</tbody>';
+    var n = Math.pow(A, x) * Math.pow(B, y), cnt = (x + 1) * (y + 1);
+    out.innerHTML = '<div class="eq">n = ' + sup(A, x) + ' · ' + sup(B, y) + ' = ' + n + '</div>' +
+      '<div class="rule">' + tx('Pe fiecare rând: ', 'In jeder Zeile: ') + (x + 1) + tx(' divizori; rânduri: ', ' Teiler; Zeilen: ') + (y + 1) + '.</div>' +
+      '<div class="eq ok-t">(x + 1) · (y + 1) = ' + (x + 1) + ' · ' + (y + 1) + ' = ' + cnt + '</div>' +
+      '<div class="rule">' + tx('Verificare: D', 'Kontrolle: D') + '<sub>' + n + '</sub> ' + tx('are', 'hat') + ' ' + divisors(n).length + ' ' + tx('elemente.', 'Elemente.') + '</div>';
+  }
+  render();
+})();
+Check($('#c6'), [
+  { q: { ro: 'Câți divizori naturali are numărul 2³ · 3²?', de: 'Wie viele natürliche Teiler hat die Zahl 2³ · 3²?' },
+    o: [{ ro: '5', de: '5' }, { ro: '6', de: '6' }, { ro: '12', de: '12' }, { ro: '72', de: '72' }], a: 2,
+    why: { ro: '(3 + 1) · (2 + 1) = 4 · 3 = 12 divizori. Se adaugă 1 la fiecare exponent și se înmulțesc rezultatele.', de: '(3 + 1) · (2 + 1) = 4 · 3 = 12 Teiler. Man addiert 1 zu jedem Exponenten und multipliziert die Ergebnisse.' },
+    hint: { ro: 'Nu aduna exponenții: adaugă 1 la fiecare exponent și înmulțește.', de: 'Addiere nicht die Exponenten: Addiere 1 zu jedem Exponenten und multipliziere.' } },
+  { q: { ro: 'Câți divizori are 280 = 2³ · 5 · 7?', de: 'Wie viele Teiler hat 280 = 2³ · 5 · 7?' },
+    o: [{ ro: '5', de: '5' }, { ro: '12', de: '12' }, { ro: '16', de: '16' }, { ro: '280', de: '280' }], a: 2,
+    why: { ro: '(3 + 1) · (1 + 1) · (1 + 1) = 4 · 2 · 2 = 16. Un exponent care nu se vede este 1.', de: '(3 + 1) · (1 + 1) · (1 + 1) = 4 · 2 · 2 = 16. Ein nicht sichtbarer Exponent ist 1.' },
+    hint: { ro: 'Factorii 5 și 7 au exponentul 1, deci fiecare dă factorul (1 + 1).', de: 'Die Faktoren 5 und 7 haben den Exponenten 1, also gibt jeder den Faktor (1 + 1).' } }
+]);
+
 Check($('#c4'), [
   { q: { ro: 'Care este descompunerea în factori primi a lui 60?', de: 'Was ist die Primfaktorzerlegung von 60?' },
     o: [{ ro: '2 · 3 · 10', de: '2 · 3 · 10' }, { ro: '2² · 3 · 5', de: '2² · 3 · 5' }, { ro: '4 · 15', de: '4 · 15' }, { ro: '2 · 5 · 6', de: '2 · 5 · 6' }], a: 1,
@@ -862,7 +1005,7 @@ Check($('#c5'), [
     ['divizor propriu', 'echter Teiler'], ['număr prim', 'die Primzahl'], ['număr compus', 'zusammengesetzte Zahl'], ['număr neprim', 'die Nichtprimzahl'],
     ['ciurul lui Eratostene', 'das Sieb des Eratosthenes'], ['descompunere în factori primi', 'die Primfaktorzerlegung'], ['factor prim', 'der Primfaktor'], ['putere', 'die Potenz'],
     ['exponent', 'der Exponent'], ['bază', 'die Basis'], ['pătrat perfect', 'die Quadratzahl'], ['număr par / impar', 'gerade / ungerade Zahl'],
-    ['produs', 'das Produkt'], ['rest', 'der Rest']
+    ['produs', 'das Produkt'], ['rest', 'der Rest'], ['algoritm de descompunere', 'der Zerlegungsalgorithmus'], ['număr de divizori', 'die Anzahl der Teiler'], ['cât (al împărțirii)', 'der Quotient']
   ];
   var dl = $('#gloss');
   G.forEach(function (g) { dl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
