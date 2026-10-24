@@ -258,7 +258,7 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Teilbarkeit in ℕ, Teiler und Vielfache, Primzahlen und zusammengesetzte Zahlen (Sieb des Eratosthenes), Primfaktorzerlegung (Algorithmus aus dem Buch), Anzahl der Teiler, Produkte von Potenzen und Aufgaben wie im Heft.',
         },
         src: 'lectii/clasa-6/algebra/numere-prime.html',
-        test: { questions: numerePrimeTest, minutes: 12 },
+        test: { questions: numerePrimeTest, minutes: 20 },
       },
     ],
     gmt: [

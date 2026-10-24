@@ -142,4 +142,158 @@ export const numerePrimeTest: Question[] = [
       de: 'Wir probieren die Primzahlen p mit p² ≤ 113, also 2, 3, 5, 7. Keine teilt genau, also ist 113 prim. Eine ungerade Zahl oder eine, die auf 3 endet, kann zusammengesetzt sein (z. B. 63).',
     },
   },
+  {
+    q: { ro: 'Numerele prime x și y au suma 39. Cât este produsul x · y?', de: 'Die Primzahlen x und y haben die Summe 39. Was ist das Produkt x · y?' },
+    options: [
+      { ro: '114', de: '114' },
+      { ro: '190', de: '190' },
+      { ro: '74', de: '74' },
+      { ro: '38', de: '38' },
+    ],
+    correct: 2,
+    explain: {
+      ro: 'Suma 39 este impară, deci unul dintre numere este par. Singurul prim par este 2, deci x = 2 și y = 37 (prim). Produsul este 2 · 37 = 74.',
+      de: 'Die Summe 39 ist ungerade, also ist eine der Zahlen gerade. Die einzige gerade Primzahl ist 2, also x = 2 und y = 37 (prim). Das Produkt ist 2 · 37 = 74.',
+    },
+  },
+  {
+    q: { ro: 'Numerele prime a și b verifică 3a + 16b = 54. Cât este a + b?', de: 'Die Primzahlen a und b erfüllen 3a + 16b = 54. Was ist a + b?' },
+    options: [
+      { ro: '9', de: '9' },
+      { ro: '7', de: '7' },
+      { ro: '5', de: '5' },
+      { ro: '11', de: '11' },
+    ],
+    correct: 2,
+    explain: {
+      ro: '16b este par și 54 este par, deci 3a este par, deci a este par. Cum a este prim, a = 2. Atunci 6 + 16b = 54, deci 16b = 48 și b = 3 (prim). Rezultă a + b = 5.',
+      de: '16b ist gerade und 54 ist gerade, also ist 3a gerade, also ist a gerade. Da a prim ist, gilt a = 2. Dann 6 + 16b = 54, also 16b = 48 und b = 3 (prim). Es folgt a + b = 5.',
+    },
+  },
+  {
+    q: { ro: 'Suma a două numere prime, ambele mai mari decât 2, este întotdeauna …', de: 'Die Summe zweier Primzahlen, beide größer als 2, ist immer …' },
+    options: [
+      { ro: 'un număr impar', de: 'un număr impar' },
+      { ro: 'un număr par mai mare decât 2, deci compus', de: 'un număr par mai mare decât 2, deci compus' },
+      { ro: 'un număr prim', de: 'un număr prim' },
+      { ro: 'uneori prim, uneori compus', de: 'uneori prim, uneori compus' },
+    ],
+    correct: 1,
+    explain: {
+      ro: 'Numerele prime mai mari decât 2 sunt impare, iar suma a două numere impare este pară. Un număr par mai mare decât 2 se împarte și la 2, deci este compus.',
+      de: 'Primzahlen größer als 2 sind ungerade, und die Summe zweier ungerader Zahlen ist gerade. Eine gerade Zahl größer als 2 ist auch durch 2 teilbar, also zusammengesetzt.',
+    },
+  },
+  {
+    q: { ro: 'A = 2³ · 3⁵ · 7 și B = 2² · 3 · 7. Cât este A : B, scris ca produs de puteri de numere prime?', de: 'A = 2³ · 3⁵ · 7 und B = 2² · 3 · 7. Was ist A : B, geschrieben als Produkt von Primzahlpotenzen?' },
+    options: [
+      { ro: '2⁵ · 3⁶ · 7²', de: '2⁵ · 3⁶ · 7²' },
+      { ro: '2 · 3⁴', de: '2 · 3⁴' },
+      { ro: '2 · 3⁴ · 7', de: '2 · 3⁴ · 7' },
+      { ro: '2⁶ · 3⁵ · 7²', de: '2⁶ · 3⁵ · 7²' },
+    ],
+    correct: 1,
+    explain: {
+      ro: 'La împărțire scădem exponenții aceluiași număr prim: 2³⁻² = 2, 3⁵⁻¹ = 3⁴, 7¹⁻¹ = 7⁰ = 1. Deci A : B = 2 · 3⁴. Prima variantă este produsul A · B (exponenții se adună).',
+      de: 'Bei der Division subtrahieren wir die Exponenten derselben Primzahl: 2³⁻² = 2, 3⁵⁻¹ = 3⁴, 7¹⁻¹ = 7⁰ = 1. Also A : B = 2 · 3⁴. Die erste Antwort ist das Produkt A · B (Exponenten werden addiert).',
+    },
+  },
+  {
+    q: { ro: 'Câți divizori naturali are numărul 450?', de: 'Wie viele natürliche Teiler hat die Zahl 450?' },
+    options: [
+      { ro: '9', de: '9' },
+      { ro: '12', de: '12' },
+      { ro: '18', de: '18' },
+      { ro: '24', de: '24' },
+    ],
+    correct: 2,
+    explain: {
+      ro: '450 : 2 = 225, : 3 = 75, : 3 = 25, : 5 = 5, : 5 = 1, deci 450 = 2 · 3² · 5². Numărul divizorilor este (1 + 1) · (2 + 1) · (2 + 1) = 2 · 3 · 3 = 18.',
+      de: '450 : 2 = 225, : 3 = 75, : 3 = 25, : 5 = 5, : 5 = 1, also 450 = 2 · 3² · 5². Die Anzahl der Teiler ist (1 + 1) · (2 + 1) · (2 + 1) = 2 · 3 · 3 = 18.',
+    },
+  },
+  {
+    q: { ro: 'Care este mulțimea divizorilor lui 48?', de: 'Was ist die Teilermenge von 48?' },
+    options: [
+      { ro: '{1, 2, 3, 4, 6, 8, 12, 24, 48}', de: '{1, 2, 3, 4, 6, 8, 12, 24, 48}' },
+      { ro: '{2, 3, 4, 6, 8, 12, 16, 24}', de: '{2, 3, 4, 6, 8, 12, 16, 24}' },
+      { ro: '{1, 2, 3, 4, 6, 8, 12, 16, 24}', de: '{1, 2, 3, 4, 6, 8, 12, 16, 24}' },
+      { ro: '{1, 2, 3, 4, 6, 8, 12, 16, 24, 48}', de: '{1, 2, 3, 4, 6, 8, 12, 16, 24, 48}' },
+    ],
+    correct: 3,
+    explain: {
+      ro: 'Perechile cu produsul 48 sunt 1 · 48, 2 · 24, 3 · 16, 4 · 12 și 6 · 8, deci D₄₈ are 10 elemente. Verificare cu formula: 48 = 2⁴ · 3, deci (4 + 1) · (1 + 1) = 10 divizori.',
+      de: 'Die Paare mit Produkt 48 sind 1 · 48, 2 · 24, 3 · 16, 4 · 12 und 6 · 8, also hat D₄₈ 10 Elemente. Kontrolle mit der Formel: 48 = 2⁴ · 3, also (4 + 1) · (1 + 1) = 10 Teiler.',
+    },
+  },
+  {
+    q: { ro: 'Care este cel mai mic număr de trei cifre care are exact trei divizori?', de: 'Was ist die kleinste dreistellige Zahl mit genau drei Teilern?' },
+    options: [
+      { ro: '100', de: '100' },
+      { ro: '101', de: '101' },
+      { ro: '121', de: '121' },
+      { ro: '125', de: '125' },
+    ],
+    correct: 2,
+    explain: {
+      ro: 'Un număr are exact trei divizori dacă este pătratul unui număr prim: p² are divizorii 1, p și p². Primul p² de trei cifre cu p prim este 11² = 121 (100 = 10² nu merge, pentru că 10 nu este prim).',
+      de: 'Eine Zahl hat genau drei Teiler, wenn sie das Quadrat einer Primzahl ist: p² hat die Teiler 1, p und p². Das erste dreistellige p² mit Primzahl p ist 11² = 121 (100 = 10² geht nicht, da 10 nicht prim ist).',
+    },
+  },
+  {
+    q: { ro: 'Fără să efectuezi înmulțirea, află în câte zerouri se termină numărul 5625 · 1728.', de: 'Ohne die Multiplikation auszuführen: Auf wie viele Nullen endet die Zahl 5625 · 1728?' },
+    options: [
+      { ro: '2', de: '2' },
+      { ro: '3', de: '3' },
+      { ro: '4', de: '4' },
+      { ro: '6', de: '6' },
+    ],
+    correct: 2,
+    explain: {
+      ro: '5625 = 5⁴ · 3² și 1728 = 2⁶ · 3³. Fiecare pereche 2 · 5 dă un zero (10 = 2 · 5). Avem patru de 5 și șase de 2, deci patru perechi: numărul se termină în 4 zerouri.',
+      de: '5625 = 5⁴ · 3² und 1728 = 2⁶ · 3³. Jedes Paar 2 · 5 ergibt eine Null (10 = 2 · 5). Wir haben vier 5er und sechs 2er, also vier Paare: Die Zahl endet auf 4 Nullen.',
+    },
+  },
+  {
+    q: { ro: 'Cu ce produs de numere prime se divide orice număr de forma abcabc (de exemplu 234234)?', de: 'Durch welches Produkt von Primzahlen ist jede Zahl der Form abcabc teilbar (zum Beispiel 234234)?' },
+    options: [
+      { ro: '2 · 3 · 5', de: '2 · 3 · 5' },
+      { ro: '3 · 5 · 7', de: '3 · 5 · 7' },
+      { ro: '11 · 13 · 17', de: '11 · 13 · 17' },
+      { ro: '7 · 11 · 13', de: '7 · 11 · 13' },
+    ],
+    correct: 3,
+    explain: {
+      ro: 'abcabc = abc · 1001, iar 1001 = 7 · 11 · 13. Deci orice număr de forma abcabc conține factorii 7, 11 și 13, indiferent de cifre.',
+      de: 'abcabc = abc · 1001, und 1001 = 7 · 11 · 13. Also enthält jede Zahl der Form abcabc die Faktoren 7, 11 und 13, egal welche Ziffern.',
+    },
+  },
+  {
+    q: { ro: 'Numerele naturale x și y verifică x² · (y + 3) = 275. Care dintre perechile (x; y) este o soluție?', de: 'Die natürlichen Zahlen x und y erfüllen x² · (y + 3) = 275. Welches Paar (x; y) ist eine Lösung?' },
+    options: [
+      { ro: '(5; 11)', de: '(5; 11)' },
+      { ro: '(11; 2)', de: '(11; 2)' },
+      { ro: '(1; 275)', de: '(1; 275)' },
+      { ro: '(5; 8)', de: '(5; 8)' },
+    ],
+    correct: 3,
+    explain: {
+      ro: '275 = 5² · 11. Pătratele perfecte care îl divid pe 275 sunt 1 și 25. Pentru x = 5: y + 3 = 275 : 25 = 11, deci y = 8. Verificare: 25 · 11 = 275. (Pentru x = 1 se obține y = 272.)',
+      de: '275 = 5² · 11. Die Quadratzahlen, die 275 teilen, sind 1 und 25. Für x = 5: y + 3 = 275 : 25 = 11, also y = 8. Kontrolle: 25 · 11 = 275. (Für x = 1 erhält man y = 272.)',
+    },
+  },
+  {
+    q: { ro: 'Câte numere prime dau câtul 12 la împărțirea cu 8?', de: 'Wie viele Primzahlen ergeben bei der Division durch 8 den Quotienten 12?' },
+    options: [
+      { ro: '1', de: '1' },
+      { ro: '2', de: '2' },
+      { ro: '3', de: '3' },
+      { ro: '4', de: '4' },
+    ],
+    correct: 2,
+    explain: {
+      ro: 'Dacă n : 8 are câtul 12, atunci n = 8 · 12 + r = 96 + r, cu restul r de la 0 la 7. Deci n este unul dintre 96, 97, …, 103. Numerele prime dintre ele sunt 97, 101 și 103: trei.',
+      de: 'Hat n : 8 den Quotienten 12, dann ist n = 8 · 12 + r = 96 + r mit Rest r von 0 bis 7. Also ist n eine der Zahlen 96, 97, …, 103. Die Primzahlen darunter sind 97, 101 und 103: drei.',
+    },
+  },
 ];
