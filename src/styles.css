@@ -710,3 +710,286 @@ button {
 .quiz-retry:hover {
   background: var(--brand-dark);
 }
+
+/* ---------- Ciornă ---------- */
+
+.quiz-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.scratch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px;
+  min-height: 36px;
+  border-radius: 99px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.scratch-btn:hover {
+  border-color: var(--brand-light);
+}
+
+.scratch-btn.has-scratch {
+  border-color: var(--brand-light);
+  background: var(--bg);
+  padding-left: 6px;
+}
+
+.scratch-btn img {
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  object-fit: cover;
+  background: #fff;
+}
+
+.scratch-clear-all {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.scratch-link {
+  font: inherit;
+  font-size: 13px;
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  color: var(--brand);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.scratch-link.is-danger {
+  color: #c23b3b;
+  font-weight: 600;
+}
+
+.scratch {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+@media (min-width: 768px) {
+  .scratch {
+    left: auto;
+    width: min(60vw, 900px);
+    border-left: 1px solid var(--line);
+    box-shadow: -12px 0 40px rgba(31, 138, 120, 0.16);
+    animation: scratch-in 0.2s ease-out;
+  }
+
+  /* Întrebarea rămâne vizibilă în stânga, lângă ciornă. */
+  .quiz.scratch-open .quiz-list,
+  .quiz.scratch-open .quiz-result {
+    max-width: calc(100vw - min(60vw, 900px) - 2 * var(--gutter));
+  }
+}
+
+@keyframes scratch-in {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scratch {
+    animation: none;
+  }
+}
+
+.scratch-top {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 12px;
+  align-items: start;
+  padding: 10px 14px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.scratch-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: var(--brand-dark);
+}
+
+.scratch-status {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.scratch-status.is-warn {
+  color: #b0541f;
+}
+
+.scratch-q {
+  grid-column: 1;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.scratch-done {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 40px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--brand);
+  color: #fff;
+  cursor: pointer;
+}
+
+.scratch-done:hover {
+  background: var(--brand-dark);
+}
+
+.scratch-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tool {
+  display: inline-grid;
+  place-items: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  font-size: 18px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.tool[aria-pressed='true'] {
+  border-color: var(--brand);
+  background: var(--bg);
+}
+
+.tool:disabled,
+.tool-text:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.tool-dot {
+  display: block;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.tool-sep {
+  width: 1px;
+  height: 26px;
+  background: var(--line);
+  margin: 0 4px;
+}
+
+.tool-select,
+.tool-text {
+  font: inherit;
+  font-size: 13px;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.tool-text {
+  cursor: pointer;
+}
+
+.scratch-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.scratch-danger {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #c23b3b;
+  color: #fff;
+  cursor: pointer;
+}
+
+.scratch-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #fbfbf8;
+}
+
+.scratch-sheet {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.scratch-paper {
+  position: relative;
+  height: 200cqw;
+  background-color: #fff;
+}
+
+.scratch-paper.bg-grid {
+  background-image: linear-gradient(#bcd3ec 1px, transparent 1px), linear-gradient(90deg, #bcd3ec 1px, transparent 1px);
+  background-size: 4cqw 4cqw;
+}
+
+.scratch-paper.bg-lines {
+  background-image: linear-gradient(#bcd3ec 1px, transparent 1px);
+  background-size: 100% 6cqw;
+}
+
+.scratch-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}

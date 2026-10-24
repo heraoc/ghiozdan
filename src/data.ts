@@ -17,6 +17,7 @@ import { poliiSiOceaneleTest } from './content/polii-si-oceanele-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import { operatiiCuMultimiTest } from './content/operatii-cu-multimi-test';
+import { numerePrimeTest } from './content/numere-prime-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -245,6 +246,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         src: 'lectii/clasa-6/algebra/operatii-cu-multimi.html',
         done: true,
         test: { questions: operatiiCuMultimiTest, minutes: 8 },
+      },
+      {
+        slug: 'numere-prime',
+        title: {
+          ro: 'Divizibilitate, numere prime, factori primi',
+          de: 'Teilbarkeit, Primzahlen, Primfaktoren',
+        },
+        summary: {
+          ro: 'Divizibilitatea în ℕ, divizori și multipli, numere prime și compuse (ciurul lui Eratostene), descompunerea în factori primi, produse de puteri și probleme ca în caiet.',
+          de: 'Teilbarkeit in ℕ, Teiler und Vielfache, Primzahlen und zusammengesetzte Zahlen (Sieb des Eratosthenes), Primfaktorzerlegung, Produkte von Potenzen und Aufgaben wie im Heft.',
+        },
+        src: 'lectii/clasa-6/algebra/numere-prime.html',
+        test: { questions: numerePrimeTest, minutes: 10 },
       },
     ],
     gmt: [

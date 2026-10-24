@@ -59,7 +59,7 @@ export function LessonPage({ grade, subjectSlug, lessonSlug, toTest }: Props) {
         height={frameHeight}
         onHeight={setFrameHeight}
       />
-      {lesson.test && <Quiz key={lesson.slug} ref={quizRef} questions={lesson.test.questions} />}
+      {lesson.test && <Quiz key={lesson.slug} ref={quizRef} questions={lesson.test.questions} scratchKey={`${grade}/${subjectSlug}/${lessonSlug}`} />}
     </main>
   );
 }

@@ -1,6 +1,6 @@
 # Plan: „Ciorna" (scratchpad pentru teste)
 
-Stare: planificat, neimplementat. Se introduce odată cu următoarea lecție.
+Stare: implementat (primul pas) odată cu lecția „Divizibilitate, numere prime, factori primi”: buton „Ciornă” pe fiecare întrebare, creion/radieră/culori/grosimi/undo/redo/fundal, salvare automată în IndexedDB, „Curăță ciornele”. Rămân pentru mai târziu: ciorna generală, tap dublu pe Pencil, zoom.
 
 Starea actuală: testul e o listă de întrebări cu variante (`src/components/Quiz.tsx`), pe pagina lecției, sub cadrul interactiv. Nu există niciun loc pentru calcule, așa că ciorna se adaugă ca strat peste test.
 
