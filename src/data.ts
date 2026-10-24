@@ -2,6 +2,7 @@
 
 import { ceasulSiArceleTest } from './content/ceasul-si-arcele-test';
 import { unghiuriTest } from './content/unghiuri-test';
+import { paralelismTest } from './content/paralelism-test';
 import { adiacenteBisectoareaTest } from './content/adiacente-bisectoarea-test';
 import { ibnBattutaTest } from './content/ibn-battuta-test';
 import { inmultireaTest } from './content/inmultirea-test';
@@ -303,6 +304,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         src: 'lectii/clasa-6/geometrie/unghiuri.html',
         done: true,
         test: { questions: unghiuriTest, minutes: 8 },
+      },
+      {
+        slug: 'paralelism',
+        title: {
+          ro: 'Paralelism: drepte paralele și unghiuri formate cu o secantă',
+          de: 'Parallelität: parallele Geraden und Winkel an einer Transversalen',
+        },
+        summary: {
+          ro: 'Drepte paralele, concurente și care coincid, axioma paralelelor, construcția cu echerul și rigla, proprietățile paralelismului, cele opt unghiuri formate de o secantă, criteriile de paralelism și calculul unghiurilor la drepte paralele.',
+          de: 'Parallele, sich schneidende und zusammenfallende Geraden, das Parallelenaxiom, Konstruktion mit Geodreieck und Lineal, Eigenschaften der Parallelität, die acht Winkel an einer Transversalen, Parallelitätskriterien und Winkelberechnung bei parallelen Geraden.',
+        },
+        src: 'lectii/clasa-6/geometrie/paralelism.html',
+        test: { questions: paralelismTest, minutes: 10 },
       },
     ],
     fiz: [
