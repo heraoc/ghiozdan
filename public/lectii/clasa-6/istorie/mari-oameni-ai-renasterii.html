@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mari oameni ai Renașterii</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Große Persönlichkeiten der Renaissance';
+})();
+</script>
+<style>
+:root{
+  --paper:#f8f5ef; --card:#ffffff; --ink:#231f1a; --muted:#625b51; --rule:#e5ded0; --sheet:#f2ece0;
+  --accent:#b4531f; --accent-soft:#fbeadf;
+  --a1:#c9871b; --a1s:#fbecc9; --a2:#2f6fd6; --a2s:#dfe9fb; --a3:#8e44ad; --a3s:#efe2f6; --a4:#1f8a5b; --a4s:#dcf1e6;
+  --good:#1f8a5b; --good-soft:#e3f5ec; --bad:#c23b3b; --bad-soft:#fbe4e4;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)} .hint{font-size:14.5px;color:var(--muted)}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.remember{margin-top:16px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.fig svg{display:block;width:100%;height:auto}
+.fig .cap{font-size:13.5px;color:var(--muted);padding:2px 6px 0}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.panel{display:grid;gap:10px}
+.readout{background:var(--sheet);border-radius:10px;padding:10px 14px;display:grid;gap:4px;min-height:84px;align-content:start}
+.readout b{font-family:var(--display);font-size:19px}
+.readout .sub{font-size:15px;color:var(--muted)}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#a12f2f;background:var(--bad-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.chip{border:1.5px solid var(--rule);background:#fff;border-radius:99px;padding:5px 14px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip i{width:12px;height:12px;border-radius:3px;background:var(--c,#999);display:inline-block}
+.chip.dom[aria-pressed="true"]{background:var(--c);border-color:var(--c)}
+.stps{margin:0;padding-left:1.3em;display:grid;gap:6px}
+.stps li{padding:6px 10px;border-radius:8px;border-left:4px solid transparent;color:var(--muted)}
+.stps li.on{background:#fff9d6;border-left-color:#e0a100;color:var(--ink);font-weight:500}
+.stps li.done{color:var(--ink)}
+.sub3{margin:26px 0 8px;font-size:22px}
+.result{border-radius:10px;padding:10px 14px;font-weight:700}
+.result:empty{display:none}
+.result.good{background:var(--good-soft);color:#17744d}
+.result.try{background:#fdf0d5;color:#8a5a00}
+.result.no{background:var(--bad-soft);color:#a12f2f}
+.story{background:#fff9e6;border:1px solid #f1e2b0;border-radius:10px;padding:10px 14px;font-size:18px}
+.quote{background:#fbf3e4;border:1px solid #ecd9b4;border-radius:8px;padding:12px 16px;font-style:italic}
+.quote cite{display:block;font-style:normal;font-size:14px;color:var(--muted);margin-top:6px}
+
+/* hărți și desene */
+.hot{cursor:pointer}
+.hot:focus{outline:none}
+.hot:focus-visible circle,.hot:focus-visible rect.hb{stroke:var(--ink);stroke-width:3}
+.tlt{font:700 13px var(--body);fill:var(--muted);text-anchor:middle}
+.tlb{font:800 14px var(--display);fill:var(--ink);text-anchor:middle}
+.sea{fill:#dbe9ee}
+.land{fill:#efe8d6;stroke:#b9ad8e;stroke-width:.4}
+.bord{fill:none;stroke:#cdbf9d;stroke-width:.5}
+.mlbl{font-family:var(--body);font-weight:800;fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round}
+.slbl{font:700 13px var(--body);fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+.lg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted);margin-top:8px}
+.lg > span{display:inline-flex;align-items:center;gap:6px}
+.fig .lg svg{width:26px;flex:none;display:inline-block}
+.lg i{width:14px;height:14px;border-radius:50%;display:inline-block}
+
+/* fluxuri și carduri */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:stretch}
+.flow .fs{background:var(--card);border:1.5px solid var(--rule);border-radius:10px;padding:10px 10px;font-size:15px;line-height:1.35;color:var(--muted);position:relative;opacity:.55;transition:opacity .2s}
+.flow .fs b{display:block;font:800 22px/1 var(--display);margin-bottom:4px;color:var(--ink)}
+.flow .fs.on{opacity:1;border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.flow .fs.done{opacity:1;color:var(--ink)}
+.flow .fs:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);font-weight:800;color:var(--accent);z-index:2}
+.people{display:grid;gap:12px}
+.pgroup h3{font-size:19px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.pgroup h3 i{width:12px;height:12px;border-radius:3px;background:var(--c);display:inline-block}
+.rows{display:grid;gap:8px}
+.ex{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px 16px;display:grid;gap:10px}
+.sortrow{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:6px 0;border-top:1px dashed var(--rule)}
+.sortrow:first-of-type{border-top:0}
+.sortrow .fb{grid-column:1/-1;font-size:14.5px;color:var(--muted)}
+.sortrow.ok{background:linear-gradient(90deg,var(--good-soft),transparent 60%)}
+.cloze{font-size:19px;line-height:2.1}
+.cloze select{border:1.5px solid var(--rule);border-radius:8px;padding:3px 6px;background:#fff;font:700 16px var(--body);max-width:100%}
+.cloze select.ok{border-color:var(--good);background:var(--good-soft)}
+.cloze select.bad{border-color:var(--bad);background:var(--bad-soft)}
+.tick{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1.5px solid var(--rule);border-radius:8px;background:#fff;cursor:pointer;text-align:left;width:100%}
+.tick[aria-pressed="true"]{border-color:var(--ink);background:var(--sheet)}
+.tick.ok{border-color:var(--good);background:var(--good-soft)}
+.tick.bad{border-color:var(--bad);background:var(--bad-soft)}
+.tick .bx{flex:none;width:20px;height:20px;border:2px solid var(--ink);border-radius:5px;display:inline-grid;place-items:center;font-weight:800;line-height:1;margin-top:2px}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #dcc0a8;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted)}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+  .flow{grid-template-columns:1fr}
+  .flow .fs:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-16px;transform:translateX(-50%)}
+}
+@media (max-width:520px){ .slbl{font-size:19px} .tlt{font-size:17px} .tlb{font-size:18px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;scroll-behavior:auto!important} }
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+[hidden]{display:none!important}
+</style>
+<style>
+.lifebar{cursor:pointer}
+.lifebar rect.b{transition:opacity .2s}
+.lname{font:700 13.5px var(--body);fill:var(--ink);text-anchor:end}
+.lyr{font:600 12px var(--body);fill:var(--muted)}
+.lgrid{stroke:#e5ded0;stroke-width:1}
+.prof{border-left:6px solid var(--c,#999)}
+.prof dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;margin:6px 0 0}
+.prof dt{font-weight:700}
+.prof dd{margin:0}
+@media (max-width:520px){ .prof dl{grid-template-columns:1fr} .prof dd{margin-bottom:6px} .lname{font-size:23px} .lyr{font-size:18px} }
+.sky text{font:700 13px var(--body);fill:#fff;text-anchor:middle}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Istorie · Clasa a 6-a · Începutul epocii moderne</span><span class="de">Geschichte · Klasse 6 · Beginn der Neuzeit</span></p>
+  <h1><span class="ro">Mari oameni ai Renașterii</span><span class="de">Große Persönlichkeiten der Renaissance</span></h1>
+  <p class="lead">
+    <span class="ro">Artiști, savanți și gânditori care au făcut Renașterea: Leonardo da Vinci, Michelangelo, Giordano Bruno, Galileo Galilei, Niccolò Machiavelli și William Shakespeare. La final cunoaștem și trei umaniști de-ai noștri: Nicolaus Olahus, Johannes Honterus și Dimitrie Cantemir.</span>
+    <span class="de">Künstler, Gelehrte und Denker, die die Renaissance prägten: Leonardo da Vinci, Michelangelo, Giordano Bruno, Galileo Galilei, Niccolò Machiavelli und William Shakespeare. Am Ende lernen wir auch drei Humanisten aus unserem Raum kennen: Nicolaus Olahus, Johannes Honterus und Dimitrie Cantemir.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Ce înseamnă să fii „om universal”? Cine din lecție ți se pare cel mai bun exemplu?</span><span class="de">Was heißt „universeller Mensch“? Wer aus der Lektion ist dafür das beste Beispiel?</span></li>
+        <li><span class="ro">De ce a fost pedepsit un om pentru ideile lui despre cer?</span><span class="de">Warum wurde ein Mensch für seine Ideen über den Himmel bestraft?</span></li>
+        <li><span class="ro">Care dintre ei au trăit în același timp?</span><span class="de">Wer von ihnen lebte zur gleichen Zeit?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Cine au fost?</span><span class="de">Wer waren sie?</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Leonardo și Michelangelo</span><span class="de">Leonardo und Michelangelo</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Bruno și Galilei</span><span class="de">Bruno und Galilei</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Machiavelli și Shakespeare</span><span class="de">Machiavelli und Shakespeare</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Umaniști români</span><span class="de">Rumänische Humanisten</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Fixăm</span><span class="de">Wir festigen</span></a>
+  </nav>
+</header>
+
+<!-- 1. Galerie -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Nouă vieți pe aceeași axă</span><span class="de">Neun Leben auf einer Zeitachse</span></h2>
+  <p class="section-sub"><span class="ro">Fiecare bară este viața unei persoane. Trage glisorul ca să vezi cine trăia într-un anumit an, sau apasă pe o bară ca să afli cine a fost.</span><span class="de">Jeder Balken ist das Leben einer Person. Ziehe den Regler, um zu sehen, wer in einem bestimmten Jahr lebte, oder tippe auf einen Balken, um zu erfahren, wer es war.</span></p>
+  <div class="fig"><svg id="lf-svg" viewBox="0 0 720 390" role="img"></svg></div>
+  <div class="split" style="margin-top:10px">
+    <div class="readout" style="min-height:0">
+      <label for="lf-y" style="font-weight:700"><span class="ro">Anul</span><span class="de">Jahr</span>: <span id="lf-yv"></span></label>
+      <input type="range" id="lf-y" min="1450" max="1730" value="1564" style="width:100%;accent-color:var(--accent)">
+      <p class="sub" id="lf-who" aria-live="polite"></p>
+    </div>
+    <div class="readout prof" id="lf-out" aria-live="polite"></div>
+  </div>
+  <div class="check" id="c1"></div>
+</section>
+
+<!-- 2. Leonardo și Michelangelo -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Leonardo da Vinci și Michelangelo</span><span class="de">Leonardo da Vinci und Michelangelo</span></h2>
+  <h3 class="sub3" style="margin-top:10px">Leonardo da Vinci (1452–1519)</h3>
+  <div class="readout prof" style="--c:#c9871b;min-height:0"><p><span class="ro">S-a născut la Vinci, lângă Florența. În adolescență a devenit ucenic al pictorului și sculptorului Verrocchio. În mare măsură autodidact, a lăsat numeroase însemnări, observații, schițe și desene despre cercetările sale în cele mai diverse domenii. Este considerat o personalitate care ilustrează idealul uman al Renașterii: un spirit animat de o curiozitate nemaiîntâlnită și susținut de o extraordinară imaginație.</span><span class="de">Er wurde in Vinci bei Florenz geboren. Als Jugendlicher wurde er Schüler des Malers und Bildhauers Verrocchio. Zum großen Teil Autodidakt, hinterließ er zahlreiche Notizen, Beobachtungen, Skizzen und Zeichnungen zu seinen Forschungen in den verschiedensten Gebieten. Er gilt als Persönlichkeit, die das Menschenideal der Renaissance verkörpert: ein Geist voller beispielloser Neugier und außergewöhnlicher Fantasie.</span></p></div>
+  <p class="section-sub" style="margin-top:12px"><span class="ro">Leonardo a fost în același timp om de știință și artist. Pentru fiecare activitate, decide în ce parte o așezi.</span><span class="de">Leonardo war zugleich Wissenschaftler und Künstler. Entscheide bei jeder Tätigkeit, in welche Gruppe sie gehört.</span></p>
+  <div class="ex" id="sg-leo"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține: Leonardo</span><span class="de">Merke dir: Leonardo</span></h3>
+    <ul>
+      <li><span class="ro"><b>Omul de știință și inventatorul</b>: l-a atras mecanica; a proiectat sisteme mobile de baricade, pompe hidraulice, arme, instrumente muzicale, un robot, mașini de zburat (printre ele <b>șurubul aerian</b>, un fel de elicopter). A studiat anatomia umană și forma plantelor.</span><span class="de"><b>Der Wissenschaftler und Erfinder</b>: Ihn faszinierte die Mechanik; er entwarf bewegliche Barrikaden, Wasserpumpen, Waffen, Musikinstrumente, einen Roboter, Flugmaschinen (darunter die <b>Luftschraube</b>, eine Art Hubschrauber). Er studierte die menschliche Anatomie und die Form der Pflanzen.</span></li>
+      <li><span class="ro"><b>Artistul</b>: <i>Mona Lisa</i> și <i>Cina cea de Taină</i>, cu colorit inovator, detalii perfecționate, joc de lumini și umbre și redarea sentimentelor personajelor. Pentru el, arta era puternic legată de știință și natură.</span><span class="de"><b>Der Künstler</b>: <i>Mona Lisa</i> und <i>Das Abendmahl</i> mit neuartiger Farbgebung, vollendeten Details, Spiel von Licht und Schatten und dem Ausdruck der Gefühle der Figuren. Für ihn war die Kunst eng mit Wissenschaft und Natur verbunden.</span></li>
+    </ul>
+  </div>
+
+  <h3 class="sub3">Michelangelo (1475–1564)</h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Născut la Caprese, lângă Florența, a lucrat sub patronajul familiei Medici și la comanda a șapte papi. A fost sculptor, arhitect și pictor. Alege o „pălărie”.</span><span class="de">In Caprese bei Florenz geboren, arbeitete er unter dem Schutz der Familie Medici und im Auftrag von sieben Päpsten. Er war Bildhauer, Architekt und Maler. Wähle einen „Hut“.</span></p>
+  <div class="chips" id="mi-chips" role="group"></div>
+  <div class="readout prof" id="mi-out" aria-live="polite" style="--c:#b4531f"></div>
+
+  <h4 style="margin:18px 0 6px;font:800 19px var(--display)"><span class="ro">Capela Sixtină, de sus</span><span class="de">Die Sixtinische Kapelle, von oben</span></h4>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Desenul este simplificat. Apasă pe plafon, pe scena centrală sau pe peretele din capăt.</span><span class="de">Die Zeichnung ist vereinfacht. Tippe auf die Decke, auf die mittlere Szene oder auf die Stirnwand.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="sx-svg" viewBox="0 0 520 250" role="img"></svg></div>
+    <div class="panel"><div class="readout" id="sx-out" aria-live="polite"></div></div>
+  </div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Bruno și Galilei -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Giordano Bruno și Galileo Galilei</span><span class="de">Giordano Bruno und Galileo Galilei</span></h2>
+  <div class="split">
+    <div class="readout prof" style="--c:#8e44ad;min-height:0"><b>Giordano Bruno (1548–1600)</b><p><span class="ro">Născut în sudul Italiei, a devenit călugăr dominican. Încă din mănăstire și-a arătat spiritul liber și nonconformist; acuzat de erezie, a părăsit mănăstirea și a rătăcit prin Europa. A ținut prelegeri la universitățile din Toulouse și Oxford. A scris <i>Dialoguri italiene</i> (șase la număr): trei despre Univers, trei despre morală. Susținea teoria heliocentrică, credea că stelele sunt asemănătoare Soarelui, că Universul este infinit și conține un număr infinit de lumi și că Dumnezeu și natura reprezintă același lucru (panteism). Revenit în 1591 în Italia, a fost arestat de Inchiziția Romană și, pe 17 februarie 1600, ars pe rug în piața Campo dei Fiori din Roma.</span><span class="de">Im Süden Italiens geboren, wurde er Dominikanermönch. Schon im Kloster zeigte er seinen freien, unangepassten Geist; der Ketzerei beschuldigt, verließ er das Kloster und zog durch Europa. Er hielt Vorlesungen an den Universitäten Toulouse und Oxford. Er schrieb die <i>Italienischen Dialoge</i> (sechs an der Zahl): drei über das Universum, drei über Moral. Er vertrat das heliozentrische Weltbild, glaubte, dass die Sterne der Sonne ähneln, dass das Universum unendlich ist und unendlich viele Welten enthält und dass Gott und Natur dasselbe sind (Pantheismus). 1591 kehrte er nach Italien zurück, wurde von der römischen Inquisition verhaftet und am 17. Februar 1600 auf dem Campo dei Fiori in Rom auf dem Scheiterhaufen verbrannt.</span></p></div>
+    <div class="readout prof" style="--c:#2f6fd6;min-height:0"><b>Galileo Galilei (1564–1642)</b><p><span class="ro">Născut la Pisa, într-o familie săracă, dar nobilă. A fost profesor de astronomie și matematică la Universitățile din Pisa și Padova. Fizician, matematician și astronom, a devenit celebru prin perfecționarea telescopului. A fost susținător al lui Copernic. A descoperit și legea căderii corpurilor. Lucrarea <i>Dialog despre cele două sisteme principale ale lumii</i> (1632) i-a adus condamnarea Inchiziției. În 1992, Biserica Catolică, prin papa Ioan Paul al II-lea, a recunoscut că a greșit condamnându-l.</span><span class="de">In Pisa in einer armen, aber adeligen Familie geboren. Er war Professor für Astronomie und Mathematik an den Universitäten Pisa und Padua. Als Physiker, Mathematiker und Astronom wurde er berühmt, weil er das Teleskop verbesserte. Er war ein Anhänger von Kopernikus. Er entdeckte auch das Fallgesetz. Sein Werk <i>Dialog über die beiden hauptsächlichen Weltsysteme</i> (1632) brachte ihm die Verurteilung durch die Inquisition ein. 1992 erkannte die katholische Kirche durch Papst Johannes Paul II. an, dass sie sich bei der Verurteilung geirrt hatte.</span></p></div>
+  </div>
+
+  <h3 class="sub3"><span class="ro">Ce a văzut Galilei prin telescop?</span><span class="de">Was sah Galilei durch das Fernrohr?</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Apasă pe cele patru obiecte de pe cer. Desenul este schematic.</span><span class="de">Tippe auf die vier Objekte am Himmel. Die Zeichnung ist schematisch.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="sk-svg" class="sky" viewBox="0 0 520 300" role="img"></svg></div>
+    <div class="panel"><div class="readout" id="sk-out" aria-live="polite"></div></div>
+  </div>
+
+  <h3 class="sub3"><span class="ro">Cine a fost? Bruno sau Galilei?</span><span class="de">Wer war es? Bruno oder Galilei?</span></h3>
+  <div class="ex" id="sg-bg"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro"><b>Bruno</b>: Universul infinit și spiritul liber. A plătit cu viața (rug, 1600).</span><span class="de"><b>Bruno</b>: unendliches Universum und freier Geist. Er bezahlte mit dem Leben (Scheiterhaufen, 1600).</span></li>
+      <li><span class="ro"><b>Galilei</b>: telescopul, observația și experimentul; „părintele științei moderne”. Condamnat de Inchiziție pentru <i>Dialog</i> (1632).</span><span class="de"><b>Galilei</b>: Teleskop, Beobachtung und Experiment; „Vater der modernen Wissenschaft“. Von der Inquisition für den <i>Dialog</i> (1632) verurteilt.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Machiavelli și Shakespeare -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Machiavelli și Shakespeare</span><span class="de">Machiavelli und Shakespeare</span></h2>
+  <div class="readout prof" style="--c:#c0392b;min-height:0"><b>Niccolò Machiavelli (1469–1527)</b><p><span class="ro">Născut aproape de Florența, într-o familie cu origini nobiliare. Dificultățile financiare l-au făcut să intre în serviciul guvernului în 1494. După ce, în 1498, Florența s-a proclamat republică, a fost secretar al Consiliului celor Zece. În 1512, odată cu revenirea familiei de Medici la cârma Florenței, a fost destituit din funcție, arestat pentru scurt timp, apoi exilat. Retras din viața publică, s-a dedicat scrisului. Este considerat astăzi fondatorul gândirii politice moderne.</span><span class="de">Nahe Florenz in einer Familie mit adeligen Wurzeln geboren. Geldsorgen führten ihn 1494 in den Dienst der Regierung. Nachdem sich Florenz 1498 zur Republik erklärt hatte, war er Sekretär des Rates der Zehn. 1512, als die Familie Medici wieder die Macht in Florenz übernahm, wurde er seines Amtes enthoben, kurz verhaftet und dann verbannt. Aus dem öffentlichen Leben zurückgezogen, widmete er sich dem Schreiben. Heute gilt er als Begründer des modernen politischen Denkens.</span></p></div>
+  <p class="section-sub" style="margin-top:14px"><span class="ro">Cartea <i>Principele</i> are 26 de capitole. Apasă pe un grup de capitole ca să vezi tema lui.</span><span class="de">Das Buch <i>Der Fürst</i> hat 26 Kapitel. Tippe auf eine Kapitelgruppe, um ihr Thema zu sehen.</span></p>
+  <div class="chips" id="mc-chips" role="group"></div>
+  <div class="readout" id="mc-out" aria-live="polite"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține: Machiavelli</span><span class="de">Merke dir: Machiavelli</span></h3>
+    <ul>
+      <li><span class="ro">Cele mai importante scrieri: <i>Discursuri asupra primei decade a lui Titus Livius</i> și <i>Principele</i> (1532).</span><span class="de">Wichtigste Schriften: <i>Discorsi über die erste Dekade des Titus Livius</i> und <i>Der Fürst</i> (1532).</span></li>
+      <li><span class="ro">În <i>Principele</i>, un principe trebuie să se preocupe doar de arta războiului și să urmărească succesul. De aici expresia <b>„Scopul scuză mijloacele”</b> și numele de <b>„machiavelism”</b>.</span><span class="de">Im <i>Fürsten</i> soll ein Fürst sich nur um die Kriegskunst kümmern und den Erfolg verfolgen. Daher der Ausdruck <b>„Der Zweck heiligt die Mittel“</b> und der Name <b>„Machiavellismus“</b>.</span></li>
+    </ul>
+  </div>
+
+  <div class="readout prof" style="--c:#1f8a5b;min-height:0;margin-top:26px"><b>William Shakespeare (1564–1616)</b><p><span class="ro">Născut la Stratford-upon-Avon. Se cunosc puține lucruri despre educația primită, dar calitatea literară deosebită a operelor sale sugerează că era un om cult. Și-a desfășurat activitatea în Londra, unde a avut o carieră de succes ca actor, scriitor și coproprietar al unei companii de teatru. Majoritatea operelor sale au fost scrise între 1589 și 1613. Cea mai cunoscută ediție a pieselor este <i>The First Folio</i> (1623).</span><span class="de">In Stratford-upon-Avon geboren. Über seine Ausbildung ist wenig bekannt, aber die besondere literarische Qualität seiner Werke deutet auf einen gebildeten Mann hin. Er wirkte in London, wo er als Schauspieler, Schriftsteller und Miteigentümer einer Theatergruppe erfolgreich war. Die meisten seiner Werke entstanden zwischen 1589 und 1613. Die bekannteste Ausgabe seiner Stücke ist das <i>First Folio</i> (1623).</span></p></div>
+  <p class="section-sub" style="margin-top:12px"><span class="ro">Piesele lui Shakespeare: drame istorice, comedii, tragedii, plus 154 de sonete. Pentru fiecare piesă, alege tipul sau tema.</span><span class="de">Shakespeares Werke: Historiendramen, Komödien, Tragödien und 154 Sonette. Wähle bei jedem Stück die Art oder das Thema.</span></p>
+  <div class="ex" id="sg-sh"></div>
+
+  <h3 class="sub3"><span class="ro">Teatrul Globe</span><span class="de">Das Globe Theatre</span></h3>
+  <div id="gl-box"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține: Shakespeare</span><span class="de">Merke dir: Shakespeare</span></h3>
+    <ul>
+      <li><span class="ro">Dramele istorice (<i>Richard al III-lea</i>, <i>Henric al IV-lea</i>, <i>Henric al V-lea</i>) arată Anglia medievală; comediile celebrează dragostea de viață; marile tragedii pornesc de la sentimentele care determină comportamentul oamenilor.</span><span class="de">Die Historiendramen (<i>Richard III.</i>, <i>Heinrich IV.</i>, <i>Heinrich V.</i>) zeigen das mittelalterliche England; die Komödien feiern die Lebensfreude; die großen Tragödien gehen von den Gefühlen aus, die das Verhalten der Menschen bestimmen.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Umaniști români -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Umaniști români: Olahus, Honterus, Cantemir</span><span class="de">Rumänische Humanisten: Olahus, Honterus, Cantemir</span></h2>
+  <p class="section-sub"><span class="ro">Ideile umaniste au ajuns și în spațiul românesc. Alege o persoană ca să-i vezi fișa. Profilele sunt făcute din surse de pe internet; datele pot diferi puțin de la o sursă la alta.</span><span class="de">Die humanistischen Ideen erreichten auch den rumänischen Raum. Wähle eine Person, um ihr Profil zu sehen. Die Profile stammen aus Internetquellen; die Angaben können sich von Quelle zu Quelle leicht unterscheiden.</span></p>
+  <div class="chips" id="rp-chips" role="group"></div>
+  <div class="readout prof" id="rp-out" aria-live="polite"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro"><b>Olahus</b> (1493–1568): umanist din Sibiu, arhiepiscop de Esztergom, autorul lucrării <i>Hungaria</i>.</span><span class="de"><b>Olahus</b> (1493–1568): Humanist aus Hermannstadt, Erzbischof von Gran (Esztergom), Autor des Werks <i>Hungaria</i>.</span></li>
+      <li><span class="ro"><b>Honterus</b> (1498–1549): umanist din Brașov, tipograf și cartograf, reformator.</span><span class="de"><b>Honterus</b> (1498–1549): Humanist aus Kronstadt, Drucker und Kartograf, Reformator.</span></li>
+      <li><span class="ro"><b>Cantemir</b> (1673–1723): domn al Moldovei, mare cărturar, autorul <i>Istoriei ieroglifice</i> și al <i>Descrierii Moldovei</i>.</span><span class="de"><b>Cantemir</b> (1673–1723): Fürst der Moldau, großer Gelehrter, Autor der <i>Hieroglyphischen Geschichte</i> und der <i>Beschreibung der Moldau</i>.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c5"></div>
+</section>
+
+<!-- 6. Fixare -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Fixăm ce am învățat</span><span class="de">Wir festigen das Gelernte</span></h2>
+  <h3 class="sub3" style="margin-top:6px"><span class="ro">Cine sunt eu?</span><span class="de">Wer bin ich?</span></h3>
+  <div class="check" id="c6" style="margin-top:0"></div>
+  <h3 class="sub3"><span class="ro">Sinteză: expoziția „Arta Renașterii”</span><span class="de">Zusammenfassung: Die Ausstellung „Kunst der Renaissance“</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Pe caiet sau împreună cu colegii: alege o operă a lui Leonardo, una a lui Michelangelo și un fragment din Shakespeare. Pentru fiecare, scrie într-o frază cum reflectă ea concepția umanistă (omul în centru, rațiunea, frumusețea).</span><span class="de">Im Heft oder gemeinsam mit Mitschülern: Wähle ein Werk von Leonardo, eines von Michelangelo und einen Ausschnitt von Shakespeare. Schreibe zu jedem in einem Satz, wie es das humanistische Denken zeigt (Mensch im Mittelpunkt, Vernunft, Schönheit).</span></p>
+
+  <h3 class="sub3"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h3>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După manualul de Istorie, clasa a 6-a, paginile despre Leonardo da Vinci, Michelangelo, Giordano Bruno, Galileo Galilei, Niccolò Machiavelli și William Shakespeare. Profilele lui Olahus, Honterus și Cantemir sunt făcute din surse de pe internet (între altele, Wikipedia). Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Geschichtsbuch der 6. Klasse, den Seiten über Leonardo da Vinci, Michelangelo, Giordano Bruno, Galileo Galilei, Niccolò Machiavelli und William Shakespeare. Die Profile von Olahus, Honterus und Cantemir stammen aus Internetquellen (u. a. Wikipedia). Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+var narrow = window.innerWidth < 560;
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+function readout(box, title, body, sub) {
+  box.innerHTML = (title ? '<b>' + title + '</b>' : '') + (body ? '<p>' + body + '</p>' : '') + (sub ? '<p class="sub">' + sub + '</p>' : '');
+}
+function hotspot(parent, fn, label) {
+  var g = el('g', { class: 'hot', tabindex: 0, role: 'button', 'aria-label': label }, parent);
+  g.addEventListener('click', fn);
+  g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } });
+  return g;
+}
+function chipGroup(host, items, onSel) {
+  var bs = items.map(function (it, i) {
+    var b = btn('chip', it.label); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { sel(i); };
+    host.appendChild(b); return b;
+  });
+  function sel(i) { bs.forEach(function (x, j) { x.setAttribute('aria-pressed', i === j ? 'true' : 'false'); }); onSel(i); }
+  return sel;
+}
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.textContent = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+/** Sortare: fiecare element se așază într-una dintre categorii. */
+function SortGame(host, cats, items, doneMsg) {
+  var done = 0;
+  items.forEach(function (it) {
+    var row = h('div', 'sortrow'), q = h('span', '', T(it.n)), bx = h('div', 'row'), fb = h('div', 'fb');
+    bx.style.display = 'flex'; bx.style.flexWrap = 'wrap'; bx.style.gap = '6px'; fb.setAttribute('aria-live', 'polite');
+    var bs = cats.map(function (c, i) {
+      var b = btn('pick', T(c));
+      b.onclick = function () {
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); row.classList.add('ok'); fb.textContent = it.why ? '✓ ' + T(it.why) : '✓'; done++;
+          if (done === items.length) fb.textContent += '  ' + T(doneMsg); }
+        else { b.classList.add('wrong'); fb.textContent = T(it.hint || { ro: 'Mai gândește-te: ce știi despre el?', de: 'Denk nochmal nach: Was weißt du darüber?' }); }
+      };
+      bx.appendChild(b); return b;
+    });
+    row.appendChild(q); row.appendChild(bx); row.appendChild(fb); host.appendChild(row);
+  });
+}
+/** Pași „Înapoi / Pasul următor”. */
+function Stepper(host, steps) {
+  var cur = 0, box = h('div', 'flow'), act = h('div', 'actions'), out = h('div', 'readout');
+  out.style.marginTop = '10px'; out.setAttribute('aria-live', 'polite');
+  var prev = btn('btn ghost', tx('Înapoi', 'Zurück')), next = btn('btn', tx('Pasul următor', 'Nächster Schritt'));
+  box.style.gridTemplateColumns = 'repeat(' + steps.length + ',1fr)';
+  steps.forEach(function (s) { box.appendChild(h('div', 'fs', '<b>' + T(s.y) + '</b>' + T(s.t))); });
+  act.appendChild(prev); act.appendChild(next); host.appendChild(box); host.appendChild(act); host.appendChild(out);
+  function draw() {
+    Array.prototype.forEach.call(box.children, function (c, i) { c.className = 'fs' + (i === cur ? ' on' : i < cur ? ' done' : ''); });
+    readout(out, T(steps[cur].y) + ': ' + T(steps[cur].t), T(steps[cur].b));
+    prev.disabled = cur === 0; next.disabled = cur === steps.length - 1;
+  }
+  prev.onclick = function () { cur--; draw(); }; next.onclick = function () { cur++; draw(); }; draw();
+}
+
+/* ================= date despre persoane ================= */
+var P = [
+  { id: 'leo', c: '#c9871b', n: 'Leonardo da Vinci', b: 1452, d: 1519, r: { ro: 'pictor, om de știință, inventator', de: 'Maler, Naturforscher, Erfinder' },
+    s: { ro: 'Geniu universal: artist (Mona Lisa, Cina cea de Taină), om de știință și inventator.', de: 'Universalgenie: Künstler (Mona Lisa, Das Abendmahl), Wissenschaftler und Erfinder.' }, go: '#s2' },
+  { id: 'mac', c: '#c0392b', n: 'Niccolò Machiavelli', b: 1469, d: 1527, r: { ro: 'gânditor politic, secretar al Florenței', de: 'politischer Denker, Sekretär von Florenz' },
+    s: { ro: 'Autorul Principelui; considerat întemeietorul gândirii politice moderne.', de: 'Autor des Fürsten; gilt als Begründer des modernen politischen Denkens.' }, go: '#s4' },
+  { id: 'mic', c: '#b4531f', n: 'Michelangelo', b: 1475, d: 1564, r: { ro: 'sculptor, arhitect, pictor', de: 'Bildhauer, Architekt, Maler' },
+    s: { ro: 'A creat Pietà și David, a pictat plafonul Capelei Sixtine și a proiectat domul Bazilicii Sfântul Petru.', de: 'Schuf Pietà und David, malte die Decke der Sixtinischen Kapelle und entwarf die Kuppel des Petersdoms.' }, go: '#s2' },
+  { id: 'bru', c: '#8e44ad', n: 'Giordano Bruno', b: 1548, d: 1600, r: { ro: 'filozof, fost călugăr dominican', de: 'Philosoph, ehemaliger Dominikanermönch' },
+    s: { ro: 'Spirit liber: a susținut un Univers infinit. A fost ars pe rug la Roma în 1600.', de: 'Freier Geist: Er vertrat ein unendliches Universum. 1600 wurde er in Rom verbrannt.' }, go: '#s3' },
+  { id: 'gal', c: '#2f6fd6', n: 'Galileo Galilei', b: 1564, d: 1642, r: { ro: 'fizician, matematician, astronom', de: 'Physiker, Mathematiker, Astronom' },
+    s: { ro: 'Telescop, observație și experiment; „părintele științei moderne”.', de: 'Teleskop, Beobachtung und Experiment; „Vater der modernen Wissenschaft“.' }, go: '#s3' },
+  { id: 'sha', c: '#1f8a5b', n: 'William Shakespeare', b: 1564, d: 1616, r: { ro: 'dramaturg, poet, actor', de: 'Dramatiker, Dichter, Schauspieler' },
+    s: { ro: 'Romeo și Julieta, Hamlet, Regele Lear, Othello și 154 de sonete.', de: 'Romeo und Julia, Hamlet, König Lear, Othello und 154 Sonette.' }, go: '#s4' },
+  { id: 'ola', c: '#7a5230', n: 'Nicolaus Olahus', b: 1493, d: 1568, r: { ro: 'umanist, istoric, arhiepiscop', de: 'Humanist, Historiker, Erzbischof' },
+    s: { ro: 'Umanist din Sibiu, de origine română, autorul lucrării Hungaria.', de: 'Humanist aus Hermannstadt rumänischer Herkunft, Autor des Werks Hungaria.' }, go: '#s5' },
+  { id: 'hon', c: '#12959b', n: 'Johannes Honterus', b: 1498, d: 1549, r: { ro: 'umanist, tipograf, cartograf, reformator', de: 'Humanist, Drucker, Kartograf, Reformator' },
+    s: { ro: 'Umanist din Brașov: a înființat o tipografie și a desenat harta Transilvaniei.', de: 'Humanist aus Kronstadt: gründete eine Druckerei und zeichnete die Karte Siebenbürgens.' }, go: '#s5' },
+  { id: 'can', c: '#5b6b7a', n: 'Dimitrie Cantemir', b: 1673, d: 1723, r: { ro: 'domn, savant, scriitor, compozitor', de: 'Fürst, Gelehrter, Schriftsteller, Komponist' },
+    s: { ro: 'Domn al Moldovei și mare cărturar, membru al Academiei din Berlin.', de: 'Fürst der Moldau und großer Gelehrter, Mitglied der Berliner Akademie.' }, go: '#s5' }
+];
+
+/* ================= 1. Axa vieților ================= */
+(function () {
+  var svg = $('#lf-svg'), out = $('#lf-out'), yr = $('#lf-y'), yv = $('#lf-yv'), who = $('#lf-who');
+  var SH = { leo: 'Leonardo', mac: 'Machiavelli', mic: 'Michelangelo', bru: 'Bruno', gal: 'Galilei', sha: 'Shakespeare', ola: 'Olahus', hon: 'Honterus', can: 'Cantemir' };
+  function X(y) { return 170 + (y - 1450) * (530 / 280); }
+  [1500, 1600, 1700].forEach(function (y) {
+    el('line', { x1: X(y), x2: X(y), y1: 30, y2: 380, class: 'lgrid' }, svg);
+    el('text', { x: X(y), y: 20, class: 'lyr', 'text-anchor': 'middle' }, svg, String(y));
+  });
+  var bars = [], line = el('line', { y1: 28, y2: 384, stroke: '#b4531f', 'stroke-width': 3, 'stroke-dasharray': '6 4' }, svg);
+  P.forEach(function (p, i) {
+    var y0 = 40 + i * 36 + (i >= 6 ? 12 : 0);
+    var g = hotspot(svg, function () { show(p); }, p.n + ' ' + p.b + '–' + p.d);
+    el('rect', { x: 0, y: y0 - 6, width: 720, height: 34, fill: 'transparent', class: 'hb' }, g);
+    el('text', { x: 160, y: y0 + 16, class: 'lname' }, g, narrow ? SH[p.id] : p.n);
+    var r = el('rect', { x: X(p.b), y: y0, width: X(p.d) - X(p.b), height: 22, rx: 11, fill: p.c, class: 'b' }, g);
+    var left = X(p.d) + 100 > 720;
+    el('text', { x: left ? X(p.b) - 6 : X(p.d) + 6, y: y0 + 16, class: 'lyr', 'text-anchor': left ? 'end' : 'start' }, g, p.b + '–' + p.d);
+    bars.push({ p: p, r: r });
+  });
+  el('text', { x: 160, y: 40 + 6 * 36 + 4, class: 'lyr', 'text-anchor': 'end' }, svg, '');
+  function show(p) {
+    out.style.setProperty('--c', p.c);
+    readout(out, p.n + ' (' + p.b + '–' + p.d + ')', T(p.r), T(p.s) + ' <a href="' + p.go + '">' + tx('→ la profil', '→ zum Profil') + '</a>');
+  }
+  function upd() {
+    var y = +yr.value; yv.textContent = y;
+    var xx = X(y); line.setAttribute('x1', xx); line.setAttribute('x2', xx);
+    var alive = P.filter(function (p) { return p.b <= y && y <= p.d; });
+    bars.forEach(function (b) { b.r.setAttribute('opacity', b.p.b <= y && y <= b.p.d ? 1 : .35); });
+    who.textContent = alive.length ? alive.length + ' ' + tx(alive.length === 1 ? 'persoană: ' : 'persoane: ', alive.length === 1 ? 'Person: ' : 'Personen: ') + alive.map(function (p) { return p.n; }).join(', ') : tx('Nimeni din această lecție.', 'Niemand aus dieser Lektion.');
+  }
+  yr.oninput = upd; upd();
+  readout(out, tx('Apasă pe o bară', 'Tippe auf einen Balken'), tx('Vezi cine a fost, într-o frază.', 'Sieh in einem Satz, wer es war.'));
+  Check($('#c1'), [
+    { q: { ro: 'În 1564 s-a născut Galilei, s-a născut Shakespeare și a murit un mare artist. Care?', de: 'Im Jahr 1564 wurden Galilei und Shakespeare geboren, und ein großer Künstler starb. Wer?' },
+      o: [{ ro: 'Leonardo da Vinci', de: 'Leonardo da Vinci' }, { ro: 'Michelangelo', de: 'Michelangelo' }, { ro: 'Machiavelli', de: 'Machiavelli' }], a: 1,
+      hint: { ro: 'Pune glisorul pe 1564 și vezi a cui bară se termină acolo.', de: 'Stelle den Regler auf 1564 und sieh, wessen Balken dort endet.' }, why: { ro: 'Michelangelo a murit în 1564, la 88 de ani.', de: 'Michelangelo starb 1564 im Alter von 88 Jahren.' } },
+    { q: { ro: 'Care dintre ei a trăit mult după ceilalți, în secolele XVII–XVIII?', de: 'Wer von ihnen lebte viel später als die anderen, im 17.–18. Jahrhundert?' },
+      o: [{ ro: 'Honterus', de: 'Honterus' }, { ro: 'Cantemir', de: 'Cantemir' }, { ro: 'Olahus', de: 'Olahus' }], a: 1,
+      hint: { ro: 'Caută bara care începe după 1650.', de: 'Such den Balken, der nach 1650 beginnt.' }, why: { ro: 'Dimitrie Cantemir (1673–1723).', de: 'Dimitrie Cantemir (1673–1723).' } }
+  ]);
+})();
+
+/* ================= 2. Leonardo și Michelangelo ================= */
+(function () {
+  SortGame($('#sg-leo'), [{ ro: 'Știință', de: 'Wissenschaft' }, { ro: 'Artă', de: 'Kunst' }], [
+    { n: { ro: 'Pictarea Cinei celei de Taină', de: 'Das Gemälde „Das Abendmahl“' }, a: 1 },
+    { n: { ro: 'Proiectul unui șurub aerian (elicopter)', de: 'Der Entwurf einer Luftschraube (Hubschrauber)' }, a: 0 },
+    { n: { ro: 'Portretul Mona Lisa', de: 'Das Porträt Mona Lisa' }, a: 1 },
+    { n: { ro: 'Studiul anatomiei umane prin disecții', de: 'Das Studium der menschlichen Anatomie' }, a: 0 },
+    { n: { ro: 'Pompe hidraulice și un robot', de: 'Wasserpumpen und ein Roboter' }, a: 0 },
+    { n: { ro: 'Jocul de lumini și umbre din tablouri', de: 'Das Spiel von Licht und Schatten in den Gemälden' }, a: 1 },
+    { n: { ro: 'Observarea formei plantelor', de: 'Die Beobachtung der Form von Pflanzen' }, a: 0 }
+  ], { ro: 'Bravo! Pentru Leonardo, știința și arta mergeau împreună.', de: 'Bravo! Für Leonardo gehörten Wissenschaft und Kunst zusammen.' });
+
+  var M = [
+    { l: { ro: 'Sculptorul', de: 'Der Bildhauer' }, t: { ro: 'Sculptorul', de: 'Der Bildhauer' }, b: { ro: 'Și-a demonstrat talentul de la o vârstă fragedă; <i>Pietà</i> și <i>David</i> sunt printre primele sale lucrări. În sculpturile lui a creat o legătură între formă și suflet, studiind cu atenție anatomia umană de-a lungul întregii sale vieți. <i>Pietà</i> (în Bazilica Sfântul Petru, singura operă semnată de el) o înfățișează pe Fecioara Maria ținând în brațe trupul neînsuflețit al lui Hristos. <i>David</i> a fost sculptat în 1501–1504.', de: 'Er bewies sein Talent schon in jungen Jahren; <i>Pietà</i> und <i>David</i> gehören zu seinen ersten Werken. In seinen Skulpturen schuf er eine Verbindung zwischen Form und Seele und studierte sein ganzes Leben lang aufmerksam die menschliche Anatomie. Die <i>Pietà</i> (im Petersdom, sein einziges signiertes Werk) zeigt die Jungfrau Maria, die den leblosen Körper Christi in den Armen hält. <i>David</i> entstand 1501–1504.' } },
+    { l: { ro: 'Arhitectul', de: 'Der Architekt' }, t: { ro: 'Arhitectul', de: 'Der Architekt' }, b: { ro: 'Ultimii 30 de ani din viață și i-a dedicat arhitecturii. Una dintre cele mai remarcabile realizări ale sale: s-a numărat printre arhitecții Bazilicii Sfântul Petru din Roma. A proiectat domul acestei biserici, lucrare rămasă și astăzi un punct de referință în arhitectură.', de: 'Die letzten 30 Jahre seines Lebens widmete er der Architektur. Eine seiner bemerkenswertesten Leistungen: Er gehörte zu den Baumeistern des Petersdoms in Rom. Er entwarf die Kuppel dieser Kirche, ein Werk, das bis heute ein Maßstab in der Architektur ist.' } },
+    { l: { ro: 'Pictorul', de: 'Der Maler' }, t: { ro: 'Pictorul', de: 'Der Maler' }, b: { ro: 'Deși s-a considerat în primul rând sculptor, este la fel de renumit ca pictor, mai ales prin lucrările din interiorul Capelei Sixtine, capela palatului papal de la Vatican. Pictarea plafonului a durat patru ani; în final, el cuprindea peste 300 de chipuri. Apoi a pictat <i>Judecata de Apoi</i> pe ultimul zid al capelei, căreia a trebuit să-i dedice cinci ani de muncă intensă.', de: 'Obwohl er sich in erster Linie als Bildhauer sah, ist er als Maler genauso berühmt, vor allem durch seine Werke im Inneren der Sixtinischen Kapelle, der Kapelle des päpstlichen Palastes im Vatikan. Die Bemalung der Decke dauerte vier Jahre; am Ende zeigte sie über 300 Gestalten. Danach malte er das <i>Jüngste Gericht</i> an die letzte Wand der Kapelle, dem er fünf Jahre intensiver Arbeit widmen musste.' } }
+  ];
+  chipGroup($('#mi-chips'), M.map(function (m) { return { label: T(m.l) }; }), function (i) { readout($('#mi-out'), T(M[i].t), T(M[i].b)); });
+  readout($('#mi-out'), tx('Trei meserii într-o viață', 'Drei Berufe in einem Leben'), tx('Apasă pe una dintre ele.', 'Tippe auf einen davon.'));
+
+  var svg = $('#sx-svg'), out = $('#sx-out');
+  readout(out, tx('Capela Sixtină', 'Die Sixtinische Kapelle'), tx('Capela palatului papal de la Vatican. Aici a lucrat Michelangelo ca pictor.', 'Die Kapelle des päpstlichen Palastes im Vatikan. Hier arbeitete Michelangelo als Maler.'));
+  var gc = hotspot(svg, function () { readout(out, tx('Plafonul', 'Die Decke'), tx('Pictarea plafonului a durat patru ani. Proiectul inițial prevedea cei 12 apostoli; la final, plafonul cuprindea peste 300 de chipuri.', 'Die Bemalung der Decke dauerte vier Jahre. Der ursprüngliche Plan sah die zwölf Apostel vor; am Ende zeigte die Decke über 300 Gestalten.')); }, tx('Plafonul', 'Die Decke'));
+  el('rect', { x: 20, y: 30, width: 380, height: 190, rx: 6, fill: '#efe3cc', stroke: '#8a7a55', 'stroke-width': 2, class: 'hb' }, gc);
+  el('text', { x: 210, y: 52, class: 'tlt' }, gc, tx('PLAFON', 'DECKE'));
+  var ga = hotspot(svg, function () { readout(out, tx('Crearea lui Adam', 'Die Erschaffung Adams'), tx('Scena din partea centrală a plafonului înfățișează momentul biblic în care Dumnezeu îi dă viață lui Adam. Cele două mâini aproape se ating.', 'Die Szene in der Mitte der Decke zeigt den biblischen Moment, in dem Gott Adam Leben gibt. Die beiden Hände berühren sich fast.')); }, tx('Crearea lui Adam', 'Die Erschaffung Adams'));
+  for (var i = 0; i < 9; i++) {
+    var adam = i === 3;
+    if (adam) { el('rect', { x: 20 + 24 + i * 40, y: 84, width: 36, height: 82, rx: 4, fill: '#f3c26b', stroke: '#b4531f', 'stroke-width': 3, class: 'hb' }, ga); }
+    else el('rect', { x: 20 + 24 + i * 40, y: 94, width: 36, height: 62, rx: 4, fill: '#e0cf9e', stroke: '#8a7a55', 'stroke-width': 1.5 }, svg);
+  }
+  el('text', { x: 20 + 24 + 3 * 40 + 18, y: 130, 'text-anchor': 'middle', 'font-size': 26 }, ga, '✋');
+  el('text', { x: 20 + 24 + 3 * 40 + 18, y: 186, class: 'tlt', style: 'font-size:12px' }, ga, tx('Crearea lui Adam', 'Erschaffung Adams'));
+  var gw = hotspot(svg, function () { readout(out, tx('Judecata de Apoi', 'Das Jüngste Gericht'), tx('Pictată pe ultimul zid al capelei, după plafon. Michelangelo i-a dedicat cinci ani de muncă intensă.', 'An die letzte Wand der Kapelle gemalt, nach der Decke. Michelangelo widmete ihr fünf Jahre intensiver Arbeit.')); }, tx('Judecata de Apoi', 'Das Jüngste Gericht'));
+  el('rect', { x: 410, y: 30, width: 90, height: 190, rx: 6, fill: '#c9d6e6', stroke: '#50627a', 'stroke-width': 2, class: 'hb' }, gw);
+  el('text', { x: 455, y: 120, class: 'tlt', style: 'font-size:12px' }, gw, tx('Judecata', 'Jüngstes'));
+  el('text', { x: 455, y: 138, class: 'tlt', style: 'font-size:12px' }, gw, tx('de Apoi', 'Gericht'));
+  el('text', { x: 260, y: 244, class: 'tlt' }, svg, tx('vedere de sus, schemă simplificată', 'Ansicht von oben, vereinfachtes Schema'));
+
+  Check($('#c2'), [
+    { q: { ro: 'Cine a fost ucenic al lui Verrocchio?', de: 'Wer war Schüler von Verrocchio?' },
+      o: [{ ro: 'Leonardo da Vinci', de: 'Leonardo da Vinci' }, { ro: 'Michelangelo', de: 'Michelangelo' }, { ro: 'Galilei', de: 'Galilei' }], a: 0,
+      hint: { ro: 'Era din Vinci, lângă Florența.', de: 'Er stammte aus Vinci bei Florenz.' }, why: { ro: 'Leonardo a devenit ucenic al pictorului și sculptorului Verrocchio.', de: 'Leonardo wurde Schüler des Malers und Bildhauers Verrocchio.' } },
+    { q: { ro: 'Ce a pictat Michelangelo pe plafonul Capelei Sixtine, în partea centrală?', de: 'Was malte Michelangelo in die Mitte der Decke der Sixtinischen Kapelle?' },
+      o: [{ ro: 'Mona Lisa', de: 'Mona Lisa' }, { ro: 'Crearea lui Adam', de: 'Die Erschaffung Adams' }, { ro: 'Cina cea de Taină', de: 'Das Abendmahl' }], a: 1,
+      hint: { ro: 'Uită-te la scena colorată din desen.', de: 'Sieh dir die farbige Szene in der Zeichnung an.' }, why: { ro: 'Crearea lui Adam; Mona Lisa și Cina sunt ale lui Leonardo.', de: 'Die Erschaffung Adams; Mona Lisa und das Abendmahl sind von Leonardo.' } },
+    { q: { ro: 'Care lucrare a lui Michelangelo este singura pe care a semnat-o?', de: 'Welches Werk Michelangelos ist das einzige, das er signierte?' },
+      o: [{ ro: 'David', de: 'David' }, { ro: 'Pietà', de: 'Pietà' }, { ro: 'Judecata de Apoi', de: 'Das Jüngste Gericht' }], a: 1,
+      hint: { ro: 'Se află în Bazilica Sfântul Petru.', de: 'Sie befindet sich im Petersdom.' }, why: { ro: 'Pietà, din Bazilica Sfântul Petru.', de: 'Die Pietà im Petersdom.' } }
+  ]);
+})();
+
+/* ================= 3. Bruno și Galilei ================= */
+(function () {
+  var svg = $('#sk-svg'), out = $('#sk-out');
+  el('rect', { width: 520, height: 300, rx: 10, fill: '#14213d' }, svg);
+  var seed = 11; function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  for (var i = 0; i < 40; i++) el('circle', { cx: rnd() * 520, cy: rnd() * 300, r: .6 + rnd() * 1.2, fill: '#fff', opacity: .7 }, svg);
+  readout(out, tx('Telescopul lui Galilei', 'Galileis Fernrohr'), tx('Telescopul lui Galilei, păstrat la Muzeul Galileo din Florența, mărea obiectele de aproximativ 30 de ori. Apasă pe un obiect.', 'Galileis Fernrohr, im Museo Galileo in Florenz aufbewahrt, vergrößerte etwa 30-fach. Tippe auf ein Objekt.'));
+  var O = [
+    { x: 120, y: 90, n: { ro: 'Luna', de: 'Mond' }, b: { ro: 'Galilei a văzut pe Lună <b>cratere</b> și munți: nu este o sferă perfect netedă.', de: 'Galilei sah auf dem Mond <b>Krater</b> und Berge: Er ist keine vollkommen glatte Kugel.' },
+      draw: function (g) { el('circle', { cx: 120, cy: 90, r: 40, fill: '#d9d6cc' }, g); [[105, 80, 9], [135, 100, 7], [118, 108, 5], [138, 74, 4]].forEach(function (c) { el('circle', { cx: c[0], cy: c[1], r: c[2], fill: '#b9b5a8' }, g); }); } },
+    { x: 330, y: 80, n: { ro: 'Jupiter', de: 'Jupiter' }, b: { ro: 'A văzut <b>patru sateliți</b> ai lui Jupiter care se mișcă în jurul lui: deci nu totul se învârte în jurul Pământului.', de: 'Er sah <b>vier Monde</b> des Jupiter, die ihn umkreisen: Also dreht sich nicht alles um die Erde.' },
+      draw: function (g) { el('circle', { cx: 330, cy: 80, r: 26, fill: '#d9a96b' }, g); [-8, 0, 9].forEach(function (d) { el('line', { x1: 306, x2: 354, y1: 80 + d, y2: 80 + d, stroke: '#b57d3f', 'stroke-width': 3 }, g); }); [[270, 80], [290, 80], [375, 80], [400, 80]].forEach(function (m) { el('circle', { cx: m[0], cy: m[1], r: 4, fill: '#fff' }, g); }); } },
+    { x: 130, y: 220, n: { ro: 'Venus', de: 'Venus' }, b: { ro: 'A observat <b>fazele</b> planetei Venus, ca ale Lunii. Asta se potrivește cu ideea că planetele se mișcă în jurul Soarelui.', de: 'Er beobachtete die <b>Phasen</b> der Venus, wie beim Mond. Das passt zur Idee, dass sich die Planeten um die Sonne bewegen.' },
+      draw: function (g) { el('circle', { cx: 130, cy: 220, r: 28, fill: '#f5e6a8' }, g); el('circle', { cx: 144, cy: 220, r: 26, fill: '#14213d' }, g); } },
+    { x: 380, y: 215, n: { ro: 'Soarele', de: 'Sonne' }, b: { ro: 'A văzut <b>petele solare</b>: Soarele nu este perfect curat. (Se observă doar prin proiecție, niciodată direct prin telescop!)', de: 'Er sah die <b>Sonnenflecken</b>: Die Sonne ist nicht makellos. (Man beobachtet sie nur durch Projektion, niemals direkt durchs Fernrohr!)' },
+      draw: function (g) { el('circle', { cx: 380, cy: 215, r: 38, fill: '#f2b233' }, g); [[368, 205, 5], [392, 224, 4], [378, 230, 3]].forEach(function (c) { el('circle', { cx: c[0], cy: c[1], r: c[2], fill: '#6b3b0a' }, g); }); } }
+  ];
+  O.forEach(function (o) {
+    var g = hotspot(svg, function () { readout(out, T(o.n), T(o.b)); }, T(o.n));
+    el('circle', { cx: o.x, cy: o.y, r: 58, fill: 'transparent', class: 'hb' }, g);
+    o.draw(g);
+    el('text', { x: o.x, y: o.y + (o.n.ro === 'Soarele' ? 66 : 62) }, g, T(o.n));
+  });
+
+  SortGame($('#sg-bg'), [{ ro: 'Bruno', de: 'Bruno' }, { ro: 'Galilei', de: 'Galilei' }], [
+    { n: { ro: 'A fost ars pe rug în Campo dei Fiori (1600)', de: 'Wurde auf dem Campo dei Fiori verbrannt (1600)' }, a: 0 },
+    { n: { ro: 'A perfecționat telescopul', de: 'Verbesserte das Fernrohr' }, a: 1 },
+    { n: { ro: 'A scris Dialoguri italiene', de: 'Schrieb die Italienischen Dialoge' }, a: 0 },
+    { n: { ro: 'A descoperit legea căderii corpurilor', de: 'Entdeckte das Fallgesetz' }, a: 1 },
+    { n: { ro: 'A scris Dialog despre cele două sisteme principale ale lumii (1632)', de: 'Schrieb den Dialog über die beiden hauptsächlichen Weltsysteme (1632)' }, a: 1 },
+    { n: { ro: 'A afirmat că Universul este infinit, cu nenumărate lumi', de: 'Behauptete, das Universum sei unendlich, mit unzähligen Welten' }, a: 0 }
+  ], { ro: 'Bravo!', de: 'Bravo!' });
+
+  Check($('#c3'), [
+    { q: { ro: 'Ce metodă a folosit Galilei în activitatea sa științifică?', de: 'Welche Methode nutzte Galilei in seiner wissenschaftlichen Arbeit?' },
+      o: [{ ro: 'Experimentul și observația', de: 'Experiment und Beobachtung' }, { ro: 'Doar citirea cărților vechi', de: 'Nur das Lesen alter Bücher' }, { ro: 'Rugăciunea', de: 'Das Gebet' }], a: 0,
+      hint: { ro: 'Gândește-te la telescop și la căderea corpurilor.', de: 'Denk an das Fernrohr und das Fallen der Körper.' }, why: { ro: 'Galilei a verificat ideile prin experiențe și observații.', de: 'Galilei prüfte Ideen durch Versuche und Beobachtungen.' } },
+    { q: { ro: 'Ce a recunoscut Biserica Catolică în 1992?', de: 'Was erkannte die katholische Kirche 1992 an?' },
+      o: [{ ro: 'Că Galilei a greșit', de: 'Dass Galilei sich geirrt hatte' }, { ro: 'Că a greșit condamnându-l pe Galilei', de: 'Dass sie sich bei der Verurteilung Galileis geirrt hatte' }, { ro: 'Că Pământul este plat', de: 'Dass die Erde flach ist' }], a: 1,
+      hint: { ro: 'Papa Ioan Paul al II-lea a vorbit despre propria greșeală.', de: 'Papst Johannes Paul II. sprach über den eigenen Fehler.' }, why: { ro: 'Biserica a recunoscut că a greșit condamnându-l pe Galilei.', de: 'Die Kirche erkannte an, dass sie sich bei der Verurteilung Galileis geirrt hatte.' } },
+    { q: { ro: 'Care citat arată cel mai bine spiritul liber al lui Bruno?', de: 'Welches Zitat zeigt Brunos freien Geist am besten?' },
+      o: [{ ro: '„Adevărul nu se schimbă pentru că este crezut sau nu de majoritatea oamenilor.”', de: '„Die Wahrheit ändert sich nicht, nur weil die Mehrheit der Menschen sie glaubt oder nicht.“' }, { ro: '„Scopul scuză mijloacele.”', de: '„Der Zweck heiligt die Mittel.“' }, { ro: '„Să te asemăn cu o zi de vară?”', de: '„Soll ich dich einem Sommertag vergleichen?“' }], a: 0,
+      hint: { ro: 'Celelalte două sunt de la Machiavelli și Shakespeare.', de: 'Die anderen beiden stammen von Machiavelli und Shakespeare.' }, why: { ro: 'Bruno spune că adevărul nu depinde de părerea majorității.', de: 'Bruno sagt, dass die Wahrheit nicht von der Meinung der Mehrheit abhängt.' } }
+  ]);
+})();
+
+/* ================= 4. Machiavelli și Shakespeare ================= */
+(function () {
+  var C = [
+    { l: 'I', b: { ro: '<b>Capitolul I</b>: clasificarea statelor.', de: '<b>Kapitel I</b>: Einteilung der Staaten.' } },
+    { l: 'II–XI', b: { ro: '<b>Capitolele II–XI</b>: modul în care statele pot fi cucerite și păstrate.', de: '<b>Kapitel II–XI</b>: wie Staaten erobert und bewahrt werden können.' } },
+    { l: 'XII–XIV', b: { ro: '<b>Capitolele XII–XIV</b>: analiza problemelor militare cu care se confruntă statele.', de: '<b>Kapitel XII–XIV</b>: Analyse der militärischen Probleme, mit denen Staaten konfrontiert sind.' } },
+    { l: 'XV–XXII', b: { ro: '<b>Capitolele XV–XXII</b>: ce trebuie să facă un principe pentru a-și păstra puterea.', de: '<b>Kapitel XV–XXII</b>: was ein Fürst tun muss, um seine Macht zu behalten.' } },
+    { l: 'XXIII–XXVI', b: { ro: '<b>Capitolele XXIII–XXVI</b>: eliberarea și unificarea Italiei.', de: '<b>Kapitel XXIII–XXVI</b>: Befreiung und Einigung Italiens.' } }
+  ];
+  chipGroup($('#mc-chips'), C.map(function (c) { return { label: tx('Cap. ', 'Kap. ') + c.l }; }), function (i) { readout($('#mc-out'), '', T(C[i].b)); });
+  readout($('#mc-out'), tx('Principele', 'Der Fürst'), tx('Alege un grup de capitole.', 'Wähle eine Kapitelgruppe.'));
+
+  SortGame($('#sg-sh'), [{ ro: 'Dramă istorică', de: 'Historiendrama' }, { ro: 'Ura dintre familii', de: 'Hass zwischen Familien' }, { ro: 'Nerecunoștința copiilor', de: 'Undank der Kinder' }, { ro: 'Dorința de răzbunare', de: 'Rachedurst' }, { ro: 'Gelozia', de: 'Eifersucht' }], [
+    { n: { ro: 'Richard al III-lea', de: 'Richard III.' }, a: 0, hint: { ro: 'Este un rege al Angliei din Evul Mediu.', de: 'Er war ein mittelalterlicher König von England.' } },
+    { n: { ro: 'Romeo și Julieta', de: 'Romeo und Julia' }, a: 1, hint: { ro: 'Tragedia născută din ura dintre două familii.', de: 'Die Tragödie entsteht aus dem Hass zwischen zwei Familien.' } },
+    { n: { ro: 'Regele Lear', de: 'König Lear' }, a: 2, hint: { ro: 'Un tată bătrân și copiii lui.', de: 'Ein alter Vater und seine Kinder.' } },
+    { n: { ro: 'Hamlet', de: 'Hamlet' }, a: 3, hint: { ro: 'Prințul danez vrea să se răzbune.', de: 'Der dänische Prinz will sich rächen.' } },
+    { n: { ro: 'Othello', de: 'Othello' }, a: 4, hint: { ro: 'Un general și Desdemona: ce sentiment îl distruge?', de: 'Ein General und Desdemona: Welches Gefühl zerstört ihn?' } },
+    { n: { ro: 'Henric al V-lea', de: 'Heinrich V.' }, a: 0, hint: { ro: 'Un alt rege al Angliei medievale.', de: 'Ein weiterer König des mittelalterlichen England.' } }
+  ], { ro: 'Bravo!', de: 'Bravo!' });
+
+  Stepper($('#gl-box'), [
+    { y: { ro: '1599', de: '1599' }, t: { ro: 'Construit', de: 'Erbaut' }, b: { ro: 'Teatrul Globe este construit din lemn. A găzduit în epocă multe dintre piesele lui Shakespeare, care s-au bucurat de mare succes la public.', de: 'Das Globe Theatre wird aus Holz gebaut. Es zeigte zu Shakespeares Zeit viele seiner Stücke, die beim Publikum sehr erfolgreich waren.' } },
+    { y: { ro: '1613', de: '1613' }, t: { ro: 'Mistuit de flăcări', de: 'Brand' }, b: { ro: 'Fiind construit din lemn, teatrul a fost mistuit de flăcări în timpul unei reprezentații, apoi demolat complet.', de: 'Da es aus Holz war, brannte das Theater während einer Aufführung nieder und wurde dann ganz abgetragen.' } },
+    { y: { ro: '1989', de: '1989' }, t: { ro: 'Locația găsită', de: 'Ort gefunden' }, b: { ro: 'Locația exactă a rămas necunoscută până în 1989.', de: 'Der genaue Standort blieb bis 1989 unbekannt.' } },
+    { y: { ro: '1997', de: '1997' }, t: { ro: 'Teatru nou', de: 'Neues Theater' }, b: { ro: 'Pe vechea fundație a fost ridicat un nou teatru, care reproduce în mare măsură structura celui din epoca lui Shakespeare. A fost inaugurat în 1997.', de: 'Auf dem alten Fundament entstand ein neues Theater, das die Bauweise des Theaters aus Shakespeares Zeit weitgehend nachbildet. Es wurde 1997 eröffnet.' } }
+  ]);
+
+  Check($('#c4'), [
+    { q: { ro: 'Cum se numește celebra lucrare a lui Machiavelli, din 1532?', de: 'Wie heißt Machiavellis berühmtes Werk von 1532?' },
+      o: [{ ro: 'Principele', de: 'Der Fürst' }, { ro: 'Elogiul nebuniei', de: 'Lob der Torheit' }, { ro: 'Decameronul', de: 'Das Decamerone' }], a: 0,
+      hint: { ro: 'Titlul vorbește despre cel care conduce.', de: 'Der Titel spricht von dem, der regiert.' }, why: { ro: 'Principele (1532); Elogiul nebuniei este al lui Erasmus.', de: 'Der Fürst (1532); das Lob der Torheit ist von Erasmus.' } },
+    { q: { ro: 'Ce expresie celebră i se atribuie lui Machiavelli?', de: 'Welcher berühmte Ausdruck wird Machiavelli zugeschrieben?' },
+      o: [{ ro: '„Scopul scuză mijloacele”', de: '„Der Zweck heiligt die Mittel“' }, { ro: '„Omul este măsura tuturor lucrurilor”', de: '„Der Mensch ist das Maß aller Dinge“' }, { ro: '„Și totuși se mișcă”', de: '„Und sie bewegt sich doch“' }], a: 0,
+      hint: { ro: 'Gândește-te la ce trebuie să urmărească un principe.', de: 'Denk daran, was ein Fürst verfolgen soll.' }, why: { ro: 'De aici vine și cuvântul „machiavelism”.', de: 'Daher kommt auch das Wort „Machiavellismus“.' } },
+    { q: { ro: 'De ce a fost reconstruit teatrul Globe după 1989?', de: 'Warum wurde das Globe Theatre nach 1989 neu gebaut?' },
+      o: [{ ro: 'Era vechiul teatru de pe aceeași fundație, redat publicului', de: 'Es sollte das alte Theater auf demselben Fundament wieder zugänglich machen' }, { ro: 'Pentru că arsese în 1989', de: 'Weil es 1989 abgebrannt war' }, { ro: 'Pentru că se afla în Italia', de: 'Weil es in Italien stand' }], a: 0,
+      hint: { ro: 'Locația exactă a fost găsită în 1989.', de: 'Der genaue Ort wurde 1989 gefunden.' }, why: { ro: 'Noul teatru, inaugurat în 1997, reproduce în mare măsură structura celui vechi.', de: 'Das neue Theater, 1997 eröffnet, bildet die Bauweise des alten weitgehend nach.' } }
+  ]);
+})();
+
+/* ================= 5. Umaniști români ================= */
+(function () {
+  var R = [
+    { n: 'Nicolaus Olahus', c: '#7a5230', rows: [
+      [{ ro: 'Născut / mort', de: 'Geboren / gestorben' }, { ro: '1493, Sibiu – 1568 (Bratislava sau Trnava; sursele diferă)', de: '1493 in Hermannstadt (Sibiu) – 1568 (Pressburg oder Tyrnau; die Quellen unterscheiden sich)' }],
+      [{ ro: 'Origine', de: 'Herkunft' }, { ro: 'Tatăl, de origine română; se numea și Nicolae Valahul (Oláh Miklós).', de: 'Der Vater war rumänischer Herkunft; er hieß auch Nicolae Valahul (Oláh Miklós).' }],
+      [{ ro: 'Studii și cariera', de: 'Ausbildung und Laufbahn' }, { ro: 'A studiat la școala capitlului din Oradea, a fost paj la curtea regelui Ludovic al II-lea, apoi preot. A fost secretarul Mariei de Habsburg, la Bruxelles, unde a corespondat cu Erasmus. A ajuns episcop de Zagreb (1543), de Eger (1548) și, din 1553, arhiepiscop de Esztergom, primat al Ungariei.', de: 'Er besuchte die Domschule in Oradea, war Page am Hof König Ludwigs II. und wurde dann Priester. Er war Sekretär Marias von Habsburg in Brüssel, wo er mit Erasmus korrespondierte. Er wurde Bischof von Zagreb (1543), von Eger (1548) und ab 1553 Erzbischof von Gran (Esztergom), Primas von Ungarn.' }],
+      [{ ro: 'Opere', de: 'Werke' }, { ro: '<i>Hungaria</i> și <i>Attila</i> (scrise în limba latină, în jurul anului 1536).', de: '<i>Hungaria</i> und <i>Attila</i> (auf Latein verfasst, um 1536).' }],
+      [{ ro: 'De ce contează', de: 'Warum er wichtig ist' }, { ro: 'Umanist cu legături cu Erasmus. În scrierile lui a subliniat originea romană a românilor și unitatea lor de limbă.', de: 'Humanist mit Verbindung zu Erasmus. In seinen Schriften betonte er die römische Herkunft der Rumänen und ihre sprachliche Einheit.' }]
+    ] },
+    { n: 'Johannes Honterus', c: '#12959b', rows: [
+      [{ ro: 'Născut / mort', de: 'Geboren / gestorben' }, { ro: '1498, Brașov – 1549, Brașov (unele surse dau 1548)', de: '1498 in Kronstadt (Brașov) – 1549 in Kronstadt (manche Quellen nennen 1548)' }],
+      [{ ro: 'Origine', de: 'Herkunft' }, { ro: 'Sas din Transilvania; în germană: Johannes Honter.', de: 'Siebenbürger Sachse; auf Deutsch: Johannes Honter.' }],
+      [{ ro: 'Studii și cariera', de: 'Ausbildung und Laufbahn' }, { ro: 'A studiat la Viena, apoi la Cracovia (1530), unde i-au apărut primele cărți (o gramatică latină și un manual de cosmografie). Între 1530 și 1532 a stat la Basel și a învățat gravura în lemn. Întors la Brașov, a înființat o școală umanistă și, în 1539, o tipografie.', de: 'Er studierte in Wien, dann in Krakau (1530), wo seine ersten Bücher erschienen (eine lateinische Grammatik und ein Lehrbuch der Kosmografie). Von 1530 bis 1532 war er in Basel und lernte den Holzschnitt. Zurück in Kronstadt gründete er eine humanistische Schule und 1539 eine Druckerei.' }],
+      [{ ro: 'Opere', de: 'Werke' }, { ro: 'Harta Transilvaniei (1532), manualul <i>Rudimenta Cosmographica</i> (mai multe zeci de ediții în Europa), <i>Reformationsbüchlein</i> (1543).', de: 'Karte Siebenbürgens (1532), das Lehrbuch <i>Rudimenta Cosmographica</i> (mehrere Dutzend Auflagen in Europa), <i>Reformationsbüchlein</i> (1543).' }],
+      [{ ro: 'De ce contează', de: 'Warum er wichtig ist' }, { ro: 'Prin tipar și școală a răspândit ideile umaniste; a condus Reforma luterană a sașilor din Transilvania.', de: 'Durch Druck und Schule verbreitete er humanistische Ideen; er führte die lutherische Reformation der Siebenbürger Sachsen an.' }]
+    ] },
+    { n: 'Dimitrie Cantemir', c: '#5b6b7a', rows: [
+      [{ ro: 'Născut / mort', de: 'Geboren / gestorben' }, { ro: '1673, Moldova – 1723, Rusia', de: '1673 in der Moldau – 1723 in Russland' }],
+      [{ ro: 'Origine', de: 'Herkunft' }, { ro: 'Fiu al unui domn al Moldovei; el însuși a fost domn în 1693 (scurt timp) și în 1710–1711.', de: 'Sohn eines Fürsten der Moldau; er selbst war Fürst 1693 (kurz) und 1710–1711.' }],
+      [{ ro: 'Studii și cariera', de: 'Ausbildung und Laufbahn' }, { ro: 'A studiat mulți ani la Constantinopol. A fost filozof, istoric, geograf, etnograf, lingvist și compozitor. În 1714 a devenit membru al Academiei din Berlin. După 1711 a trăit în Rusia, unde a murit.', de: 'Er studierte viele Jahre in Konstantinopel. Er war Philosoph, Historiker, Geograf, Ethnograf, Sprachforscher und Komponist. 1714 wurde er Mitglied der Berliner Akademie. Nach 1711 lebte er in Russland, wo er starb.' }],
+      [{ ro: 'Opere', de: 'Werke' }, { ro: '<i>Istoria ieroglifică</i> (1705, considerată primul roman românesc, cu animale alegorice), <i>Descriptio Moldaviae</i> (descrierea geografică, etnografică și economică a Moldovei, scrisă pentru Academia din Berlin), harta Moldovei.', de: '<i>Hieroglyphische Geschichte</i> (1705, gilt als erster rumänischer Roman, mit allegorischen Tieren), <i>Descriptio Moldaviae</i> (geografische, ethnografische und wirtschaftliche Beschreibung der Moldau, für die Berliner Akademie geschrieben), Karte der Moldau.' }],
+      [{ ro: 'De ce contează', de: 'Warum er wichtig ist' }, { ro: 'Cel mai mare cărturar român al timpului. A făcut cunoscută Moldova în Europa și a susținut originea romană a românilor.', de: 'Der größte rumänische Gelehrte seiner Zeit. Er machte die Moldau in Europa bekannt und vertrat die römische Herkunft der Rumänen.' }]
+    ] }
+  ];
+  var out = $('#rp-out');
+  chipGroup($('#rp-chips'), R.map(function (r) { return { label: r.n }; }), function (i) {
+    var r = R[i]; out.style.setProperty('--c', r.c);
+    out.innerHTML = '<b>' + r.n + '</b><dl>' + r.rows.map(function (x) { return '<dt>' + T(x[0]) + '</dt><dd>' + T(x[1]) + '</dd>'; }).join('') + '</dl>';
+  });
+  readout(out, tx('Alege un umanist', 'Wähle einen Humanisten'), tx('Olahus, Honterus sau Cantemir.', 'Olahus, Honterus oder Cantemir.'));
+  Check($('#c5'), [
+    { q: { ro: 'Cine a înființat o tipografie la Brașov, în 1539?', de: 'Wer gründete 1539 in Kronstadt eine Druckerei?' },
+      o: [{ ro: 'Olahus', de: 'Olahus' }, { ro: 'Honterus', de: 'Honterus' }, { ro: 'Cantemir', de: 'Cantemir' }], a: 1,
+      hint: { ro: 'A învățat gravura în lemn la Basel.', de: 'Er lernte in Basel den Holzschnitt.' }, why: { ro: 'Johannes Honterus, umanist, tipograf și cartograf.', de: 'Johannes Honterus, Humanist, Drucker und Kartograf.' } },
+    { q: { ro: 'Care dintre ei a fost domn al Moldovei?', de: 'Wer von ihnen war Fürst der Moldau?' },
+      o: [{ ro: 'Dimitrie Cantemir', de: 'Dimitrie Cantemir' }, { ro: 'Nicolaus Olahus', de: 'Nicolaus Olahus' }, { ro: 'Johannes Honterus', de: 'Johannes Honterus' }], a: 0,
+      hint: { ro: 'A fost și membru al Academiei din Berlin.', de: 'Er war auch Mitglied der Berliner Akademie.' }, why: { ro: 'Cantemir a domnit în 1693 și în 1710–1711.', de: 'Cantemir regierte 1693 und 1710–1711.' } }
+  ]);
+})();
+
+/* ================= 6. Fixare ================= */
+(function () {
+  Check($('#c6'), [
+    { q: { ro: '„Am fost ucenic al lui Verrocchio și am proiectat un șurub aerian.”', de: '„Ich war Schüler von Verrocchio und entwarf eine Luftschraube.“' },
+      o: [{ ro: 'Michelangelo', de: 'Michelangelo' }, { ro: 'Leonardo da Vinci', de: 'Leonardo da Vinci' }, { ro: 'Galilei', de: 'Galilei' }], a: 1,
+      hint: { ro: 'Pictorul Mona Lisei.', de: 'Der Maler der Mona Lisa.' }, why: { ro: 'Leonardo da Vinci.', de: 'Leonardo da Vinci.' } },
+    { q: { ro: '„Am pictat plafonul Capelei Sixtine și am proiectat domul Bazilicii Sfântul Petru.”', de: '„Ich malte die Decke der Sixtinischen Kapelle und entwarf die Kuppel des Petersdoms.“' },
+      o: [{ ro: 'Michelangelo', de: 'Michelangelo' }, { ro: 'Leonardo da Vinci', de: 'Leonardo da Vinci' }, { ro: 'Machiavelli', de: 'Machiavelli' }], a: 0,
+      hint: { ro: 'Am sculptat și David.', de: 'Ich schuf auch den David.' }, why: { ro: 'Michelangelo.', de: 'Michelangelo.' } },
+    { q: { ro: '„Am fost ars pe rug în 1600 pentru ideile mele despre Univers.”', de: '„Ich wurde 1600 für meine Ideen über das Universum verbrannt.“' },
+      o: [{ ro: 'Galilei', de: 'Galilei' }, { ro: 'Copernic', de: 'Kopernikus' }, { ro: 'Giordano Bruno', de: 'Giordano Bruno' }], a: 2,
+      hint: { ro: 'Fost călugăr dominican.', de: 'Ein ehemaliger Dominikanermönch.' }, why: { ro: 'Giordano Bruno.', de: 'Giordano Bruno.' } },
+    { q: { ro: '„Am scris Principele și am sfătuit conducătorii să urmărească succesul.”', de: '„Ich schrieb Der Fürst und riet den Herrschern, den Erfolg anzustreben.“' },
+      o: [{ ro: 'Machiavelli', de: 'Machiavelli' }, { ro: 'Erasmus', de: 'Erasmus' }, { ro: 'Olahus', de: 'Olahus' }], a: 0,
+      hint: { ro: 'De la numele meu vine „machiavelism”.', de: 'Von meinem Namen kommt „Machiavellismus“.' }, why: { ro: 'Niccolò Machiavelli.', de: 'Niccolò Machiavelli.' } },
+    { q: { ro: '„Am scris Hamlet și am avut o companie de teatru la Londra.”', de: '„Ich schrieb Hamlet und hatte in London eine Theatergruppe.“' },
+      o: [{ ro: 'Cervantes', de: 'Cervantes' }, { ro: 'Shakespeare', de: 'Shakespeare' }, { ro: 'Rabelais', de: 'Rabelais' }], a: 1,
+      hint: { ro: 'Teatrul Globe.', de: 'Das Globe Theatre.' }, why: { ro: 'William Shakespeare.', de: 'William Shakespeare.' } },
+    { q: { ro: '„Am scris Istoria ieroglifică și am fost domn al Moldovei.”', de: '„Ich schrieb die Hieroglyphische Geschichte und war Fürst der Moldau.“' },
+      o: [{ ro: 'Cantemir', de: 'Cantemir' }, { ro: 'Honterus', de: 'Honterus' }, { ro: 'Olahus', de: 'Olahus' }], a: 0,
+      hint: { ro: 'Primul roman românesc.', de: 'Der erste rumänische Roman.' }, why: { ro: 'Dimitrie Cantemir.', de: 'Dimitrie Cantemir.' } }
+  ]);
+  var G = [
+    ['geniu universal', 'Universalgenie'], ['autodidact', 'Autodidakt'], ['șurub aerian', 'Luftschraube'], ['frescă', 'Fresko'], ['Capela Sixtină', 'Sixtinische Kapelle'],
+    ['Pietà', 'Pietà'], ['telescop', 'Fernrohr / Teleskop'], ['Inchiziție', 'Inquisition'], ['erezie', 'Ketzerei (Häresie)'], ['panteism', 'Pantheismus'],
+    ['Univers infinit', 'unendliches Universum'], ['machiavelism', 'Machiavellismus'], ['tragedie', 'Tragödie'], ['sonet', 'Sonett'], ['tipografie', 'Druckerei'], ['cartograf', 'Kartograf']
+  ];
+  var gl = $('#gloss');
+  G.forEach(function (g) { gl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
+})();
+})();
+</script>
+</body>
+</html>

@@ -20,6 +20,7 @@ import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import { operatiiCuMultimiTest } from './content/operatii-cu-multimi-test';
 import { numerePrimeTest } from './content/numere-prime-test';
 import { renastereaTest } from './content/renasterea-test';
+import { mariOameniAiRenasteriiTest } from './content/mari-oameni-ai-renasterii-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -424,6 +425,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/istorie/renasterea.html',
         test: { questions: renastereaTest, minutes: 8 },
+      },
+      {
+        slug: 'mari-oameni-ai-renasterii',
+        title: {
+          ro: 'Mari oameni ai Renașterii',
+          de: 'Große Persönlichkeiten der Renaissance',
+        },
+        summary: {
+          ro: 'Leonardo, Michelangelo, Bruno, Galilei, Machiavelli și Shakespeare, apoi trei umaniști români: Olahus, Honterus și Cantemir. Axa vieților, ce a văzut Galilei prin telescop, Capela Sixtină și teatrul Globe.',
+          de: 'Leonardo, Michelangelo, Bruno, Galilei, Machiavelli und Shakespeare, dann drei rumänische Humanisten: Olahus, Honterus und Cantemir. Zeitachse der Leben, was Galilei durchs Fernrohr sah, die Sixtinische Kapelle und das Globe Theatre.',
+        },
+        src: 'lectii/clasa-6/istorie/mari-oameni-ai-renasterii.html',
+        test: { questions: mariOameniAiRenasteriiTest, minutes: 8 },
       },
     ],
   },
