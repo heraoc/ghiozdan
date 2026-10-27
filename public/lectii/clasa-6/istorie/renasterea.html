@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Renașterea: geneza spiritului modern, umanismul</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Die Renaissance: Geburt des modernen Geistes, der Humanismus';
+})();
+</script>
+<script src="../../lib/d3-7.8.5.min.js"></script>
+<script src="../../lib/topojson-client-3.1.0.min.js"></script>
+<style>
+:root{
+  --paper:#f8f5ef; --card:#ffffff; --ink:#231f1a; --muted:#625b51; --rule:#e5ded0; --sheet:#f2ece0;
+  --accent:#b4531f; --accent-soft:#fbeadf;
+  --a1:#c9871b; --a1s:#fbecc9; --a2:#2f6fd6; --a2s:#dfe9fb; --a3:#8e44ad; --a3s:#efe2f6; --a4:#1f8a5b; --a4s:#dcf1e6;
+  --good:#1f8a5b; --good-soft:#e3f5ec; --bad:#c23b3b; --bad-soft:#fbe4e4;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)} .hint{font-size:14.5px;color:var(--muted)}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.remember{margin-top:16px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.fig svg{display:block;width:100%;height:auto}
+.fig .cap{font-size:13.5px;color:var(--muted);padding:2px 6px 0}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.panel{display:grid;gap:10px}
+.readout{background:var(--sheet);border-radius:10px;padding:10px 14px;display:grid;gap:4px;min-height:84px;align-content:start}
+.readout b{font-family:var(--display);font-size:19px}
+.readout .sub{font-size:15px;color:var(--muted)}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#a12f2f;background:var(--bad-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.chip{border:1.5px solid var(--rule);background:#fff;border-radius:99px;padding:5px 14px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip i{width:12px;height:12px;border-radius:3px;background:var(--c,#999);display:inline-block}
+.chip.dom[aria-pressed="true"]{background:var(--c);border-color:var(--c)}
+.stps{margin:0;padding-left:1.3em;display:grid;gap:6px}
+.stps li{padding:6px 10px;border-radius:8px;border-left:4px solid transparent;color:var(--muted)}
+.stps li.on{background:#fff9d6;border-left-color:#e0a100;color:var(--ink);font-weight:500}
+.stps li.done{color:var(--ink)}
+.sub3{margin:26px 0 8px;font-size:22px}
+.result{border-radius:10px;padding:10px 14px;font-weight:700}
+.result:empty{display:none}
+.result.good{background:var(--good-soft);color:#17744d}
+.result.try{background:#fdf0d5;color:#8a5a00}
+.result.no{background:var(--bad-soft);color:#a12f2f}
+.story{background:#fff9e6;border:1px solid #f1e2b0;border-radius:10px;padding:10px 14px;font-size:18px}
+.quote{background:#fbf3e4;border:1px solid #ecd9b4;border-radius:8px;padding:12px 16px;font-style:italic}
+.quote cite{display:block;font-style:normal;font-size:14px;color:var(--muted);margin-top:6px}
+
+/* hărți și desene */
+.hot{cursor:pointer}
+.hot:focus{outline:none}
+.hot:focus-visible circle,.hot:focus-visible rect.hb{stroke:var(--ink);stroke-width:3}
+.tlt{font:700 13px var(--body);fill:var(--muted);text-anchor:middle}
+.tlb{font:800 14px var(--display);fill:var(--ink);text-anchor:middle}
+.sea{fill:#dbe9ee}
+.land{fill:#efe8d6;stroke:#b9ad8e;stroke-width:.4}
+.bord{fill:none;stroke:#cdbf9d;stroke-width:.5}
+.mlbl{font-family:var(--body);font-weight:800;fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round}
+.slbl{font:700 13px var(--body);fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+.lg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted);margin-top:8px}
+.lg > span{display:inline-flex;align-items:center;gap:6px}
+.fig .lg svg{width:26px;flex:none;display:inline-block}
+.lg i{width:14px;height:14px;border-radius:50%;display:inline-block}
+
+/* fluxuri și carduri */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:stretch}
+.flow .fs{background:var(--card);border:1.5px solid var(--rule);border-radius:10px;padding:10px 10px;font-size:15px;line-height:1.35;color:var(--muted);position:relative;opacity:.55;transition:opacity .2s}
+.flow .fs b{display:block;font:800 22px/1 var(--display);margin-bottom:4px;color:var(--ink)}
+.flow .fs.on{opacity:1;border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.flow .fs.done{opacity:1;color:var(--ink)}
+.flow .fs:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);font-weight:800;color:var(--accent);z-index:2}
+.people{display:grid;gap:12px}
+.pgroup h3{font-size:19px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.pgroup h3 i{width:12px;height:12px;border-radius:3px;background:var(--c);display:inline-block}
+.rows{display:grid;gap:8px}
+.ex{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px 16px;display:grid;gap:10px}
+.sortrow{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:6px 0;border-top:1px dashed var(--rule)}
+.sortrow:first-of-type{border-top:0}
+.sortrow .fb{grid-column:1/-1;font-size:14.5px;color:var(--muted)}
+.sortrow.ok{background:linear-gradient(90deg,var(--good-soft),transparent 60%)}
+.cloze{font-size:19px;line-height:2.1}
+.cloze select{border:1.5px solid var(--rule);border-radius:8px;padding:3px 6px;background:#fff;font:700 16px var(--body);max-width:100%}
+.cloze select.ok{border-color:var(--good);background:var(--good-soft)}
+.cloze select.bad{border-color:var(--bad);background:var(--bad-soft)}
+.tick{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1.5px solid var(--rule);border-radius:8px;background:#fff;cursor:pointer;text-align:left;width:100%}
+.tick[aria-pressed="true"]{border-color:var(--ink);background:var(--sheet)}
+.tick.ok{border-color:var(--good);background:var(--good-soft)}
+.tick.bad{border-color:var(--bad);background:var(--bad-soft)}
+.tick .bx{flex:none;width:20px;height:20px;border:2px solid var(--ink);border-radius:5px;display:inline-grid;place-items:center;font-weight:800;line-height:1;margin-top:2px}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #dcc0a8;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted)}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+  .flow{grid-template-columns:1fr}
+  .flow .fs:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-16px;transform:translateX(-50%)}
+}
+@media (max-width:520px){ .slbl{font-size:19px} .tlt{font-size:17px} .tlb{font-size:18px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;scroll-behavior:auto!important} }
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Istorie · Clasa a 6-a · Începutul epocii moderne</span><span class="de">Geschichte · Klasse 6 · Beginn der Neuzeit</span></p>
+  <h1><span class="ro">Renașterea: geneza spiritului modern, umanismul</span><span class="de">Die Renaissance: Geburt des modernen Geistes, der Humanismus</span></h1>
+  <p class="lead">
+    <span class="ro">Între secolele XIV și XVI, Europa se schimbă: orașele devin bogate, apar idei noi despre om, tiparul răspândește cărțile, savanții privesc cerul cu alți ochi, iar artiștii pictează, sculptează și construiesc ca în Antichitate. Aflăm cum a început totul în Italia și cum s-a întins în toată Europa.</span>
+    <span class="de">Zwischen dem 14. und 16. Jahrhundert verändert sich Europa: Die Städte werden reich, neue Ideen über den Menschen entstehen, der Buchdruck verbreitet Bücher, Gelehrte schauen mit neuen Augen zum Himmel, und Künstler malen, formen und bauen wie in der Antike. Wir erfahren, wie alles in Italien begann und sich über ganz Europa ausbreitete.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">De ce crezi că Renașterea a început tocmai în Italia?</span><span class="de">Warum begann die Renaissance wohl gerade in Italien?</span></li>
+        <li><span class="ro">Ce înseamnă „Omul este măsura tuturor lucrurilor”?</span><span class="de">Was bedeutet „Der Mensch ist das Maß aller Dinge“?</span></li>
+        <li><span class="ro">Cum ajută o invenție, tiparul, la răspândirea ideilor?</span><span class="de">Wie hilft eine Erfindung, der Buchdruck, bei der Verbreitung von Ideen?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Ce a fost Renașterea?</span><span class="de">Was war die Renaissance?</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Din Italia în Europa</span><span class="de">Von Italien nach Europa</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Umanismul</span><span class="de">Der Humanismus</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Oameni și idei noi</span><span class="de">Menschen und neue Ideen</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Arta și arhitectura</span><span class="de">Kunst und Architektur</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Fixăm ce am învățat</span><span class="de">Wir festigen</span></a>
+  </nav>
+</header>
+
+<!-- 1. Ce a fost Renașterea -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Ce a fost Renașterea?</span><span class="de">Was war die Renaissance?</span></h2>
+  <p class="section-sub"><span class="ro">Renașterea a marcat, alături de marile descoperiri geografice și de Reformă, începutul Epocii Moderne. Apasă pe axa timpului, apoi alege câte un domeniu al vieții și vezi ce s-a schimbat.</span><span class="de">Die Renaissance markierte, zusammen mit den großen Entdeckungsreisen und der Reformation, den Beginn der Neuzeit. Tippe auf die Zeitachse und wähle dann nacheinander einen Lebensbereich: Was hat sich verändert?</span></p>
+  <div class="fig"><svg id="tl-svg" viewBox="0 0 700 190" role="img"></svg></div>
+  <div class="readout" id="tl-out" aria-live="polite" style="margin-top:10px"></div>
+
+  <h3 class="sub3"><span class="ro">Ce a adus Renașterea în fiecare domeniu?</span><span class="de">Was brachte die Renaissance in jedem Bereich?</span></h3>
+  <div class="chips" id="dm-chips" role="group"></div>
+  <div class="readout" id="dm-out" aria-live="polite"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Renașterea este epoca dintre secolele <b>XIV și XVI</b>, care a marcat trecerea la societatea de tip modern prin schimbări profunde în cultura europeană.</span><span class="de">Die Renaissance ist die Epoche zwischen dem <b>14. und 16. Jahrhundert</b>, die durch tiefgreifende Veränderungen der europäischen Kultur den Übergang zur modernen Gesellschaft markierte.</span></li>
+      <li><span class="ro">Schimbările au atins <b>economia, societatea, politica și cultura</b>.</span><span class="de">Die Veränderungen betrafen <b>Wirtschaft, Gesellschaft, Politik und Kultur</b>.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c1"></div>
+</section>
+
+<!-- 2. Din Italia în Europa -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Renașterea în Italia și răspândirea ei în Europa</span><span class="de">Die Renaissance in Italien und ihre Ausbreitung in Europa</span></h2>
+  <p class="section-sub"><span class="ro">Primele idei renascentiste au apărut în Italia. Alege pe rând cei patru factori care au pregătit Renașterea, apoi explorează harta.</span><span class="de">Die ersten Ideen der Renaissance entstanden in Italien. Wähle nacheinander die vier Faktoren, die die Renaissance vorbereiteten, und erkunde dann die Karte.</span></p>
+  <div class="chips" id="fc-chips" role="group"></div>
+  <div class="readout" id="fc-out" aria-live="polite"></div>
+
+  <h3 class="sub3"><span class="ro">Harta Renașterii în Europa, secolele XV–XVI</span><span class="de">Karte der Renaissance in Europa, 15.–16. Jahrhundert</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Apasă pe un oraș ca să afli ce rol a avut. Pornește „Găsește pe hartă” ca să te testezi.</span><span class="de">Tippe auf eine Stadt, um ihre Rolle zu erfahren. Starte „Finde auf der Karte“, um dich zu testen.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="mp-svg" viewBox="0 0 620 470" role="img"></svg>
+      <div class="lg"><span><i style="background:#c0392b"></i><span class="ro">Centre ale Renașterii italiene</span><span class="de">Zentren der italienischen Renaissance</span></span><span><i style="background:#231f1a"></i><span class="ro">Alte centre în Europa</span><span class="de">Weitere Zentren in Europa</span></span><span><svg width="26" height="10" aria-hidden="true"><path d="M1 5H20" stroke="#c0392b" stroke-width="3"/><path d="M17 1L25 5L17 9Z" fill="#c0392b"/></svg><span class="ro">Răspândirea Renașterii italiene</span><span class="de">Ausbreitung der italienischen Renaissance</span></span></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="mp-tog" role="group"></div>
+      <div class="readout" id="mp-out" aria-live="polite"></div>
+      <div class="result" id="mp-res" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Renașterea a pornit din <b>Italia</b> (Florența, Veneția, Milano, Roma) și s-a răspândit în Franța, Anglia, Spania, Țările de Jos, Europa Centrală și Țările Române.</span><span class="de">Die Renaissance ging von <b>Italien</b> aus (Florenz, Venedig, Mailand, Rom) und breitete sich nach Frankreich, England, Spanien, in die Niederlande, nach Mitteleuropa und in die Rumänischen Fürstentümer aus.</span></li>
+      <li><span class="ro"><b>Mecenatul</b> = sprijinul financiar dat artiștilor și savanților de oameni bogați.</span><span class="de"><b>Mäzenatentum</b> = die finanzielle Unterstützung von Künstlern und Gelehrten durch wohlhabende Menschen.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Umanismul -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Umanismul: omul în centrul atenției</span><span class="de">Der Humanismus: der Mensch im Mittelpunkt</span></h2>
+  <p class="section-sub"><span class="ro">Umanismul este mișcarea intelectuală care a dat Renașterii o nouă concepție despre om și despre lume. Un principiu antic îi rezumă ideea: „Omul este măsura tuturor lucrurilor”. Apasă pe cele trei obiective ale umaniștilor.</span><span class="de">Der Humanismus ist die geistige Bewegung, die der Renaissance ein neues Bild vom Menschen und von der Welt gab. Ein antiker Grundsatz fasst seine Idee zusammen: „Der Mensch ist das Maß aller Dinge“. Tippe auf die drei Ziele der Humanisten.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="hu-svg" viewBox="0 0 520 330" role="img"></svg></div>
+    <div class="panel"><div class="readout" id="hu-out" aria-live="polite"></div></div>
+  </div>
+
+  <h3 class="sub3"><span class="ro">Cum s-au răspândit ideile umaniste?</span><span class="de">Wie verbreiteten sich die humanistischen Ideen?</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Parcurge lanțul, pas cu pas. Fiecare verigă a ajutat-o pe următoarea.</span><span class="de">Gehe die Kette Schritt für Schritt durch. Jedes Glied half dem nächsten.</span></p>
+  <div class="flow" id="fl-box"></div>
+  <div class="actions"><button type="button" class="btn ghost" id="fl-prev"></button><button type="button" class="btn" id="fl-next"></button></div>
+  <div class="readout" id="fl-out" aria-live="polite" style="margin-top:10px"></div>
+
+  <h3 class="sub3"><span class="ro">Umanismul la noi</span><span class="de">Der Humanismus bei uns</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">În spațiul românesc, ideile umaniste au pătruns în secolul al XVII-lea și în prima parte a secolului al XVIII-lea. Alege un cărturar.</span><span class="de">Im rumänischen Raum erreichten humanistische Ideen das 17. und die erste Hälfte des 18. Jahrhunderts. Wähle einen Gelehrten.</span></p>
+  <div class="chips" id="ro-chips" role="group"></div>
+  <div class="readout" id="ro-out" aria-live="polite"></div>
+
+  <h3 class="sub3"><span class="ro">Concepția umaniștilor despre educație</span><span class="de">Die Bildungsidee der Humanisten</span></h3>
+  <div class="quote"><span class="ro">„Iată pentru ce, fiul meu, te-aș sfătui să folosești anii tinereții cu silința învățăturii […]. Să-ți însușești fără greșeală limba elină […], apoi latina și ebraica. Să nu rămână nicio cronică pe care să n-o știi pe de rost […]. Învață tot ce nu știi încă și încearcă să cunoști legile astronomiei și regulile dreptului obștesc […]. Să știi toate metalele ascunse în adâncuri […], să adâncești studiul cărților medicilor greci.”</span><span class="de">„Darum, mein Sohn, möchte ich dir raten, die Jahre deiner Jugend mit dem Eifer des Lernens zu nutzen […]. Eigne dir ohne Fehler die griechische Sprache an […], dann das Lateinische und das Hebräische. Es soll keine Chronik bleiben, die du nicht auswendig kennst […]. Lerne alles, was du noch nicht weißt, und versuche, die Gesetze der Astronomie und die Regeln des allgemeinen Rechts kennenzulernen […]. Du sollst alle Metalle kennen, die in der Tiefe verborgen sind […], vertiefe das Studium der Bücher der griechischen Ärzte.“</span><cite>François Rabelais, Gargantua și Pantagruel / Gargantua und Pantagruel</cite></div>
+  <p class="section-sub" style="margin-top:12px"><span class="ro">Pentru fiecare element din text, decide: este o <b>limbă</b> sau o <b>disciplină</b> de studiu?</span><span class="de">Entscheide bei jedem Element aus dem Text: Ist es eine <b>Sprache</b> oder ein <b>Fach</b>?</span></p>
+  <div class="ex" id="rb-box"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Umaniștii voiau un <b>„om universal”</b>, cu rațiune și cultură enciclopedică, și reînvierea culturii greco-romane.</span><span class="de">Die Humanisten wollten einen <b>„universellen Menschen“</b> mit Vernunft und umfassender Bildung und die Wiederbelebung der griechisch-römischen Kultur.</span></li>
+      <li><span class="ro">Ideile lor s-au răspândit prin <b>tipar</b>, limbile naționale, biblioteci și învățământ.</span><span class="de">Ihre Ideen verbreiteten sich durch den <b>Buchdruck</b>, die Nationalsprachen, Bibliotheken und das Bildungswesen.</span></li>
+      <li><span class="ro">Educația umanistă se baza pe limbile <b>greacă, latină și ebraică</b>, dar și pe istorie, astronomie, drept, științele naturii și medicină.</span><span class="de">Die humanistische Bildung beruhte auf <b>Griechisch, Latein und Hebräisch</b>, aber auch auf Geschichte, Astronomie, Recht, Naturwissenschaften und Medizin.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Oameni și idei noi -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Oameni și idei noi: literatură, știință, gândire politică</span><span class="de">Menschen und neue Ideen: Literatur, Wissenschaft, politisches Denken</span></h2>
+  <p class="section-sub"><span class="ro">Savanții și scriitorii umaniști au reflectat asupra lumii și a omului. Apasă pe un nume și vezi ce a făcut.</span><span class="de">Humanistische Gelehrte und Schriftsteller dachten über die Welt und den Menschen nach. Tippe auf einen Namen und sieh, was die Person geleistet hat.</span></p>
+  <div class="split">
+    <div class="people" id="pp-box"></div>
+    <div class="panel"><div class="readout" id="pp-out" aria-live="polite"></div></div>
+  </div>
+
+  <h3 class="sub3"><span class="ro">O idee nouă despre Univers</span><span class="de">Eine neue Idee vom Universum</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">În știință, noile metode (observația și experimentul) au dus la idei noi. Compară cele trei imagini ale Universului. Desenul este simplificat.</span><span class="de">In der Wissenschaft führten neue Methoden (Beobachtung und Experiment) zu neuen Ideen. Vergleiche die drei Bilder des Universums. Die Zeichnung ist vereinfacht.</span></p>
+  <div class="chips" id="hc-chips" role="group"></div>
+  <div class="split">
+    <div class="fig"><svg id="hc-svg" viewBox="0 0 520 320" role="img"></svg></div>
+    <div class="panel">
+      <div class="readout" id="hc-out" aria-live="polite"></div>
+      <div class="actions" style="margin-top:0"><button type="button" class="btn ghost" id="hc-play"></button></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro"><b>Teoria heliocentrică</b>: Soarele este în centru, iar Pământul se mișcă în jurul lui. A fost susținută de <b>Nicolaus Copernic</b> și de <b>Galileo Galilei</b>.</span><span class="de"><b>Das heliozentrische Weltbild</b>: Die Sonne steht im Zentrum, die Erde bewegt sich um sie. Vertreten von <b>Nikolaus Kopernikus</b> und <b>Galileo Galilei</b>.</span></li>
+      <li><span class="ro"><b>Giordano Bruno</b> a afirmat că Universul este infinit.</span><span class="de"><b>Giordano Bruno</b> behauptete, dass das Universum unendlich ist.</span></li>
+      <li><span class="ro"><b>Erasmus</b> a criticat moravurile societății și abuzurile Bisericii; <b>Machiavelli</b> a formulat noi principii de guvernare.</span><span class="de"><b>Erasmus</b> kritisierte die Sitten der Gesellschaft und die Missstände der Kirche; <b>Machiavelli</b> formulierte neue Regierungsgrundsätze.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Arta și arhitectura -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Arta și arhitectura Renașterii</span><span class="de">Kunst und Architektur der Renaissance</span></h2>
+  <p class="section-sub"><span class="ro">Spiritul Renașterii s-a manifestat deplin în artă. Artiștii s-au inspirat din Antichitate și au descoperit lucruri noi. Alege un domeniu.</span><span class="de">Der Geist der Renaissance zeigte sich voll in der Kunst. Die Künstler ließen sich von der Antike inspirieren und entdeckten Neues. Wähle einen Bereich.</span></p>
+  <div class="chips" id="ar-chips" role="group"></div>
+  <div class="readout" id="ar-out" aria-live="polite"></div>
+
+  <h3 class="sub3"><span class="ro">Perspectiva în pictură</span><span class="de">Die Perspektive in der Malerei</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Pictorii renascentiști au introdus perspectiva: imaginea pare adâncă, ca o privire într-o încăpere sau pe un drum. Mută punctul de fugă și urmărește liniile.</span><span class="de">Die Maler der Renaissance führten die Perspektive ein: Das Bild wirkt tief, wie ein Blick in einen Raum oder auf eine Straße. Verschiebe den Fluchtpunkt und verfolge die Linien.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="pv-svg" viewBox="0 0 520 300" role="img"></svg></div>
+    <div class="panel">
+      <div class="readout" style="min-height:0">
+        <label for="pv-x" style="font-weight:700"><span class="ro">Poziția punctului de fugă</span><span class="de">Lage des Fluchtpunkts</span></label>
+        <input type="range" id="pv-x" min="80" max="440" value="260" style="width:100%;accent-color:var(--accent)">
+      </div>
+      <div class="chips"><button type="button" class="chip" id="pv-ln" aria-pressed="true"></button></div>
+      <div class="readout" id="pv-out" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <h3 class="sub3"><span class="ro">Arhitectura: ce au preluat arhitecții din Antichitate?</span><span class="de">Architektur: Was übernahmen die Baumeister aus der Antike?</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Desenul arată o clădire renascentistă simplificată, ca o catedrală cu cupolă. Apasă pe numere sau pornește „Găsește pe desen”.</span><span class="de">Die Zeichnung zeigt ein vereinfachtes Renaissance-Gebäude, ähnlich einer Kuppelkirche. Tippe auf die Zahlen oder starte „Finde auf der Zeichnung“.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="fa-svg" viewBox="0 0 600 360" role="img"></svg></div>
+    <div class="panel">
+      <div class="actions" style="margin:0"><button type="button" class="btn ghost" id="fa-find"></button></div>
+      <div class="readout" id="fa-out" aria-live="polite"></div>
+      <div class="result" id="fa-res" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">În pictură: <b>desenul anatomic</b> și <b>perspectiva</b>. În sculptură: nuduri, busturi, statui ecvestre și basoreliefuri.</span><span class="de">In der Malerei: <b>anatomisches Zeichnen</b> und <b>Perspektive</b>. In der Bildhauerei: Akte, Büsten, Reiterstandbilder und Reliefs.</span></li>
+      <li><span class="ro">În arhitectură s-au preluat din Antichitate: <b>arcada, cornișa, cupola, bolta semicirculară, coloanele și frontonul</b>.</span><span class="de">In der Architektur wurden aus der Antike übernommen: <b>Arkade, Gesims, Kuppel, Tonnengewölbe, Säulen und Giebel</b>.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c5"></div>
+</section>
+
+<!-- 6. Fixare -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Fixăm ce am învățat</span><span class="de">Wir festigen das Gelernte</span></h2>
+  <h3 class="sub3" style="margin-top:6px"><span class="ro">Completează textul</span><span class="de">Ergänze den Text</span></h3>
+  <div class="ex"><p class="cloze" id="cz-box"></p><div class="actions" style="margin:0"><button type="button" class="btn" id="cz-ok"></button></div><div class="result" id="cz-res" aria-live="polite"></div></div>
+
+  <h3 class="sub3"><span class="ro">Critica viciilor umane în Renaștere</span><span class="de">Kritik an menschlichen Lastern in der Renaissance</span></h3>
+  <div class="quote"><span class="ro">„Închipuiți-vă acum un om – care există adesea – care habar n-are de legi, e aproape dușman al binelui obștesc, fiind preocupat doar de interesele proprii, care este dedat plăcerilor, urăște știința, libertatea și adevărul, care nu se gândește câtuși de puțin la bunăstarea statului, călăuzindu-se în toate numai după pofta și foloasele sale!”</span><span class="de">„Stellt euch nun einen Menschen vor – den es oft gibt –, der von den Gesetzen keine Ahnung hat, fast ein Feind des Gemeinwohls ist, weil er nur auf den eigenen Vorteil bedacht ist, der den Vergnügungen verfallen ist, Wissenschaft, Freiheit und Wahrheit hasst, der nicht im Geringsten an das Wohl des Staates denkt und sich in allem nur nach seiner Begierde und seinem Nutzen richtet!“</span><cite>Erasmus din Rotterdam / Erasmus von Rotterdam, Elogiul nebuniei / Lob der Torheit</cite></div>
+  <p class="section-sub" style="margin-top:12px"><span class="ro">Bifează trăsăturile care apar în text, apoi apasă „Verifică”.</span><span class="de">Hake die Eigenschaften an, die im Text vorkommen, und tippe dann auf „Prüfen“.</span></p>
+  <div class="ex"><div class="rows" id="er-box"></div><div class="actions" style="margin:0"><button type="button" class="btn" id="er-ok"></button></div><div class="result" id="er-res" aria-live="polite"></div></div>
+  <div class="check" id="c6"></div>
+
+  <h3 class="sub3"><span class="ro">Gândire critică</span><span class="de">Kritisches Denken</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Compară textul lui Erasmus cu cel al lui Rabelais: prin ce a conturat umanismul o nouă viziune asupra omului? Răspunde în cinci rânduri pe caiet, apoi compară cu modelul.</span><span class="de">Vergleiche den Text von Erasmus mit dem von Rabelais: Wodurch entwarf der Humanismus ein neues Bild vom Menschen? Antworte in fünf Zeilen im Heft und vergleiche dann mit dem Beispiel.</span></p>
+  <div class="actions" style="margin-top:0"><button type="button" class="btn ghost" id="gc-btn"></button></div>
+  <div class="readout" id="gc-out" hidden></div>
+
+  <h3 class="sub3"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h3>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După manualul de Istorie, clasa a 6-a, lecția „Renașterea: geneza spiritului modern, umanismul”. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Geschichtsbuch der 6. Klasse, Lektion „Die Renaissance: Geburt des modernen Geistes, der Humanismus“. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var narrow = window.innerWidth < 560;
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function readout(box, title, body, sub) {
+  box.innerHTML = (title ? '<b>' + title + '</b>' : '') + (body ? '<p>' + body + '</p>' : '') + (sub ? '<p class="sub">' + sub + '</p>' : '');
+}
+/** Element SVG apăsabil (mouse, tastatură). */
+function hotspot(parent, fn, label) {
+  var g = el('g', { class: 'hot', tabindex: 0, role: 'button', 'aria-label': label }, parent);
+  g.addEventListener('click', fn);
+  g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } });
+  return g;
+}
+/** Un grup de butoane-comutator; întoarce funcția de selectare. */
+function chipGroup(host, items, onSel, cls) {
+  var bs = items.map(function (it, i) {
+    var b = btn('chip' + (cls ? ' ' + cls : ''), (it.c && !cls ? '<i></i>' : '') + it.label); b.setAttribute('aria-pressed', 'false');
+    if (it.c) b.style.setProperty('--c', it.c);
+    b.onclick = function () { sel(i); };
+    host.appendChild(b); return b;
+  });
+  function sel(i) { bs.forEach(function (x, j) { x.setAttribute('aria-pressed', i === j ? 'true' : 'false'); }); onSel(i); }
+  return sel;
+}
+
+/** Întrebări scurte de verificare. */
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.textContent = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* ================= 1. Axa timpului și domeniile ================= */
+(function () {
+  var svg = $('#tl-svg'), out = $('#tl-out');
+  function X(y) { return 40 + (y - 1300) * (620 / 450); }
+  el('rect', { x: X(1300), y: 62, width: X(1600) - X(1300), height: 44, rx: 8, fill: '#fbeadf', stroke: '#b4531f', 'stroke-width': 2 }, svg);
+  el('rect', { x: X(1600), y: 62, width: X(1740) - X(1600), height: 44, rx: 8, fill: '#efe2f6', stroke: '#8e44ad', 'stroke-width': 2 }, svg);
+  el('line', { x1: 30, x2: 670, y1: 134, y2: 134, stroke: '#231f1a', 'stroke-width': 2.5 }, svg);
+  [1300, 1400, 1500, 1600, 1700].forEach(function (y) {
+    el('line', { x1: X(y), x2: X(y), y1: 128, y2: 140, stroke: '#231f1a', 'stroke-width': 2 }, svg);
+    el('text', { x: X(y), y: 160, class: 'tlt' }, svg, String(y));
+  });
+  var b1 = hotspot(svg, function () { show('r'); }, tx('Renașterea, secolele XIV–XVI', 'Renaissance, 14.–16. Jahrhundert'));
+  el('rect', { x: X(1300), y: 62, width: X(1600) - X(1300), height: 44, rx: 8, fill: 'transparent', class: 'hb' }, b1);
+  el('text', { x: (X(1300) + X(1600)) / 2, y: 90, class: 'tlb' }, b1, tx('Renașterea · sec. XIV–XVI', 'Renaissance · 14.–16. Jh.'));
+  var b2 = hotspot(svg, function () { show('o'); }, tx('Umanismul în Țările Române', 'Humanismus in den Rumänischen Fürstentümern'));
+  el('rect', { x: X(1600), y: 62, width: X(1740) - X(1600), height: 44, rx: 8, fill: 'transparent', class: 'hb' }, b2);
+  el('text', { x: (X(1600) + X(1740)) / 2, y: 90, class: 'tlb' }, b2, tx('Umanism la noi', 'Humanismus bei uns'));
+  var g = hotspot(svg, function () { show('g'); }, tx('Gutenberg inventează tiparul', 'Gutenberg erfindet den Buchdruck'));
+  el('line', { x1: X(1450), x2: X(1450), y1: 36, y2: 62, stroke: '#231f1a', 'stroke-width': 2 }, g);
+  el('circle', { cx: X(1450), cy: 30, r: 14, fill: '#c9871b', stroke: '#fff', 'stroke-width': 3 }, g);
+  el('text', { x: X(1450), y: 36, class: 'tlt', fill: '#fff', style: 'fill:#fff;font-size:16px' }, g, '✎');
+  el('text', { x: X(1450) + 22, y: 22, class: 'tlb', style: 'text-anchor:start;font-size:13px' }, g, tx('Gutenberg · tiparul', 'Gutenberg · Buchdruck'));
+  var D = {
+    r: [tx('Renașterea: secolele XIV–XVI', 'Die Renaissance: 14.–16. Jahrhundert'),
+        tx('A marcat, alături de marile descoperiri geografice și de Reformă, începutul Epocii Moderne.', 'Sie markierte, zusammen mit den großen Entdeckungsreisen und der Reformation, den Beginn der Neuzeit.')],
+    g: [tx('Mijlocul secolului al XV-lea: tiparul', 'Mitte des 15. Jahrhunderts: der Buchdruck'),
+        tx('Johannes Gutenberg inventează tiparul. Cărțile se pot face mai repede, iar ideile ajung la mai mulți oameni.', 'Johannes Gutenberg erfindet den Buchdruck. Bücher lassen sich schneller herstellen, und Ideen erreichen mehr Menschen.')],
+    o: [tx('Secolul al XVII-lea: umanismul în Țările Române', '17. Jahrhundert: Humanismus in den Rumänischen Fürstentümern'),
+        tx('Ideile umaniste pătrund în spațiul românesc în secolul al XVII-lea și în prima parte a secolului al XVIII-lea.', 'Humanistische Ideen erreichen den rumänischen Raum im 17. und in der ersten Hälfte des 18. Jahrhunderts.')]
+  };
+  function show(k) { readout(out, D[k][0], D[k][1]); }
+  readout(out, tx('Apasă pe axa timpului', 'Tippe auf die Zeitachse'), tx('Alege perioada colorată sau cercul de deasupra.', 'Wähle den farbigen Abschnitt oder den Kreis darüber.'));
+
+  var DOM = [
+    { c: '#c9871b', l: { ro: '💰 Economie', de: '💰 Wirtschaft' }, t: { ro: 'Economie', de: 'Wirtschaft' },
+      b: { ro: 'S-au dezvoltat activitatea <b>manufacturieră</b> (atelierele mari), <b>comerțul</b> și <b>finanțele</b>.', de: 'Die <b>Manufakturen</b> (große Werkstätten), der <b>Handel</b> und das <b>Finanzwesen</b> entwickelten sich.' } },
+    { c: '#2f6fd6', l: { ro: '🏙️ Societate', de: '🏙️ Gesellschaft' }, t: { ro: 'Societate', de: 'Gesellschaft' },
+      b: { ro: 'A apărut o nouă forță socială: <b>burghezia</b> (orășenii înstăriți, care trăiau din comerț, meșteșuguri și bani).', de: 'Eine neue gesellschaftliche Kraft entstand: das <b>Bürgertum</b> (wohlhabende Stadtbewohner, die von Handel, Handwerk und Geld lebten).' } },
+    { c: '#8e44ad', l: { ro: '🏛️ Politică', de: '🏛️ Politik' }, t: { ro: 'Politică', de: 'Politik' },
+      b: { ro: 'Au apărut idei noi despre <b>cum trebuie condus un stat</b>: o nouă concepție politică.', de: 'Neue Ideen darüber, <b>wie ein Staat regiert werden soll</b>, entstanden: ein neues politisches Denken.' } },
+    { c: '#1f8a5b', l: { ro: '🎨 Cultură', de: '🎨 Kultur' }, t: { ro: 'Cultură', de: 'Kultur' },
+      b: { ro: '<b>Știința</b> a luat avânt, iar <b>artele</b> au înflorit (pictură, sculptură, arhitectură, literatură).', de: 'Die <b>Wissenschaft</b> nahm Fahrt auf, und die <b>Künste</b> blühten (Malerei, Bildhauerei, Architektur, Literatur).' } }
+  ];
+  var sel = chipGroup($('#dm-chips'), DOM.map(function (d) { return { label: T(d.l), c: d.c }; }), function (i) {
+    readout($('#dm-out'), T(DOM[i].t), T(DOM[i].b));
+    $('#dm-out').style.borderLeft = '5px solid ' + DOM[i].c;
+  }, 'dom');
+  readout($('#dm-out'), tx('Alege un domeniu', 'Wähle einen Bereich'), tx('Economie, societate, politică sau cultură.', 'Wirtschaft, Gesellschaft, Politik oder Kultur.'));
+  Check($('#c1'), [
+    { q: { ro: 'Între ce secole s-a desfășurat Renașterea?', de: 'Zwischen welchen Jahrhunderten fand die Renaissance statt?' },
+      o: [{ ro: 'XII–XIV', de: '12.–14. Jh.' }, { ro: 'XIV–XVI', de: '14.–16. Jh.' }, { ro: 'XVI–XVIII', de: '16.–18. Jh.' }], a: 1,
+      hint: { ro: 'Uită-te la banda colorată de pe axa timpului.', de: 'Schau auf den farbigen Abschnitt der Zeitachse.' },
+      why: { ro: 'Renașterea cuprinde secolele XIV–XVI.', de: 'Die Renaissance umfasst das 14. bis 16. Jahrhundert.' } },
+    { q: { ro: 'Care este noua forță care apare în planul social?', de: 'Welche neue Kraft entsteht in der Gesellschaft?' },
+      o: [{ ro: 'Burghezia', de: 'Das Bürgertum' }, { ro: 'Cavalerii', de: 'Die Ritter' }, { ro: 'Iobagii', de: 'Die Leibeigenen' }], a: 0,
+      hint: { ro: 'Gândește-te la orășenii bogați din comerț și bani.', de: 'Denk an die wohlhabenden Stadtbewohner aus Handel und Geldgeschäften.' },
+      why: { ro: 'Burghezia, adică orășenii înstăriți, devine o forță importantă.', de: 'Das Bürgertum, also die wohlhabenden Stadtbewohner, wird zu einer wichtigen Kraft.' } }
+  ]);
+})();
+
+/* ================= 2. Factori și hartă ================= */
+(function () {
+  var F = [
+    { l: { ro: 'Antichitatea redescoperită', de: 'Antike neu entdeckt' }, t: { ro: 'Redescoperirea valorilor Antichității greco-romane', de: 'Wiederentdeckung der Werte der griechisch-römischen Antike' },
+      b: { ro: 'În Italia se păstrau multe ruine și monumente romane. Oamenii le studiau și voiau să reînvie frumusețea și cunoașterea Antichității.', de: 'In Italien blieben viele römische Ruinen und Bauwerke erhalten. Die Menschen studierten sie und wollten die Schönheit und das Wissen der Antike wiederbeleben.' } },
+    { l: { ro: 'Creșterea demografică', de: 'Bevölkerungswachstum' }, t: { ro: 'Creșterea demografică', de: 'Bevölkerungswachstum' },
+      b: { ro: 'Populația crește. Mai mulți oameni înseamnă mai mulți meșteri, negustori și cumpărători în orașe.', de: 'Die Bevölkerung wächst. Mehr Menschen bedeuten mehr Handwerker, Händler und Käufer in den Städten.' } },
+    { l: { ro: 'Orașe bogate', de: 'Reiche Städte' }, t: { ro: 'Progresul economic al orașelor italiene', de: 'Wirtschaftlicher Aufschwung der italienischen Städte' },
+      b: { ro: 'Orașe ca Veneția sau Florența făceau comerț și afaceri bănești până departe și se îmbogățeau.', de: 'Städte wie Venedig oder Florenz trieben weit über ihre Grenzen hinaus Handel und Geldgeschäfte und wurden reich.' } },
+    { l: { ro: 'Burghezie și mecenat', de: 'Bürgertum und Mäzenatentum' }, t: { ro: 'O burghezie bogată și puternică', de: 'Ein reiches und mächtiges Bürgertum' },
+      b: { ro: 'Burghezii bogați voiau să se afirme și iubeau frumosul. Au plătit artiști și savanți: acesta este <b>mecenatul</b>. (De exemplu, familia Medici din Florența.)', de: 'Reiche Bürger wollten sich zeigen und liebten das Schöne. Sie bezahlten Künstler und Gelehrte: Das ist das <b>Mäzenatentum</b>. (Zum Beispiel die Familie Medici in Florenz.)' } }
+  ];
+  chipGroup($('#fc-chips'), F.map(function (f) { return { label: T(f.l) }; }), function (i) { readout($('#fc-out'), T(F[i].t), T(F[i].b)); });
+  readout($('#fc-out'), tx('Factorii Renașterii italiene', 'Faktoren der italienischen Renaissance'), tx('Apasă pe fiecare factor ca să afli cum a ajutat.', 'Tippe auf jeden Faktor, um zu erfahren, wie er half.'));
+
+  var CITIES = [
+    { k: 'flo', it: 1, ll: [11.25, 43.77], n: { ro: 'Florența', de: 'Florenz' }, s: 'l', d: { ro: 'Unul dintre cele mai importante centre ale Renașterii italiene, orașul marilor mecenați și artiști.', de: 'Eines der wichtigsten Zentren der italienischen Renaissance, Stadt großer Mäzene und Künstler.' } },
+    { k: 'ven', it: 1, ll: [12.33, 45.44], n: { ro: 'Veneția', de: 'Venedig' }, s: 'r', d: { ro: 'Oraș-port bogat din comerț. Centru al Renașterii italiene.', de: 'Reiche Hafenstadt durch den Handel. Zentrum der italienischen Renaissance.' } },
+    { k: 'mil', it: 1, ll: [9.19, 45.46], n: { ro: 'Milano', de: 'Mailand' }, s: 'l', d: { ro: 'Centru al Renașterii italiene, în nordul Italiei.', de: 'Zentrum der italienischen Renaissance im Norden Italiens.' } },
+    { k: 'rom', it: 1, ll: [12.5, 41.9], n: { ro: 'Roma', de: 'Rom' }, s: 'r', d: { ro: 'Centru al Renașterii italiene, între ruinele Romei antice.', de: 'Zentrum der italienischen Renaissance, zwischen den Ruinen des antiken Roms.' } },
+    { k: 'par', ll: [2.35, 48.86], n: { ro: 'Paris', de: 'Paris' }, s: 'l', d: { ro: 'În Franța ajung ideile renascentiste din Italia. Aici trăiește scriitorul François Rabelais.', de: 'Nach Frankreich gelangen die Ideen der italienischen Renaissance. Hier lebte der Schriftsteller François Rabelais.' } },
+    { k: 'lon', ll: [-0.12, 51.5], n: { ro: 'Londra', de: 'London' }, s: 'l', d: { ro: 'În Anglia, Renașterea dă scriitori ca William Shakespeare.', de: 'In England bringt die Renaissance Schriftsteller wie William Shakespeare hervor.' } },
+    { k: 'bru', ll: [4.35, 50.85], n: { ro: 'Bruxelles', de: 'Brüssel' }, s: 'r', d: { ro: 'În Țările de Jos, orașe ca Bruxelles și Anvers sunt centre ale Renașterii.', de: 'In den Niederlanden sind Städte wie Brüssel und Antwerpen Zentren der Renaissance.' } },
+    { k: 'nur', ll: [11.08, 49.45], n: { ro: 'Nürnberg', de: 'Nürnberg' }, s: 'r', d: { ro: 'Centru al Renașterii în Europa Centrală.', de: 'Zentrum der Renaissance in Mitteleuropa.' } },
+    { k: 'mad', ll: [-3.7, 40.42], n: { ro: 'Madrid', de: 'Madrid' }, s: 'r', d: { ro: 'În Spania ajung ideile renascentiste. Aici trăiește Miguel de Cervantes, autorul lui Don Quijote.', de: 'Nach Spanien gelangen die Ideen der Renaissance. Hier lebte Miguel de Cervantes, der Autor von Don Quijote.' } },
+    { k: 'tro', ll: [25.2, 45.9], n: { ro: 'Țările Române', de: 'Rumänische Fürstentümer' }, s: 'l', d: { ro: 'Ideile umaniste ajung și la noi, în secolul al XVII-lea.', de: 'Humanistische Ideen erreichen auch unsere Länder, im 17. Jahrhundert.' } }
+  ];
+  var out = $('#mp-out'), res = $('#mp-res');
+  readout(out, tx('Apasă pe un oraș', 'Tippe auf eine Stadt'), tx('Punctele roșii sunt centre italiene, cele negre sunt alte centre din Europa.', 'Rote Punkte sind italienische Zentren, schwarze sind andere Zentren in Europa.'));
+  var find = null, findBtn = btn('chip', tx('🔎 Găsește pe hartă', '🔎 Finde auf der Karte'));
+  findBtn.setAttribute('aria-pressed', 'false');
+  var arrowsOn = true, arrowBtn = btn('chip', tx('Arată răspândirea', 'Ausbreitung zeigen')); arrowBtn.setAttribute('aria-pressed', 'true');
+  $('#mp-tog').appendChild(arrowBtn); $('#mp-tog').appendChild(findBtn);
+  var arrowG = null, M = {};
+  function nextTarget() {
+    var prev = find; do { find = CITIES[Math.floor(Math.random() * CITIES.length)]; } while (find === prev);
+    res.className = 'result try'; res.textContent = tx('Apasă pe: ', 'Tippe auf: ') + T(find.n);
+  }
+  findBtn.onclick = function () {
+    var on = findBtn.getAttribute('aria-pressed') !== 'true';
+    findBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (on) nextTarget(); else { find = null; res.className = 'result'; res.textContent = ''; }
+  };
+  arrowBtn.onclick = function () { arrowsOn = !arrowsOn; arrowBtn.setAttribute('aria-pressed', arrowsOn ? 'true' : 'false'); if (arrowG) arrowG.style.display = arrowsOn ? '' : 'none'; };
+  function pressed(c) {
+    if (find) {
+      if (c === find) { res.className = 'result good'; res.textContent = '✓ ' + tx('Corect: ', 'Richtig: ') + T(c.n) + '. ' + tx('Încă una?', 'Noch eine?'); find = null; setTimeout(function () { if (!find && findBtn.getAttribute('aria-pressed') === 'true') nextTarget(); }, 1400); }
+      else { res.className = 'result no'; res.textContent = tx('Aceea este ', 'Das ist ') + T(c.n) + tx('. Mai caută.', '. Such weiter.'); }
+      return;
+    }
+    readout(out, T(c.n), T(c.d), c.it ? tx('Centru al Renașterii italiene', 'Zentrum der italienischen Renaissance') : tx('Aici a ajuns Renașterea italiană', 'Hierhin gelangte die italienische Renaissance'));
+  }
+  Promise.all([
+    fetch('../../lib/land-50m.json').then(function (r) { return r.json(); }),
+    fetch('../../lib/countries-110m.json').then(function (r) { return r.json(); })
+  ]).then(function (res2) {
+    var land = topojson.feature(res2[0], res2[0].objects.land), bord = topojson.mesh(res2[1], res2[1].objects.countries, function (a, b) { return a !== b; });
+    var W = 620, H = 470, svg = d3.select('#mp-svg');
+    var proj = d3.geoConicConformal().rotate([-12, 0]).parallels([40, 55]);
+    proj.fitExtent([[6, 6], [W - 6, H - 6]], { type: 'MultiPoint', coordinates: [[-7, 39.5], [29, 39.5], [-3, 52.5], [29, 52.5], [12, 41]] });
+    var path = d3.geoPath(proj);
+    svg.append('rect').attr('width', W).attr('height', H).attr('class', 'sea');
+    svg.append('path').datum(land).attr('class', 'land').attr('d', path);
+    svg.append('path').datum(bord).attr('class', 'bord').attr('d', path);
+    var gA = el('g', {}, svg.node()); arrowG = gA;
+    var gC = el('g', {}, svg.node());
+    el('defs', {}, svg.node()).innerHTML = '<marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#c0392b"/></marker>';
+    var o = proj([11.8, 43.6]), fs = narrow ? 22 : 14, R = narrow ? 8 : 6;
+    CITIES.forEach(function (c) {
+      var p = proj(c.ll); M[c.k] = p;
+      if (!c.it) {
+        var dx = p[0] - o[0], dy = p[1] - o[1], len = Math.sqrt(dx * dx + dy * dy), ux = dx / len, uy = dy / len;
+        el('line', { x1: o[0] + ux * 18, y1: o[1] + uy * 18, x2: p[0] - ux * (R + 10), y2: p[1] - uy * (R + 10), stroke: '#c0392b', 'stroke-width': narrow ? 5 : 4, 'stroke-linecap': 'round', 'marker-end': 'url(#ah)' }, gA);
+      }
+    });
+    CITIES.forEach(function (c) {
+      var p = M[c.k], g = hotspot(gC, function () { pressed(c); }, T(c.n));
+      el('circle', { cx: p[0], cy: p[1], r: R + 4, fill: 'transparent' }, g);
+      el('circle', { cx: p[0], cy: p[1], r: c.it ? R + 1 : R - 1, fill: c.it ? '#c0392b' : '#231f1a', stroke: '#fff', 'stroke-width': 2 }, g);
+      var left = c.s === 'l';
+      var t = el('text', { x: p[0] + (left ? -(R + 5) : R + 5), y: p[1] + (c.k === 'flo' || c.k === 'rom' ? 14 : 5) , class: 'mlbl', 'text-anchor': left ? 'end' : 'start', style: 'font-size:' + fs + 'px' }, g, T(c.n));
+      if (c.k === 'flo') { t.setAttribute('y', p[1] + 18); t.setAttribute('x', p[0] - 6); }
+      if (c.k === 'mil') { t.setAttribute('y', p[1] - 6); }
+      if (c.k === 'ven') { t.setAttribute('y', p[1] - 6); }
+      if (c.k === 'rom') { t.setAttribute('y', p[1] + 16); }
+      if (c.k === 'tro') { t.setAttribute('y', p[1] - 10); t.setAttribute('x', p[0] + 4); }
+    });
+  }).catch(function () { readout(out, tx('Harta nu s-a putut încărca', 'Die Karte konnte nicht geladen werden'), tx('Încearcă să reîncarci pagina.', 'Lade die Seite bitte neu.')); });
+  Check($('#c2'), [
+    { q: { ro: 'Ce este mecenatul?', de: 'Was ist Mäzenatentum?' },
+      o: [{ ro: 'Sprijinul financiar dat artiștilor și savanților', de: 'Die finanzielle Unterstützung von Künstlern und Gelehrten' }, { ro: 'O călătorie pe mare', de: 'Eine Seereise' }, { ro: 'O școală pentru copii', de: 'Eine Schule für Kinder' }], a: 0,
+      hint: { ro: 'Gândește-te la burghezii bogați care plăteau artiști.', de: 'Denk an die reichen Bürger, die Künstler bezahlten.' },
+      why: { ro: 'Mecena = om bogat care sprijină artiști și savanți.', de: 'Ein Mäzen ist ein reicher Mensch, der Künstler und Gelehrte unterstützt.' } },
+    { q: { ro: 'Care oraș a fost un centru al Renașterii italiene?', de: 'Welche Stadt war ein Zentrum der italienischen Renaissance?' },
+      o: [{ ro: 'Paris', de: 'Paris' }, { ro: 'Florența', de: 'Florenz' }, { ro: 'Londra', de: 'London' }], a: 1,
+      hint: { ro: 'Caută orașul din Italia, nu pe cele unde a ajuns Renașterea mai târziu.', de: 'Such die Stadt in Italien, nicht die, in die die Renaissance erst später kam.' },
+      why: { ro: 'Florența, alături de Veneția, Milano și Roma.', de: 'Florenz, neben Venedig, Mailand und Rom.' } }
+  ]);
+})();
+
+/* ================= 3. Umanismul ================= */
+(function () {
+  var svg = $('#hu-svg'), out = $('#hu-out');
+  var G = [
+    { x: 90, c: '#c9871b', s: '#fbecc9', n: { ro: 'Omul universal', de: 'Universeller Mensch' }, e: '🧠',
+      b: { ro: 'Un om <b>înzestrat cu rațiune</b> și cu o <b>cultură enciclopedică</b>: știe mult, din multe domenii.', de: 'Ein Mensch, <b>begabt mit Vernunft</b> und <b>umfassender Bildung</b>: Er weiß viel, aus vielen Bereichen.' } },
+    { x: 260, c: '#2f6fd6', s: '#dfe9fb', n: { ro: 'Cultura greco-romană', de: 'Griechisch-römische Kultur' }, e: '🏛️',
+      b: { ro: '<b>Reînvierea culturii greco-romane</b>, considerată izvorul inteligenței, al științei și al frumuseții.', de: '<b>Wiederbelebung der griechisch-römischen Kultur</b>, die als Quelle von Klugheit, Wissenschaft und Schönheit galt.' } },
+    { x: 430, c: '#1f8a5b', s: '#dcf1e6', n: { ro: 'Fericirea oamenilor', de: 'Glück der Menschen' }, e: '🙂',
+      b: { ro: '<b>Asigurarea fericirii oamenilor</b>: omul și binele lui sunt în centrul preocupărilor.', de: '<b>Das Glück der Menschen sichern</b>: Der Mensch und sein Wohl stehen im Mittelpunkt.' } }
+  ];
+  readout(out, tx('Omul în centru', 'Der Mensch im Zentrum'), tx('Potrivit principiului antic „Omul este măsura tuturor lucrurilor”, umanismul plasa omul în centrul tuturor preocupărilor. Apasă pe un obiectiv.', 'Nach dem antiken Grundsatz „Der Mensch ist das Maß aller Dinge“ stellte der Humanismus den Menschen in den Mittelpunkt aller Interessen. Tippe auf ein Ziel.'));
+  var sels = [];
+  G.forEach(function (g, i) {
+    el('line', { x1: 260, y1: 96, x2: g.x, y2: 196, stroke: g.c, 'stroke-width': 3 }, svg);
+  });
+  el('circle', { cx: 260, cy: 66, r: 52, fill: '#fbeadf', stroke: '#b4531f', 'stroke-width': 3 }, svg);
+  el('text', { x: 260, y: 66, 'text-anchor': 'middle', 'font-size': 34 }, svg, '🧑');
+  el('text', { x: 260, y: 92, class: 'tlb' }, svg, tx('OMUL', 'DER MENSCH'));
+  G.forEach(function (g, i) {
+    var hs = hotspot(svg, function () {
+      sels.forEach(function (r, j) { r.setAttribute('stroke-width', i === j ? 5 : 2); });
+      readout(out, T(g.n), T(g.b));
+    }, T(g.n));
+    var r = el('rect', { x: g.x - 76, y: 196, width: 152, height: 112, rx: 14, fill: g.s, stroke: g.c, 'stroke-width': 2, class: 'hb' }, hs); sels.push(r);
+    el('text', { x: g.x, y: 244, 'text-anchor': 'middle', 'font-size': 34 }, hs, g.e);
+    var words = T(g.n).split(' ');
+    var l1 = words.length > 1 ? words.slice(0, Math.ceil(words.length / 2)).join(' ') : words[0], l2 = words.length > 1 ? words.slice(Math.ceil(words.length / 2)).join(' ') : '';
+    el('text', { x: g.x, y: 274, class: 'tlb' }, hs, l1);
+    if (l2) el('text', { x: g.x, y: 294, class: 'tlb' }, hs, l2);
+  });
+
+  /* lanțul tiparului */
+  var FL = [
+    { t: { ro: 'Tiparul', de: 'Der Buchdruck' }, b: { ro: 'Johannes Gutenberg inventează tiparul la mijlocul secolului al XV-lea.', de: 'Johannes Gutenberg erfindet Mitte des 15. Jahrhunderts den Buchdruck.' } },
+    { t: { ro: 'Mai multe cărți', de: 'Mehr Bücher' }, b: { ro: 'Cărțile se pot copia mult mai repede decât de mână, deci ajung la mai mulți oameni.', de: 'Bücher lassen sich viel schneller vervielfältigen als von Hand und erreichen deshalb mehr Menschen.' } },
+    { t: { ro: 'Limbi naționale', de: 'Nationalsprachen' }, b: { ro: 'În scrieri se folosesc, alături de limba latină, și limbile naționale.', de: 'In Schriften verwendet man neben dem Lateinischen auch die Nationalsprachen.' } },
+    { t: { ro: 'Biblioteci', de: 'Bibliotheken' }, b: { ro: 'Se înființează biblioteci, unde cărțile sunt păstrate și citite.', de: 'Bibliotheken werden gegründet, in denen Bücher aufbewahrt und gelesen werden.' } },
+    { t: { ro: 'Învățământ', de: 'Bildungswesen' }, b: { ro: 'Învățământul se dezvoltă: tot mai mulți oameni învață să citească și să studieze.', de: 'Das Bildungswesen entwickelt sich: Immer mehr Menschen lernen lesen und studieren.' } }
+  ];
+  var cur = 0, box = $('#fl-box'), prev = $('#fl-prev'), next = $('#fl-next');
+  prev.textContent = tx('Înapoi', 'Zurück'); next.textContent = tx('Pasul următor', 'Nächster Schritt');
+  FL.forEach(function (f, i) { box.appendChild(h('div', 'fs', '<b>' + (i + 1) + '</b>' + T(f.t))); });
+  function draw() {
+    Array.prototype.forEach.call(box.children, function (c, i) { c.className = 'fs' + (i === cur ? ' on' : i < cur ? ' done' : ''); });
+    readout($('#fl-out'), (cur + 1) + '. ' + T(FL[cur].t), T(FL[cur].b));
+    prev.disabled = cur === 0; next.disabled = cur === FL.length - 1;
+  }
+  prev.onclick = function () { cur--; draw(); }; next.onclick = function () { cur++; draw(); }; draw();
+
+  /* umaniști români */
+  var R = [
+    { l: 'Nicolae Olahus', b: { ro: 'Umanist de origine română din Transilvania. A scris în limba latină și a arătat că românii se trag din romani.', de: 'Humanist rumänischer Herkunft aus Siebenbürgen. Er schrieb auf Latein und zeigte, dass die Rumänen von den Römern abstammen.' } },
+    { l: 'Johannes Honterus', b: { ro: 'Umanist din Brașov. A înființat o tipografie în Brașov și a tipărit cărți, deci a ajutat la răspândirea ideilor noi.', de: 'Humanist aus Kronstadt (Brașov). Er gründete in Kronstadt eine Druckerei und druckte Bücher, half also bei der Verbreitung neuer Ideen.' } },
+    { l: 'Dimitrie Cantemir', b: { ro: 'Domn al Moldovei și mare cărturar. A scris lucrări despre istoria și geografia țării sale și a susținut originea romană a românilor.', de: 'Fürst der Moldau und großer Gelehrter. Er schrieb Werke über Geschichte und Geografie seines Landes und vertrat die römische Herkunft der Rumänen.' } }
+  ];
+  chipGroup($('#ro-chips'), R.map(function (r) { return { label: r.l }; }), function (i) {
+    readout($('#ro-out'), R[i].l, T(R[i].b), tx('Umanismul românesc a insistat asupra romanității și a unității poporului român.', 'Der rumänische Humanismus betonte die römische Herkunft und die Einheit des rumänischen Volkes.'));
+  });
+  readout($('#ro-out'), tx('Umaniști români', 'Rumänische Humanisten'), tx('Nicolae Olahus, Johannes Honterus, Dimitrie Cantemir.', 'Nicolae Olahus, Johannes Honterus, Dimitrie Cantemir.'));
+
+  /* Rabelais: limbă sau disciplină */
+  var RB = [
+    { n: { ro: 'limba elină (greaca)', de: 'die griechische Sprache' }, a: 0 },
+    { n: { ro: 'limba latină', de: 'die lateinische Sprache' }, a: 0 },
+    { n: { ro: 'limba ebraică', de: 'die hebräische Sprache' }, a: 0 },
+    { n: { ro: 'cronicile (istoria)', de: 'die Chroniken (Geschichte)' }, a: 1 },
+    { n: { ro: 'astronomia', de: 'die Astronomie' }, a: 1 },
+    { n: { ro: 'dreptul obștesc', de: 'das allgemeine Recht' }, a: 1 },
+    { n: { ro: 'metalele din adâncuri (științele naturii)', de: 'die Metalle in der Tiefe (Naturwissenschaften)' }, a: 1 },
+    { n: { ro: 'cărțile medicilor greci (medicina)', de: 'die Bücher der griechischen Ärzte (Medizin)' }, a: 1 }
+  ];
+  var rb = $('#rb-box'), done = 0;
+  RB.forEach(function (r) {
+    var row = h('div', 'sortrow'), q = h('span', '', T(r.n)), bx = h('div', 'row'), fb = h('div', 'fb');
+    bx.style.display = 'flex'; bx.style.gap = '6px'; fb.setAttribute('aria-live', 'polite');
+    var bs = [tx('Limbă', 'Sprache'), tx('Disciplină', 'Fach')].map(function (txt, i) {
+      var b = btn('pick', txt);
+      b.onclick = function () {
+        if (i === r.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); row.classList.add('ok'); fb.textContent = '✓'; done++;
+          if (done === RB.length) fb.textContent = '✓ ' + tx('Bravo! Trei limbi și cinci discipline: baza educației umaniste.', 'Bravo! Drei Sprachen und fünf Fächer: die Grundlage humanistischer Bildung.'); }
+        else { b.classList.add('wrong'); fb.textContent = r.a === 0 ? tx('Întreabă-te: se vorbește sau se studiază ca materie?', 'Frag dich: Spricht man sie, oder lernt man sie als Fach?') : tx('Întreabă-te: este un mod de a vorbi sau un domeniu de cunoaștere?', 'Frag dich: Ist es eine Art zu sprechen oder ein Wissensgebiet?'); }
+      };
+      bx.appendChild(b); return b;
+    });
+    row.appendChild(q); row.appendChild(bx); row.appendChild(fb); rb.appendChild(row);
+  });
+
+  Check($('#c3'), [
+    { q: { ro: 'Ce invenție a favorizat răspândirea ideilor umaniste?', de: 'Welche Erfindung förderte die Verbreitung humanistischer Ideen?' },
+      o: [{ ro: 'Tiparul', de: 'Der Buchdruck' }, { ro: 'Busola', de: 'Der Kompass' }, { ro: 'Telescopul', de: 'Das Teleskop' }], a: 0,
+      hint: { ro: 'Gândește-te la ce ajută cărțile să fie copiate repede.', de: 'Denk daran, was Bücher schnell vervielfältigt.' },
+      why: { ro: 'Tiparul, inventat de Gutenberg.', de: 'Der Buchdruck, erfunden von Gutenberg.' } },
+    { q: { ro: 'Ce înseamnă „Omul este măsura tuturor lucrurilor” pentru umaniști?', de: 'Was bedeutet „Der Mensch ist das Maß aller Dinge“ für die Humanisten?' },
+      o: [{ ro: 'Omul trebuie să măsoare totul cu rigla', de: 'Der Mensch muss alles mit dem Lineal messen' }, { ro: 'Omul este în centrul tuturor preocupărilor', de: 'Der Mensch steht im Mittelpunkt aller Interessen' }, { ro: 'Omul nu contează', de: 'Der Mensch zählt nicht' }], a: 1,
+      hint: { ro: 'Reciți desenul de la începutul secțiunii: cine e în centru?', de: 'Schau dir die Zeichnung am Anfang des Abschnitts an: Wer steht in der Mitte?' },
+      why: { ro: 'Umanismul plasa omul în centrul preocupărilor.', de: 'Der Humanismus stellte den Menschen in den Mittelpunkt.' } },
+    { q: { ro: 'De ce erau importante limbile latină și greacă pentru epoca Renașterii?', de: 'Warum waren Latein und Griechisch für die Renaissance wichtig?' },
+      o: [{ ro: 'Prin ele se citeau operele Antichității, izvorul culturii greco-romane', de: 'Durch sie las man die Werke der Antike, die Quelle der griechisch-römischen Kultur' }, { ro: 'Erau limbile în care vorbeau toți oamenii pe stradă', de: 'Es waren die Sprachen, die alle Menschen auf der Straße sprachen' }, { ro: 'Nu erau importante', de: 'Sie waren nicht wichtig' }], a: 0,
+      hint: { ro: 'Umaniștii voiau să reînvie cultura greco-romană.', de: 'Die Humanisten wollten die griechisch-römische Kultur wiederbeleben.' },
+      why: { ro: 'Operele Antichității erau scrise în greacă și latină.', de: 'Die Werke der Antike waren auf Griechisch und Latein geschrieben.' } }
+  ]);
+})();
+
+/* ================= 4. Oameni și idei ================= */
+(function () {
+  var GR = [
+    { c: '#2f6fd6', t: { ro: 'Literatură', de: 'Literatur' }, p: [
+      { n: 'Francesco Petrarca', co: { ro: 'Italia', de: 'Italien' }, b: { ro: 'Preocupat de publicarea operelor antice.', de: 'Bemühte sich um die Herausgabe antiker Werke.' } },
+      { n: 'Giovanni Boccaccio', co: { ro: 'Italia', de: 'Italien' }, b: { ro: 'În <i>Decameronul</i> a ilustrat diverse tipuri umane.', de: 'Im <i>Decamerone</i> schilderte er verschiedene menschliche Typen.' } },
+      { n: 'William Shakespeare', co: { ro: 'Anglia', de: 'England' }, b: { ro: 'A scris drame istorice, comedii și tragedii, precum <i>Romeo și Julieta</i>, <i>Hamlet</i>, <i>Regele Lear</i>, dar și sonete.', de: 'Schrieb Historiendramen, Komödien und Tragödien wie <i>Romeo und Julia</i>, <i>Hamlet</i>, <i>König Lear</i> sowie Sonette.' } },
+      { n: 'François Rabelais', co: { ro: 'Franța', de: 'Frankreich' }, b: { ro: 'În <i>Gargantua și Pantagruel</i> a expus o nouă concepție despre educație, bazată pe studiul limbilor clasice și al științei.', de: 'In <i>Gargantua und Pantagruel</i> legte er ein neues Bildungsideal dar, das auf dem Studium der klassischen Sprachen und der Wissenschaft beruht.' } },
+      { n: 'Miguel de Cervantes', co: { ro: 'Spania', de: 'Spanien' }, b: { ro: 'În <i>Don Quijote de la Mancha</i> a satirizat cavalerismul medieval.', de: 'In <i>Don Quijote de la Mancha</i> verspottete er das mittelalterliche Rittertum.' } }
+    ] },
+    { c: '#1f8a5b', t: { ro: 'Știință', de: 'Wissenschaft' }, p: [
+      { n: 'Nicolaus Copernic', co: { ro: 'Polonia', de: 'Polen' }, b: { ro: 'A susținut teoria heliocentrică: Soarele este în centru.', de: 'Vertrat das heliozentrische Weltbild: Die Sonne steht im Zentrum.' } },
+      { n: 'Galileo Galilei', co: { ro: 'Italia', de: 'Italien' }, b: { ro: 'A susținut și el teoria heliocentrică, pe baza observației.', de: 'Vertrat ebenfalls das heliozentrische Weltbild, gestützt auf Beobachtung.' } },
+      { n: 'Giordano Bruno', co: { ro: 'Italia', de: 'Italien' }, b: { ro: 'A afirmat că Universul este infinit.', de: 'Behauptete, dass das Universum unendlich ist.' } },
+      { n: 'Leonardo da Vinci', co: { ro: 'Italia', de: 'Italien' }, b: { ro: 'Cel mai de seamă savant renascentist, considerat adesea cel mai mare geniu din istorie și unul dintre cei mai mari pictori. A excelat în sculptură, arhitectură, muzică, inginerie, anatomie, geologie, cartografie, botanică și literatură.', de: 'Der bedeutendste Gelehrte der Renaissance, oft als größtes Genie der Geschichte und einer der größten Maler bezeichnet. Er war auch in Bildhauerei, Architektur, Musik, Ingenieurwesen, Anatomie, Geologie, Kartografie, Botanik und Literatur hervorragend.' } }
+    ] },
+    { c: '#8e44ad', t: { ro: 'Societate și politică', de: 'Gesellschaft und Politik' }, p: [
+      { n: 'Erasmus din Rotterdam', co: { ro: 'Țările de Jos', de: 'Niederlande' }, b: { ro: 'În <i>Elogiul nebuniei</i> a criticat moravurile societății și abuzurile din sânul Bisericii.', de: 'Im <i>Lob der Torheit</i> kritisierte er die Sitten der Gesellschaft und Missstände in der Kirche.' } },
+      { n: 'Niccolò Machiavelli', co: { ro: 'Italia', de: 'Italien' }, b: { ro: 'A formulat noi principii de guvernare.', de: 'Formulierte neue Regierungsgrundsätze.' } }
+    ] }
+  ];
+  var box = $('#pp-box'), out = $('#pp-out'), allB = [];
+  readout(out, tx('Alege o persoană', 'Wähle eine Person'), tx('Apasă pe un nume din listă.', 'Tippe auf einen Namen in der Liste.'));
+  GR.forEach(function (g) {
+    var d = h('div', 'pgroup'), ch = h('div', 'chips');
+    d.style.setProperty('--c', g.c);
+    d.appendChild(h('h3', '', '<i></i>' + T(g.t)));
+    g.p.forEach(function (p) {
+      var b = btn('chip', p.n); b.setAttribute('aria-pressed', 'false'); allB.push(b);
+      b.onclick = function () {
+        allB.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        readout(out, p.n, T(p.b), T(g.t) + ' · ' + T(p.co));
+        out.style.borderLeft = '5px solid ' + g.c;
+      };
+      ch.appendChild(b);
+    });
+    d.appendChild(ch); box.appendChild(d);
+  });
+
+  /* heliocentric */
+  var svg = $('#hc-svg'), out2 = $('#hc-out'), playB = $('#hc-play');
+  var mode = 0, t0 = 0, run = !reduce, raf = null, movers = [];
+  var MODES = [
+    { l: { ro: 'Pământul în centru', de: 'Erde im Zentrum' }, t: { ro: 'Imaginea veche: geocentrismul', de: 'Das alte Bild: das geozentrische Weltbild' },
+      b: { ro: 'În imaginea veche, <b>Pământul stă în centru</b>, iar Luna, Soarele și planetele se învârt în jurul lui.', de: 'Im alten Bild <b>steht die Erde im Zentrum</b>, und Mond, Sonne und Planeten kreisen um sie.' } },
+    { l: { ro: 'Soarele în centru', de: 'Sonne im Zentrum' }, t: { ro: 'Teoria heliocentrică', de: 'Das heliozentrische Weltbild' },
+      b: { ro: '<b>Soarele este în centru</b>, iar Pământul și celelalte planete se mișcă în jurul lui. Teoria a fost susținută de Copernic și de Galilei.', de: 'Die <b>Sonne steht im Zentrum</b>, die Erde und die anderen Planeten bewegen sich um sie. Vertreten von Kopernikus und Galilei.' } },
+    { l: { ro: 'Univers infinit', de: 'Unendliches Universum' }, t: { ro: 'Universul infinit (Giordano Bruno)', de: 'Das unendliche Universum (Giordano Bruno)' },
+      b: { ro: 'Universul nu are margini: există nenumărate stele, ca Soarele nostru. Așa a afirmat Giordano Bruno.', de: 'Das Universum hat keinen Rand: Es gibt unzählige Sterne wie unsere Sonne. So behauptete es Giordano Bruno.' } }
+  ];
+  function build() {
+    svg.innerHTML = ''; movers = [];
+    var cx = 260, cy = 160;
+    if (mode < 2) {
+      var orbs = mode === 0 ? [{ r: 55, w: 2.4, c: '#9aa3ad', n: tx('Luna', 'Mond'), s: 7 }, { r: 100, w: 1.0, c: '#e8a01c', n: tx('Soarele', 'Sonne'), s: 16 }, { r: 145, w: .53, c: '#c0452b', n: tx('Marte', 'Mars'), s: 9 }]
+                             : [{ r: 55, w: 2.4, c: '#9aa3ad', n: tx('Mercur', 'Merkur'), s: 7 }, { r: 100, w: 1.0, c: '#2f6fd6', n: tx('Pământul', 'Erde'), s: 11 }, { r: 145, w: .53, c: '#c0452b', n: tx('Marte', 'Mars'), s: 9 }];
+      orbs.forEach(function (o) { el('circle', { cx: cx, cy: cy, r: o.r, fill: 'none', stroke: '#cbbfa5', 'stroke-width': 1.5, 'stroke-dasharray': '4 5' }, svg); });
+      if (mode === 0) { el('circle', { cx: cx, cy: cy, r: 17, fill: '#2f6fd6', stroke: '#fff', 'stroke-width': 3 }, svg); el('text', { x: cx, y: cy + 36, class: 'slbl' }, svg, tx('Pământul', 'Erde')); }
+      else { el('circle', { cx: cx, cy: cy, r: 22, fill: '#e8a01c', stroke: '#fff', 'stroke-width': 3 }, svg); el('text', { x: cx, y: cy + 40, class: 'slbl' }, svg, tx('Soarele', 'Sonne')); }
+      orbs.forEach(function (o, i) {
+        var c = el('circle', { r: o.s, fill: o.c, stroke: '#fff', 'stroke-width': 2 }, svg), t = el('text', { class: 'slbl' }, svg, o.n);
+        movers.push({ c: c, t: t, cx: cx, cy: cy, r: o.r, w: o.w, a0: i * 2.1 });
+      });
+    } else {
+      var seed = 7; function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+      var pos = [[260, 160], [90, 70], [430, 80], [100, 250], [420, 255], [260, 40], [250, 285], [40, 160], [485, 165]];
+      pos.forEach(function (p, i) {
+        el('circle', { cx: p[0], cy: p[1], r: i === 0 ? 11 : 8, fill: '#e8a01c', stroke: '#fff', 'stroke-width': 2 }, svg);
+        var c = el('circle', { r: 3.5, fill: '#2f6fd6' }, svg);
+        movers.push({ c: c, cx: p[0], cy: p[1], r: i === 0 ? 24 : 18, w: .9 + rnd(), a0: rnd() * 6 });
+        el('circle', { cx: p[0], cy: p[1], r: i === 0 ? 24 : 18, fill: 'none', stroke: '#cbbfa5', 'stroke-dasharray': '3 4' }, svg);
+      });
+      el('text', { x: 260, y: 110, class: 'slbl' }, svg, tx('Soarele nostru', 'Unsere Sonne'));
+      ['→', '←'].forEach(function (a, i) { el('text', { x: i ? 12 : 508, y: 316, 'text-anchor': 'middle', class: 'slbl' }, svg, a); });
+      el('text', { x: 260, y: 312, class: 'slbl' }, svg, tx('… fără margini …', '… ohne Rand …'));
+    }
+    frame(0);
+  }
+  function frame(t) {
+    movers.forEach(function (m) {
+      var a = m.a0 + t * m.w, x = m.cx + m.r * Math.cos(a), y = m.cy + m.r * Math.sin(a);
+      m.c.setAttribute('cx', x); m.c.setAttribute('cy', y);
+      if (m.t) { m.t.setAttribute('x', x); m.t.setAttribute('y', y - 16); }
+    });
+  }
+  function loop(ts) {
+    if (!run) { raf = null; return; }
+    if (!t0) t0 = ts; frame((ts - t0) / 1000 * .5);
+    raf = requestAnimationFrame(loop);
+  }
+  function setRun(r) { run = r; playB.textContent = run ? tx('⏸ Oprește mișcarea', '⏸ Bewegung stoppen') : tx('▶ Pornește mișcarea', '▶ Bewegung starten'); if (run && !raf) { t0 = 0; raf = requestAnimationFrame(loop); } }
+  playB.onclick = function () { setRun(!run); };
+  chipGroup($('#hc-chips'), MODES.map(function (m) { return { label: T(m.l) }; }), function (i) { mode = i; build(); readout(out2, T(MODES[i].t), T(MODES[i].b)); });
+  $('#hc-chips').children[1].click();
+  setRun(run);
+
+  Check($('#c4'), [
+    { q: { ro: 'Cine a scris <i>Don Quijote de la Mancha</i>?', de: 'Wer schrieb <i>Don Quijote de la Mancha</i>?' },
+      o: [{ ro: 'Shakespeare', de: 'Shakespeare' }, { ro: 'Cervantes', de: 'Cervantes' }, { ro: 'Boccaccio', de: 'Boccaccio' }], a: 1,
+      hint: { ro: 'Autorul era din Spania.', de: 'Der Autor kam aus Spanien.' }, why: { ro: 'Miguel de Cervantes a satirizat cavalerismul medieval.', de: 'Miguel de Cervantes verspottete das mittelalterliche Rittertum.' } },
+    { q: { ro: 'Cine a scris <i>Elogiul nebuniei</i> și a criticat moravurile societății?', de: 'Wer schrieb das <i>Lob der Torheit</i> und kritisierte die Sitten der Gesellschaft?' },
+      o: [{ ro: 'Machiavelli', de: 'Machiavelli' }, { ro: 'Rabelais', de: 'Rabelais' }, { ro: 'Erasmus din Rotterdam', de: 'Erasmus von Rotterdam' }], a: 2,
+      hint: { ro: 'Numele autorului vine de la un oraș din Țările de Jos.', de: 'Der Name des Autors stammt von einer Stadt in den Niederlanden.' }, why: { ro: 'Erasmus a criticat și abuzurile Bisericii.', de: 'Erasmus kritisierte auch Missstände der Kirche.' } },
+    { q: { ro: 'Ce afirmă teoria heliocentrică?', de: 'Was besagt das heliozentrische Weltbild?' },
+      o: [{ ro: 'Soarele este în centru', de: 'Die Sonne steht im Zentrum' }, { ro: 'Pământul este în centru', de: 'Die Erde steht im Zentrum' }, { ro: 'Luna este în centru', de: 'Der Mond steht im Zentrum' }], a: 0,
+      hint: { ro: '„Helios” înseamnă Soare în greacă.', de: '„Helios“ bedeutet auf Griechisch Sonne.' }, why: { ro: 'Soarele în centru, Pământul se mișcă în jurul lui.', de: 'Die Sonne im Zentrum, die Erde bewegt sich um sie.' } },
+    { q: { ro: 'Cine a afirmat că Universul este infinit?', de: 'Wer behauptete, dass das Universum unendlich ist?' },
+      o: [{ ro: 'Giordano Bruno', de: 'Giordano Bruno' }, { ro: 'Copernic', de: 'Kopernikus' }, { ro: 'Leonardo da Vinci', de: 'Leonardo da Vinci' }], a: 0,
+      hint: { ro: 'Uită-te la al treilea desen, cel fără margini.', de: 'Sieh dir die dritte Zeichnung an, die ohne Rand.' }, why: { ro: 'Giordano Bruno: nenumărate stele, fără margini.', de: 'Giordano Bruno: unzählige Sterne, ohne Rand.' } }
+  ]);
+})();
+
+/* ================= 5. Arta și arhitectura ================= */
+(function () {
+  var A = [
+    { l: { ro: '🖼️ Pictură', de: '🖼️ Malerei' }, t: { ro: 'Pictura', de: 'Die Malerei' },
+      b: { ro: 'Artiștii au introdus <b>desenul anatomic</b> și <b>regula perspectivei</b>. Temele preferate: picturile religioase și cele inspirate de mitologia Antichității, portretul și natura, lucrate în frescă sau în ulei. Exemple: <i>Școala din Atena</i> (Rafael), <i>La seceriș</i> (Pieter Bruegel cel Bătrân, 1565).', de: 'Die Künstler führten das <b>anatomische Zeichnen</b> und die <b>Regeln der Perspektive</b> ein. Bevorzugte Themen: religiöse Bilder und solche aus der antiken Mythologie, Porträt und Natur, ausgeführt als Fresko oder in Öl. Beispiele: <i>Die Schule von Athen</i> (Raffael), <i>Die Kornernte</i> (Pieter Bruegel der Ältere, 1565).' } },
+    { l: { ro: '🗿 Sculptură', de: '🗿 Bildhauerei' }, t: { ro: 'Sculptura', de: 'Die Bildhauerei' },
+      b: { ro: 'Sculptura a urmărit reprezentarea omului și a frumuseții corpului uman prin <b>nuduri, busturi, statui ecvestre și basoreliefuri</b>. Exemplu: <i>David</i> de Michelangelo (1501–1504).', de: 'Die Bildhauerei stellte den Menschen und die Schönheit des menschlichen Körpers dar, durch <b>Akte, Büsten, Reiterstandbilder und Reliefs</b>. Beispiel: <i>David</i> von Michelangelo (1501–1504).' } },
+    { l: { ro: '🏛️ Arhitectură', de: '🏛️ Architektur' }, t: { ro: 'Arhitectura', de: 'Die Architektur' },
+      b: { ro: 'În catedrale, piețe publice, reședințe ale orășenilor înstăriți, palate, primării și biblioteci s-au folosit inovații arhitecturale sau preluări din Antichitate: <b>arcada, acoperișul cu cornișă, cupola, bolta semicirculară, coloanele și frontoanele</b>.', de: 'Bei Kathedralen, öffentlichen Plätzen, Wohnhäusern wohlhabender Bürger, Palästen, Rathäusern und Bibliotheken nutzte man Neuerungen oder Übernahmen aus der Antike: <b>Arkade, Dach mit Gesims, Kuppel, Tonnengewölbe, Säulen und Giebel</b>.' } }
+  ];
+  chipGroup($('#ar-chips'), A.map(function (a) { return { label: T(a.l) }; }), function (i) { readout($('#ar-out'), T(A[i].t), T(A[i].b)); });
+  readout($('#ar-out'), tx('Alege un domeniu', 'Wähle einen Bereich'), tx('Pictură, sculptură sau arhitectură.', 'Malerei, Bildhauerei oder Architektur.'));
+
+  /* perspectivă */
+  var pv = $('#pv-svg'), px = $('#pv-x'), lnB = $('#pv-ln'), lines = true;
+  lnB.textContent = tx('Arată liniile de perspectivă', 'Perspektivlinien zeigen'); lnB.setAttribute('aria-pressed', 'true');
+  readout($('#pv-out'), tx('Punctul de fugă', 'Der Fluchtpunkt'), tx('Liniile drumului se întâlnesc într-un punct de pe orizont. Cu cât un copac e mai departe, cu atât pare mai mic.', 'Die Linien der Straße treffen sich in einem Punkt am Horizont. Je weiter ein Baum entfernt ist, desto kleiner wirkt er.'));
+  function drawPv() {
+    var vx = +px.value, hy = 120; pv.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: 520, height: hy, fill: '#cfe3ee' }, pv);
+    el('rect', { x: 0, y: hy, width: 520, height: 180, fill: '#cfe3a8' }, pv);
+    var L0 = [140, 300], R0 = [380, 300];
+    el('polygon', { points: L0.join(',') + ' ' + R0.join(',') + ' ' + vx + ',' + hy, fill: '#d9c9a0' }, pv);
+    if (lines) {
+      [L0, R0, [0, 300], [520, 300]].forEach(function (p) { el('line', { x1: p[0], y1: p[1], x2: vx, y2: hy, stroke: '#b4531f', 'stroke-width': 2, 'stroke-dasharray': '6 5' }, pv); });
+      el('circle', { cx: vx, cy: hy, r: 6, fill: '#b4531f' }, pv);
+      el('text', { x: vx, y: hy - 12, class: 'slbl' }, pv, tx('punct de fugă', 'Fluchtpunkt'));
+    }
+    [.1, .3, .5, .7].forEach(function (t) {
+      [-1, 1].forEach(function (side) {
+        var base = side < 0 ? L0 : R0, x = base[0] + (vx - base[0]) * t + side * 26 * (1 - t), y = base[1] + (hy - base[1]) * t, s = 1 - t * .9;
+        el('rect', { x: x - 5 * s, y: y - 50 * s, width: 10 * s, height: 50 * s, fill: '#7a5230' }, pv);
+        el('circle', { cx: x, cy: y - 62 * s, r: 28 * s, fill: '#3c8f4b' }, pv);
+      });
+    });
+  }
+  px.oninput = drawPv;
+  lnB.onclick = function () { lines = !lines; lnB.setAttribute('aria-pressed', lines ? 'true' : 'false'); drawPv(); };
+  drawPv();
+
+  /* fațadă */
+  var fa = $('#fa-svg'), out = $('#fa-out'), res = $('#fa-res'), findB = $('#fa-find'), target = null, K = {};
+  var P = [
+    { k: 'col', x: 215, y: 255, n: { ro: 'Coloane', de: 'Säulen' }, o: 1, b: { ro: '<b>Coloanele</b> sunt preluate din arhitectura Antichității.', de: 'Die <b>Säulen</b> stammen aus der Architektur der Antike.' } },
+    { k: 'fro', x: 300, y: 138, n: { ro: 'Fronton', de: 'Giebel' }, o: 2, b: { ro: '<b>Frontonul</b> este partea triunghiulară de deasupra coloanelor. Vine din Antichitate.', de: 'Der <b>Giebel</b> ist der dreieckige Teil über den Säulen. Er stammt aus der Antike.' } },
+    { k: 'cup', x: 300, y: 54, n: { ro: 'Cupolă', de: 'Kuppel' }, o: 3, b: { ro: '<b>Cupola</b> este acoperișul rotund, în formă de emisferă. Este preluată din arhitectura Antichității.', de: 'Die <b>Kuppel</b> ist das runde, halbkugelförmige Dach. Sie wurde aus der Architektur der Antike übernommen.' } },
+    { k: 'arc', x: 100, y: 255, n: { ro: 'Arcadă', de: 'Arkade' }, o: 4, b: { ro: '<b>Arcada</b> (arcul semicircular, aici la ferestre) este preluată din Antichitate.', de: 'Der <b>Bogen</b> (Halbkreisbogen, hier an den Fenstern) wurde aus der Antike übernommen.' } },
+    { k: 'cor', x: 500, y: 190, n: { ro: 'Cornișă', de: 'Gesims' }, o: 5, b: { ro: '<b>Cornișa</b> este profilul care încheie peretele sub acoperiș. Face parte din arhitectura Antichității.', de: 'Das <b>Gesims</b> ist das Profil, das die Wand unter dem Dach abschließt. Es gehört zur Architektur der Antike.' } }
+  ];
+  /* desen */
+  el('rect', { x: 0, y: 0, width: 600, height: 360, fill: '#cfe3ee' }, fa);
+  el('rect', { x: 0, y: 330, width: 600, height: 30, fill: '#d9c9a0' }, fa);
+  el('rect', { x: 252, y: 102, width: 96, height: 30, fill: '#e6d7b8', stroke: '#8a7a55', 'stroke-width': 2 }, fa);
+  el('path', { d: 'M248 102 A52 52 0 0 1 352 102 Z', fill: '#c9d3d6', stroke: '#6b777b', 'stroke-width': 2 }, fa);
+  for (var i = -2; i <= 2; i++) el('path', { d: 'M300 102 Q' + (300 + i * 14) + ' 70 ' + (300 + i * 26) + ' 102', fill: 'none', stroke: '#6b777b', 'stroke-width': 1 }, fa);
+  el('rect', { x: 296, y: 38, width: 8, height: 14, fill: '#6b777b' }, fa);
+  [[40, 180], [420, 180]].forEach(function (w) {
+    el('rect', { x: w[0], y: 190, width: 140, height: 140, fill: '#efe3cc', stroke: '#8a7a55', 'stroke-width': 2 }, fa);
+    el('rect', { x: w[0] - 4, y: 180, width: 148, height: 12, fill: '#e0d0ac', stroke: '#8a7a55', 'stroke-width': 2 }, fa);
+    [30, 85].forEach(function (dx) { el('path', { d: 'M' + (w[0] + dx) + ' 290 V245 A15 15 0 0 1 ' + (w[0] + dx + 30) + ' 245 V290 Z', fill: '#7da0b8', stroke: '#5b6d78', 'stroke-width': 2 }, fa); });
+  });
+  el('rect', { x: 180, y: 155, width: 240, height: 175, fill: '#efe3cc', stroke: '#8a7a55', 'stroke-width': 2 }, fa);
+  el('rect', { x: 170, y: 168, width: 260, height: 14, fill: '#e0d0ac', stroke: '#8a7a55', 'stroke-width': 2 }, fa);
+  el('polygon', { points: '165,155 435,155 300,100', fill: '#e6d7b8', stroke: '#8a7a55', 'stroke-width': 2 }, fa);
+  el('polygon', { points: '195,152 405,152 300,112', fill: '#d6c49d' }, fa);
+  for (var j = 0; j < 6; j++) el('rect', { x: 192 + j * 40, y: 182, width: 16, height: 148, fill: '#f6efe0', stroke: '#8a7a55', 'stroke-width': 2 }, fa);
+  el('path', { d: 'M270 330 V275 A30 30 0 0 1 330 275 V330 Z', fill: '#5b4a35' }, fa);
+  P.forEach(function (p) {
+    var g = hotspot(fa, function () { press(p); }, T(p.n));
+    el('circle', { cx: p.x, cy: p.y, r: 17, fill: '#b4531f', stroke: '#fff', 'stroke-width': 3 }, g);
+    el('text', { x: p.x, y: p.y + 6, 'text-anchor': 'middle', style: 'font:800 17px Alegreya Sans,sans-serif;fill:#fff;pointer-events:none' }, g, String(p.o));
+    K[p.k] = g;
+  });
+  readout(out, tx('Apasă pe un număr', 'Tippe auf eine Zahl'), tx('Fiecare număr marchează un element de arhitectură preluat din Antichitate.', 'Jede Zahl markiert ein Architekturelement, das aus der Antike übernommen wurde.'));
+  findB.textContent = tx('🔎 Găsește pe desen', '🔎 Finde auf der Zeichnung');
+  function nextT() { var prev = target; do { target = P[Math.floor(Math.random() * P.length)]; } while (target === prev); res.className = 'result try'; res.textContent = tx('Apasă pe: ', 'Tippe auf: ') + T(target.n); }
+  findB.onclick = function () { if (target) { target = null; findB.setAttribute('aria-pressed', 'false'); res.className = 'result'; res.textContent = ''; } else { findB.setAttribute('aria-pressed', 'true'); nextT(); } };
+  function press(p) {
+    if (target) {
+      if (p === target) { res.className = 'result good'; res.textContent = '✓ ' + T(p.n) + '! ' + tx('Încă una…', 'Noch eine …'); target = null; setTimeout(function () { if (findB.getAttribute('aria-pressed') === 'true') nextT(); }, 1300); }
+      else { res.className = 'result no'; res.textContent = tx('Acela este: ', 'Das ist: ') + T(p.n) + tx('. Mai caută.', '. Such weiter.'); }
+      return;
+    }
+    readout(out, p.o + '. ' + T(p.n), T(p.b));
+  }
+
+  Check($('#c5'), [
+    { q: { ro: 'Ce au introdus pictorii renascentiști pentru a da adâncime imaginii?', de: 'Was führten die Maler der Renaissance ein, um dem Bild Tiefe zu geben?' },
+      o: [{ ro: 'Perspectiva', de: 'Die Perspektive' }, { ro: 'Frontonul', de: 'Den Giebel' }, { ro: 'Tiparul', de: 'Den Buchdruck' }], a: 0,
+      hint: { ro: 'Reciți desenul cu drumul și punctul de fugă.', de: 'Denk an die Zeichnung mit der Straße und dem Fluchtpunkt.' }, why: { ro: 'Perspectiva și desenul anatomic.', de: 'Die Perspektive und das anatomische Zeichnen.' } },
+    { q: { ro: 'Cum se numește partea triunghiulară de deasupra coloanelor?', de: 'Wie heißt der dreieckige Teil über den Säulen?' },
+      o: [{ ro: 'Cupolă', de: 'Kuppel' }, { ro: 'Fronton', de: 'Giebel' }, { ro: 'Arcadă', de: 'Arkade' }], a: 1,
+      hint: { ro: 'Cupola e rotundă, arcada e un arc.', de: 'Die Kuppel ist rund, die Arkade ist ein Bogen.' }, why: { ro: 'Frontonul, preluat din Antichitate.', de: 'Der Giebel, aus der Antike übernommen.' } }
+  ]);
+})();
+
+/* ================= 6. Fixare ================= */
+(function () {
+  var CZ = [
+    { t: { ro: 'Renașterea a pornit din ', de: 'Die Renaissance ging von ' } },
+    { o: [{ ro: 'Italia', de: 'Italien' }, { ro: 'Anglia', de: 'England' }, { ro: 'Spania', de: 'Spanien' }], a: 0 },
+    { t: { ro: ' și a fost epoca dintre secolele ', de: ' aus und war die Epoche zwischen dem ' } },
+    { o: [{ ro: 'XII și XIV', de: '12. und 14. Jh.' }, { ro: 'XIV și XVI', de: '14. und 16. Jh.' }, { ro: 'XVI și XVIII', de: '16. und 18. Jh.' }], a: 1 },
+    { t: { ro: '. Fundamentul ei a fost ', de: '. Ihr Fundament war der ' } },
+    { o: [{ ro: 'umanismul', de: 'Humanismus' }, { ro: 'cavalerismul', de: 'Rittergeist' }, { ro: 'feudalismul', de: 'Feudalismus' }], a: 0 },
+    { t: { ro: ', iar răspândirea ideilor a fost ajutată de inventarea ', de: ', und die Verbreitung der Ideen wurde durch die Erfindung des ' } },
+    { o: [{ ro: 'tiparului', de: 'Buchdrucks' }, { ro: 'busolei', de: 'Kompasses' }, { ro: 'pergamentului', de: 'Pergaments' }], a: 0 },
+    { t: { ro: '. Teoria heliocentrică a fost susținută de ', de: ' unterstützt. Das heliozentrische Weltbild vertrat ' } },
+    { o: [{ ro: 'Copernic', de: 'Kopernikus' }, { ro: 'Machiavelli', de: 'Machiavelli' }, { ro: 'Rabelais', de: 'Rabelais' }], a: 0 },
+    { t: { ro: ', iar în Spania, Cervantes a scris ', de: ', und in Spanien schrieb Cervantes ' } },
+    { o: [{ ro: 'Don Quijote', de: 'Don Quijote' }, { ro: 'Hamlet', de: 'Hamlet' }, { ro: 'Decameronul', de: 'das Decamerone' }], a: 0 },
+    { t: { ro: '.', de: '.' } }
+  ];
+  var box = $('#cz-box'), sels = [];
+  CZ.forEach(function (p) {
+    if (p.t) { box.appendChild(document.createTextNode(T(p.t))); return; }
+    var s = document.createElement('select'); s.setAttribute('aria-label', tx('Alege răspunsul', 'Antwort wählen'));
+    var o0 = h('option', '', '…'); o0.value = '-1'; s.appendChild(o0);
+    p.o.forEach(function (o, i) { var op = h('option', '', T(o)); op.value = i; s.appendChild(op); });
+    box.appendChild(s); sels.push({ s: s, a: p.a });
+  });
+  var okB = $('#cz-ok'); okB.textContent = tx('Verifică', 'Prüfen');
+  okB.onclick = function () {
+    var good = 0;
+    sels.forEach(function (x) {
+      x.s.classList.remove('ok', 'bad');
+      if (+x.s.value === x.a) { x.s.classList.add('ok'); good++; } else if (x.s.value !== '-1') x.s.classList.add('bad');
+    });
+    var r = $('#cz-res');
+    r.className = 'result ' + (good === sels.length ? 'good' : 'try');
+    r.textContent = good === sels.length ? tx('✓ Perfect! Textul este complet și corect.', '✓ Perfekt! Der Text ist vollständig und richtig.') : tx(good + ' din ' + sels.length + ' corecte. Răspunsurile roșii sunt greșite, cele necompletate lipsesc. Mai încearcă.', good + ' von ' + sels.length + ' richtig. Rote Antworten sind falsch, offene fehlen. Versuch es nochmal.');
+  };
+
+  /* Erasmus: trăsături din text */
+  var ER = [
+    { n: { ro: 'Nu cunoaște legile.', de: 'Er kennt die Gesetze nicht.' }, y: 1 },
+    { n: { ro: 'Se gândește doar la interesele proprii.', de: 'Er denkt nur an seine eigenen Interessen.' }, y: 1 },
+    { n: { ro: 'Este dedat plăcerilor.', de: 'Er ist den Vergnügungen verfallen.' }, y: 1 },
+    { n: { ro: 'Urăște știința, libertatea și adevărul.', de: 'Er hasst Wissenschaft, Freiheit und Wahrheit.' }, y: 1 },
+    { n: { ro: 'Își ajută cu generozitate vecinii.', de: 'Er hilft seinen Nachbarn großzügig.' }, y: 0 },
+    { n: { ro: 'Studiază limbi vechi și astronomie.', de: 'Er studiert alte Sprachen und Astronomie.' }, y: 0 }
+  ];
+  var eb = $('#er-box'), picks = [];
+  ER.forEach(function (e, i) {
+    var b = btn('tick', '<span class="bx" aria-hidden="true"></span><span>' + T(e.n) + '</span>'); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { var on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.firstChild.textContent = on ? '✓' : ''; b.classList.remove('ok', 'bad'); };
+    eb.appendChild(b); picks.push(b);
+  });
+  var eOk = $('#er-ok'); eOk.textContent = tx('Verifică', 'Prüfen');
+  eOk.onclick = function () {
+    var good = 0;
+    picks.forEach(function (b, i) {
+      var on = b.getAttribute('aria-pressed') === 'true', right = on === !!ER[i].y;
+      b.classList.remove('ok', 'bad'); b.classList.add(right ? 'ok' : 'bad'); if (right) good++;
+    });
+    var r = $('#er-res');
+    r.className = 'result ' + (good === ER.length ? 'good' : 'try');
+    r.textContent = good === ER.length ? tx('✓ Corect! Primele patru trăsături sunt chiar în text; ultimele două sunt opusul a ceea ce admiră umaniștii.', '✓ Richtig! Die ersten vier Eigenschaften stehen im Text; die letzten beiden sind das Gegenteil dessen, was Humanisten schätzen.') : tx('Mai citește o dată citatul: bifează doar ce spune autorul despre acel om. Verdele e corect, roșul trebuie schimbat.', 'Lies das Zitat noch einmal: Hake nur an, was der Autor über diesen Menschen sagt. Grün ist richtig, Rot muss geändert werden.');
+  };
+  Check($('#c6'), [
+    { q: { ro: 'Ce atitudine manifestă Erasmus față de acest tip de oameni?', de: 'Welche Haltung zeigt Erasmus gegenüber dieser Art von Menschen?' },
+      o: [{ ro: 'Admirație', de: 'Bewunderung' }, { ro: 'Critică, cu ironie', de: 'Kritik, mit Ironie' }, { ro: 'Indiferență', de: 'Gleichgültigkeit' }], a: 1,
+      hint: { ro: 'Autorul numește trăsăturile „vicii”.', de: 'Der Autor nennt die Eigenschaften „Laster“.' },
+      why: { ro: 'Erasmus critică viciile omenești: ignoranța, egoismul și dezinteresul față de binele comun.', de: 'Erasmus kritisiert menschliche Laster: Unwissenheit, Egoismus und Gleichgültigkeit gegenüber dem Gemeinwohl.' } }
+  ]);
+
+  var gb = $('#gc-btn'), go = $('#gc-out'); gb.textContent = tx('Arată un răspuns-model', 'Beispielantwort zeigen');
+  go.innerHTML = '<b>' + tx('Răspuns-model', 'Beispielantwort') + '</b><p>' + tx('Umaniștii priveau omul ca pe o ființă rațională, care poate învăța și se poate perfecționa. Rabelais arată că omul trebuie să studieze limbile Antichității, istoria, astronomia, dreptul, științele naturii și medicina, deci să aibă o cultură largă. Erasmus arată opusul: criticând omul care urăște știința, libertatea și adevărul și nu respectă legile, el arată că omul trebuie să fie instruit și să țină la binele comun. Astfel, umanismul pune în centru omul educat, liber și util societății.', 'Die Humanisten sahen den Menschen als vernunftbegabtes Wesen, das lernen und sich vervollkommnen kann. Rabelais zeigt, dass der Mensch die Sprachen der Antike, Geschichte, Astronomie, Recht, Naturwissenschaften und Medizin studieren soll, also eine breite Bildung braucht. Erasmus zeigt das Gegenteil: Indem er den Menschen kritisiert, der Wissenschaft, Freiheit und Wahrheit hasst und die Gesetze nicht beachtet, zeigt er, dass der Mensch gebildet sein und am Gemeinwohl interessiert sein soll. So stellt der Humanismus den gebildeten, freien und der Gesellschaft nützlichen Menschen in den Mittelpunkt.') + '</p>';
+  gb.onclick = function () { go.hidden = !go.hidden; gb.textContent = go.hidden ? tx('Arată un răspuns-model', 'Beispielantwort zeigen') : tx('Ascunde răspunsul', 'Antwort ausblenden'); };
+
+  var G = [
+    ['Renaștere', 'Renaissance'], ['umanism', 'Humanismus'], ['mecenat', 'Mäzenatentum'], ['burghezie', 'Bürgertum'],
+    ['manufactură', 'Manufaktur'], ['tipar', 'Buchdruck'], ['limbi naționale', 'Nationalsprachen'], ['omul universal', 'universeller Mensch'],
+    ['romanitate', 'römische Herkunft (Romanität)'], ['Antichitate', 'Antike'], ['teoria heliocentrică', 'heliozentrisches Weltbild'], ['Univers infinit', 'unendliches Universum'],
+    ['perspectivă', 'Perspektive'], ['frescă', 'Fresko'], ['arcadă', 'Arkade'], ['cupolă', 'Kuppel'], ['fronton', 'Giebel'], ['cornișă', 'Gesims'], ['boltă semicirculară', 'Tonnengewölbe']
+  ];
+  var gl = $('#gloss');
+  G.forEach(function (g) { gl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
+})();
+})();
+</script>
+</body>
+</html>

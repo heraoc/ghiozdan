@@ -19,6 +19,7 @@ import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import { operatiiCuMultimiTest } from './content/operatii-cu-multimi-test';
 import { numerePrimeTest } from './content/numere-prime-test';
+import { renastereaTest } from './content/renasterea-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -410,6 +411,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         done: true,
         test: { questions: mariExploratoriTest, minutes: 8 },
+      },
+      {
+        slug: 'renasterea',
+        title: {
+          ro: 'Renașterea: geneza spiritului modern, umanismul',
+          de: 'Die Renaissance: Geburt des modernen Geistes, der Humanismus',
+        },
+        summary: {
+          ro: 'De ce a început în Italia și cum s-a răspândit în Europa. Umanismul, tiparul, oamenii de litere și de știință, apoi arta și arhitectura inspirate din Antichitate.',
+          de: 'Warum sie in Italien begann und wie sie sich in Europa ausbreitete. Humanismus, Buchdruck, Dichter und Gelehrte, dann Kunst und Architektur nach antikem Vorbild.',
+        },
+        src: 'lectii/clasa-6/istorie/renasterea.html',
+        test: { questions: renastereaTest, minutes: 8 },
       },
     ],
   },
