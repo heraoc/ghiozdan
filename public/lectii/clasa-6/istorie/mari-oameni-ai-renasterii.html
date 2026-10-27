@@ -178,6 +178,21 @@ html.embed .head{padding-bottom:0;border-bottom:0}
 .prof dd{margin:0}
 @media (max-width:520px){ .prof dl{grid-template-columns:1fr} .prof dd{margin-bottom:6px} .lname{font-size:23px} .lyr{font-size:18px} }
 .sky text{font:700 13px var(--body);fill:#fff;text-anchor:middle}
+
+.yrs{font-weight:500;color:var(--muted);font-size:.7em}
+.pgrid{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;align-items:start}
+.pimgs{display:grid;gap:12px;align-content:start}
+.pimgs figure{margin:0}
+.pimgs img{width:100%;height:auto;display:block;border-radius:6px;border:1px solid var(--rule);background:var(--sheet)}
+.pimgs figcaption{font-size:13px;line-height:1.4;color:var(--muted);margin-top:6px}
+.pbody > .readout.prof{margin-bottom:10px}
+.anecs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.anec{background:#fff9e6;border:1px solid #f1e2b0;border-left:5px solid var(--pc,#b4531f);border-radius:10px;padding:12px 16px}
+.anec h3{font-size:19px;margin-bottom:4px}
+.anec h3::before{content:"💡 "}
+section.block{--pc:#b4531f}
+@media (max-width:820px){ .pgrid{grid-template-columns:1fr} .pimgs{grid-template-columns:repeat(2,minmax(0,210px))} .anecs{grid-template-columns:1fr} }
+@media (max-width:420px){ .pimgs{grid-template-columns:1fr} .pimgs figure{max-width:260px} }
 </style>
 </head>
 <body>
@@ -203,11 +218,14 @@ html.embed .head{padding-bottom:0;border-bottom:0}
   </div>
   <nav class="toc" aria-label="Cuprins">
     <a href="#s1"><b>1</b><span class="ro">Cine au fost?</span><span class="de">Wer waren sie?</span></a>
-    <a href="#s2"><b>2</b><span class="ro">Leonardo și Michelangelo</span><span class="de">Leonardo und Michelangelo</span></a>
-    <a href="#s3"><b>3</b><span class="ro">Bruno și Galilei</span><span class="de">Bruno und Galilei</span></a>
-    <a href="#s4"><b>4</b><span class="ro">Machiavelli și Shakespeare</span><span class="de">Machiavelli und Shakespeare</span></a>
-    <a href="#s5"><b>5</b><span class="ro">Umaniști români</span><span class="de">Rumänische Humanisten</span></a>
-    <a href="#s6"><b>6</b><span class="ro">Fixăm</span><span class="de">Wir festigen</span></a>
+    <a href="#s2"><b>2</b>Leonardo</a>
+    <a href="#s3"><b>3</b>Michelangelo</a>
+    <a href="#s4"><b>4</b>Bruno</a>
+    <a href="#s5"><b>5</b>Galilei</a>
+    <a href="#s6"><b>6</b>Machiavelli</a>
+    <a href="#s7"><b>7</b>Shakespeare</a>
+    <a href="#s8"><b>8</b><span class="ro">Umaniști români</span><span class="de">Rumänische Humanisten</span></a>
+    <a href="#s9"><b>9</b><span class="ro">Fixăm</span><span class="de">Wir festigen</span></a>
   </nav>
 </header>
 
@@ -227,12 +245,15 @@ html.embed .head{padding-bottom:0;border-bottom:0}
   <div class="check" id="c1"></div>
 </section>
 
-<!-- 2. Leonardo și Michelangelo -->
-<section class="block" id="s2" aria-labelledby="t2">
-  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Leonardo da Vinci și Michelangelo</span><span class="de">Leonardo da Vinci und Michelangelo</span></h2>
-  <h3 class="sub3" style="margin-top:10px">Leonardo da Vinci (1452–1519)</h3>
-  <div class="readout prof" style="--c:#c9871b;min-height:0"><p><span class="ro">S-a născut la Vinci, lângă Florența. În adolescență a devenit ucenic al pictorului și sculptorului Verrocchio. În mare măsură autodidact, a lăsat numeroase însemnări, observații, schițe și desene despre cercetările sale în cele mai diverse domenii. Este considerat o personalitate care ilustrează idealul uman al Renașterii: un spirit animat de o curiozitate nemaiîntâlnită și susținut de o extraordinară imaginație.</span><span class="de">Er wurde in Vinci bei Florenz geboren. Als Jugendlicher wurde er Schüler des Malers und Bildhauers Verrocchio. Zum großen Teil Autodidakt, hinterließ er zahlreiche Notizen, Beobachtungen, Skizzen und Zeichnungen zu seinen Forschungen in den verschiedensten Gebieten. Er gilt als Persönlichkeit, die das Menschenideal der Renaissance verkörpert: ein Geist voller beispielloser Neugier und außergewöhnlicher Fantasie.</span></p></div>
-  <p class="section-sub" style="margin-top:12px"><span class="ro">Leonardo a fost în același timp om de știință și artist. Pentru fiecare activitate, decide în ce parte o așezi.</span><span class="de">Leonardo war zugleich Wissenschaftler und Künstler. Entscheide bei jeder Tätigkeit, in welche Gruppe sie gehört.</span></p>
+<section class="block" id="s2" aria-labelledby="t2" style="--pc:#c9871b">
+  <h2 class="section-title" id="t2"><span class="step">2</span>Leonardo da Vinci <span class="yrs">(1452–1519)</span></h2>
+  <p class="section-sub"><span class="ro">Pictor, om de știință și inventator: idealul „omului universal”.</span><span class="de">Maler, Naturforscher und Erfinder: das Ideal des „universellen Menschen“.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="mari-oameni-ai-renasterii/leonardo.jpg" alt="Portretul lui Leonardo da Vinci" width="210" loading="lazy"><figcaption>Leonardo da Vinci, portret atribuit lui Francesco Melzi, cca 1515–1518. Domeniu public.</figcaption></figure><figure><img src="mari-oameni-ai-renasterii/mona-lisa.jpg" alt="Mona Lisa de Leonardo da Vinci" width="210" loading="lazy"><figcaption><i>Mona Lisa</i>, cca 1503–1519, Muzeul Luvru, Paris. Domeniu public.</figcaption></figure></div>
+    <div class="pbody">
+<div class="readout prof" style="--c:#c9871b;min-height:0"><p><span class="ro">S-a născut la Vinci, lângă Florența. În adolescență a devenit ucenic al pictorului și sculptorului Verrocchio. În mare măsură autodidact, a lăsat numeroase însemnări, observații, schițe și desene despre cercetările sale în cele mai diverse domenii. Este considerat o personalitate care ilustrează idealul uman al Renașterii: un spirit animat de o curiozitate nemaiîntâlnită și susținut de o extraordinară imaginație.</span><span class="de">Er wurde in Vinci bei Florenz geboren. Als Jugendlicher wurde er Schüler des Malers und Bildhauers Verrocchio. Zum großen Teil Autodidakt, hinterließ er zahlreiche Notizen, Beobachtungen, Skizzen und Zeichnungen zu seinen Forschungen in den verschiedensten Gebieten. Er gilt als Persönlichkeit, die das Menschenideal der Renaissance verkörpert: ein Geist voller beispielloser Neugier und außergewöhnlicher Fantasie.</span></p></div>
+  
+<p class="section-sub" style="margin-top:12px"><span class="ro">Leonardo a fost în același timp om de știință și artist. Pentru fiecare activitate, decide în ce parte o așezi.</span><span class="de">Leonardo war zugleich Wissenschaftler und Künstler. Entscheide bei jeder Tätigkeit, in welche Gruppe sie gehört.</span></p>
   <div class="ex" id="sg-leo"></div>
   <div class="remember">
     <h3><span class="ro">Reține: Leonardo</span><span class="de">Merke dir: Leonardo</span></h3>
@@ -242,8 +263,21 @@ html.embed .head{padding-bottom:0;border-bottom:0}
     </ul>
   </div>
 
-  <h3 class="sub3">Michelangelo (1475–1564)</h3>
-  <p class="section-sub" style="margin-top:0"><span class="ro">Născut la Caprese, lângă Florența, a lucrat sub patronajul familiei Medici și la comanda a șapte papi. A fost sculptor, arhitect și pictor. Alege o „pălărie”.</span><span class="de">In Caprese bei Florenz geboren, arbeitete er unter dem Schutz der Familie Medici und im Auftrag von sieben Päpsten. Er war Bildhauer, Architekt und Maler. Wähle einen „Hut“.</span></p>
+  
+    </div>
+  </div>
+  <div class="anecs"><div class="anec"><h3><span class="ro">Scria în oglindă</span><span class="de">Er schrieb in Spiegelschrift</span></h3><p><span class="ro">În caiete, Leonardo scria de la dreapta la stânga, cu literele răsturnate, așa că textul se citește ușor doar cu o oglindă. Nu se știe sigur de ce: poate pentru că era stângaci și nu își mânjea mâna cu cerneala, poate ca să-și țină ideile secrete.</span><span class="de">In seinen Notizbüchern schrieb Leonardo von rechts nach links in Spiegelschrift, sodass man den Text leicht nur mit einem Spiegel lesen kann. Warum, weiß man nicht sicher: vielleicht weil er Linkshänder war und die Tinte nicht verschmierte, vielleicht um seine Ideen geheim zu halten.</span></p></div><div class="anec"><h3><span class="ro">Mona Lisa a fost furată</span><span class="de">Die Mona Lisa wurde gestohlen</span></h3><p><span class="ro">În 1911, Mona Lisa a dispărut din Luvru: a furat-o un muncitor italian, Vincenzo Peruggia. Tabloul a lipsit doi ani; a fost găsit în 1913, la Florența, și s-a întors la Paris. Povestea furtului a făcut din tablou o vedetă mondială.</span><span class="de">1911 verschwand die Mona Lisa aus dem Louvre: Ein italienischer Arbeiter, Vincenzo Peruggia, hatte sie gestohlen. Das Gemälde fehlte zwei Jahre; 1913 wurde es in Florenz gefunden und kehrte nach Paris zurück. Die Geschichte des Diebstahls machte das Bild weltberühmt.</span></p></div></div>
+
+<div class="check" id="c2"></div>
+</section>
+
+<section class="block" id="s3" aria-labelledby="t3" style="--pc:#b4531f">
+  <h2 class="section-title" id="t3"><span class="step">3</span>Michelangelo <span class="yrs">(1475–1564)</span></h2>
+  <p class="section-sub"><span class="ro">Sculptor, arhitect și pictor: trei meserii într-o singură viață.</span><span class="de">Bildhauer, Architekt und Maler: drei Berufe in einem Leben.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="mari-oameni-ai-renasterii/michelangelo.jpg" alt="Portretul lui Michelangelo" width="210" loading="lazy"><figcaption>Michelangelo, portret de Daniele da Volterra (detaliu), cca 1545. Domeniu public.</figcaption></figure><figure><img src="mari-oameni-ai-renasterii/creatia-lui-adam.jpg" alt="Crearea lui Adam, frescă de Michelangelo" width="210" loading="lazy"><figcaption><i>Crearea lui Adam</i>, frescă de pe plafonul Capelei Sixtine (detaliu). Domeniu public.</figcaption></figure></div>
+    <div class="pbody">
+<p class="section-sub" style="margin-top:0"><span class="ro">Născut la Caprese, lângă Florența, a lucrat sub patronajul familiei Medici și la comanda a șapte papi. A fost sculptor, arhitect și pictor. Alege o „pălărie”.</span><span class="de">In Caprese bei Florenz geboren, arbeitete er unter dem Schutz der Familie Medici und im Auftrag von sieben Päpsten. Er war Bildhauer, Architekt und Maler. Wähle einen „Hut“.</span></p>
   <div class="chips" id="mi-chips" role="group"></div>
   <div class="readout prof" id="mi-out" aria-live="polite" style="--c:#b4531f"></div>
 
@@ -253,40 +287,57 @@ html.embed .head{padding-bottom:0;border-bottom:0}
     <div class="fig"><svg id="sx-svg" viewBox="0 0 520 250" role="img"></svg></div>
     <div class="panel"><div class="readout" id="sx-out" aria-live="polite"></div></div>
   </div>
-  <div class="check" id="c2"></div>
+  
+    </div>
+  </div>
+  <div class="anecs"><div class="anec"><h3><span class="ro">Un bloc de marmură abandonat</span><span class="de">Ein aufgegebener Marmorblock</span></h3><p><span class="ro">David a fost sculptat dintr-un bloc uriaș de marmură, început de alți sculptori și lăsat deoparte, pentru că era greu de lucrat. Michelangelo avea în jur de 26 de ani când l-a primit. Statuia are mai mult de 5 metri.</span><span class="de">David wurde aus einem riesigen Marmorblock gehauen, den andere Bildhauer begonnen und beiseitegelegt hatten, weil er schwer zu bearbeiten war. Michelangelo war etwa 26 Jahre alt, als er ihn bekam. Die Statue ist mehr als 5 Meter hoch.</span></p></div><div class="anec"><h3><span class="ro">Semnătura de pe Pietà</span><span class="de">Die Signatur auf der Pietà</span></h3><p><span class="ro">Se povestește (după biograful Vasari) că Michelangelo a auzit vizitatori spunând că Pietà este opera altui sculptor. Atunci și-ar fi săpat numele pe banda de pe pieptul Mariei. Este singura lucrare semnată de el.</span><span class="de">Man erzählt (nach dem Biografen Vasari), Michelangelo habe Besucher sagen hören, die Pietà sei das Werk eines anderen Bildhauers. Da habe er seinen Namen in das Band auf der Brust Marias gemeißelt. Es ist sein einziges signiertes Werk.</span></p></div></div>
+<div class="remember"><h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3><ul><li><span class="ro">Michelangelo a fost <b>sculptor</b> (<i>Pietà</i>, <i>David</i>), <b>arhitect</b> (domul Bazilicii Sfântul Petru) și <b>pictor</b> (plafonul și <i>Judecata de Apoi</i> din Capela Sixtină).</span><span class="de">Michelangelo war <b>Bildhauer</b> (<i>Pietà</i>, <i>David</i>), <b>Architekt</b> (Kuppel des Petersdoms) und <b>Maler</b> (Decke und <i>Jüngstes Gericht</i> der Sixtinischen Kapelle).</span></li></ul></div>
+<div class="check" id="c2b"></div>
 </section>
 
-<!-- 3. Bruno și Galilei -->
-<section class="block" id="s3" aria-labelledby="t3">
-  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Giordano Bruno și Galileo Galilei</span><span class="de">Giordano Bruno und Galileo Galilei</span></h2>
-  <div class="split">
-    <div class="readout prof" style="--c:#8e44ad;min-height:0"><b>Giordano Bruno (1548–1600)</b><p><span class="ro">Născut în sudul Italiei, a devenit călugăr dominican. Încă din mănăstire și-a arătat spiritul liber și nonconformist; acuzat de erezie, a părăsit mănăstirea și a rătăcit prin Europa. A ținut prelegeri la universitățile din Toulouse și Oxford. A scris <i>Dialoguri italiene</i> (șase la număr): trei despre Univers, trei despre morală. Susținea teoria heliocentrică, credea că stelele sunt asemănătoare Soarelui, că Universul este infinit și conține un număr infinit de lumi și că Dumnezeu și natura reprezintă același lucru (panteism). Revenit în 1591 în Italia, a fost arestat de Inchiziția Romană și, pe 17 februarie 1600, ars pe rug în piața Campo dei Fiori din Roma.</span><span class="de">Im Süden Italiens geboren, wurde er Dominikanermönch. Schon im Kloster zeigte er seinen freien, unangepassten Geist; der Ketzerei beschuldigt, verließ er das Kloster und zog durch Europa. Er hielt Vorlesungen an den Universitäten Toulouse und Oxford. Er schrieb die <i>Italienischen Dialoge</i> (sechs an der Zahl): drei über das Universum, drei über Moral. Er vertrat das heliozentrische Weltbild, glaubte, dass die Sterne der Sonne ähneln, dass das Universum unendlich ist und unendlich viele Welten enthält und dass Gott und Natur dasselbe sind (Pantheismus). 1591 kehrte er nach Italien zurück, wurde von der römischen Inquisition verhaftet und am 17. Februar 1600 auf dem Campo dei Fiori in Rom auf dem Scheiterhaufen verbrannt.</span></p></div>
-    <div class="readout prof" style="--c:#2f6fd6;min-height:0"><b>Galileo Galilei (1564–1642)</b><p><span class="ro">Născut la Pisa, într-o familie săracă, dar nobilă. A fost profesor de astronomie și matematică la Universitățile din Pisa și Padova. Fizician, matematician și astronom, a devenit celebru prin perfecționarea telescopului. A fost susținător al lui Copernic. A descoperit și legea căderii corpurilor. Lucrarea <i>Dialog despre cele două sisteme principale ale lumii</i> (1632) i-a adus condamnarea Inchiziției. În 1992, Biserica Catolică, prin papa Ioan Paul al II-lea, a recunoscut că a greșit condamnându-l.</span><span class="de">In Pisa in einer armen, aber adeligen Familie geboren. Er war Professor für Astronomie und Mathematik an den Universitäten Pisa und Padua. Als Physiker, Mathematiker und Astronom wurde er berühmt, weil er das Teleskop verbesserte. Er war ein Anhänger von Kopernikus. Er entdeckte auch das Fallgesetz. Sein Werk <i>Dialog über die beiden hauptsächlichen Weltsysteme</i> (1632) brachte ihm die Verurteilung durch die Inquisition ein. 1992 erkannte die katholische Kirche durch Papst Johannes Paul II. an, dass sie sich bei der Verurteilung geirrt hatte.</span></p></div>
+<section class="block" id="s4" aria-labelledby="t4" style="--pc:#8e44ad">
+  <h2 class="section-title" id="t4"><span class="step">4</span>Giordano Bruno <span class="yrs">(1548–1600)</span></h2>
+  <p class="section-sub"><span class="ro">Spirit liber: a plătit cu viața pentru ideile lui despre Univers.</span><span class="de">Freier Geist: Er bezahlte seine Ideen vom Universum mit dem Leben.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="mari-oameni-ai-renasterii/bruno.jpg" alt="Gravură cu Giordano Bruno" width="210" loading="lazy"><figcaption>Giordano Bruno, gravură din ediția <i>Opere</i> (Wellcome Collection). Domeniu public.</figcaption></figure><figure><img src="mari-oameni-ai-renasterii/bruno-statuie.jpg" alt="Statuia lui Giordano Bruno din Roma" width="210" loading="lazy"><figcaption>Statuia lui Giordano Bruno, de Ettore Ferrari, în Campo dei Fiori, Roma (1889). Domeniu public.</figcaption></figure></div>
+    <div class="pbody">
+<div class="readout prof" style="--c:#8e44ad;min-height:0"><b>Giordano Bruno (1548–1600)</b><p><span class="ro">Născut în sudul Italiei, a devenit călugăr dominican. Încă din mănăstire și-a arătat spiritul liber și nonconformist; acuzat de erezie, a părăsit mănăstirea și a rătăcit prin Europa. A ținut prelegeri la universitățile din Toulouse și Oxford. A scris <i>Dialoguri italiene</i> (șase la număr): trei despre Univers, trei despre morală. Susținea teoria heliocentrică, credea că stelele sunt asemănătoare Soarelui, că Universul este infinit și conține un număr infinit de lumi și că Dumnezeu și natura reprezintă același lucru (panteism). Revenit în 1591 în Italia, a fost arestat de Inchiziția Romană și, pe 17 februarie 1600, ars pe rug în piața Campo dei Fiori din Roma.</span><span class="de">Im Süden Italiens geboren, wurde er Dominikanermönch. Schon im Kloster zeigte er seinen freien, unangepassten Geist; der Ketzerei beschuldigt, verließ er das Kloster und zog durch Europa. Er hielt Vorlesungen an den Universitäten Toulouse und Oxford. Er schrieb die <i>Italienischen Dialoge</i> (sechs an der Zahl): drei über das Universum, drei über Moral. Er vertrat das heliozentrische Weltbild, glaubte, dass die Sterne der Sonne ähneln, dass das Universum unendlich ist und unendlich viele Welten enthält und dass Gott und Natur dasselbe sind (Pantheismus). 1591 kehrte er nach Italien zurück, wurde von der römischen Inquisition verhaftet und am 17. Februar 1600 auf dem Campo dei Fiori in Rom auf dem Scheiterhaufen verbrannt.</span></p></div>
+    
+    </div>
   </div>
+  <div class="anecs"><div class="anec"><h3><span class="ro">Campion al memoriei</span><span class="de">Gedächtniskünstler</span></h3><p><span class="ro">Bruno era renumit pentru „arta memoriei”, tehnici prin care îți amintești cantități mari de informații. A scris mai multe cărți despre ele și le-a predat în orașele prin care a trecut.</span><span class="de">Bruno war berühmt für die „Gedächtniskunst“, Techniken, mit denen man sich viele Informationen merkt. Er schrieb mehrere Bücher darüber und lehrte sie in den Städten, durch die er zog.</span></p></div><div class="anec"><h3><span class="ro">Statuie și crater pe Lună</span><span class="de">Standbild und Mondkrater</span></h3><p><span class="ro">După aproape opt ani de închisoare, Bruno a fost ars pe rug pe 17 februarie 1600. Aproape trei secole mai târziu, în 1889, i s-a ridicat o statuie chiar în piața din Roma unde a fost executat. Un crater de pe fața ascunsă a Lunii îi poartă numele.</span><span class="de">Nach fast acht Jahren Haft wurde Bruno am 17. Februar 1600 verbrannt. Fast drei Jahrhunderte später, 1889, errichtete man ihm auf dem Platz in Rom, wo er hingerichtet wurde, ein Standbild. Ein Krater auf der Mondrückseite trägt seinen Namen.</span></p></div></div>
+<div class="remember"><h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3><ul><li><span class="ro"><b>Bruno</b>: Universul infinit, stele asemănătoare Soarelui, spirit liber. A fost ars pe rug în 1600.</span><span class="de"><b>Bruno</b>: unendliches Universum, Sterne wie die Sonne, freier Geist. 1600 wurde er verbrannt.</span></li></ul></div>
+<div class="check" id="c3"></div>
+</section>
 
-  <h3 class="sub3"><span class="ro">Ce a văzut Galilei prin telescop?</span><span class="de">Was sah Galilei durch das Fernrohr?</span></h3>
+<section class="block" id="s5" aria-labelledby="t5" style="--pc:#2f6fd6">
+  <h2 class="section-title" id="t8"><span class="step">8</span>Galileo Galilei <span class="yrs">(1564–1642)</span></h2>
+  <p class="section-sub"><span class="ro">„Părintele științei moderne”: telescopul, observația și experimentul.</span><span class="de">„Vater der modernen Wissenschaft“: Fernrohr, Beobachtung und Experiment.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="mari-oameni-ai-renasterii/galilei.jpg" alt="Portretul lui Galileo Galilei" width="210" loading="lazy"><figcaption>Galileo Galilei, portret de Justus Sustermans, cca 1636, Muzeul Maritim Național, Greenwich. Domeniu public.</figcaption></figure><figure><img src="mari-oameni-ai-renasterii/galilei-proces.jpg" alt="Galilei în fața Inchiziției" width="210" loading="lazy"><figcaption>Galilei în fața Inchiziției, pictură de Cristiano Banti, 1857. Domeniu public.</figcaption></figure></div>
+    <div class="pbody">
+<div class="readout prof" style="--c:#2f6fd6;min-height:0"><b>Galileo Galilei (1564–1642)</b><p><span class="ro">Născut la Pisa, într-o familie săracă, dar nobilă. A fost profesor de astronomie și matematică la Universitățile din Pisa și Padova. Fizician, matematician și astronom, a devenit celebru prin perfecționarea telescopului. A fost susținător al lui Copernic. A descoperit și legea căderii corpurilor. Lucrarea <i>Dialog despre cele două sisteme principale ale lumii</i> (1632) i-a adus condamnarea Inchiziției. În 1992, Biserica Catolică, prin papa Ioan Paul al II-lea, a recunoscut că a greșit condamnându-l.</span><span class="de">In Pisa in einer armen, aber adeligen Familie geboren. Er war Professor für Astronomie und Mathematik an den Universitäten Pisa und Padua. Als Physiker, Mathematiker und Astronom wurde er berühmt, weil er das Teleskop verbesserte. Er war ein Anhänger von Kopernikus. Er entdeckte auch das Fallgesetz. Sein Werk <i>Dialog über die beiden hauptsächlichen Weltsysteme</i> (1632) brachte ihm die Verurteilung durch die Inquisition ein. 1992 erkannte die katholische Kirche durch Papst Johannes Paul II. an, dass sie sich bei der Verurteilung geirrt hatte.</span></p></div><h3 class="sub3"><span class="ro">Ce a văzut Galilei prin telescop?</span><span class="de">Was sah Galilei durch das Fernrohr?</span></h3>
   <p class="section-sub" style="margin-top:0"><span class="ro">Apasă pe cele patru obiecte de pe cer. Desenul este schematic.</span><span class="de">Tippe auf die vier Objekte am Himmel. Die Zeichnung ist schematisch.</span></p>
   <div class="split">
     <div class="fig"><svg id="sk-svg" class="sky" viewBox="0 0 520 300" role="img"></svg></div>
     <div class="panel"><div class="readout" id="sk-out" aria-live="polite"></div></div>
   </div>
 
-  <h3 class="sub3"><span class="ro">Cine a fost? Bruno sau Galilei?</span><span class="de">Wer war es? Bruno oder Galilei?</span></h3>
-  <div class="ex" id="sg-bg"></div>
-  <div class="remember">
-    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
-    <ul>
-      <li><span class="ro"><b>Bruno</b>: Universul infinit și spiritul liber. A plătit cu viața (rug, 1600).</span><span class="de"><b>Bruno</b>: unendliches Universum und freier Geist. Er bezahlte mit dem Leben (Scheiterhaufen, 1600).</span></li>
-      <li><span class="ro"><b>Galilei</b>: telescopul, observația și experimentul; „părintele științei moderne”. Condamnat de Inchiziție pentru <i>Dialog</i> (1632).</span><span class="de"><b>Galilei</b>: Teleskop, Beobachtung und Experiment; „Vater der modernen Wissenschaft“. Von der Inquisition für den <i>Dialog</i> (1632) verurteilt.</span></li>
-    </ul>
+  
+    </div>
   </div>
-  <div class="check" id="c3"></div>
+  <div class="anecs"><div class="anec"><h3><span class="ro">Candelabrul din Pisa</span><span class="de">Der Leuchter von Pisa</span></h3><p><span class="ro">Se spune că tânărul Galilei a privit un candelabru legănându-se în catedrala din Pisa și a măsurat timpul cu pulsul propriu. A observat că fiecare balans durează la fel. E o poveste povestită de elevul său Viviani; unii istorici se îndoiesc că s-a întâmplat chiar așa.</span><span class="de">Man erzählt, der junge Galilei habe im Dom von Pisa einen schwingenden Leuchter beobachtet und die Zeit mit seinem Puls gemessen. Er bemerkte, dass jeder Schwung gleich lang dauert. Die Geschichte stammt von seinem Schüler Viviani; manche Historiker bezweifeln, dass es genau so war.</span></p></div><div class="anec"><h3><span class="ro">Degetul din muzeu</span><span class="de">Der Finger im Museum</span></h3><p><span class="ro">După moartea lui Galilei, admiratorii i-au luat ca amintire câteva părți din trup. Un deget al lui este expus și azi la Muzeul Galileo din Florența, unde se păstrează și telescopul lui.</span><span class="de">Nach Galileis Tod nahmen Bewunderer einige Körperteile als Andenken mit. Einer seiner Finger ist bis heute im Museo Galileo in Florenz ausgestellt, wo auch sein Fernrohr aufbewahrt wird.</span></p></div></div>
+<div class="remember"><h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3><ul><li><span class="ro"><b>Galilei</b>: telescopul, observația și experimentul; legea căderii corpurilor. Condamnat de Inchiziție pentru <i>Dialog</i> (1632); în 1992 Biserica a recunoscut greșeala.</span><span class="de"><b>Galilei</b>: Fernrohr, Beobachtung und Experiment; Fallgesetz. Von der Inquisition für den <i>Dialog</i> (1632) verurteilt; 1992 erkannte die Kirche den Fehler an.</span></li></ul></div>
+<div class="check" id="c3b"></div>
 </section>
 
-<!-- 4. Machiavelli și Shakespeare -->
-<section class="block" id="s4" aria-labelledby="t4">
-  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Machiavelli și Shakespeare</span><span class="de">Machiavelli und Shakespeare</span></h2>
-  <div class="readout prof" style="--c:#c0392b;min-height:0"><b>Niccolò Machiavelli (1469–1527)</b><p><span class="ro">Născut aproape de Florența, într-o familie cu origini nobiliare. Dificultățile financiare l-au făcut să intre în serviciul guvernului în 1494. După ce, în 1498, Florența s-a proclamat republică, a fost secretar al Consiliului celor Zece. În 1512, odată cu revenirea familiei de Medici la cârma Florenței, a fost destituit din funcție, arestat pentru scurt timp, apoi exilat. Retras din viața publică, s-a dedicat scrisului. Este considerat astăzi fondatorul gândirii politice moderne.</span><span class="de">Nahe Florenz in einer Familie mit adeligen Wurzeln geboren. Geldsorgen führten ihn 1494 in den Dienst der Regierung. Nachdem sich Florenz 1498 zur Republik erklärt hatte, war er Sekretär des Rates der Zehn. 1512, als die Familie Medici wieder die Macht in Florenz übernahm, wurde er seines Amtes enthoben, kurz verhaftet und dann verbannt. Aus dem öffentlichen Leben zurückgezogen, widmete er sich dem Schreiben. Heute gilt er als Begründer des modernen politischen Denkens.</span></p></div>
+<section class="block" id="s6" aria-labelledby="t6" style="--pc:#c0392b">
+  <h2 class="section-title" id="t9"><span class="step">9</span>Niccolò Machiavelli <span class="yrs">(1469–1527)</span></h2>
+  <p class="section-sub"><span class="ro">Autorul Principelui, fondatorul gândirii politice moderne.</span><span class="de">Autor des Fürsten, Begründer des modernen politischen Denkens.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="mari-oameni-ai-renasterii/machiavelli.jpg" alt="Portretul lui Niccolò Machiavelli" width="210" loading="lazy"><figcaption>Niccolò Machiavelli, portret de Santi di Tito, Palazzo Vecchio, Florența. Domeniu public.</figcaption></figure><figure><img src="mari-oameni-ai-renasterii/principele.jpg" alt="Pagina de titlu a Principelui, 1550" width="210" loading="lazy"><figcaption>Pagina de titlu a <i>Principelui</i>, ediția din 1550. Domeniu public.</figcaption></figure></div>
+    <div class="pbody">
+<div class="readout prof" style="--c:#c0392b;min-height:0"><b>Niccolò Machiavelli (1469–1527)</b><p><span class="ro">Născut aproape de Florența, într-o familie cu origini nobiliare. Dificultățile financiare l-au făcut să intre în serviciul guvernului în 1494. După ce, în 1498, Florența s-a proclamat republică, a fost secretar al Consiliului celor Zece. În 1512, odată cu revenirea familiei de Medici la cârma Florenței, a fost destituit din funcție, arestat pentru scurt timp, apoi exilat. Retras din viața publică, s-a dedicat scrisului. Este considerat astăzi fondatorul gândirii politice moderne.</span><span class="de">Nahe Florenz in einer Familie mit adeligen Wurzeln geboren. Geldsorgen führten ihn 1494 in den Dienst der Regierung. Nachdem sich Florenz 1498 zur Republik erklärt hatte, war er Sekretär des Rates der Zehn. 1512, als die Familie Medici wieder die Macht in Florenz übernahm, wurde er seines Amtes enthoben, kurz verhaftet und dann verbannt. Aus dem öffentlichen Leben zurückgezogen, widmete er sich dem Schreiben. Heute gilt er als Begründer des modernen politischen Denkens.</span></p></div>
   <p class="section-sub" style="margin-top:14px"><span class="ro">Cartea <i>Principele</i> are 26 de capitole. Apasă pe un grup de capitole ca să vezi tema lui.</span><span class="de">Das Buch <i>Der Fürst</i> hat 26 Kapitel. Tippe auf eine Kapitelgruppe, um ihr Thema zu sehen.</span></p>
   <div class="chips" id="mc-chips" role="group"></div>
   <div class="readout" id="mc-out" aria-live="polite"></div>
@@ -298,7 +349,21 @@ html.embed .head{padding-bottom:0;border-bottom:0}
     </ul>
   </div>
 
-  <div class="readout prof" style="--c:#1f8a5b;min-height:0;margin-top:26px"><b>William Shakespeare (1564–1616)</b><p><span class="ro">Născut la Stratford-upon-Avon. Se cunosc puține lucruri despre educația primită, dar calitatea literară deosebită a operelor sale sugerează că era un om cult. Și-a desfășurat activitatea în Londra, unde a avut o carieră de succes ca actor, scriitor și coproprietar al unei companii de teatru. Majoritatea operelor sale au fost scrise între 1589 și 1613. Cea mai cunoscută ediție a pieselor este <i>The First Folio</i> (1623).</span><span class="de">In Stratford-upon-Avon geboren. Über seine Ausbildung ist wenig bekannt, aber die besondere literarische Qualität seiner Werke deutet auf einen gebildeten Mann hin. Er wirkte in London, wo er als Schauspieler, Schriftsteller und Miteigentümer einer Theatergruppe erfolgreich war. Die meisten seiner Werke entstanden zwischen 1589 und 1613. Die bekannteste Ausgabe seiner Stücke ist das <i>First Folio</i> (1623).</span></p></div>
+  
+    </div>
+  </div>
+  <div class="anecs"><div class="anec"><h3><span class="ro">Carte publicată după moarte</span><span class="de">Ein Buch nach dem Tod</span></h3><p><span class="ro">Machiavelli a scris <i>Principele</i> în 1513 și l-a dedicat unui Medici, sperând să-și recapete un rol în guvernare. Cartea a apărut abia în 1532, la cinci ani după moartea lui. Pagina de titlu de mai sus, din 1550, îl menționează încă pe „Magnificul Lorenzo de Medici”.</span><span class="de">Machiavelli schrieb den <i>Fürsten</i> 1513 und widmete ihn einem Medici, in der Hoffnung, wieder eine Rolle in der Regierung zu bekommen. Das Buch erschien erst 1532, fünf Jahre nach seinem Tod. Das Titelblatt oben, von 1550, nennt noch immer den „prächtigen Lorenzo de Medici“.</span></p></div><div class="anec"><h3><span class="ro">Și autor de comedii</span><span class="de">Auch Komödienautor</span></h3><p><span class="ro">Machiavelli n-a scris doar despre politică. Pe la 1518 a scris o comedie, <i>Mandragola</i>, considerată una dintre cele mai bune comedii ale Renașterii italiene.</span><span class="de">Machiavelli schrieb nicht nur über Politik. Um 1518 verfasste er die Komödie <i>Mandragola</i>, die als eine der besten Komödien der italienischen Renaissance gilt.</span></p></div></div>
+
+<div class="check" id="c4"></div>
+</section>
+
+<section class="block" id="s7" aria-labelledby="t7" style="--pc:#1f8a5b">
+  <h2 class="section-title" id="t7"><span class="step">7</span>William Shakespeare <span class="yrs">(1564–1616)</span></h2>
+  <p class="section-sub"><span class="ro">Dramaturg, poet și actor: tragedii, comedii, drame istorice și 154 de sonete.</span><span class="de">Dramatiker, Dichter und Schauspieler: Tragödien, Komödien, Historiendramen und 154 Sonette.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="mari-oameni-ai-renasterii/shakespeare.jpg" alt="Portret atribuit lui William Shakespeare" width="210" loading="lazy"><figcaption>William Shakespeare, portret atribuit lui John Taylor (cca 1610), National Portrait Gallery, Londra. Domeniu public.</figcaption></figure><figure><img src="mari-oameni-ai-renasterii/first-folio.jpg" alt="Gravura lui Droeshout din First Folio" width="210" loading="lazy"><figcaption>Shakespeare în <i>First Folio</i> (1623), gravură de Martin Droeshout. Domeniu public.</figcaption></figure></div>
+    <div class="pbody">
+<div class="readout prof" style="--c:#1f8a5b;min-height:0;margin-top:26px"><b>William Shakespeare (1564–1616)</b><p><span class="ro">Născut la Stratford-upon-Avon. Se cunosc puține lucruri despre educația primită, dar calitatea literară deosebită a operelor sale sugerează că era un om cult. Și-a desfășurat activitatea în Londra, unde a avut o carieră de succes ca actor, scriitor și coproprietar al unei companii de teatru. Majoritatea operelor sale au fost scrise între 1589 și 1613. Cea mai cunoscută ediție a pieselor este <i>The First Folio</i> (1623).</span><span class="de">In Stratford-upon-Avon geboren. Über seine Ausbildung ist wenig bekannt, aber die besondere literarische Qualität seiner Werke deutet auf einen gebildeten Mann hin. Er wirkte in London, wo er als Schauspieler, Schriftsteller und Miteigentümer einer Theatergruppe erfolgreich war. Die meisten seiner Werke entstanden zwischen 1589 und 1613. Die bekannteste Ausgabe seiner Stücke ist das <i>First Folio</i> (1623).</span></p></div>
   <p class="section-sub" style="margin-top:12px"><span class="ro">Piesele lui Shakespeare: drame istorice, comedii, tragedii, plus 154 de sonete. Pentru fiecare piesă, alege tipul sau tema.</span><span class="de">Shakespeares Werke: Historiendramen, Komödien, Tragödien und 154 Sonette. Wähle bei jedem Stück die Art oder das Thema.</span></p>
   <div class="ex" id="sg-sh"></div>
 
@@ -310,11 +375,16 @@ html.embed .head{padding-bottom:0;border-bottom:0}
       <li><span class="ro">Dramele istorice (<i>Richard al III-lea</i>, <i>Henric al IV-lea</i>, <i>Henric al V-lea</i>) arată Anglia medievală; comediile celebrează dragostea de viață; marile tragedii pornesc de la sentimentele care determină comportamentul oamenilor.</span><span class="de">Die Historiendramen (<i>Richard III.</i>, <i>Heinrich IV.</i>, <i>Heinrich V.</i>) zeigen das mittelalterliche England; die Komödien feiern die Lebensfreude; die großen Tragödien gehen von den Gefühlen aus, die das Verhalten der Menschen bestimmen.</span></li>
     </ul>
   </div>
-  <div class="check" id="c4"></div>
+  
+    </div>
+  </div>
+  <div class="anecs"><div class="anec"><h3><span class="ro">Al doilea cel mai bun pat</span><span class="de">Das zweitbeste Bett</span></h3><p><span class="ro">În testamentul din 1616, Shakespeare i-a lăsat soției sale, Anne, „al doilea cel mai bun pat”. Istoricii discută de ce: unii cred că patul cel mai bun era rezervat oaspeților, iar cel „al doilea” era patul căsniciei lor.</span><span class="de">In seinem Testament von 1616 hinterließ Shakespeare seiner Frau Anne „das zweitbeste Bett“. Historiker diskutieren, warum: Manche glauben, das beste Bett war für Gäste reserviert und das „zweitbeste“ war das Ehebett des Paares.</span></p></div><div class="anec"><h3><span class="ro">Tunul care a ars teatrul</span><span class="de">Die Kanone, die das Theater verbrannte</span></h3><p><span class="ro">În 1613, la o reprezentație cu <i>Henric al VIII-lea</i>, un tun tras pentru efect a aprins acoperișul de paie al teatrului Globe. Clădirea de lemn a ars complet.</span><span class="de">1613, bei einer Aufführung von <i>Heinrich VIII.</i>, entzündete eine für den Effekt abgefeuerte Kanone das Strohdach des Globe Theatre. Das Holzgebäude brannte vollständig nieder.</span></p></div></div>
+
+<div class="check" id="c4b"></div>
 </section>
 
 <!-- 5. Umaniști români -->
-<section class="block" id="s5" aria-labelledby="t5">
+<section class="block" id="s8" aria-labelledby="t8">
   <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Umaniști români: Olahus, Honterus, Cantemir</span><span class="de">Rumänische Humanisten: Olahus, Honterus, Cantemir</span></h2>
   <p class="section-sub"><span class="ro">Ideile umaniste au ajuns și în spațiul românesc. Alege o persoană ca să-i vezi fișa. Profilele sunt făcute din surse de pe internet; datele pot diferi puțin de la o sursă la alta.</span><span class="de">Die humanistischen Ideen erreichten auch den rumänischen Raum. Wähle eine Person, um ihr Profil zu sehen. Die Profile stammen aus Internetquellen; die Angaben können sich von Quelle zu Quelle leicht unterscheiden.</span></p>
   <div class="chips" id="rp-chips" role="group"></div>
@@ -331,7 +401,7 @@ html.embed .head{padding-bottom:0;border-bottom:0}
 </section>
 
 <!-- 6. Fixare -->
-<section class="block" id="s6" aria-labelledby="t6">
+<section class="block" id="s9" aria-labelledby="t9">
   <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Fixăm ce am învățat</span><span class="de">Wir festigen das Gelernte</span></h2>
   <h3 class="sub3" style="margin-top:6px"><span class="ro">Cine sunt eu?</span><span class="de">Wer bin ich?</span></h3>
   <div class="check" id="c6" style="margin-top:0"></div>
@@ -343,7 +413,7 @@ html.embed .head{padding-bottom:0;border-bottom:0}
   <dl class="gloss" id="gloss"></dl>
 </section>
 
-<p class="foot"><span class="ro">După manualul de Istorie, clasa a 6-a, paginile despre Leonardo da Vinci, Michelangelo, Giordano Bruno, Galileo Galilei, Niccolò Machiavelli și William Shakespeare. Profilele lui Olahus, Honterus și Cantemir sunt făcute din surse de pe internet (între altele, Wikipedia). Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Geschichtsbuch der 6. Klasse, den Seiten über Leonardo da Vinci, Michelangelo, Giordano Bruno, Galileo Galilei, Niccolò Machiavelli und William Shakespeare. Die Profile von Olahus, Honterus und Cantemir stammen aus Internetquellen (u. a. Wikipedia). Der Test unten prüft, was du gelernt hast.</span></p>
+<p class="foot"><span class="ro">După manualul de Istorie, clasa a 6-a, paginile despre Leonardo da Vinci, Michelangelo, Giordano Bruno, Galileo Galilei, Niccolò Machiavelli și William Shakespeare. Profilele lui Olahus, Honterus și Cantemir sunt făcute din surse de pe internet (între altele, Wikipedia). Imaginile provin de la Wikimedia Commons (opere în domeniul public). Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Geschichtsbuch der 6. Klasse, den Seiten über Leonardo da Vinci, Michelangelo, Giordano Bruno, Galileo Galilei, Niccolò Machiavelli und William Shakespeare. Die Profile von Olahus, Honterus und Cantemir stammen aus Internetquellen (u. a. Wikipedia). Die Bilder stammen von Wikimedia Commons (gemeinfreie Werke). Der Test unten prüft, was du gelernt hast.</span></p>
 </div>
 
 <script>
@@ -383,8 +453,10 @@ function chipGroup(host, items, onSel) {
   return sel;
 }
 function Check(host, items) {
-  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  var seen = [host]; host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
   items.forEach(function (it) {
+    var host2 = host;
+    if (it.to) { host2 = $('#' + it.to); if (seen.indexOf(host2) < 0) { seen.push(host2); host2.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich'))); } }
     var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
     why.setAttribute('aria-live', 'polite');
     box.appendChild(h('p', 'q', T(it.q)));
@@ -397,7 +469,7 @@ function Check(host, items) {
       };
       opts.appendChild(b); return b;
     });
-    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+    box.appendChild(opts); box.appendChild(why); host2.appendChild(box);
   });
 }
 /** Sortare: fiecare element se așază într-una dintre categorii. */
@@ -439,21 +511,21 @@ var P = [
   { id: 'leo', c: '#c9871b', n: 'Leonardo da Vinci', b: 1452, d: 1519, r: { ro: 'pictor, om de știință, inventator', de: 'Maler, Naturforscher, Erfinder' },
     s: { ro: 'Geniu universal: artist (Mona Lisa, Cina cea de Taină), om de știință și inventator.', de: 'Universalgenie: Künstler (Mona Lisa, Das Abendmahl), Wissenschaftler und Erfinder.' }, go: '#s2' },
   { id: 'mac', c: '#c0392b', n: 'Niccolò Machiavelli', b: 1469, d: 1527, r: { ro: 'gânditor politic, secretar al Florenței', de: 'politischer Denker, Sekretär von Florenz' },
-    s: { ro: 'Autorul Principelui; considerat întemeietorul gândirii politice moderne.', de: 'Autor des Fürsten; gilt als Begründer des modernen politischen Denkens.' }, go: '#s4' },
+    s: { ro: 'Autorul Principelui; considerat întemeietorul gândirii politice moderne.', de: 'Autor des Fürsten; gilt als Begründer des modernen politischen Denkens.' }, go: '#s6' },
   { id: 'mic', c: '#b4531f', n: 'Michelangelo', b: 1475, d: 1564, r: { ro: 'sculptor, arhitect, pictor', de: 'Bildhauer, Architekt, Maler' },
-    s: { ro: 'A creat Pietà și David, a pictat plafonul Capelei Sixtine și a proiectat domul Bazilicii Sfântul Petru.', de: 'Schuf Pietà und David, malte die Decke der Sixtinischen Kapelle und entwarf die Kuppel des Petersdoms.' }, go: '#s2' },
+    s: { ro: 'A creat Pietà și David, a pictat plafonul Capelei Sixtine și a proiectat domul Bazilicii Sfântul Petru.', de: 'Schuf Pietà und David, malte die Decke der Sixtinischen Kapelle und entwarf die Kuppel des Petersdoms.' }, go: '#s3' },
   { id: 'bru', c: '#8e44ad', n: 'Giordano Bruno', b: 1548, d: 1600, r: { ro: 'filozof, fost călugăr dominican', de: 'Philosoph, ehemaliger Dominikanermönch' },
-    s: { ro: 'Spirit liber: a susținut un Univers infinit. A fost ars pe rug la Roma în 1600.', de: 'Freier Geist: Er vertrat ein unendliches Universum. 1600 wurde er in Rom verbrannt.' }, go: '#s3' },
+    s: { ro: 'Spirit liber: a susținut un Univers infinit. A fost ars pe rug la Roma în 1600.', de: 'Freier Geist: Er vertrat ein unendliches Universum. 1600 wurde er in Rom verbrannt.' }, go: '#s4' },
   { id: 'gal', c: '#2f6fd6', n: 'Galileo Galilei', b: 1564, d: 1642, r: { ro: 'fizician, matematician, astronom', de: 'Physiker, Mathematiker, Astronom' },
-    s: { ro: 'Telescop, observație și experiment; „părintele științei moderne”.', de: 'Teleskop, Beobachtung und Experiment; „Vater der modernen Wissenschaft“.' }, go: '#s3' },
+    s: { ro: 'Telescop, observație și experiment; „părintele științei moderne”.', de: 'Teleskop, Beobachtung und Experiment; „Vater der modernen Wissenschaft“.' }, go: '#s5' },
   { id: 'sha', c: '#1f8a5b', n: 'William Shakespeare', b: 1564, d: 1616, r: { ro: 'dramaturg, poet, actor', de: 'Dramatiker, Dichter, Schauspieler' },
-    s: { ro: 'Romeo și Julieta, Hamlet, Regele Lear, Othello și 154 de sonete.', de: 'Romeo und Julia, Hamlet, König Lear, Othello und 154 Sonette.' }, go: '#s4' },
+    s: { ro: 'Romeo și Julieta, Hamlet, Regele Lear, Othello și 154 de sonete.', de: 'Romeo und Julia, Hamlet, König Lear, Othello und 154 Sonette.' }, go: '#s7' },
   { id: 'ola', c: '#7a5230', n: 'Nicolaus Olahus', b: 1493, d: 1568, r: { ro: 'umanist, istoric, arhiepiscop', de: 'Humanist, Historiker, Erzbischof' },
-    s: { ro: 'Umanist din Sibiu, de origine română, autorul lucrării Hungaria.', de: 'Humanist aus Hermannstadt rumänischer Herkunft, Autor des Werks Hungaria.' }, go: '#s5' },
+    s: { ro: 'Umanist din Sibiu, de origine română, autorul lucrării Hungaria.', de: 'Humanist aus Hermannstadt rumänischer Herkunft, Autor des Werks Hungaria.' }, go: '#s8' },
   { id: 'hon', c: '#12959b', n: 'Johannes Honterus', b: 1498, d: 1549, r: { ro: 'umanist, tipograf, cartograf, reformator', de: 'Humanist, Drucker, Kartograf, Reformator' },
-    s: { ro: 'Umanist din Brașov: a înființat o tipografie și a desenat harta Transilvaniei.', de: 'Humanist aus Kronstadt: gründete eine Druckerei und zeichnete die Karte Siebenbürgens.' }, go: '#s5' },
+    s: { ro: 'Umanist din Brașov: a înființat o tipografie și a desenat harta Transilvaniei.', de: 'Humanist aus Kronstadt: gründete eine Druckerei und zeichnete die Karte Siebenbürgens.' }, go: '#s8' },
   { id: 'can', c: '#5b6b7a', n: 'Dimitrie Cantemir', b: 1673, d: 1723, r: { ro: 'domn, savant, scriitor, compozitor', de: 'Fürst, Gelehrter, Schriftsteller, Komponist' },
-    s: { ro: 'Domn al Moldovei și mare cărturar, membru al Academiei din Berlin.', de: 'Fürst der Moldau und großer Gelehrter, Mitglied der Berliner Akademie.' }, go: '#s5' }
+    s: { ro: 'Domn al Moldovei și mare cărturar, membru al Academiei din Berlin.', de: 'Fürst der Moldau und großer Gelehrter, Mitglied der Berliner Akademie.' }, go: '#s8' }
 ];
 
 /* ================= 1. Axa vieților ================= */
@@ -543,12 +615,17 @@ var P = [
     { q: { ro: 'Cine a fost ucenic al lui Verrocchio?', de: 'Wer war Schüler von Verrocchio?' },
       o: [{ ro: 'Leonardo da Vinci', de: 'Leonardo da Vinci' }, { ro: 'Michelangelo', de: 'Michelangelo' }, { ro: 'Galilei', de: 'Galilei' }], a: 0,
       hint: { ro: 'Era din Vinci, lângă Florența.', de: 'Er stammte aus Vinci bei Florenz.' }, why: { ro: 'Leonardo a devenit ucenic al pictorului și sculptorului Verrocchio.', de: 'Leonardo wurde Schüler des Malers und Bildhauers Verrocchio.' } },
-    { q: { ro: 'Ce a pictat Michelangelo pe plafonul Capelei Sixtine, în partea centrală?', de: 'Was malte Michelangelo in die Mitte der Decke der Sixtinischen Kapelle?' },
+    { to: 'c2b', q: { ro: 'Ce a pictat Michelangelo pe plafonul Capelei Sixtine, în partea centrală?', de: 'Was malte Michelangelo in die Mitte der Decke der Sixtinischen Kapelle?' },
       o: [{ ro: 'Mona Lisa', de: 'Mona Lisa' }, { ro: 'Crearea lui Adam', de: 'Die Erschaffung Adams' }, { ro: 'Cina cea de Taină', de: 'Das Abendmahl' }], a: 1,
       hint: { ro: 'Uită-te la scena colorată din desen.', de: 'Sieh dir die farbige Szene in der Zeichnung an.' }, why: { ro: 'Crearea lui Adam; Mona Lisa și Cina sunt ale lui Leonardo.', de: 'Die Erschaffung Adams; Mona Lisa und das Abendmahl sind von Leonardo.' } },
-    { q: { ro: 'Care lucrare a lui Michelangelo este singura pe care a semnat-o?', de: 'Welches Werk Michelangelos ist das einzige, das er signierte?' },
+    { to: 'c2b', q: { ro: 'Care lucrare a lui Michelangelo este singura pe care a semnat-o?', de: 'Welches Werk Michelangelos ist das einzige, das er signierte?' },
       o: [{ ro: 'David', de: 'David' }, { ro: 'Pietà', de: 'Pietà' }, { ro: 'Judecata de Apoi', de: 'Das Jüngste Gericht' }], a: 1,
       hint: { ro: 'Se află în Bazilica Sfântul Petru.', de: 'Sie befindet sich im Petersdom.' }, why: { ro: 'Pietà, din Bazilica Sfântul Petru.', de: 'Die Pietà im Petersdom.' } }
+  ]);
+  Check($('#c2'), [
+    { q: { ro: 'În ce an a fost furată Mona Lisa din Luvru?', de: 'In welchem Jahr wurde die Mona Lisa aus dem Louvre gestohlen?' },
+      o: [{ ro: '1511', de: '1511' }, { ro: '1911', de: '1911' }, { ro: '1991', de: '1991' }], a: 1,
+      hint: { ro: 'Citește din nou povestea de mai sus.', de: 'Lies die Geschichte oben noch einmal.' }, why: { ro: 'În 1911, iar în 1913 a fost găsită la Florența.', de: '1911; 1913 wurde sie in Florenz gefunden.' } }
   ]);
 })();
 
@@ -576,20 +653,16 @@ var P = [
     el('text', { x: o.x, y: o.y + (o.n.ro === 'Soarele' ? 66 : 62) }, g, T(o.n));
   });
 
-  SortGame($('#sg-bg'), [{ ro: 'Bruno', de: 'Bruno' }, { ro: 'Galilei', de: 'Galilei' }], [
-    { n: { ro: 'A fost ars pe rug în Campo dei Fiori (1600)', de: 'Wurde auf dem Campo dei Fiori verbrannt (1600)' }, a: 0 },
-    { n: { ro: 'A perfecționat telescopul', de: 'Verbesserte das Fernrohr' }, a: 1 },
-    { n: { ro: 'A scris Dialoguri italiene', de: 'Schrieb die Italienischen Dialoge' }, a: 0 },
-    { n: { ro: 'A descoperit legea căderii corpurilor', de: 'Entdeckte das Fallgesetz' }, a: 1 },
-    { n: { ro: 'A scris Dialog despre cele două sisteme principale ale lumii (1632)', de: 'Schrieb den Dialog über die beiden hauptsächlichen Weltsysteme (1632)' }, a: 1 },
-    { n: { ro: 'A afirmat că Universul este infinit, cu nenumărate lumi', de: 'Behauptete, das Universum sei unendlich, mit unzähligen Welten' }, a: 0 }
-  ], { ro: 'Bravo!', de: 'Bravo!' });
+
 
   Check($('#c3'), [
-    { q: { ro: 'Ce metodă a folosit Galilei în activitatea sa științifică?', de: 'Welche Methode nutzte Galilei in seiner wissenschaftlichen Arbeit?' },
+    { q: { ro: 'Ce credea Bruno despre stele?', de: 'Was glaubte Bruno über die Sterne?' },
+      o: [{ ro: 'Că sunt asemănătoare Soarelui', de: 'Dass sie der Sonne ähneln' }, { ro: 'Că sunt găuri în cer', de: 'Dass sie Löcher im Himmel sind' }, { ro: 'Că se rotesc în jurul Pământului', de: 'Dass sie um die Erde kreisen' }], a: 0,
+      hint: { ro: 'Pentru Bruno, Universul era infinit.', de: 'Für Bruno war das Universum unendlich.' }, why: { ro: 'Stelele sunt asemenea Soarelui, iar Universul este infinit.', de: 'Die Sterne sind wie die Sonne, und das Universum ist unendlich.' } },
+    { to: 'c3b', q: { ro: 'Ce metodă a folosit Galilei în activitatea sa științifică?', de: 'Welche Methode nutzte Galilei in seiner wissenschaftlichen Arbeit?' },
       o: [{ ro: 'Experimentul și observația', de: 'Experiment und Beobachtung' }, { ro: 'Doar citirea cărților vechi', de: 'Nur das Lesen alter Bücher' }, { ro: 'Rugăciunea', de: 'Das Gebet' }], a: 0,
       hint: { ro: 'Gândește-te la telescop și la căderea corpurilor.', de: 'Denk an das Fernrohr und das Fallen der Körper.' }, why: { ro: 'Galilei a verificat ideile prin experiențe și observații.', de: 'Galilei prüfte Ideen durch Versuche und Beobachtungen.' } },
-    { q: { ro: 'Ce a recunoscut Biserica Catolică în 1992?', de: 'Was erkannte die katholische Kirche 1992 an?' },
+    { to: 'c3b', q: { ro: 'Ce a recunoscut Biserica Catolică în 1992?', de: 'Was erkannte die katholische Kirche 1992 an?' },
       o: [{ ro: 'Că Galilei a greșit', de: 'Dass Galilei sich geirrt hatte' }, { ro: 'Că a greșit condamnându-l pe Galilei', de: 'Dass sie sich bei der Verurteilung Galileis geirrt hatte' }, { ro: 'Că Pământul este plat', de: 'Dass die Erde flach ist' }], a: 1,
       hint: { ro: 'Papa Ioan Paul al II-lea a vorbit despre propria greșeală.', de: 'Papst Johannes Paul II. sprach über den eigenen Fehler.' }, why: { ro: 'Biserica a recunoscut că a greșit condamnându-l pe Galilei.', de: 'Die Kirche erkannte an, dass sie sich bei der Verurteilung Galileis geirrt hatte.' } },
     { q: { ro: 'Care citat arată cel mai bine spiritul liber al lui Bruno?', de: 'Welches Zitat zeigt Brunos freien Geist am besten?' },
@@ -633,30 +706,40 @@ var P = [
     { q: { ro: 'Ce expresie celebră i se atribuie lui Machiavelli?', de: 'Welcher berühmte Ausdruck wird Machiavelli zugeschrieben?' },
       o: [{ ro: '„Scopul scuză mijloacele”', de: '„Der Zweck heiligt die Mittel“' }, { ro: '„Omul este măsura tuturor lucrurilor”', de: '„Der Mensch ist das Maß aller Dinge“' }, { ro: '„Și totuși se mișcă”', de: '„Und sie bewegt sich doch“' }], a: 0,
       hint: { ro: 'Gândește-te la ce trebuie să urmărească un principe.', de: 'Denk daran, was ein Fürst verfolgen soll.' }, why: { ro: 'De aici vine și cuvântul „machiavelism”.', de: 'Daher kommt auch das Wort „Machiavellismus“.' } },
-    { q: { ro: 'De ce a fost reconstruit teatrul Globe după 1989?', de: 'Warum wurde das Globe Theatre nach 1989 neu gebaut?' },
+    { q: { ro: 'Când a apărut <i>Principele</i>?', de: 'Wann erschien <i>Der Fürst</i>?' },
+      o: [{ ro: 'În timpul vieții lui Machiavelli, în 1513', de: 'Zu Machiavellis Lebzeiten, 1513' }, { ro: 'În 1532, la cinci ani după moartea lui', de: '1532, fünf Jahre nach seinem Tod' }, { ro: 'În 1600', de: '1600' }], a: 1,
+      hint: { ro: 'Machiavelli a murit în 1527.', de: 'Machiavelli starb 1527.' }, why: { ro: 'A fost scris în 1513, dar publicat în 1532.', de: 'Geschrieben 1513, aber 1532 veröffentlicht.' } },
+    { to: 'c4b', q: { ro: 'De ce a fost reconstruit teatrul Globe după 1989?', de: 'Warum wurde das Globe Theatre nach 1989 neu gebaut?' },
       o: [{ ro: 'Era vechiul teatru de pe aceeași fundație, redat publicului', de: 'Es sollte das alte Theater auf demselben Fundament wieder zugänglich machen' }, { ro: 'Pentru că arsese în 1989', de: 'Weil es 1989 abgebrannt war' }, { ro: 'Pentru că se afla în Italia', de: 'Weil es in Italien stand' }], a: 0,
       hint: { ro: 'Locația exactă a fost găsită în 1989.', de: 'Der genaue Ort wurde 1989 gefunden.' }, why: { ro: 'Noul teatru, inaugurat în 1997, reproduce în mare măsură structura celui vechi.', de: 'Das neue Theater, 1997 eröffnet, bildet die Bauweise des alten weitgehend nach.' } }
+    ,
+    { to: 'c4b', q: { ro: 'Câte sonete a scris Shakespeare?', de: 'Wie viele Sonette schrieb Shakespeare?' },
+      o: [{ ro: '14', de: '14' }, { ro: '154', de: '154' }, { ro: '1 054', de: '1 054' }], a: 1,
+      hint: { ro: 'Sunt peste o sută.', de: 'Es sind mehr als hundert.' }, why: { ro: '154 de sonete, printre ele Sonetul 18.', de: '154 Sonette, darunter Sonett 18.' } },
+    { to: 'c4b', q: { ro: 'Ce a provocat incendiul teatrului Globe în 1613?', de: 'Was löste den Brand des Globe Theatre 1613 aus?' },
+      o: [{ ro: 'Un tun tras în timpul unei reprezentații', de: 'Eine Kanone, die während einer Aufführung abgefeuert wurde' }, { ro: 'O furtună', de: 'Ein Sturm' }, { ro: 'Un război', de: 'Ein Krieg' }], a: 0,
+      hint: { ro: 'Acoperișul era de paie.', de: 'Das Dach war aus Stroh.' }, why: { ro: 'Tunul a aprins acoperișul de paie.', de: 'Die Kanone entzündete das Strohdach.' } }
   ]);
 })();
 
 /* ================= 5. Umaniști români ================= */
 (function () {
   var R = [
-    { n: 'Nicolaus Olahus', c: '#7a5230', rows: [
-      [{ ro: 'Născut / mort', de: 'Geboren / gestorben' }, { ro: '1493, Sibiu – 1568 (Bratislava sau Trnava; sursele diferă)', de: '1493 in Hermannstadt (Sibiu) – 1568 (Pressburg oder Tyrnau; die Quellen unterscheiden sich)' }],
+    { n: 'Nicolaus Olahus', c: '#7a5230', img: 'olahus.jpg', cap: { ro: 'Gravură cu Olahus, ca arhiepiscop de Esztergom', de: 'Kupferstich von Olahus als Erzbischof von Gran' }, rows: [
+      [{ ro: 'Născut / mort', de: 'Geboren / gestorben' }, { ro: '1493, Sibiu – 16 ianuarie 1568, Trnava (unele surse dau Bratislava)', de: '1493 in Hermannstadt (Sibiu) – 16. Januar 1568 in Tyrnau (Trnava); manche Quellen nennen Pressburg' }],
       [{ ro: 'Origine', de: 'Herkunft' }, { ro: 'Tatăl, de origine română; se numea și Nicolae Valahul (Oláh Miklós).', de: 'Der Vater war rumänischer Herkunft; er hieß auch Nicolae Valahul (Oláh Miklós).' }],
       [{ ro: 'Studii și cariera', de: 'Ausbildung und Laufbahn' }, { ro: 'A studiat la școala capitlului din Oradea, a fost paj la curtea regelui Ludovic al II-lea, apoi preot. A fost secretarul Mariei de Habsburg, la Bruxelles, unde a corespondat cu Erasmus. A ajuns episcop de Zagreb (1543), de Eger (1548) și, din 1553, arhiepiscop de Esztergom, primat al Ungariei.', de: 'Er besuchte die Domschule in Oradea, war Page am Hof König Ludwigs II. und wurde dann Priester. Er war Sekretär Marias von Habsburg in Brüssel, wo er mit Erasmus korrespondierte. Er wurde Bischof von Zagreb (1543), von Eger (1548) und ab 1553 Erzbischof von Gran (Esztergom), Primas von Ungarn.' }],
       [{ ro: 'Opere', de: 'Werke' }, { ro: '<i>Hungaria</i> și <i>Attila</i> (scrise în limba latină, în jurul anului 1536).', de: '<i>Hungaria</i> und <i>Attila</i> (auf Latein verfasst, um 1536).' }],
       [{ ro: 'De ce contează', de: 'Warum er wichtig ist' }, { ro: 'Umanist cu legături cu Erasmus. În scrierile lui a subliniat originea romană a românilor și unitatea lor de limbă.', de: 'Humanist mit Verbindung zu Erasmus. In seinen Schriften betonte er die römische Herkunft der Rumänen und ihre sprachliche Einheit.' }]
     ] },
-    { n: 'Johannes Honterus', c: '#12959b', rows: [
+    { n: 'Johannes Honterus', c: '#12959b', img: 'honterus-harta.jpg', cap: { ro: 'Harta Transilvaniei desenată de Honterus, 1532', de: 'Von Honterus gezeichnete Karte Siebenbürgens, 1532' }, rows: [
       [{ ro: 'Născut / mort', de: 'Geboren / gestorben' }, { ro: '1498, Brașov – 1549, Brașov (unele surse dau 1548)', de: '1498 in Kronstadt (Brașov) – 1549 in Kronstadt (manche Quellen nennen 1548)' }],
       [{ ro: 'Origine', de: 'Herkunft' }, { ro: 'Sas din Transilvania; în germană: Johannes Honter.', de: 'Siebenbürger Sachse; auf Deutsch: Johannes Honter.' }],
       [{ ro: 'Studii și cariera', de: 'Ausbildung und Laufbahn' }, { ro: 'A studiat la Viena, apoi la Cracovia (1530), unde i-au apărut primele cărți (o gramatică latină și un manual de cosmografie). Între 1530 și 1532 a stat la Basel și a învățat gravura în lemn. Întors la Brașov, a înființat o școală umanistă și, în 1539, o tipografie.', de: 'Er studierte in Wien, dann in Krakau (1530), wo seine ersten Bücher erschienen (eine lateinische Grammatik und ein Lehrbuch der Kosmografie). Von 1530 bis 1532 war er in Basel und lernte den Holzschnitt. Zurück in Kronstadt gründete er eine humanistische Schule und 1539 eine Druckerei.' }],
       [{ ro: 'Opere', de: 'Werke' }, { ro: 'Harta Transilvaniei (1532), manualul <i>Rudimenta Cosmographica</i> (mai multe zeci de ediții în Europa), <i>Reformationsbüchlein</i> (1543).', de: 'Karte Siebenbürgens (1532), das Lehrbuch <i>Rudimenta Cosmographica</i> (mehrere Dutzend Auflagen in Europa), <i>Reformationsbüchlein</i> (1543).' }],
       [{ ro: 'De ce contează', de: 'Warum er wichtig ist' }, { ro: 'Prin tipar și școală a răspândit ideile umaniste; a condus Reforma luterană a sașilor din Transilvania.', de: 'Durch Druck und Schule verbreitete er humanistische Ideen; er führte die lutherische Reformation der Siebenbürger Sachsen an.' }]
     ] },
-    { n: 'Dimitrie Cantemir', c: '#5b6b7a', rows: [
+    { n: 'Dimitrie Cantemir', c: '#5b6b7a', img: 'cantemir.jpg', cap: { ro: 'Dimitrie Cantemir, portret din <i>Descriptio Moldaviae</i>, 1716', de: 'Dimitrie Cantemir, Porträt aus der <i>Descriptio Moldaviae</i>, 1716' }, rows: [
       [{ ro: 'Născut / mort', de: 'Geboren / gestorben' }, { ro: '1673, Moldova – 1723, Rusia', de: '1673 in der Moldau – 1723 in Russland' }],
       [{ ro: 'Origine', de: 'Herkunft' }, { ro: 'Fiu al unui domn al Moldovei; el însuși a fost domn în 1693 (scurt timp) și în 1710–1711.', de: 'Sohn eines Fürsten der Moldau; er selbst war Fürst 1693 (kurz) und 1710–1711.' }],
       [{ ro: 'Studii și cariera', de: 'Ausbildung und Laufbahn' }, { ro: 'A studiat mulți ani la Constantinopol. A fost filozof, istoric, geograf, etnograf, lingvist și compozitor. În 1714 a devenit membru al Academiei din Berlin. După 1711 a trăit în Rusia, unde a murit.', de: 'Er studierte viele Jahre in Konstantinopel. Er war Philosoph, Historiker, Geograf, Ethnograf, Sprachforscher und Komponist. 1714 wurde er Mitglied der Berliner Akademie. Nach 1711 lebte er in Russland, wo er starb.' }],
@@ -667,7 +750,7 @@ var P = [
   var out = $('#rp-out');
   chipGroup($('#rp-chips'), R.map(function (r) { return { label: r.n }; }), function (i) {
     var r = R[i]; out.style.setProperty('--c', r.c);
-    out.innerHTML = '<b>' + r.n + '</b><dl>' + r.rows.map(function (x) { return '<dt>' + T(x[0]) + '</dt><dd>' + T(x[1]) + '</dd>'; }).join('') + '</dl>';
+    out.innerHTML = '<div style="display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:14px;align-items:start" class="rpg"><figure style="margin:0"><img src="mari-oameni-ai-renasterii/' + r.img + '" alt="' + r.n + '" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--rule)" loading="lazy"><figcaption style="font-size:12.5px;color:var(--muted);margin-top:4px">' + T(r.cap) + '</figcaption></figure><div><b>' + r.n + '</b><dl>' + r.rows.map(function (x) { return '<dt>' + T(x[0]) + '</dt><dd>' + T(x[1]) + '</dd>'; }).join('') + '</dl></div></div>';
   });
   readout(out, tx('Alege un umanist', 'Wähle einen Humanisten'), tx('Olahus, Honterus sau Cantemir.', 'Olahus, Honterus oder Cantemir.'));
   Check($('#c5'), [
