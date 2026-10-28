@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reforma și Contrareforma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Reformation und Gegenreformation';
+})();
+</script>
+<script src="../../lib/d3-7.8.5.min.js"></script>
+<script src="../../lib/topojson-client-3.1.0.min.js"></script>
+<style>
+:root{
+  --paper:#f8f5ef; --card:#ffffff; --ink:#231f1a; --muted:#625b51; --rule:#e5ded0; --sheet:#f2ece0;
+  --accent:#b4531f; --accent-soft:#fbeadf;
+  --a1:#c9871b; --a1s:#fbecc9; --a2:#2f6fd6; --a2s:#dfe9fb; --a3:#8e44ad; --a3s:#efe2f6; --a4:#1f8a5b; --a4s:#dcf1e6;
+  --good:#1f8a5b; --good-soft:#e3f5ec; --bad:#c23b3b; --bad-soft:#fbe4e4;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)} .hint{font-size:14.5px;color:var(--muted)}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.remember{margin-top:16px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.fig svg{display:block;width:100%;height:auto}
+.fig .cap{font-size:13.5px;color:var(--muted);padding:2px 6px 0}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.panel{display:grid;gap:10px}
+.readout{background:var(--sheet);border-radius:10px;padding:10px 14px;display:grid;gap:4px;min-height:84px;align-content:start}
+.readout b{font-family:var(--display);font-size:19px}
+.readout .sub{font-size:15px;color:var(--muted)}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#a12f2f;background:var(--bad-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.chip{border:1.5px solid var(--rule);background:#fff;border-radius:99px;padding:5px 14px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip i{width:12px;height:12px;border-radius:3px;background:var(--c,#999);display:inline-block}
+.chip.dom[aria-pressed="true"]{background:var(--c);border-color:var(--c)}
+.stps{margin:0;padding-left:1.3em;display:grid;gap:6px}
+.stps li{padding:6px 10px;border-radius:8px;border-left:4px solid transparent;color:var(--muted)}
+.stps li.on{background:#fff9d6;border-left-color:#e0a100;color:var(--ink);font-weight:500}
+.stps li.done{color:var(--ink)}
+.sub3{margin:26px 0 8px;font-size:22px}
+.result{border-radius:10px;padding:10px 14px;font-weight:700}
+.result:empty{display:none}
+.result.good{background:var(--good-soft);color:#17744d}
+.result.try{background:#fdf0d5;color:#8a5a00}
+.result.no{background:var(--bad-soft);color:#a12f2f}
+.story{background:#fff9e6;border:1px solid #f1e2b0;border-radius:10px;padding:10px 14px;font-size:18px}
+.quote{background:#fbf3e4;border:1px solid #ecd9b4;border-radius:8px;padding:12px 16px;font-style:italic}
+.quote cite{display:block;font-style:normal;font-size:14px;color:var(--muted);margin-top:6px}
+
+/* hărți și desene */
+.hot{cursor:pointer}
+.hot:focus{outline:none}
+.hot:focus-visible circle,.hot:focus-visible rect.hb{stroke:var(--ink);stroke-width:3}
+.tlt{font:700 13px var(--body);fill:var(--muted);text-anchor:middle}
+.tlb{font:800 14px var(--display);fill:var(--ink);text-anchor:middle}
+.sea{fill:#dbe9ee}
+.land{fill:#efe8d6;stroke:#b9ad8e;stroke-width:.4}
+.bord{fill:none;stroke:#cdbf9d;stroke-width:.5}
+.mlbl{font-family:var(--body);font-weight:800;fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round}
+.slbl{font:700 13px var(--body);fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+.lg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted);margin-top:8px}
+.lg > span{display:inline-flex;align-items:center;gap:6px}
+.fig .lg svg{width:26px;flex:none;display:inline-block}
+.lg i{width:14px;height:14px;border-radius:50%;display:inline-block}
+
+/* fluxuri și carduri */
+.flow{display:grid;grid-template-columns:repeat(var(--n,5),minmax(0,1fr));gap:8px;align-items:stretch}
+.flow .fs{background:var(--card);border:1.5px solid var(--rule);border-radius:10px;padding:10px 10px;font-size:15px;line-height:1.35;color:var(--muted);position:relative;opacity:.55;transition:opacity .2s}
+.flow .fs b{display:block;font:800 22px/1 var(--display);margin-bottom:4px;color:var(--ink)}
+.flow .fs.on{opacity:1;border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.flow .fs.done{opacity:1;color:var(--ink)}
+.flow .fs:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);font-weight:800;color:var(--accent);z-index:2}
+.people{display:grid;gap:12px}
+.pgroup h3{font-size:19px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.pgroup h3 i{width:12px;height:12px;border-radius:3px;background:var(--c);display:inline-block}
+.rows{display:grid;gap:8px}
+.ex{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px 16px;display:grid;gap:10px}
+.sortrow{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:6px 0;border-top:1px dashed var(--rule)}
+.sortrow:first-of-type{border-top:0}
+.sortrow .fb{grid-column:1/-1;font-size:14.5px;color:var(--muted)}
+.sortrow.ok{background:linear-gradient(90deg,var(--good-soft),transparent 60%)}
+.cloze{font-size:19px;line-height:2.1}
+.cloze select{border:1.5px solid var(--rule);border-radius:8px;padding:3px 6px;background:#fff;font:700 16px var(--body);max-width:100%}
+.cloze select.ok{border-color:var(--good);background:var(--good-soft)}
+.cloze select.bad{border-color:var(--bad);background:var(--bad-soft)}
+.tick{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1.5px solid var(--rule);border-radius:8px;background:#fff;cursor:pointer;text-align:left;width:100%}
+.tick[aria-pressed="true"]{border-color:var(--ink);background:var(--sheet)}
+.tick.ok{border-color:var(--good);background:var(--good-soft)}
+.tick.bad{border-color:var(--bad);background:var(--bad-soft)}
+.tick .bx{flex:none;width:20px;height:20px;border:2px solid var(--ink);border-radius:5px;display:inline-grid;place-items:center;font-weight:800;line-height:1;margin-top:2px}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #dcc0a8;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted)}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+  .flow{grid-template-columns:1fr}
+  .flow .fs:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-16px;transform:translateX(-50%)}
+}
+@media (max-width:520px){ .slbl{font-size:19px} .tlt{font-size:17px} .tlb{font-size:18px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important;scroll-behavior:auto!important} }
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+[hidden]{display:none!important}
+</style>
+<style>
+.lifebar{cursor:pointer}
+.lifebar rect.b{transition:opacity .2s}
+.lname{font:700 13.5px var(--body);fill:var(--ink);text-anchor:end}
+.lyr{font:600 12px var(--body);fill:var(--muted)}
+.lgrid{stroke:#e5ded0;stroke-width:1}
+.prof{border-left:6px solid var(--c,#999)}
+.prof dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;margin:6px 0 0}
+.prof dt{font-weight:700}
+.prof dd{margin:0}
+@media (max-width:520px){ .prof dl{grid-template-columns:1fr} .prof dd{margin-bottom:6px} .lname{font-size:23px} .lyr{font-size:18px} }
+.sky text{font:700 13px var(--body);fill:#fff;text-anchor:middle}
+
+.yrs{font-weight:500;color:var(--muted);font-size:.7em}
+.pgrid{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;align-items:start}
+.pimgs{display:grid;gap:12px;align-content:start}
+.pimgs figure{margin:0}
+.pimgs img{width:100%;height:auto;display:block;border-radius:6px;border:1px solid var(--rule);background:var(--sheet)}
+.pimgs figcaption{font-size:13px;line-height:1.4;color:var(--muted);margin-top:6px}
+.pbody > .readout.prof{margin-bottom:10px}
+.anecs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.anec{background:#fff9e6;border:1px solid #f1e2b0;border-left:5px solid var(--pc,#b4531f);border-radius:10px;padding:12px 16px}
+.anec h3{font-size:19px;margin-bottom:4px}
+.anec h3::before{content:"💡 "}
+section.block{--pc:#b4531f}
+@media (max-width:820px){ .pgrid{grid-template-columns:1fr} .pimgs{grid-template-columns:repeat(2,minmax(0,210px))} .anecs{grid-template-columns:1fr} }
+@media (max-width:420px){ .pimgs{grid-template-columns:1fr} .pimgs figure{max-width:260px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Istorie · Clasa a 6-a · Începutul epocii moderne</span><span class="de">Geschichte · Klasse 6 · Beginn der Neuzeit</span></p>
+  <h1><span class="ro">Reforma și Contrareforma</span><span class="de">Reformation und Gegenreformation</span></h1>
+  <p class="lead">
+    <span class="ro">În 1517, un profesor din Wittenberg a pus întrebări incomode Bisericii Catolice. Din ele a ieșit o mișcare care a schimbat religia, politica și chiar școala în toată Europa: Reforma. Biserica Catolică a răspuns cu Contrareforma. Aflăm cauzele, oamenii, locurile și urmările.</span>
+    <span class="de">1517 stellte ein Professor aus Wittenberg der katholischen Kirche unbequeme Fragen. Daraus wurde eine Bewegung, die Religion, Politik und sogar die Schule in ganz Europa veränderte: die Reformation. Die katholische Kirche antwortete mit der Gegenreformation. Wir erfahren Ursachen, Personen, Orte und Folgen.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Ce ți se pare nedrept în ideea că poți cumpăra iertarea păcatelor?</span><span class="de">Was findest du ungerecht an der Idee, man könne sich Vergebung der Sünden kaufen?</span></li>
+        <li><span class="ro">De ce era importantă Biblia în limba pe care o vorbesc oamenii?</span><span class="de">Warum war die Bibel in der Sprache wichtig, die die Menschen sprechen?</span></li>
+        <li><span class="ro">Poate o Biserică să interzică cărți? Ce se întâmplă cu ideile interzise?</span><span class="de">Darf eine Kirche Bücher verbieten? Was geschieht mit verbotenen Ideen?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Ce a fost Reforma?</span><span class="de">Was war die Reformation?</span></a>
+    <a href="#s2"><b>2</b>Luther</a>
+    <a href="#s3"><b>3</b>Calvin</a>
+    <a href="#s4"><b>4</b><span class="ro">Anglia</span><span class="de">England</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Franța</span><span class="de">Frankreich</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Harta</span><span class="de">Die Karte</span></a>
+    <a href="#s7"><b>7</b><span class="ro">Contrareforma</span><span class="de">Gegenreformation</span></a>
+    <a href="#s8"><b>8</b><span class="ro">Școala</span><span class="de">Die Schule</span></a>
+    <a href="#s9"><b>9</b><span class="ro">Fixăm</span><span class="de">Wir festigen</span></a>
+  </nav>
+</header>
+
+<!-- 1. Ce a fost Reforma -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Ce a fost Reforma?</span><span class="de">Was war die Reformation?</span></h2>
+  <p class="section-sub"><span class="ro">Reforma a fost o mișcare de contestare a autorității spirituale a Bisericii Catolice. A început în Germania, la începutul secolului al XVI-lea, și s-a extins în toată Europa Nordică și în unele teritorii din Europa Occidentală și Centrală. Apasă pe evenimentele de pe axă.</span><span class="de">Die Reformation war eine Bewegung, die die geistliche Autorität der katholischen Kirche infrage stellte. Sie begann Anfang des 16. Jahrhunderts in Deutschland und breitete sich über ganz Nordeuropa und einige Gebiete West- und Mitteleuropas aus. Tippe auf die Ereignisse auf der Zeitachse.</span></p>
+  <div class="fig"><svg id="tl-svg" viewBox="0 0 700 200" role="img"></svg></div>
+  <div class="readout" id="tl-out" aria-live="polite" style="margin-top:10px"></div>
+
+  <h3 class="sub3"><span class="ro">De ce a început Reforma? Cauzele</span><span class="de">Warum begann die Reformation? Die Ursachen</span></h3>
+  <div class="chips" id="cz-chips" role="group"></div>
+  <div class="readout" id="cz-out" aria-live="polite"></div>
+
+  <h3 class="sub3"><span class="ro">Vânzarea de indulgențe</span><span class="de">Der Ablasshandel</span></h3>
+  <div class="split">
+    <div class="fig"><img src="reforma-si-contrareforma/indulgente.jpg" alt="Gravură cu vânzarea indulgențelor" style="width:100%;height:auto;display:block;border-radius:8px" loading="lazy"><p class="cap"><span class="ro">Vânzarea indulgențelor, gravură atribuită lui Hans Holbein cel Tânăr, cca 1529. Domeniu public.</span><span class="de">Verkauf von Ablassbriefen, Holzschnitt, Hans Holbein dem Jüngeren zugeschrieben, um 1529. Gemeinfrei.</span></p></div>
+    <div class="panel"><div id="ind-box"></div></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">O <b>indulgență</b> era un document care confirma iertarea totală sau parțială a pedepselor divine pentru păcate; Biserica o acorda credincioșilor, adesea în schimbul unei sume de bani.</span><span class="de">Ein <b>Ablass</b> war eine Urkunde, die den vollständigen oder teilweisen Erlass göttlicher Strafen für Sünden bestätigte; die Kirche gewährte sie den Gläubigen, oft gegen eine Geldsumme.</span></li>
+      <li><span class="ro">Cauzele Reformei: <b>religioase</b> (decăderea morală a clerului, vânzarea de indulgențe), <b>economice</b> (averile Bisericii), <b>politice</b> (monarhii voiau mai multă autoritate), <b>intelectuale</b> (Renașterea și umanismul).</span><span class="de">Ursachen der Reformation: <b>religiöse</b> (sittlicher Verfall des Klerus, Ablasshandel), <b>wirtschaftliche</b> (Reichtum der Kirche), <b>politische</b> (die Herrscher wollten mehr Macht), <b>geistige</b> (Renaissance und Humanismus).</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c1"></div>
+</section>
+
+<!-- 2. Luther -->
+<section class="block" id="s2" aria-labelledby="t2" style="--pc:#2f6fd6">
+  <h2 class="section-title" id="t2"><span class="step">2</span>Martin Luther <span class="yrs">(1483–1546)</span></h2>
+  <p class="section-sub"><span class="ro">Călugăr și profesor la Universitatea din Wittenberg, inițiatorul Reformei.</span><span class="de">Mönch und Professor an der Universität Wittenberg, Begründer der Reformation.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="reforma-si-contrareforma/luther.jpg" alt="Portretul lui Martin Luther" width="210" loading="lazy"><figcaption><span class="ro">Martin Luther, pictură din atelierul lui Lucas Cranach cel Bătrân, 1532. Domeniu public.</span><span class="de">Martin Luther, Gemälde aus der Werkstatt Lucas Cranachs des Älteren, 1532. Gemeinfrei.</span></figcaption></figure></div>
+    <div class="pbody">
+      <div class="readout prof" style="--c:#2f6fd6;min-height:0"><p><span class="ro">Reforma religioasă a început prin activitatea lui Martin Luther, călugăr și profesor la Universitatea din Wittenberg. El critica vânzarea de indulgențe, luxul și lăcomia prelaților și cerea o organizare mai simplă a Bisericii, pe care o voia pusă sub autoritatea puterii laice. Ideea de bază a lui Luther era că omul putea să primească în mod gratuit harul lui Dumnezeu și să se mântuiască prin credință.</span><span class="de">Die Reformation begann mit dem Wirken Martin Luthers, Mönch und Professor an der Universität Wittenberg. Er kritisierte den Ablasshandel sowie Luxus und Habgier der Kirchenfürsten und forderte eine einfachere Organisation der Kirche, die er unter die Autorität der weltlichen Macht stellen wollte. Luthers Grundgedanke war, dass der Mensch Gottes Gnade unverdient empfangen und durch den Glauben gerettet werden kann.</span></p></div>
+      <p class="section-sub" style="margin-top:12px"><span class="ro">Cum voia Luther să arate noua Biserică? Apasă pe fiecare idee.</span><span class="de">Wie wollte Luther die neue Kirche gestalten? Tippe auf jede Idee.</span></p>
+      <div class="chips" id="lu-chips" role="group"></div>
+      <div class="readout prof" id="lu-out" aria-live="polite" style="--c:#2f6fd6"></div>
+    </div>
+  </div>
+  <h3 class="sub3"><span class="ro">Vocea trecutului: Luther despre mântuirea prin credință</span><span class="de">Stimme der Vergangenheit: Luther über die Rettung durch den Glauben</span></h3>
+  <div class="quote"><span class="ro">„Cred că nu sunt în stare să cred în Iisus Hristos, Domnul meu, sau să vin la El numai datorită minții mele sau prin puterea mea, ci Duhul Sfânt m-a chemat prin Evanghelie, m-a luminat cu darurile Sale […]. Aceasta este, fără putință de tăgadă, adevărat.”</span><span class="de">„Ich glaube, dass ich nicht aus eigener Vernunft oder Kraft an Jesus Christus, meinen Herrn, glauben oder zu ihm kommen kann, sondern der Heilige Geist hat mich durch das Evangelium berufen, mit seinen Gaben erleuchtet […]. Das ist gewisslich wahr.“</span><cite>Martin Luther, despre mântuirea prin credință / über die Rettung durch den Glauben</cite></div>
+  <div class="anecs">
+    <div class="anec"><h3><span class="ro">Cele 95 de teze</span><span class="de">Die 95 Thesen</span></h3><p><span class="ro">Se povestește că, pe 31 octombrie 1517, Luther a bătut în cuie pe ușa bisericii din Wittenberg 95 de teze împotriva vânzării de indulgențe. Istoricii discută dacă a făcut-o chiar așa; sigur este că tezele s-au răspândit foarte repede prin tipar.</span><span class="de">Man erzählt, Luther habe am 31. Oktober 1517 95 Thesen gegen den Ablasshandel an die Tür der Kirche in Wittenberg genagelt. Historiker diskutieren, ob es wirklich so war; sicher ist, dass sich die Thesen durch den Buchdruck sehr schnell verbreiteten.</span></p></div>
+    <div class="anec"><h3><span class="ro">Biblia tradusă în ascunzătoare</span><span class="de">Die Bibel, im Versteck übersetzt</span></h3><p><span class="ro">După ce a fost declarat în afara legii, Luther s-a ascuns în castelul Wartburg, sub numele „cavalerul Jörg”. Acolo a tradus Noul Testament în germană, în aproximativ 11 săptămâni. Traducerea l-a făcut pe Luther și mai cunoscut și a contribuit la formarea limbii germane scrise.</span><span class="de">Nachdem er für vogelfrei erklärt worden war, versteckte sich Luther auf der Wartburg unter dem Namen „Junker Jörg“. Dort übersetzte er das Neue Testament ins Deutsche, in etwa 11 Wochen. Die Übersetzung machte Luther noch bekannter und trug zur Entstehung der deutschen Schriftsprache bei.</span></p></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține: Luther</span><span class="de">Merke dir: Luther</span></h3>
+    <ul>
+      <li><span class="ro">Mântuire prin <b>credință</b>, nu prin bani sau fapte. Biserică simplă, <b>puține sacramente</b> (botezul, spovedania, împărtășania), slujba în <b>limba națională</b>.</span><span class="de">Rettung durch den <b>Glauben</b>, nicht durch Geld oder Werke. Einfache Kirche, <b>wenige Sakramente</b> (Taufe, Beichte, Abendmahl), Gottesdienst in der <b>Landessprache</b>.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Calvin -->
+<section class="block" id="s3" aria-labelledby="t3" style="--pc:#8e44ad">
+  <h2 class="section-title" id="t3"><span class="step">3</span>Jean Calvin <span class="yrs">(1509–1564)</span></h2>
+  <p class="section-sub"><span class="ro">Reformator francez, care a insistat pe ideea predestinării.</span><span class="de">Französischer Reformator, der die Idee der Prädestination in den Mittelpunkt stellte.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="reforma-si-contrareforma/calvin.jpg" alt="Portretul lui Jean Calvin" width="210" loading="lazy"><figcaption><span class="ro">Jean Calvin, portret anonim, cca 1550. Domeniu public.</span><span class="de">Johannes Calvin, anonymes Porträt, um 1550. Gemeinfrei.</span></figcaption></figure></div>
+    <div class="pbody">
+      <div class="readout prof" style="--c:#8e44ad;min-height:0"><p><span class="ro">Ideile lui Luther i-au inspirat și pe alți reformatori; unul dintre cei mai importanți a fost Jean Calvin. Ca și Luther, el considera credința ca fiind esențială pentru mântuire și insista pe ideea <b>predestinării</b>: Dumnezeu hotărăște dinainte cine se va mântui și cine nu. Opera lui principală este <i>Învățătura religiei creștine</i>. Adepții lui din Franța au fost numiți <b>hughenoți</b>. Doctrina lui se numește <b>calvinism</b>.</span><span class="de">Luthers Ideen inspirierten auch andere Reformatoren; einer der wichtigsten war Johannes Calvin. Wie Luther hielt er den Glauben für entscheidend zur Rettung und betonte die <b>Prädestination</b>: Gott bestimmt im Voraus, wer gerettet wird und wer nicht. Sein Hauptwerk ist die <i>Institutio</i> („Unterricht in der christlichen Religion“). Seine Anhänger in Frankreich hießen <b>Hugenotten</b>. Seine Lehre heißt <b>Kalvinismus</b>.</span></p></div>
+      <div class="quote" style="margin-top:12px"><span class="ro">„Numim predestinare înțelepciunea eternă a lui Dumnezeu, prin care a determinat ceea ce voia să facă din fiecare om. Întrucât el nu îi creează pe toți la fel, ci îi hotărăște pe unii pentru viața veșnică, iar pe alții pentru osânda veșnică […].”</span><span class="de">„Prädestination nennen wir Gottes ewigen Ratschluss, durch den er bestimmt hat, was er aus jedem Menschen machen wollte. Denn er schafft nicht alle gleich, sondern bestimmt die einen zum ewigen Leben, die anderen zur ewigen Verdammnis […].“</span><cite>Jean Calvin, Învățătura religiei creștine / Institutio Christianae Religionis</cite></div>
+    </div>
+  </div>
+  <p class="section-sub" style="margin-top:14px"><span class="ro">Luther sau Calvin? Alege pentru fiecare afirmație.</span><span class="de">Luther oder Calvin? Wähle bei jeder Aussage.</span></p>
+  <div class="ex" id="sg-lc"></div>
+  <div class="anecs">
+    <div class="anec"><h3><span class="ro">O carte scrisă la 26 de ani</span><span class="de">Ein Buch mit 26 Jahren</span></h3><p><span class="ro">Calvin avea în jur de 26 de ani când a apărut prima ediție a <i>Învățăturii religiei creștine</i> (1536, în latină). Era o carte mică. A completat-o și a revizuit-o toată viața; ediția finală a ajuns de câteva ori mai lungă.</span><span class="de">Calvin war etwa 26 Jahre alt, als die erste Ausgabe der <i>Institutio</i> erschien (1536, auf Latein). Es war ein kleines Buch. Er ergänzte und überarbeitete es sein Leben lang; die Endfassung wurde um ein Mehrfaches länger.</span></p></div>
+    <div class="anec"><h3><span class="ro">Alungat și chemat înapoi</span><span class="de">Vertrieben und zurückgerufen</span></h3><p><span class="ro">Calvin s-a stabilit la Geneva, dar în 1538 consiliul orașului l-a alungat. În 1541 a fost chemat înapoi și a rămas acolo până la moarte. Geneva a devenit un centru al calvinismului, unde veneau refugiați din toată Europa.</span><span class="de">Calvin ließ sich in Genf nieder, doch 1538 wies ihn der Stadtrat aus. 1541 wurde er zurückgerufen und blieb bis zu seinem Tod. Genf wurde ein Zentrum des Kalvinismus, wohin Flüchtlinge aus ganz Europa kamen.</span></p></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține: Calvin</span><span class="de">Merke dir: Calvin</span></h3>
+    <ul>
+      <li><span class="ro"><b>Predestinarea</b>: soarta fiecărui om (viața veșnică sau osânda veșnică) este hotărâtă de Dumnezeu. Prima ediție a operei lui principale a fost scrisă în <b>latină</b>.</span><span class="de"><b>Prädestination</b>: Das Schicksal jedes Menschen (ewiges Leben oder ewige Verdammnis) bestimmt Gott. Die erste Ausgabe seines Hauptwerks war auf <b>Latein</b>.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Anglia -->
+<section class="block" id="s4" aria-labelledby="t4" style="--pc:#c0392b">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Reforma în Anglia: Henric al VIII-lea</span><span class="de">Die Reformation in England: Heinrich VIII.</span></h2>
+  <p class="section-sub"><span class="ro">Ideile Reformei au dobândit în Anglia forme specifice. Parcurge pașii.</span><span class="de">Die Ideen der Reformation nahmen in England besondere Formen an. Gehe die Schritte durch.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="reforma-si-contrareforma/henric.jpg" alt="Portretul lui Henric al VIII-lea" width="210" loading="lazy"><figcaption><span class="ro">Henric al VIII-lea, portret după Hans Holbein cel Tânăr. Domeniu public.</span><span class="de">Heinrich VIII., Porträt nach Hans Holbein dem Jüngeren. Gemeinfrei.</span></figcaption></figure></div>
+    <div class="pbody"><div id="en-box"></div></div>
+  </div>
+  <div class="anecs">
+    <div class="anec"><h3><span class="ro">„Apărătorul Credinței”</span><span class="de">„Verteidiger des Glaubens“</span></h3><p><span class="ro">Înainte să rupă cu Roma, Henric al VIII-lea a scris o carte împotriva ideilor lui Luther. Drept răsplată, papa i-a dat titlul „Apărătorul Credinței” (1521). Titlul a rămas la regii și reginele Angliei, iar abrevierea „F. D.” apare și azi pe monedele britanice.</span><span class="de">Bevor er mit Rom brach, schrieb Heinrich VIII. ein Buch gegen Luthers Ideen. Zur Belohnung verlieh ihm der Papst den Titel „Verteidiger des Glaubens“ (1521). Der Titel blieb bei den Herrschern Englands, und die Abkürzung „F. D.“ steht bis heute auf britischen Münzen.</span></p></div>
+    <div class="anec"><h3><span class="ro">Șase soții și o căsătorie anulată</span><span class="de">Sechs Ehefrauen und eine Annullierung</span></h3><p><span class="ro">Conflictul cu papalitatea a pornit și de la dorința regelui de a-și anula prima căsătorie, pe care papa n-a aprobat-o. Henric al VIII-lea s-a căsătorit în total de șase ori.</span><span class="de">Der Konflikt mit dem Papsttum entstand auch aus dem Wunsch des Königs, seine erste Ehe annullieren zu lassen, was der Papst nicht genehmigte. Heinrich VIII. heiratete insgesamt sechsmal.</span></p></div>
+  </div>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Franța -->
+<section class="block" id="s5" aria-labelledby="t5" style="--pc:#1f8a5b">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Reforma în Franța: hughenoții</span><span class="de">Die Reformation in Frankreich: die Hugenotten</span></h2>
+  <p class="section-sub"><span class="ro">În Franța, în a doua jumătate a secolului al XVI-lea, au izbucnit o serie de războaie civile care au avut și o componentă religioasă. Parcurge pașii.</span><span class="de">In Frankreich brachen in der zweiten Hälfte des 16. Jahrhunderts mehrere Bürgerkriege aus, die auch eine religiöse Komponente hatten. Gehe die Schritte durch.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="reforma-si-contrareforma/bartolomeu.jpg" alt="Masacrul din Noaptea Sf. Bartolomeu, pictură" width="210" loading="lazy"><figcaption><span class="ro">Noaptea Sf. Bartolomeu, pictură de François Dubois (sec. al XVI-lea). Domeniu public.</span><span class="de">Bartholomäusnacht, Gemälde von François Dubois (16. Jh.). Gemeinfrei.</span></figcaption></figure></div>
+    <div class="pbody"><div id="fr-box"></div></div>
+  </div>
+  <div class="anecs">
+    <div class="anec"><h3><span class="ro">Un tablou pictat de un martor</span><span class="de">Ein Bild von einem Zeitzeugen</span></h3><p><span class="ro">Pictorul François Dubois era el însuși protestant și a trăit în vremea aceea. După 1572 a pictat masacrul într-un tablou, iar tabloul este una dintre puținele imagini din epocă ale evenimentului.</span><span class="de">Der Maler François Dubois war selbst Protestant und lebte in dieser Zeit. Nach 1572 malte er das Massaker in einem Bild, das eines der wenigen zeitgenössischen Bilder des Ereignisses ist.</span></p></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul><li><span class="ro"><b>Hughenoții</b> erau calviniștii francezi. Principalii combatanți ai războaielor civile au fost catolicii și calviniștii. Pe 23/24 august 1572, „Noaptea Sf. Bartolomeu”, nobilimea catolică a atacat grupul protestanților.</span><span class="de">Die <b>Hugenotten</b> waren die französischen Calvinisten. Die Hauptgegner der Bürgerkriege waren Katholiken und Calvinisten. In der Nacht vom 23. auf den 24. August 1572, der „Bartholomäusnacht“, griff der katholische Adel die Gruppe der Protestanten an.</span></li></ul>
+  </div>
+  <div class="check" id="c5"></div>
+</section>
+
+<!-- 6. Harta -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Geografia Reformei la sfârșitul secolului al XVI-lea</span><span class="de">Die Geografie der Reformation Ende des 16. Jahrhunderts</span></h2>
+  <p class="section-sub"><span class="ro">Harta este simplificată și folosește granițele de azi: în realitate, zonele se amestecau. Alege o religie ca s-o vezi pe hartă, apoi apasă pe un loc. Reforma s-a răspândit în Europa de Nord și de Nord-Vest.</span><span class="de">Die Karte ist vereinfacht und nutzt die heutigen Grenzen: In Wirklichkeit vermischten sich die Zonen. Wähle eine Religion, um sie auf der Karte zu sehen, und tippe dann auf einen Ort. Die Reformation breitete sich in Nord- und Nordwesteuropa aus.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="mp-svg" viewBox="0 0 620 470" role="img"></svg>
+      <div class="lg" id="mp-lg"></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="mp-tog" role="group"></div>
+      <div class="readout" id="mp-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Zonele protestante: Anglia și Scoția, Europa Nordică (Suedia, Norvegia, Danemarca, Finlanda), părți din Germania, Țările de Jos, Elveția. Catolice: Franța, Spania, Portugalia, Italia, Polonia. Ortodoxe: Rusia și sud-estul Europei.</span><span class="de">Protestantische Gebiete: England und Schottland, Nordeuropa (Schweden, Norwegen, Dänemark, Finnland), Teile Deutschlands, die Niederlande, die Schweiz. Katholisch: Frankreich, Spanien, Portugal, Italien, Polen. Orthodox: Russland und Südosteuropa.</span></li>
+      <li><span class="ro">Pe scurt: unde regii și prinții voiau mai multă autoritate asupra statelor lor, ideile Reformei au prins mai ușor.</span><span class="de">Kurz: Wo Könige und Fürsten mehr Macht über ihre Staaten wollten, fassten die Ideen der Reformation leichter Fuß.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c6"></div>
+</section>
+
+<!-- 7. Contrareforma -->
+<section class="block" id="s7" aria-labelledby="t7" style="--pc:#b4531f">
+  <h2 class="section-title" id="t7"><span class="step">7</span><span class="ro">Contrareforma: răspunsul Bisericii Catolice</span><span class="de">Die Gegenreformation: die Antwort der katholischen Kirche</span></h2>
+  <p class="section-sub"><span class="ro">Lupta ierarhilor Bisericii Catolice împotriva confesiunilor protestante s-a numit „Contrareformă” (sau „Reforma Catolică”). Parcurge măsurile adoptate.</span><span class="de">Der Kampf der katholischen Kirchenführer gegen die protestantischen Konfessionen hieß „Gegenreformation“ (oder „Katholische Reform“). Gehe die beschlossenen Maßnahmen durch.</span></p>
+  <div class="pgrid">
+    <div class="pimgs"><figure><img src="reforma-si-contrareforma/index.jpg" alt="Index Librorum Prohibitorum, 1564" width="210" loading="lazy"><figcaption><span class="ro"><i>Index Librorum Prohibitorum</i>, pagina de titlu a ediției din 1564, Veneția. Domeniu public.</span><span class="de"><i>Index Librorum Prohibitorum</i>, Titelseite der Ausgabe von 1564, Venedig. Gemeinfrei.</span></figcaption></figure></div>
+    <div class="pbody"><div id="ct-box"></div></div>
+  </div>
+  <p class="section-sub" style="margin-top:16px"><span class="ro">Cine a făcut ce? Pentru fiecare idee, decide: Reforma protestantă sau Contrareforma catolică?</span><span class="de">Wer tat was? Entscheide bei jeder Idee: protestantische Reformation oder katholische Gegenreformation?</span></p>
+  <div class="ex" id="sg-ct"></div>
+  <div class="anecs">
+    <div class="anec"><h3><span class="ro">O listă care a durat peste 400 de ani</span><span class="de">Eine Liste, die über 400 Jahre bestand</span></h3><p><span class="ro">Indexul cărților interzise a fost revizuit și completat de multe ori și a fost desființat abia în 1966. Pe el au ajuns multe lucrări de seamă ale vremii.</span><span class="de">Der Index der verbotenen Bücher wurde oft überarbeitet und ergänzt und erst 1966 abgeschafft. Viele bedeutende Werke der Zeit landeten darauf.</span></p></div>
+    <div class="anec"><h3><span class="ro">Un conciliu de 18 ani</span><span class="de">Ein Konzil von 18 Jahren</span></h3><p><span class="ro">Conciliul din Trento (în nordul Italiei) a durat din 1545 până în 1563: aproape 18 ani, cu pauze lungi între ședințe. A fost una dintre cele mai lungi adunări ale Bisericii.</span><span class="de">Das Konzil von Trient (in Norditalien) dauerte von 1545 bis 1563: fast 18 Jahre, mit langen Pausen zwischen den Sitzungen. Es war eine der längsten Versammlungen der Kirche.</span></p></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține: Contrareforma</span><span class="de">Merke dir: Gegenreformation</span></h3>
+    <ul><li><span class="ro"><b>Conciliul din Trento</b> (1545–1563), <b>Indexul cărților interzise</b>, reorganizarea <b>Inchiziției</b>. Latina a rămas limba de cult, iar papa a rămas capul Bisericii.</span><span class="de"><b>Konzil von Trient</b> (1545–1563), <b>Index der verbotenen Bücher</b>, Neuordnung der <b>Inquisition</b>. Latein blieb die Kirchensprache, und der Papst blieb das Oberhaupt der Kirche.</span></li></ul>
+  </div>
+  <div class="check" id="c7"></div>
+</section>
+
+<!-- 8. Școala -->
+<section class="block" id="s8" aria-labelledby="t8">
+  <h2 class="section-title" id="t8"><span class="step">8</span><span class="ro">Conexiuni: educația în epoca Reformei</span><span class="de">Verbindungen: Bildung im Zeitalter der Reformation</span></h2>
+  <p class="section-sub"><span class="ro">Protestantismul a însemnat și un progres în redescoperirea tradiției culturale a Antichității și în studiul Sfintei Scripturi. Toți marii reformatori, fiind și clerici, erau cunoscători ai limbilor greacă veche și latină. Alege un element.</span><span class="de">Der Protestantismus bedeutete auch einen Fortschritt bei der Wiederentdeckung der Kultur der Antike und im Studium der Heiligen Schrift. Alle großen Reformatoren waren zugleich Geistliche und kannten Altgriechisch und Latein. Wähle ein Element.</span></p>
+  <div class="chips" id="ed-chips" role="group"></div>
+  <div class="readout" id="ed-out" aria-live="polite"></div>
+  <div class="check" id="c8"></div>
+</section>
+
+<!-- 9. Fixare -->
+<section class="block" id="s9" aria-labelledby="t9">
+  <h2 class="section-title" id="t9"><span class="step">9</span><span class="ro">Fixăm ce am învățat</span><span class="de">Wir festigen das Gelernte</span></h2>
+  <h3 class="sub3" style="margin-top:6px"><span class="ro">Completează textul</span><span class="de">Ergänze den Text</span></h3>
+  <div class="ex"><p class="cloze" id="cz-box"></p><div class="actions" style="margin:0"><button type="button" class="btn" id="cz-ok"></button></div><div class="result" id="cz-res" aria-live="polite"></div></div>
+
+  <h3 class="sub3"><span class="ro">Cum analizezi un document</span><span class="de">Wie man ein Dokument analysiert</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Cei cinci pași din „Trusa de instrumente”, aplicați pe fragmentul din Luther. Parcurge-i unul câte unul, apoi încearcă singur cu fragmentul din Calvin.</span><span class="de">Die fünf Schritte aus dem „Werkzeugkasten“, angewendet auf den Ausschnitt von Luther. Gehe sie nacheinander durch und versuche es dann selbst mit dem Ausschnitt von Calvin.</span></p>
+  <div id="doc-box"></div>
+
+  <h3 class="sub3"><span class="ro">Gândire critică</span><span class="de">Kritisches Denken</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Argumentează afirmația: „În prima parte a secolului al XVI-lea, Biserica Catolică a fost afectată de o criză puternică.” Folosește cauzele din secțiunea 1 și textele lui Luther și Calvin.</span><span class="de">Begründe die Aussage: „Im ersten Teil des 16. Jahrhunderts war die katholische Kirche von einer schweren Krise betroffen.“ Nutze die Ursachen aus Abschnitt 1 und die Texte von Luther und Calvin.</span></p>
+  <div class="actions" style="margin-top:0"><button type="button" class="btn ghost" id="gc-btn"></button></div>
+  <div class="readout" id="gc-out" hidden></div>
+
+  <h3 class="sub3"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h3>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După manualul de Istorie, clasa a 6-a, lecția „Reforma și Contrareforma”. Imaginile provin de la Wikimedia Commons (opere în domeniul public). Anecdotele sunt completări la manual. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Geschichtsbuch der 6. Klasse, Lektion „Reformation und Gegenreformation“. Die Bilder stammen von Wikimedia Commons (gemeinfreie Werke). Die Anekdoten ergänzen das Buch. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+var narrow = window.innerWidth < 560;
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+function readout(box, title, body, sub) {
+  box.innerHTML = (title ? '<b>' + title + '</b>' : '') + (body ? '<p>' + body + '</p>' : '') + (sub ? '<p class="sub">' + sub + '</p>' : '');
+}
+function hotspot(parent, fn, label) {
+  var g = el('g', { class: 'hot', tabindex: 0, role: 'button', 'aria-label': label }, parent);
+  g.addEventListener('click', fn);
+  g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } });
+  return g;
+}
+function chipGroup(host, items, onSel) {
+  var bs = items.map(function (it, i) {
+    var b = btn('chip', it.label); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { sel(i); };
+    host.appendChild(b); return b;
+  });
+  function sel(i) { bs.forEach(function (x, j) { x.setAttribute('aria-pressed', i === j ? 'true' : 'false'); }); onSel(i); }
+  return sel;
+}
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.textContent = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+function SortGame(host, cats, items, doneMsg) {
+  var done = 0;
+  items.forEach(function (it) {
+    var row = h('div', 'sortrow'), q = h('span', '', T(it.n)), bx = h('div', 'row'), fb = h('div', 'fb');
+    bx.style.display = 'flex'; bx.style.flexWrap = 'wrap'; bx.style.gap = '6px'; fb.setAttribute('aria-live', 'polite');
+    var bs = cats.map(function (c, i) {
+      var b = btn('pick', T(c));
+      b.onclick = function () {
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); row.classList.add('ok'); fb.textContent = it.why ? '✓ ' + T(it.why) : '✓'; done++;
+          if (done === items.length) fb.textContent += '  ' + T(doneMsg); }
+        else { b.classList.add('wrong'); fb.textContent = T(it.hint || { ro: 'Mai gândește-te: ce știi despre el?', de: 'Denk nochmal nach: Was weißt du darüber?' }); }
+      };
+      bx.appendChild(b); return b;
+    });
+    row.appendChild(q); row.appendChild(bx); row.appendChild(fb); host.appendChild(row);
+  });
+}
+function Stepper(host, steps) {
+  var cur = 0, box = h('div', 'flow'), act = h('div', 'actions'), out = h('div', 'readout');
+  out.style.marginTop = '10px'; out.setAttribute('aria-live', 'polite');
+  var prev = btn('btn ghost', tx('Înapoi', 'Zurück')), next = btn('btn', tx('Pasul următor', 'Nächster Schritt'));
+  box.style.setProperty('--n', steps.length);
+  steps.forEach(function (s, i) { box.appendChild(h('div', 'fs', '<b>' + (s.y ? T(s.y) : (i + 1)) + '</b>' + T(s.t))); });
+  act.appendChild(prev); act.appendChild(next); host.appendChild(box); host.appendChild(act); host.appendChild(out);
+  function draw() {
+    Array.prototype.forEach.call(box.children, function (c, i) { c.className = 'fs' + (i === cur ? ' on' : i < cur ? ' done' : ''); });
+    readout(out, (cur + 1) + '. ' + T(steps[cur].t), T(steps[cur].b));
+    prev.disabled = cur === 0; next.disabled = cur === steps.length - 1;
+  }
+  prev.onclick = function () { cur--; draw(); }; next.onclick = function () { cur++; draw(); }; draw();
+}
+
+/* ================= 1. Axa timpului, cauze, indulgențe ================= */
+(function () {
+  var svg = $('#tl-svg'), out = $('#tl-out');
+  function X(y) { return 40 + (y - 1510) * (620 / 70); }
+  el('line', { x1: 30, x2: 670, y1: 120, y2: 120, stroke: '#231f1a', 'stroke-width': 2.5 }, svg);
+  [1510, 1520, 1530, 1540, 1550, 1560, 1570, 1580].forEach(function (y) {
+    el('line', { x1: X(y), x2: X(y), y1: 114, y2: 126, stroke: '#231f1a', 'stroke-width': 2 }, svg);
+    el('text', { x: X(y), y: 148, class: 'tlt' }, svg, String(y));
+  });
+  var E = [
+    { y: 1517, c: '#2f6fd6', n: { ro: '1517', de: '1517' }, l: { ro: 'Începutul Reformei', de: 'Beginn der Reformation' }, b: { ro: 'Martin Luther critică public vânzarea de indulgențe. Începe Reforma.', de: 'Martin Luther kritisiert öffentlich den Ablasshandel. Die Reformation beginnt.' }, up: 1 },
+    { y: 1534, c: '#c0392b', n: { ro: '1534', de: '1534' }, l: { ro: 'Actul de Supremație', de: 'Suprematsakte' }, ly: 46, b: { ro: 'Prin Actul de Supremație, regele Henric al VIII-lea rupe biserica din Anglia de tutela Romei: începutul Reformei în Anglia.', de: 'Mit der Suprematsakte löst König Heinrich VIII. die Kirche in England von Rom: Beginn der Reformation in England.' }, up: 1 },
+    { y: 1572, c: '#1f8a5b', n: { ro: '23/24 aug. 1572', de: '23./24. Aug. 1572' }, l: { ro: 'Noaptea Sf. Bartolomeu', de: 'Bartholomäusnacht' }, b: { ro: 'Atacul grupării nobilimii catolice împotriva protestanților din Franța (numiți hughenoți).', de: 'Angriff einer Gruppe des katholischen Adels auf die Protestanten in Frankreich (Hugenotten genannt).' }, up: 1 }
+  ];
+  E.forEach(function (e) {
+    var g = hotspot(svg, function () { readout(out, T(e.n) + ': ' + T(e.l), T(e.b)); }, T(e.l));
+    el('line', { x1: X(e.y), x2: X(e.y), y1: 66, y2: 120, stroke: e.c, 'stroke-width': 3 }, g);
+    el('circle', { cx: X(e.y), cy: 60, r: 14, fill: e.c, stroke: '#fff', 'stroke-width': 3 }, g);
+    var a = e.y > 1560 ? 'end' : 'start';
+    el('text', { x: X(e.y) + (a === 'end' ? 20 : -2), y: e.ly || 24, class: 'tlb', style: 'text-anchor:' + (a === 'end' ? 'end' : 'middle') }, g, T(e.l));
+  });
+  var g2 = hotspot(svg, function () { readout(out, '1545–1563: ' + tx('Conciliul din Trento', 'Konzil von Trient'), tx('Conciliul din Trento pune bazele Contrareformei: reforme în Biserica Catolică și măsuri împotriva protestantismului.', 'Das Konzil von Trient legt die Grundlagen der Gegenreformation: Reformen in der katholischen Kirche und Maßnahmen gegen den Protestantismus.')); }, tx('Conciliul din Trento', 'Konzil von Trient'));
+  el('rect', { x: X(1545), y: 94, width: X(1563) - X(1545), height: 20, rx: 8, fill: '#b4531f', class: 'hb' }, g2);
+  el('text', { x: (X(1545) + X(1563)) / 2, y: 86, class: 'tlb' }, g2, tx('Conciliul din Trento', 'Konzil von Trient'));
+  readout(out, tx('Apasă pe un eveniment', 'Tippe auf ein Ereignis'), tx('Sunt patru repere: 1517, 1534, 1545–1563 și 1572.', 'Es gibt vier Merkdaten: 1517, 1534, 1545–1563 und 1572.'));
+
+  var C = [
+    { l: { ro: '⛪ Decăderea clerului', de: '⛪ Verfall des Klerus' }, t: { ro: 'Cauza religioasă', de: 'Religiöse Ursache' }, b: { ro: 'Decăderea morală a înaltului cler, care trăia în lux și acumulase averi din beneficii și funcții obținute prin corupție și nepotism.', de: 'Der sittliche Verfall des hohen Klerus, der im Luxus lebte und durch Korruption und Vetternwirtschaft Vermögen aus Pfründen und Ämtern angehäuft hatte.' } },
+    { l: { ro: '💰 Averile Bisericii', de: '💰 Reichtum der Kirche' }, t: { ro: 'Cauza economică', de: 'Wirtschaftliche Ursache' }, b: { ro: 'Biserica era unul dintre cei mai mari proprietari de pământ și dispunea de venituri importante din taxe și din vânzarea de indulgențe. Mulți credincioși se simțeau nedreptățiți.', de: 'Die Kirche war einer der größten Grundbesitzer und hatte hohe Einkünfte aus Abgaben und dem Verkauf von Ablässen. Viele Gläubige fühlten sich ungerecht behandelt.' } },
+    { l: { ro: '👑 Autoritatea papei', de: '👑 Macht des Papstes' }, t: { ro: 'Cauza politică', de: 'Politische Ursache' }, b: { ro: 'Autoritatea papei de la Roma nu mai era acceptată cu ușurință de unii monarhi europeni, care doreau să exercite o mai mare autoritate asupra statelor pe care le conduceau.', de: 'Die Autorität des Papstes in Rom wurde von manchen europäischen Herrschern nicht mehr ohne Weiteres akzeptiert; sie wollten mehr Macht über die Staaten ausüben, die sie regierten.' } },
+    { l: { ro: '📚 Renaștere și umanism', de: '📚 Renaissance und Humanismus' }, t: { ro: 'Cauza intelectuală', de: 'Geistige Ursache' }, b: { ro: 'Renașterea și umanismul au contribuit la adâncirea crizei religioase, deoarece unii intelectuali ai epocii au emis opinii critice cu privire la credința creștină, la rolul Bisericii în societate sau la conduita clerului.', de: 'Renaissance und Humanismus vertieften die religiöse Krise, da manche Gelehrte der Zeit kritische Meinungen zum christlichen Glauben, zur Rolle der Kirche in der Gesellschaft oder zum Verhalten des Klerus äußerten.' } }
+  ];
+  chipGroup($('#cz-chips'), C.map(function (c) { return { label: T(c.l) }; }), function (i) { readout($('#cz-out'), T(C[i].t), T(C[i].b)); });
+  readout($('#cz-out'), tx('Cauzele Reformei', 'Ursachen der Reformation'), tx('Apasă pe fiecare cauză.', 'Tippe auf jede Ursache.'));
+
+  Stepper($('#ind-box'), [
+    { t: { ro: 'Păcatul', de: 'Die Sünde' }, b: { ro: 'Credincioșii credeau că păcatele atrag pedepse divine.', de: 'Die Gläubigen glaubten, dass Sünden göttliche Strafen nach sich ziehen.' } },
+    { t: { ro: 'Plata', de: 'Die Zahlung' }, b: { ro: 'Biserica acorda indulgența, adesea în schimbul unei sume de bani.', de: 'Die Kirche gewährte den Ablass oft gegen eine Geldsumme.' } },
+    { t: { ro: 'Documentul', de: 'Die Urkunde' }, b: { ro: 'Credinciosul primea un document care confirma iertarea totală sau parțială a pedepselor.', de: 'Der Gläubige erhielt eine Urkunde, die den vollständigen oder teilweisen Erlass der Strafen bestätigte.' } },
+    { t: { ro: 'Critica', de: 'Die Kritik' }, b: { ro: 'Luther și alții criticau vânzarea de indulgențe: iertarea nu trebuie cumpărată.', de: 'Luther und andere kritisierten den Ablasshandel: Vergebung darf man nicht kaufen.' } }
+  ]);
+
+  Check($('#c1'), [
+    { q: { ro: 'Ce era o indulgență?', de: 'Was war ein Ablass?' },
+      o: [{ ro: 'Un document care confirma iertarea pedepselor pentru păcate', de: 'Eine Urkunde, die den Erlass von Strafen für Sünden bestätigte' }, { ro: 'O taxă pe pământ', de: 'Eine Steuer auf Land' }, { ro: 'O carte de rugăciuni', de: 'Ein Gebetbuch' }], a: 0,
+      hint: { ro: 'Uită-te la gravura cu masa unde se plătește.', de: 'Sieh dir den Holzschnitt mit dem Tisch an, an dem bezahlt wird.' }, why: { ro: 'Indulgența era un document de iertare, adesea cumpărat cu bani.', de: 'Der Ablass war eine Vergebungsurkunde, oft mit Geld erkauft.' } },
+    { q: { ro: 'Ce cauză a Reformei este legată de Renaștere?', de: 'Welche Ursache der Reformation hängt mit der Renaissance zusammen?' },
+      o: [{ ro: 'Intelectuali umaniști au criticat conduita clerului', de: 'Humanistische Gelehrte kritisierten das Verhalten des Klerus' }, { ro: 'Monarhii au cerut taxe mai mici', de: 'Die Herrscher forderten niedrigere Steuern' }, { ro: 'Recolte proaste', de: 'Schlechte Ernten' }], a: 0,
+      hint: { ro: 'Caută cauza „intelectuală”.', de: 'Such die „geistige“ Ursache.' }, why: { ro: 'Renașterea și umanismul au adâncit criza religioasă.', de: 'Renaissance und Humanismus vertieften die religiöse Krise.' } },
+    { q: { ro: 'Ce eveniment din 1517 marchează începutul Reformei?', de: 'Welches Ereignis von 1517 markiert den Beginn der Reformation?' },
+      o: [{ ro: 'Luther critică vânzarea de indulgențe', de: 'Luther kritisiert den Ablasshandel' }, { ro: 'Începe Conciliul din Trento', de: 'Das Konzil von Trient beginnt' }, { ro: 'Henric al VIII-lea devine capul Bisericii', de: 'Heinrich VIII. wird Oberhaupt der Kirche' }], a: 0,
+      hint: { ro: 'Uită-te la prima bulină de pe axă.', de: 'Sieh dir den ersten Punkt auf der Zeitachse an.' }, why: { ro: '1517 este anul începutului Reformei.', de: '1517 ist das Jahr des Beginns der Reformation.' } }
+  ]);
+})();
+
+/* ================= 2. Luther ================= */
+(function () {
+  var I = [
+    { l: { ro: '✝️ Credința mântuiește', de: '✝️ Der Glaube rettet' }, t: { ro: 'Mântuire prin credință', de: 'Rettung durch den Glauben' }, b: { ro: 'Omul poate primi gratuit harul lui Dumnezeu și se mântuiește prin credință, nu cumpărând indulgențe.', de: 'Der Mensch kann Gottes Gnade geschenkt bekommen und wird durch den Glauben gerettet, nicht durch den Kauf von Ablässen.' } },
+    { l: { ro: '⛪ Biserică simplă', de: '⛪ Einfache Kirche' }, t: { ro: 'O Biserică nouă, mai simplă', de: 'Eine neue, einfachere Kirche' }, b: { ro: 'Ceremonial simplificat. Luther critica luxul și lăcomia prelaților.', de: 'Vereinfachte Zeremonien. Luther kritisierte Luxus und Habgier der Kirchenfürsten.' } },
+    { l: { ro: '🕯️ Puține sacramente', de: '🕯️ Wenige Sakramente' }, t: { ro: 'Un număr redus de sacramente', de: 'Eine geringere Zahl von Sakramenten' }, b: { ro: 'Doar botezul, spovedania și împărtășania au fost considerate Sfinte Taine.', de: 'Nur Taufe, Beichte und Abendmahl wurden als heilige Sakramente betrachtet.' } },
+    { l: { ro: '🗣️ Limba națională', de: '🗣️ Landessprache' }, t: { ro: 'Slujba în limba națională', de: 'Gottesdienst in der Landessprache' }, b: { ro: 'Slujba religioasă să fie ținută în limba națională, nu în latină, ca până atunci. De aici și importanța traducerii Bibliei.', de: 'Der Gottesdienst sollte in der Landessprache stattfinden, nicht auf Latein wie bisher. Daher die Bedeutung der Bibelübersetzung.' } }
+  ];
+  chipGroup($('#lu-chips'), I.map(function (c) { return { label: T(c.l) }; }), function (i) { readout($('#lu-out'), T(I[i].t), T(I[i].b)); });
+  readout($('#lu-out'), tx('Ideile lui Luther', 'Luthers Ideen'), tx('Alege o idee.', 'Wähle eine Idee.'));
+  Check($('#c2'), [
+    { q: { ro: 'Ce idee exprimă Luther în citat?', de: 'Welche Idee äußert Luther im Zitat?' },
+      o: [{ ro: 'Credința este un dar de la Dumnezeu, nu o realizare a omului', de: 'Der Glaube ist ein Geschenk Gottes, keine Leistung des Menschen' }, { ro: 'Omul se mântuiește cumpărând indulgențe', de: 'Der Mensch wird durch den Kauf von Ablässen gerettet' }, { ro: 'Latina e singura limbă a rugăciunii', de: 'Latein ist die einzige Sprache des Gebets' }], a: 0,
+      hint: { ro: 'Luther spune că nu poate crede doar prin puterea lui.', de: 'Luther sagt, dass er nicht allein aus eigener Kraft glauben kann.' }, why: { ro: 'Mântuirea se primește prin credință, ca dar.', de: 'Die Rettung wird im Glauben als Geschenk empfangen.' } },
+    { q: { ro: 'Care a fost urmarea traducerii Bibliei în limba națională?', de: 'Was war die Folge der Bibelübersetzung in die Landessprache?' },
+      o: [{ ro: 'Mai mulți oameni puteau citi și înțelege singuri textul', de: 'Mehr Menschen konnten den Text selbst lesen und verstehen' }, { ro: 'Biblia a dispărut', de: 'Die Bibel verschwand' }, { ro: 'Nimeni n-a mai citit-o', de: 'Niemand las sie mehr' }], a: 0,
+      hint: { ro: 'Gândește-te: latina o știau puțini.', de: 'Denk daran: Latein konnten nur wenige.' }, why: { ro: 'Oamenii o puteau citi în limba lor; asta a întărit limbile naționale.', de: 'Die Menschen konnten sie in ihrer Sprache lesen; das stärkte die Nationalsprachen.' } },
+    { q: { ro: 'Care dintre acestea NU era în ideile lui Luther?', de: 'Was gehörte NICHT zu Luthers Ideen?' },
+      o: [{ ro: 'Slujba în limba națională', de: 'Gottesdienst in der Landessprache' }, { ro: 'Vânzarea de indulgențe', de: 'Der Verkauf von Ablässen' }, { ro: 'Mântuirea prin credință', de: 'Rettung durch den Glauben' }], a: 1,
+      hint: { ro: 'Luther a criticat tocmai asta.', de: 'Genau das kritisierte Luther.' }, why: { ro: 'Luther a criticat vânzarea de indulgențe.', de: 'Luther kritisierte den Ablasshandel.' } }
+  ]);
+})();
+
+/* ================= 3. Calvin ================= */
+(function () {
+  SortGame($('#sg-lc'), [{ ro: 'Luther', de: 'Luther' }, { ro: 'Calvin', de: 'Calvin' }], [
+    { n: { ro: 'A fost profesor la Universitatea din Wittenberg', de: 'War Professor an der Universität Wittenberg' }, a: 0 },
+    { n: { ro: 'A insistat pe ideea predestinării', de: 'Betonte die Idee der Prädestination' }, a: 1 },
+    { n: { ro: 'Adepții lui din Franța au fost numiți hughenoți', de: 'Seine Anhänger in Frankreich hießen Hugenotten' }, a: 1 },
+    { n: { ro: 'A criticat vânzarea de indulgențe (1517)', de: 'Kritisierte den Ablasshandel (1517)' }, a: 0 },
+    { n: { ro: 'A scris Învățătura religiei creștine', de: 'Schrieb die Institutio (Unterricht in der christlichen Religion)' }, a: 1 },
+    { n: { ro: 'A cerut slujba în limba națională, nu în latină', de: 'Forderte den Gottesdienst in der Landessprache statt auf Latein' }, a: 0, hint: { ro: 'Ideea este asociată cu traducerea Bibliei în germană.', de: 'Die Idee ist mit der Bibelübersetzung ins Deutsche verbunden.' } }
+  ], { ro: 'Bravo!', de: 'Bravo!' });
+  Check($('#c3'), [
+    { q: { ro: 'În ce limbă a fost scrisă prima ediție a Învățăturii religiei creștine?', de: 'In welcher Sprache erschien die erste Ausgabe der Institutio?' },
+      o: [{ ro: 'Latină', de: 'Latein' }, { ro: 'Germană', de: 'Deutsch' }, { ro: 'Franceză', de: 'Französisch' }], a: 0,
+      hint: { ro: 'Era limba cărților învățate din epocă.', de: 'Es war die Sprache der gelehrten Bücher der Zeit.' }, why: { ro: 'Prima ediție (1536) a fost în latină.', de: 'Die erste Ausgabe (1536) war auf Latein.' } },
+    { q: { ro: 'Predestinarea este hotărâtă de:', de: 'Die Prädestination wird bestimmt von:' },
+      o: [{ ro: 'Dumnezeu', de: 'Gott' }, { ro: 'reprezentanții Bisericii', de: 'den Vertretern der Kirche' }, { ro: 'oamenii înșiși', de: 'den Menschen selbst' }], a: 0,
+      hint: { ro: 'Citește citatul: „înțelepciunea eternă a lui…”', de: 'Lies das Zitat: „der ewige Ratschluss …“' }, why: { ro: 'Dumnezeu hotărăște dinainte soarta fiecărui om.', de: 'Gott bestimmt im Voraus das Schicksal jedes Menschen.' } },
+    { q: { ro: 'Potrivit predestinării, toți oamenii sunt sortiți:', de: 'Nach der Prädestination sind alle Menschen bestimmt zu:' },
+      o: [{ ro: 'numai vieții veșnice', de: 'nur ewigem Leben' }, { ro: 'numai osândei veșnice', de: 'nur ewiger Verdammnis' }, { ro: 'fie vieții veșnice, fie osândei veșnice', de: 'entweder ewigem Leben oder ewiger Verdammnis' }], a: 2,
+      hint: { ro: 'Calvin spune că Dumnezeu nu îi creează pe toți la fel.', de: 'Calvin sagt, dass Gott nicht alle gleich schafft.' }, why: { ro: 'Unii pentru viața veșnică, alții pentru osânda veșnică.', de: 'Die einen zum ewigen Leben, die anderen zur ewigen Verdammnis.' } }
+  ]);
+})();
+
+/* ================= 4. Anglia ================= */
+(function () {
+  Stepper($('#en-box'), [
+    { y: { ro: 'Conflict', de: 'Konflikt' }, t: { ro: 'Conflictul cu papalitatea', de: 'Konflikt mit dem Papsttum' }, b: { ro: 'Henric al VIII-lea intră în conflict cu papalitatea.', de: 'Heinrich VIII. gerät in Konflikt mit dem Papsttum.' } },
+    { y: { ro: '1534', de: '1534' }, t: { ro: 'Actul de Supremație', de: 'Suprematsakte' }, b: { ro: 'Prin Actul de Supremație (1534), regele rupe biserica din Anglia de tutela Romei: începutul Reformei în Anglia.', de: 'Mit der Suprematsakte (1534) löst der König die Kirche in England von Rom: Beginn der Reformation in England.' } },
+    { y: { ro: 'Rege', de: 'König' }, t: { ro: 'Regele, capul Bisericii', de: 'Der König als Oberhaupt' }, b: { ro: 'Regele se declară capul Bisericii, nu papa.', de: 'Der König erklärt sich zum Oberhaupt der Kirche, nicht der Papst.' } },
+    { y: { ro: 'Anglicană', de: 'Anglikanisch' }, t: { ro: 'Biserica anglicană', de: 'Die anglikanische Kirche' }, b: { ro: 'Noua Biserică a fost denumită ulterior „anglicană”.', de: 'Die neue Kirche wurde später „anglikanisch“ genannt.' } }
+  ]);
+  Check($('#c4'), [
+    { q: { ro: 'Cine este capul Bisericii în Anglia după 1534?', de: 'Wer ist nach 1534 das Oberhaupt der Kirche in England?' },
+      o: [{ ro: 'Papa', de: 'Der Papst' }, { ro: 'Regele', de: 'Der König' }, { ro: 'Luther', de: 'Luther' }], a: 1,
+      hint: { ro: 'Se numește „Actul de Supremație”.', de: 'Es heißt „Suprematsakte“.' }, why: { ro: 'Regele Henric al VIII-lea s-a declarat capul Bisericii.', de: 'König Heinrich VIII. erklärte sich zum Oberhaupt der Kirche.' } },
+    { q: { ro: 'Cum se numește confesiunea apărută în Anglia?', de: 'Wie heißt die in England entstandene Konfession?' },
+      o: [{ ro: 'Luteranism', de: 'Luthertum' }, { ro: 'Anglicanism', de: 'Anglikanismus' }, { ro: 'Calvinism', de: 'Kalvinismus' }], a: 1,
+      hint: { ro: 'Numele vine de la țară.', de: 'Der Name kommt vom Land.' }, why: { ro: 'Anglicanismul (Biserica anglicană).', de: 'Der Anglikanismus (anglikanische Kirche).' } }
+  ]);
+})();
+
+/* ================= 5. Franța ================= */
+(function () {
+  Stepper($('#fr-box'), [
+    { y: { ro: 'Hughenoți', de: 'Hugenotten' }, t: { ro: 'Calviniștii francezi', de: 'Französische Calvinisten' }, b: { ro: 'Ideile lui Calvin au ajuns în Franța. Adepții lui sunt numiți hughenoți.', de: 'Calvins Ideen kamen nach Frankreich. Seine Anhänger heißen Hugenotten.' } },
+    { y: { ro: 'Războaie', de: 'Kriege' }, t: { ro: 'Războaie civile', de: 'Bürgerkriege' }, b: { ro: 'În a doua jumătate a secolului al XVI-lea au izbucnit războaie civile cu componentă religioasă; principalii combatanți: catolicii și calviniștii.', de: 'In der zweiten Hälfte des 16. Jahrhunderts brachen Bürgerkriege mit religiöser Komponente aus; Hauptgegner: Katholiken und Calvinisten.' } },
+    { y: { ro: '1572', de: '1572' }, t: { ro: 'Noaptea Sf. Bartolomeu', de: 'Bartholomäusnacht' }, b: { ro: 'În noaptea de 23/24 august 1572, un grup al nobilimii catolice atacă protestanții.', de: 'In der Nacht vom 23. auf den 24. August 1572 greift eine Gruppe des katholischen Adels die Protestanten an.' } }
+  ]);
+  Check($('#c5'), [
+    { q: { ro: 'Cum se numeau protestanții calviniști din Franța?', de: 'Wie hießen die calvinistischen Protestanten in Frankreich?' },
+      o: [{ ro: 'Hughenoți', de: 'Hugenotten' }, { ro: 'Anglicani', de: 'Anglikaner' }, { ro: 'Iezuiți', de: 'Jesuiten' }], a: 0,
+      hint: { ro: 'Au fost adepții lui Calvin.', de: 'Sie waren Anhänger Calvins.' }, why: { ro: 'Hughenoții.', de: 'Die Hugenotten.' } },
+    { q: { ro: 'În ce an a avut loc Noaptea Sf. Bartolomeu?', de: 'In welchem Jahr war die Bartholomäusnacht?' },
+      o: [{ ro: '1517', de: '1517' }, { ro: '1534', de: '1534' }, { ro: '1572', de: '1572' }], a: 2,
+      hint: { ro: 'Uită-te la ultimul eveniment de pe axă.', de: 'Sieh dir das letzte Ereignis auf der Zeitachse an.' }, why: { ro: 'În 1572, pe 23/24 august.', de: '1572, in der Nacht vom 23. auf den 24. August.' } }
+  ]);
+})();
+
+/* ================= 6. Harta ================= */
+(function () {
+  var G = {
+    p: { c: '#8e44ad', n: { ro: 'Protestanți', de: 'Protestanten' }, m: ['United Kingdom', 'Norway', 'Sweden', 'Denmark', 'Finland', 'Estonia', 'Latvia', 'Iceland'] },
+    x: { c: '#e6d96b', n: { ro: 'Mixt (catolici și protestanți)', de: 'Gemischt (Katholiken und Protestanten)' }, m: ['Germany', 'Netherlands', 'Switzerland', 'Czechia', 'Hungary', 'Slovakia'] },
+    k: { c: '#f2e58c', n: { ro: 'Catolici', de: 'Katholiken' }, m: ['Portugal', 'Spain', 'France', 'Italy', 'Austria', 'Poland', 'Belgium', 'Luxembourg', 'Ireland', 'Croatia', 'Slovenia', 'Lithuania'] },
+    o: { c: '#e7a7d6', n: { ro: 'Ortodocși', de: 'Orthodoxe' }, m: ['Russia', 'Ukraine', 'Belarus', 'Romania', 'Moldova', 'Bulgaria', 'Serbia', 'Greece', 'North Macedonia', 'Macedonia', 'Montenegro', 'Bosnia and Herz.'] },
+    m: { c: '#7cc048', n: { ro: 'Musulmani', de: 'Muslime' }, m: ['Turkey', 'Albania'] }
+  };
+  G.x.c = '#d9b25f'; G.k.c = '#f2e58c';
+  var byName = {}; Object.keys(G).forEach(function (k) { G[k].m.forEach(function (n) { byName[n] = k; }); });
+  var out = $('#mp-out'), lg = $('#mp-lg');
+  readout(out, tx('Apasă pe un loc', 'Tippe auf einen Ort'), tx('Punctele marcate sunt locuri importante pentru Reformă și Contrareformă.', 'Die markierten Punkte sind wichtige Orte der Reformation und Gegenreformation.'));
+  var sel = null, countries = null;
+  Object.keys(G).forEach(function (k) { lg.appendChild(h('span', '', '<i style="background:' + G[k].c + '"></i>' + T(G[k].n))); });
+  function paint() { if (!countries) return; countries.attr('fill', function (d) { var k = byName[d.properties.name]; if (!k) return '#efe8d6'; if (sel && sel !== k) return '#e8e3d6'; return G[k].c; }); }
+  var tog = chipGroup($('#mp-tog'), Object.keys(G).map(function (k) { return { label: T(G[k].n) }; }), function (i) { sel = Object.keys(G)[i]; paint(); });
+  var all = btn('chip', tx('Toate', 'Alle')); all.onclick = function () { sel = null; paint(); Array.prototype.forEach.call($('#mp-tog').children, function (b) { b.setAttribute('aria-pressed', 'false'); }); };
+  $('#mp-tog').appendChild(all);
+  var PL = [
+    { ll: [12.65, 51.87], n: { ro: 'Wittenberg', de: 'Wittenberg' }, c: '#2f6fd6', d: { ro: 'Aici a predat și a criticat Luther vânzarea de indulgențe (1517).', de: 'Hier lehrte Luther und kritisierte 1517 den Ablasshandel.' }, s: 'r' },
+    { ll: [6.14, 46.2], n: { ro: 'Geneva', de: 'Genf' }, c: '#8e44ad', d: { ro: 'Orașul lui Calvin, centru al calvinismului.', de: 'Die Stadt Calvins, Zentrum des Kalvinismus.' }, s: 'l' },
+    { ll: [-0.12, 51.5], n: { ro: 'Londra', de: 'London' }, c: '#c0392b', d: { ro: 'Capitala Angliei, unde Henric al VIII-lea a ruptă biserica de Roma (1534).', de: 'Hauptstadt Englands, wo Heinrich VIII. die Kirche von Rom löste (1534).' }, s: 'l' },
+    { ll: [2.35, 48.86], n: { ro: 'Paris', de: 'Paris' }, c: '#1f8a5b', d: { ro: 'Aici a avut loc Noaptea Sf. Bartolomeu (1572).', de: 'Hier fand die Bartholomäusnacht statt (1572).' }, s: 'l' },
+    { ll: [11.12, 46.07], n: { ro: 'Trento', de: 'Trient' }, c: '#b4531f', d: { ro: 'Aici s-a ținut Conciliul din Trento (1545–1563).', de: 'Hier tagte das Konzil von Trient (1545–1563).' }, s: 'r' },
+    { ll: [12.5, 41.9], n: { ro: 'Roma', de: 'Rom' }, c: '#b4531f', d: { ro: 'Sediul papei: de aici a condus Contrareforma, cu Inchiziția și Indexul.', de: 'Sitz des Papstes: Von hier aus leitete er die Gegenreformation mit Inquisition und Index.' }, s: 'r' }
+  ];
+  Promise.all([
+    fetch('../../lib/land-50m.json').then(function (r) { return r.json(); }),
+    fetch('../../lib/countries-110m.json').then(function (r) { return r.json(); })
+  ]).then(function (res) {
+    var land = topojson.feature(res[0], res[0].objects.land), cf = topojson.feature(res[1], res[1].objects.countries).features, bord = topojson.mesh(res[1], res[1].objects.countries, function (a, b) { return a !== b; });
+    var W = 620, H = 470, svg = d3.select('#mp-svg');
+    var proj = d3.geoConicConformal().rotate([-15, 0]).parallels([40, 58]);
+    proj.fitExtent([[6, 6], [W - 6, H - 6]], { type: 'MultiPoint', coordinates: [[-9, 36], [38, 36], [-6, 62], [34, 62], [15, 42]] });
+    var path = d3.geoPath(proj);
+    svg.append('rect').attr('width', W).attr('height', H).attr('class', 'sea');
+    svg.append('path').datum(land).attr('class', 'land').attr('d', path);
+    countries = svg.append('g').selectAll('path').data(cf).enter().append('path').attr('d', path).attr('stroke', '#b9ad8e').attr('stroke-width', .4);
+    paint();
+    svg.append('path').datum(bord).attr('class', 'bord').attr('d', path);
+    var fs = narrow ? 21 : 14, R = narrow ? 8 : 6, gC = el('g', {}, svg.node());
+    PL.forEach(function (c) {
+      var p = proj(c.ll), g = hotspot(gC, function () { readout(out, T(c.n), T(c.d)); }, T(c.n));
+      el('circle', { cx: p[0], cy: p[1], r: R + 5, fill: 'transparent' }, g);
+      el('circle', { cx: p[0], cy: p[1], r: R, fill: c.c, stroke: '#fff', 'stroke-width': 2.5 }, g);
+      var left = c.s === 'l';
+      el('text', { x: p[0] + (left ? -(R + 4) : R + 4), y: p[1] + 5, class: 'mlbl', 'text-anchor': left ? 'end' : 'start', style: 'font-size:' + fs + 'px' }, g, T(c.n));
+    });
+  }).catch(function () { readout(out, tx('Harta nu s-a putut încărca', 'Die Karte konnte nicht geladen werden'), tx('Încearcă să reîncarci pagina.', 'Lade die Seite bitte neu.')); });
+  Check($('#c6'), [
+    { q: { ro: 'În ce parte a Europei s-a răspândit Reforma protestantă?', de: 'In welchem Teil Europas breitete sich die protestantische Reformation aus?' },
+      o: [{ ro: 'Mai ales în Europa de Nord și de Nord-Vest', de: 'Vor allem in Nord- und Nordwesteuropa' }, { ro: 'Mai ales în sudul Europei', de: 'Vor allem in Südeuropa' }, { ro: 'Numai în Rusia', de: 'Nur in Russland' }], a: 0,
+      hint: { ro: 'Uită-te unde e violetul pe hartă.', de: 'Sieh dir an, wo das Violett auf der Karte ist.' }, why: { ro: 'Anglia, Scoția, Scandinavia și o parte din Germania.', de: 'England, Schottland, Skandinavien und ein Teil Deutschlands.' } },
+    { q: { ro: 'Care dintre aceste țări a rămas în principal catolică?', de: 'Welches dieser Länder blieb überwiegend katholisch?' },
+      o: [{ ro: 'Suedia', de: 'Schweden' }, { ro: 'Spania', de: 'Spanien' }, { ro: 'Danemarca', de: 'Dänemark' }], a: 1,
+      hint: { ro: 'Alege țara din sudul Europei.', de: 'Wähle das Land in Südeuropa.' }, why: { ro: 'Spania a rămas catolică.', de: 'Spanien blieb katholisch.' } },
+    { q: { ro: 'De ce a prins Reforma mai ușor acolo unde monarhii voiau mai multă autoritate?', de: 'Warum fasste die Reformation dort leichter Fuß, wo die Herrscher mehr Macht wollten?' },
+      o: [{ ro: 'Pentru că astfel scăpau de tutela papei', de: 'Weil sie so die Vormundschaft des Papstes loswurden' }, { ro: 'Pentru că regii iubeau latina', de: 'Weil die Könige Latein liebten' }, { ro: 'Pentru că nu existau cărți', de: 'Weil es keine Bücher gab' }], a: 0,
+      hint: { ro: 'Gândește-te la Henric al VIII-lea.', de: 'Denk an Heinrich VIII.' }, why: { ro: 'Reforma le dădea controlul asupra bisericii din țara lor.', de: 'Die Reformation gab ihnen die Kontrolle über die Kirche ihres Landes.' } }
+  ]);
+})();
+
+/* ================= 7. Contrareforma ================= */
+(function () {
+  Stepper($('#ct-box'), [
+    { y: { ro: '1545', de: '1545' }, t: { ro: 'Conciliul din Trento', de: 'Konzil von Trient' }, b: { ro: 'Se adună Conciliul din Trento, o adunare a episcopilor catolici, care s-a întrunit între 1545 și 1563.', de: 'Das Konzil von Trient, eine Versammlung katholischer Bischöfe, tagt zwischen 1545 und 1563.' } },
+    { y: { ro: 'Reforme', de: 'Reformen' }, t: { ro: 'Reforme interne', de: 'Innere Reformen' }, b: { ro: 'Se hotărăsc combaterea corupției, a nepotismului, a exceselor fiscale și reorganizarea învățământului teologic.', de: 'Beschlossen werden der Kampf gegen Korruption, Vetternwirtschaft und Steuerexzesse sowie die Neuordnung der theologischen Ausbildung.' } },
+    { y: { ro: 'Tradiția', de: 'Tradition' }, t: { ro: 'Se păstrează tradiția', de: 'Die Tradition bleibt' }, b: { ro: 'Se păstrează latina ca limbă de cult, se mențin indulgențele (fără ca ele să mai poată fi vândute) și se confirmă statutul de cap al Bisericii atribuit papei.', de: 'Latein bleibt Kirchensprache, Ablässe bleiben bestehen (dürfen aber nicht mehr verkauft werden), und die Stellung des Papstes als Oberhaupt wird bestätigt.' } },
+    { y: { ro: 'Index', de: 'Index' }, t: { ro: 'Indexul cărților interzise', de: 'Index der verbotenen Bücher' }, b: { ro: 'Se întocmește Indexul cărților interzise: o listă de cărți pe care credincioșii catolici nu aveau voie să le citească.', de: 'Der Index der verbotenen Bücher entsteht: eine Liste von Büchern, die katholische Gläubige nicht lesen durften.' } },
+    { y: { ro: 'Inchiziția', de: 'Inquisition' }, t: { ro: 'Inchiziția reorganizată', de: 'Neuordnung der Inquisition' }, b: { ro: 'Inchiziția este reorganizată, pentru a combate ideile considerate eretice.', de: 'Die Inquisition wird neu geordnet, um als ketzerisch geltende Ideen zu bekämpfen.' } }
+  ]);
+  SortGame($('#sg-ct'), [{ ro: 'Reforma protestantă', de: 'Protestantische Reformation' }, { ro: 'Contrareforma catolică', de: 'Katholische Gegenreformation' }], [
+    { n: { ro: 'Slujba în limba națională', de: 'Gottesdienst in der Landessprache' }, a: 0 },
+    { n: { ro: 'Păstrarea latinei ca limbă de cult', de: 'Beibehaltung des Lateinischen als Kirchensprache' }, a: 1 },
+    { n: { ro: 'Un număr redus de sacramente', de: 'Eine geringere Zahl von Sakramenten' }, a: 0 },
+    { n: { ro: 'Indexul cărților interzise', de: 'Der Index der verbotenen Bücher' }, a: 1 },
+    { n: { ro: 'Reorganizarea Inchiziției', de: 'Neuordnung der Inquisition' }, a: 1 },
+    { n: { ro: 'Biserica pusă sub autoritatea puterii laice (Luther)', de: 'Kirche unter weltlicher Autorität (Luther)' }, a: 0 },
+    { n: { ro: 'Papa rămâne capul Bisericii', de: 'Der Papst bleibt Oberhaupt der Kirche' }, a: 1 }
+  ], { ro: 'Bravo!', de: 'Bravo!' });
+  Check($('#c7'), [
+    { q: { ro: 'Ce era Indexul cărților interzise?', de: 'Was war der Index der verbotenen Bücher?' },
+      o: [{ ro: 'O listă de cărți pe care credincioșii catolici nu aveau voie să le citească', de: 'Eine Liste von Büchern, die katholische Gläubige nicht lesen durften' }, { ro: 'O bibliotecă publică', de: 'Eine öffentliche Bibliothek' }, { ro: 'Un manual de rugăciuni', de: 'Ein Gebetbuch' }], a: 0,
+      hint: { ro: 'Numele spune ce se întâmplă cu cărțile de pe el.', de: 'Der Name sagt, was mit den Büchern darauf geschieht.' }, why: { ro: 'Era o listă de cărți interzise credincioșilor catolici.', de: 'Es war eine Liste von Büchern, die Katholiken verboten waren.' } },
+    { q: { ro: 'Între ce ani s-a întrunit Conciliul din Trento?', de: 'Zwischen welchen Jahren tagte das Konzil von Trient?' },
+      o: [{ ro: '1517–1534', de: '1517–1534' }, { ro: '1545–1563', de: '1545–1563' }, { ro: '1572–1600', de: '1572–1600' }], a: 1,
+      hint: { ro: 'Uită-te la banda portocalie de pe axa din secțiunea 1.', de: 'Sieh dir den orangen Balken auf der Zeitachse in Abschnitt 1 an.' }, why: { ro: 'Între 1545 și 1563.', de: 'Zwischen 1545 und 1563.' } },
+    { q: { ro: 'Ce s-a întâmplat cu indulgențele după Conciliul din Trento?', de: 'Was geschah nach dem Konzil von Trient mit den Ablässen?' },
+      o: [{ ro: 'Au fost menținute, dar nu mai puteau fi vândute', de: 'Sie blieben bestehen, durften aber nicht mehr verkauft werden' }, { ro: 'Au fost desființate complet', de: 'Sie wurden ganz abgeschafft' }, { ro: 'Au fost vândute și mai scump', de: 'Sie wurden noch teurer verkauft' }], a: 0,
+      hint: { ro: 'Citește pasul „Se păstrează tradiția”.', de: 'Lies den Schritt „Die Tradition bleibt“.' }, why: { ro: 'Au fost menținute, fără ca ele să mai poată fi vândute.', de: 'Sie blieben bestehen, durften aber nicht mehr verkauft werden.' } }
+  ]);
+})();
+
+/* ================= 8. Educația ================= */
+(function () {
+  var E = [
+    { l: { ro: '📖 Limbile vechi', de: '📖 Alte Sprachen' }, t: { ro: 'Greaca veche și latina', de: 'Altgriechisch und Latein' }, b: { ro: 'Toți marii reformatori, fiind și clerici, erau cunoscători ai limbilor greacă veche și latină. Asta le-a permis să citească Sfânta Scriptură în limbile originale.', de: 'Alle großen Reformatoren waren zugleich Geistliche und kannten Altgriechisch und Latein. So konnten sie die Heilige Schrift in den Ursprachen lesen.' } },
+    { l: { ro: '🏫 Școala lui Comenius', de: '🏫 Comenius’ Schule' }, t: { ro: 'Jan Amos Comenius (1592–1670)', de: 'Johann Amos Comenius (1592–1670)' }, b: { ro: 'Modelul de școală propus de Comenius organiza elevii pe grupe de vârstă; acest model începe să se răspândească. Sistemul său de gândire a încercat să cuprindă idei din filozofie, teologie și educație într-un tot unitar.', de: 'Das von Comenius vorgeschlagene Schulmodell ordnete die Schüler nach Altersgruppen; dieses Modell begann sich zu verbreiten. Sein Denksystem versuchte, Ideen aus Philosophie, Theologie und Bildung zu einem Ganzen zu verbinden.' } },
+    { l: { ro: '🖼️ Cartea cu imagini', de: '🖼️ Das Bilderbuch' }, t: { ro: 'Orbis Pictus (1658)', de: 'Orbis Pictus (1658)' }, b: { ro: 'Comenius a fost primul autor care a folosit imagini în manuale (de exemplu, <i>Lumea înconjurătoare în imagini</i>, 1658).', de: 'Comenius war der erste Autor, der Bilder in Schulbüchern verwendete (zum Beispiel <i>Die Welt in Bildern</i>, 1658).' } },
+    { l: { ro: '👧 De la început, pentru toți', de: '👧 Von Anfang an, für alle' }, t: { ro: 'Educația începe devreme', de: 'Bildung beginnt früh' }, b: { ro: 'Comenius credea că educația începe încă din primele zile ale copilăriei și continuă de-a lungul întregii vieți. A fost adeptul școlarizării femeilor, o idee de neconceput pentru acea perioadă.', de: 'Comenius glaubte, dass die Bildung schon in den ersten Tagen der Kindheit beginnt und das ganze Leben dauert. Er trat für die Schulbildung von Frauen ein, eine Idee, die für diese Zeit undenkbar war.' } }
+  ];
+  chipGroup($('#ed-chips'), E.map(function (c) { return { label: T(c.l) }; }), function (i) { readout($('#ed-out'), T(E[i].t), T(E[i].b)); });
+  readout($('#ed-out'), tx('Educația în epoca Reformei', 'Bildung im Zeitalter der Reformation'), tx('Alege un element.', 'Wähle ein Element.'));
+  Check($('#c8'), [
+    { q: { ro: 'Cum organiza Comenius elevii într-o școală?', de: 'Wie ordnete Comenius die Schüler in einer Schule?' },
+      o: [{ ro: 'Pe grupe de vârstă', de: 'Nach Altersgruppen' }, { ro: 'Toți laolaltă, indiferent de vârstă', de: 'Alle zusammen, unabhängig vom Alter' }, { ro: 'După avere', de: 'Nach Vermögen' }], a: 0,
+      hint: { ro: 'Modelul seamănă cu clasele de azi.', de: 'Das Modell ähnelt den heutigen Klassen.' }, why: { ro: 'Pe grupe de vârstă, ca în școlile de azi.', de: 'Nach Altersgruppen, wie in den Schulen von heute.' } },
+    { q: { ro: 'Ce noutate a adus Comenius în manuale?', de: 'Was Neues brachte Comenius in die Schulbücher?' },
+      o: [{ ro: 'Imaginile', de: 'Bilder' }, { ro: 'Latina', de: 'Latein' }, { ro: 'Indulgențele', de: 'Ablässe' }], a: 0,
+      hint: { ro: 'Titlul cărții lui spune „în imagini”.', de: 'Der Titel seines Buches sagt „in Bildern“.' }, why: { ro: 'A fost primul care a folosit imagini în manuale.', de: 'Er war der Erste, der Bilder in Schulbüchern verwendete.' } }
+  ]);
+})();
+
+/* ================= 9. Fixare ================= */
+(function () {
+  var CZ = [
+    { t: { ro: 'Reforma a început în ', de: 'Die Reformation begann in ' } },
+    { o: [{ ro: 'Germania', de: 'Deutschland' }, { ro: 'Spania', de: 'Spanien' }, { ro: 'Rusia', de: 'Russland' }], a: 0 },
+    { t: { ro: ', în anul ', de: ', im Jahr ' } },
+    { o: [{ ro: '1417', de: '1417' }, { ro: '1517', de: '1517' }, { ro: '1617', de: '1617' }], a: 1 },
+    { t: { ro: ', când ', de: ', als ' } },
+    { o: [{ ro: 'Luther', de: 'Luther' }, { ro: 'Calvin', de: 'Calvin' }, { ro: 'Comenius', de: 'Comenius' }], a: 0 },
+    { t: { ro: ' a criticat vânzarea de ', de: ' den Verkauf von ' } },
+    { o: [{ ro: 'indulgențe', de: 'Ablässen' }, { ro: 'cărți', de: 'Büchern' }, { ro: 'pământ', de: 'Land' }], a: 0 },
+    { t: { ro: '. Calvin a insistat pe ', de: ' kritisierte. Calvin betonte die ' } },
+    { o: [{ ro: 'predestinare', de: 'Prädestination' }, { ro: 'perspectivă', de: 'Perspektive' }, { ro: 'tipar', de: 'Buchdruck' }], a: 0 },
+    { t: { ro: '. Răspunsul Bisericii Catolice se numește ', de: '. Die Antwort der katholischen Kirche heißt ' } },
+    { o: [{ ro: 'Contrareformă', de: 'Gegenreformation' }, { ro: 'Renaștere', de: 'Renaissance' }, { ro: 'Reformă', de: 'Reformation' }], a: 0 },
+    { t: { ro: ', iar prima ei adunare mare a fost Conciliul din ', de: ', und ihre erste große Versammlung war das Konzil von ' } },
+    { o: [{ ro: 'Trento', de: 'Trient' }, { ro: 'Paris', de: 'Paris' }, { ro: 'Londra', de: 'London' }], a: 0 },
+    { t: { ro: '.', de: '.' } }
+  ];
+  var box = $('#cz-box'), sels = [];
+  CZ.forEach(function (p) {
+    if (p.t) { box.appendChild(document.createTextNode(T(p.t))); return; }
+    var s = document.createElement('select'); s.setAttribute('aria-label', tx('Alege răspunsul', 'Antwort wählen'));
+    var o0 = h('option', '', '…'); o0.value = '-1'; s.appendChild(o0);
+    p.o.forEach(function (o, i) { var op = h('option', '', T(o)); op.value = i; s.appendChild(op); });
+    box.appendChild(s); sels.push({ s: s, a: p.a });
+  });
+  var okB = $('#cz-ok'); okB.textContent = tx('Verifică', 'Prüfen');
+  okB.onclick = function () {
+    var good = 0;
+    sels.forEach(function (x) {
+      x.s.classList.remove('ok', 'bad');
+      if (+x.s.value === x.a) { x.s.classList.add('ok'); good++; } else if (x.s.value !== '-1') x.s.classList.add('bad');
+    });
+    var r = $('#cz-res');
+    r.className = 'result ' + (good === sels.length ? 'good' : 'try');
+    r.textContent = good === sels.length ? tx('✓ Perfect! Textul este complet și corect.', '✓ Perfekt! Der Text ist vollständig und richtig.') : tx(good + ' din ' + sels.length + ' corecte. Roșu = greșit, cele necompletate lipsesc. Mai încearcă.', good + ' von ' + sels.length + ' richtig. Rot = falsch, offene fehlen. Versuch es nochmal.');
+  };
+
+  Stepper($('#doc-box'), [
+    { t: { ro: 'Titlul, autorul, tipul', de: 'Titel, Autor, Art' }, b: { ro: 'Autor: Martin Luther. Tema: mântuirea prin credință. Tip: text religios în care Luther își exprimă credința.', de: 'Autor: Martin Luther. Thema: Rettung durch den Glauben. Art: religiöser Text, in dem Luther seinen Glauben ausdrückt.' } },
+    { t: { ro: 'Elementele-cheie', de: 'Schlüsselelemente' }, b: { ro: 'Fragmente care necesită explicații: „credința”, „Duhul Sfânt m-a chemat prin Evanghelie”, „darurile Sale”.', de: 'Stellen, die erklärt werden müssen: „der Glaube“, „der Heilige Geist hat mich durch das Evangelium berufen“, „seine Gaben“.' } },
+    { t: { ro: 'Explicațiile', de: 'Erklärungen' }, b: { ro: 'Folosim ce știm: Luther a criticat vânzarea de indulgențe. Pentru el, credința și harul sunt daruri, nu se cumpără.', de: 'Wir nutzen, was wir wissen: Luther kritisierte den Ablasshandel. Für ihn sind Glaube und Gnade Geschenke, die man nicht kaufen kann.' } },
+    { t: { ro: 'Ideea și atitudinea', de: 'Idee und Haltung' }, b: { ro: 'Ideea: omul nu se mântuiește prin puterea lui, ci prin credință. Atitudinea: Luther este convins și o spune cu hotărâre.', de: 'Idee: Der Mensch wird nicht aus eigener Kraft gerettet, sondern durch den Glauben. Haltung: Luther ist überzeugt und sagt es entschieden.' } },
+    { t: { ro: 'Concluzia', de: 'Das Fazit' }, b: { ro: 'Importanța: ideea mântuirii prin credință este baza Reformei și a noilor confesiuni protestante.', de: 'Bedeutung: Die Idee der Rettung durch den Glauben ist die Grundlage der Reformation und der neuen protestantischen Konfessionen.' } }
+  ]);
+
+  var gb = $('#gc-btn'), go = $('#gc-out'); gb.textContent = tx('Arată un răspuns-model', 'Beispielantwort zeigen');
+  go.innerHTML = '<b>' + tx('Răspuns-model', 'Beispielantwort') + '</b><p>' + tx('Biserica Catolică era în criză: înaltul cler trăia în lux și își acumulase averi prin corupție și nepotism; vânzarea de indulgențe a stârnit critici, iar Biserica avea mari proprietăți și venituri. Luther cerea o Biserică mai simplă și mântuire prin credință, iar Calvin susținea predestinarea, ceea ce arăta că ideile oficiale erau puse la îndoială. În plus, unii monarhi nu mai voiau să accepte autoritatea papei, iar umaniștii criticau conduita clerului. Toate acestea au dus la apariția protestantismului și la Contrareformă.', 'Die katholische Kirche steckte in einer Krise: Der hohe Klerus lebte im Luxus und hatte durch Korruption und Vetternwirtschaft Vermögen angehäuft; der Ablasshandel rief Kritik hervor, und die Kirche hatte großen Besitz und hohe Einkünfte. Luther forderte eine einfachere Kirche und Rettung durch den Glauben, und Calvin vertrat die Prädestination, was zeigte, dass die offizielle Lehre infrage gestellt wurde. Außerdem wollten manche Herrscher die Autorität des Papstes nicht mehr hinnehmen, und Humanisten kritisierten das Verhalten des Klerus. All das führte zur Entstehung des Protestantismus und zur Gegenreformation.') + '</p>';
+  gb.onclick = function () { go.hidden = !go.hidden; gb.textContent = go.hidden ? tx('Arată un răspuns-model', 'Beispielantwort zeigen') : tx('Ascunde răspunsul', 'Antwort ausblenden'); };
+
+  var GL = [
+    ['Reformă', 'Reformation'], ['Contrareformă', 'Gegenreformation'], ['indulgență', 'Ablass'], ['predestinare', 'Prädestination'], ['confesiune', 'Konfession'],
+    ['protestanți', 'Protestanten'], ['luteranism', 'Luthertum'], ['calvinism', 'Kalvinismus'], ['anglicanism', 'Anglikanismus'], ['hughenoți', 'Hugenotten'],
+    ['Inchiziție', 'Inquisition'], ['Conciliul din Trento', 'Konzil von Trient'], ['Indexul cărților interzise', 'Index der verbotenen Bücher'], ['sacrament', 'Sakrament'],
+    ['cult', 'Gottesdienst / Kult'], ['Actul de Supremație', 'Suprematsakte'], ['clerici (cler)', 'Geistliche (Klerus)'], ['nepotism', 'Vetternwirtschaft']
+  ];
+  var gl = $('#gloss');
+  GL.forEach(function (g) { gl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
+})();
+})();
+</script>
+</body>
+</html>

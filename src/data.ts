@@ -21,6 +21,7 @@ import { operatiiCuMultimiTest } from './content/operatii-cu-multimi-test';
 import { numerePrimeTest } from './content/numere-prime-test';
 import { renastereaTest } from './content/renasterea-test';
 import { mariOameniAiRenasteriiTest } from './content/mari-oameni-ai-renasterii-test';
+import { reformaSiContrareformaTest } from './content/reforma-si-contrareforma-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -438,6 +439,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/istorie/mari-oameni-ai-renasterii.html',
         test: { questions: mariOameniAiRenasteriiTest, minutes: 8 },
+      },
+      {
+        slug: 'reforma-si-contrareforma',
+        title: {
+          ro: 'Reforma și Contrareforma',
+          de: 'Reformation und Gegenreformation',
+        },
+        summary: {
+          ro: 'De la indulgențe la Luther și Calvin, apoi Anglia lui Henric al VIII-lea, hughenoții din Franța și harta religiilor Europei. Răspunsul Bisericii Catolice: Conciliul din Trento, Indexul și Inchiziția. Plus școala lui Comenius.',
+          de: 'Vom Ablasshandel zu Luther und Calvin, dann das England Heinrichs VIII., die Hugenotten in Frankreich und die Religionskarte Europas. Die Antwort der katholischen Kirche: Konzil von Trient, Index und Inquisition. Dazu die Schule des Comenius.',
+        },
+        src: 'lectii/clasa-6/istorie/reforma-si-contrareforma.html',
+        test: { questions: reformaSiContrareformaTest, minutes: 8 },
       },
     ],
   },
