@@ -347,7 +347,7 @@ section.block{--pc:#b4531f}
 <!-- 6. Harta -->
 <section class="block" id="s6" aria-labelledby="t6">
   <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Geografia Reformei la sfârșitul secolului al XVI-lea</span><span class="de">Die Geografie der Reformation Ende des 16. Jahrhunderts</span></h2>
-  <p class="section-sub"><span class="ro">Harta este simplificată și folosește granițele de azi: în realitate, zonele se amestecau. Alege o religie ca s-o vezi pe hartă, apoi apasă pe un loc. Reforma s-a răspândit în Europa de Nord și de Nord-Vest.</span><span class="de">Die Karte ist vereinfacht und nutzt die heutigen Grenzen: In Wirklichkeit vermischten sich die Zonen. Wähle eine Religion, um sie auf der Karte zu sehen, und tippe dann auf einen Ort. Die Reformation breitete sich in Nord- und Nordwesteuropa aus.</span></p>
+  <p class="section-sub"><span class="ro">Harta este simplificată și folosește granițele de azi: în realitate, zonele se amestecau. Alege o religie ca s-o vezi pe hartă, apoi apasă pe un loc. Reforma s-a răspândit în Europa de Nord și de Nord-Vest. Transilvania apare hașurată: aici coexistau mai multe confesiuni.</span><span class="de">Die Karte ist vereinfacht und nutzt die heutigen Grenzen: In Wirklichkeit vermischten sich die Zonen. Wähle eine Religion, um sie auf der Karte zu sehen, und tippe dann auf einen Ort. Die Reformation breitete sich in Nord- und Nordwesteuropa aus. Siebenbürgen ist schraffiert: Hier bestanden mehrere Konfessionen nebeneinander.</span></p>
   <div class="split">
     <div class="fig"><svg id="mp-svg" viewBox="0 0 620 470" role="img"></svg>
       <div class="lg" id="mp-lg"></div>
@@ -356,6 +356,21 @@ section.block{--pc:#b4531f}
       <div class="chips" id="mp-tog" role="group"></div>
       <div class="readout" id="mp-out" aria-live="polite"></div>
     </div>
+  </div>
+
+  <h3 class="sub3"><span class="ro">Transilvania și Edictul de la Turda (1568)</span><span class="de">Siebenbürgen und das Edikt von Turda (Thorenburg, 1568)</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Pe hartă, Transilvania nu este nici catolică, nici ortodoxă, nici protestantă: aici au trăit alături mai multe confesiuni. Parcurge pașii care au dus la una dintre cele mai cunoscute hotărâri despre libertatea religioasă din secolul al XVI-lea.</span><span class="de">Auf der Karte ist Siebenbürgen weder katholisch noch orthodox noch protestantisch: Hier lebten mehrere Konfessionen nebeneinander. Gehe die Schritte durch, die zu einem der bekanntesten Beschlüsse über Religionsfreiheit im 16. Jahrhundert führten.</span></p>
+  <div id="tu-box"></div>
+  <div class="anecs">
+    <div class="anec"><h3><span class="ro">Predicatorul unitarian</span><span class="de">Der unitarische Prediger</span></h3><p><span class="ro">Francisc David (Dávid Ferenc) a fost predicatorul de la curtea lui Ioan Sigismund și întemeietorul bisericii unitariene din Transilvania. Povestea lui arată limitele toleranței: după ce a murit Ioan Sigismund, un nou principe a interzis noile învățături religioase, iar David a murit în închisoare, la Deva, în 1579.</span><span class="de">Franz David (Dávid Ferenc) war Hofprediger Johann Sigismunds und Begründer der unitarischen Kirche in Siebenbürgen. Seine Geschichte zeigt die Grenzen der Toleranz: Nach dem Tod Johann Sigismunds verbot ein neuer Fürst neue religiöse Lehren, und David starb 1579 im Gefängnis in Deva.</span></p></div>
+    <div class="anec"><h3><span class="ro">Cum să-ți ții preotul</span><span class="de">Den eigenen Pfarrer behalten</span></h3><p><span class="ro">Edictul spunea, în esență, că fiecare comunitate poate să-și păstreze predicatorul și să predice „după priceperea fiecăruia”, fără ca cineva să fie pedepsit pentru credința lui. Era o idee îndrăzneață într-o epocă în care în aproape toată Europa conducătorii își obligau supușii să țină religia lor.</span><span class="de">Das Edikt besagte im Wesentlichen, dass jede Gemeinde ihren Prediger behalten und „nach eigenem Verständnis“ predigen darf, ohne dass jemand für seinen Glauben bestraft wird. Das war eine kühne Idee in einer Zeit, in der fast überall in Europa die Herrscher ihre Untertanen zur eigenen Religion zwangen.</span></p></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">În Transilvania au coexistat catolicismul, luteranismul (sași, Honterus), calvinismul, unitarianismul și, printre români, ortodoxia.</span><span class="de">In Siebenbürgen bestanden Katholizismus, Luthertum (Sachsen, Honterus), Kalvinismus, Unitarismus und, bei den Rumänen, die Orthodoxie nebeneinander.</span></li>
+      <li><span class="ro"><b>Edictul de la Turda (1568)</b>, dat de dieta Transilvaniei sub Ioan Sigismund, a proclamat libertatea religioasă pentru catolici, luterani, calvini și unitarieni. Ortodocșii erau doar tolerați.</span><span class="de">Das <b>Edikt von Turda (1568)</b>, vom siebenbürgischen Landtag unter Johann Sigismund erlassen, verkündete Religionsfreiheit für Katholiken, Lutheraner, Calvinisten und Unitarier. Die Orthodoxen wurden nur geduldet.</span></li>
+    </ul>
   </div>
   <div class="remember">
     <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
@@ -652,12 +667,15 @@ function Stepper(host, steps) {
     m: { c: '#7cc048', n: { ro: 'Musulmani', de: 'Muslime' }, m: ['Turkey', 'Albania'] }
   };
   G.x.c = '#d9b25f'; G.k.c = '#f2e58c';
+  var trans = null;
   var byName = {}; Object.keys(G).forEach(function (k) { G[k].m.forEach(function (n) { byName[n] = k; }); });
   var out = $('#mp-out'), lg = $('#mp-lg');
   readout(out, tx('Apasă pe un loc', 'Tippe auf einen Ort'), tx('Punctele marcate sunt locuri importante pentru Reformă și Contrareformă.', 'Die markierten Punkte sind wichtige Orte der Reformation und Gegenreformation.'));
   var sel = null, countries = null;
   Object.keys(G).forEach(function (k) { lg.appendChild(h('span', '', '<i style="background:' + G[k].c + '"></i>' + T(G[k].n))); });
-  function paint() { if (!countries) return; countries.attr('fill', function (d) { var k = byName[d.properties.name]; if (!k) return '#efe8d6'; if (sel && sel !== k) return '#e8e3d6'; return G[k].c; }); }
+  lg.appendChild(h('span', '', '<i style="background:repeating-linear-gradient(45deg,#d9b25f 0 3px,#e7a7d6 3px 6px)"></i>' + tx('Transilvania (zonă mixtă)', 'Siebenbürgen (gemischte Zone)')));
+  function paint() { if (!countries) return; countries.attr('fill', function (d) { var k = byName[d.properties.name]; if (!k) return '#efe8d6'; if (sel && sel !== k) return '#e8e3d6'; return G[k].c; });
+    if (trans) trans.attr('opacity', (!sel || sel === 'x') ? 1 : .3); }
   var tog = chipGroup($('#mp-tog'), Object.keys(G).map(function (k) { return { label: T(G[k].n) }; }), function (i) { sel = Object.keys(G)[i]; paint(); });
   var all = btn('chip', tx('Toate', 'Alle')); all.onclick = function () { sel = null; paint(); Array.prototype.forEach.call($('#mp-tog').children, function (b) { b.setAttribute('aria-pressed', 'false'); }); };
   $('#mp-tog').appendChild(all);
@@ -666,6 +684,8 @@ function Stepper(host, steps) {
     { ll: [6.14, 46.2], n: { ro: 'Geneva', de: 'Genf' }, c: '#8e44ad', d: { ro: 'Orașul lui Calvin, centru al calvinismului.', de: 'Die Stadt Calvins, Zentrum des Kalvinismus.' }, s: 'l' },
     { ll: [-0.12, 51.5], n: { ro: 'Londra', de: 'London' }, c: '#c0392b', d: { ro: 'Capitala Angliei, unde Henric al VIII-lea a ruptă biserica de Roma (1534).', de: 'Hauptstadt Englands, wo Heinrich VIII. die Kirche von Rom löste (1534).' }, s: 'l' },
     { ll: [2.35, 48.86], n: { ro: 'Paris', de: 'Paris' }, c: '#1f8a5b', d: { ro: 'Aici a avut loc Noaptea Sf. Bartolomeu (1572).', de: 'Hier fand die Bartholomäusnacht statt (1572).' }, s: 'l' },
+    { ll: [25.6, 45.65], n: { ro: 'Brașov', de: 'Kronstadt' }, c: '#2f6fd6', d: { ro: 'Aici a înființat Honterus o tipografie (1539) și a condus Reforma luterană a sașilor din Transilvania.', de: 'Hier gründete Honterus 1539 eine Druckerei und führte die lutherische Reformation der Siebenbürger Sachsen an.' }, s: 'r' },
+    { ll: [23.78, 46.58], n: { ro: 'Turda', de: 'Turda' }, c: '#d9b25f', d: { ro: 'Aici, în 1568, dieta Transilvaniei a proclamat libertatea religioasă pentru catolici, luterani, calvini și unitarieni (Edictul de la Turda).', de: 'Hier verkündete der siebenbürgische Landtag 1568 Religionsfreiheit für Katholiken, Lutheraner, Calvinisten und Unitarier (Edikt von Turda).' }, s: 'l' },
     { ll: [11.12, 46.07], n: { ro: 'Trento', de: 'Trient' }, c: '#b4531f', d: { ro: 'Aici s-a ținut Conciliul din Trento (1545–1563).', de: 'Hier tagte das Konzil von Trient (1545–1563).' }, s: 'r' },
     { ll: [12.5, 41.9], n: { ro: 'Roma', de: 'Rom' }, c: '#b4531f', d: { ro: 'Sediul papei: de aici a condus Contrareforma, cu Inchiziția și Indexul.', de: 'Sitz des Papstes: Von hier aus leitete er die Gegenreformation mit Inquisition und Index.' }, s: 'r' }
   ];
@@ -683,16 +703,38 @@ function Stepper(host, steps) {
     countries = svg.append('g').selectAll('path').data(cf).enter().append('path').attr('d', path).attr('stroke', '#b9ad8e').attr('stroke-width', .4);
     paint();
     svg.append('path').datum(bord).attr('class', 'bord').attr('d', path);
+    svg.append('defs').html('<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#e7a7d6"/><rect width="3" height="6" fill="#d9b25f"/></pattern>');
+    var TR = { type: 'Polygon', coordinates: [[[22.3, 47.3], [23.5, 47.9], [25.0, 47.7], [26.3, 47.5], [26.7, 46.6], [26.4, 45.8], [25.8, 45.5], [24.5, 45.5], [23.0, 45.7], [22.2, 46.0], [21.8, 46.8], [22.3, 47.3]]] };
+    function showTr() { readout(out, tx('Transilvania (aproximativ)', 'Siebenbürgen (ungefähr)'), tx('Aici au coexistat luteranismul (sașii), calvinismul și unitarianismul (mulți maghiari), catolicismul și ortodoxia (majoritatea românilor). În 1568, Edictul de la Turda a proclamat libertatea religioasă pentru patru confesiuni.', 'Hier bestanden Luthertum (Sachsen), Kalvinismus und Unitarismus (viele Ungarn), Katholizismus und Orthodoxie (die meisten Rumänen) nebeneinander. 1568 verkündete das Edikt von Turda Religionsfreiheit für vier Konfessionen.')); }
+    trans = svg.append('path').datum(TR).attr('d', path).attr('fill', 'url(#hatch)').attr('stroke', '#8a6a2a').attr('stroke-width', 1.2).attr('class', 'hot').attr('tabindex', 0).attr('role', 'button').attr('aria-label', tx('Transilvania', 'Siebenbürgen'))
+      .on('click', showTr).on('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showTr(); } });
+    paint();
     var fs = narrow ? 21 : 14, R = narrow ? 8 : 6, gC = el('g', {}, svg.node());
     PL.forEach(function (c) {
       var p = proj(c.ll), g = hotspot(gC, function () { readout(out, T(c.n), T(c.d)); }, T(c.n));
       el('circle', { cx: p[0], cy: p[1], r: R + 5, fill: 'transparent' }, g);
       el('circle', { cx: p[0], cy: p[1], r: R, fill: c.c, stroke: '#fff', 'stroke-width': 2.5 }, g);
       var left = c.s === 'l';
-      el('text', { x: p[0] + (left ? -(R + 4) : R + 4), y: p[1] + 5, class: 'mlbl', 'text-anchor': left ? 'end' : 'start', style: 'font-size:' + fs + 'px' }, g, T(c.n));
+      el('text', { x: p[0] + (left ? -(R + 4) : R + 4), y: p[1] + (c.n.ro === 'Turda' ? -11 : 5), class: 'mlbl', 'text-anchor': left ? 'end' : 'start', style: 'font-size:' + fs + 'px' }, g, T(c.n));
     });
   }).catch(function () { readout(out, tx('Harta nu s-a putut încărca', 'Die Karte konnte nicht geladen werden'), tx('Încearcă să reîncarci pagina.', 'Lade die Seite bitte neu.')); });
+  Stepper($('#tu-box'), [
+    { y: { ro: 'Sec. XVI', de: '16. Jh.' }, t: { ro: 'Mai multe confesiuni', de: 'Mehrere Konfessionen' }, b: { ro: 'În Transilvania trăiau sași, maghiari, secui și români. Sașii au trecut la luteranism (Honterus), mulți maghiari la calvinism, iar unii la unitarianism. Mulți rămâneau catolici, iar majoritatea românilor erau ortodocși.', de: 'In Siebenbürgen lebten Sachsen, Ungarn, Szekler und Rumänen. Die Sachsen wurden lutherisch (Honterus), viele Ungarn calvinistisch, manche unitarisch. Viele blieben katholisch, und die meisten Rumänen waren orthodox.' } },
+    { y: { ro: '1568', de: '1568' }, t: { ro: 'Dieta de la Turda', de: 'Landtag von Turda' }, b: { ro: 'Sub principele Ioan Sigismund Zápolya, dieta Transilvaniei (adunarea reprezentanților stărilor) se întrunește la Turda.', de: 'Unter Fürst Johann Sigismund Zápolya tritt der siebenbürgische Landtag (die Versammlung der Stände) in Turda zusammen.' } },
+    { y: { ro: 'Edictul', de: 'Edikt' }, t: { ro: 'Libertate religioasă', de: 'Religionsfreiheit' }, b: { ro: 'Se hotărăște că nimeni nu poate fi pedepsit pentru credința lui, iar fiecare comunitate își poate alege și păstra predicatorul. Sunt vizate catolicismul, luteranismul, calvinismul și unitarianismul.', de: 'Es wird beschlossen, dass niemand für seinen Glauben bestraft werden darf und jede Gemeinde ihren Prediger wählen und behalten kann. Gemeint sind Katholizismus, Luthertum, Kalvinismus und Unitarismus.' } },
+    { y: { ro: 'Limite', de: 'Grenzen' }, t: { ro: 'Ortodocșii, doar toleranți', de: 'Orthodoxe nur geduldet' }, b: { ro: 'Ortodocșii, adică majoritatea românilor, nu aveau același statut: erau tolerați, nu recunoscuți ca una dintre confesiunile oficiale.', de: 'Die Orthodoxen, also die meisten Rumänen, hatten nicht denselben Status: Sie wurden geduldet, nicht als eine der anerkannten Konfessionen geführt.' } },
+    { y: { ro: 'Importanță', de: 'Bedeutung' }, t: { ro: 'Un exemplu rar', de: 'Ein seltenes Beispiel' }, b: { ro: 'Edictul este adesea citat drept una dintre primele hotărâri din Europa care au proclamat libertatea religioasă, într-un secol al războaielor religioase.', de: 'Das Edikt wird oft als einer der ersten Beschlüsse in Europa genannt, die Religionsfreiheit verkündeten, in einem Jahrhundert der Religionskriege.' } }
+  ]);
   Check($('#c6'), [
+    { q: { ro: 'Ce a proclamat Edictul de la Turda (1568)?', de: 'Was verkündete das Edikt von Turda (1568)?' },
+      o: [{ ro: 'Libertatea religioasă pentru mai multe confesiuni', de: 'Religionsfreiheit für mehrere Konfessionen' }, { ro: 'Interzicerea Reformei', de: 'Das Verbot der Reformation' }, { ro: 'Desființarea Inchiziției', de: 'Die Abschaffung der Inquisition' }], a: 0,
+      hint: { ro: 'Gândește-te la coexistența confesiunilor din Transilvania.', de: 'Denk an das Nebeneinander der Konfessionen in Siebenbürgen.' }, why: { ro: 'Libertatea religioasă pentru catolici, luterani, calvini și unitarieni.', de: 'Religionsfreiheit für Katholiken, Lutheraner, Calvinisten und Unitarier.' } },
+    { q: { ro: 'Ce statut aveau ortodocșii, majoritatea românilor, în Transilvania după edict?', de: 'Welchen Status hatten die Orthodoxen, die meisten Rumänen, nach dem Edikt in Siebenbürgen?' },
+      o: [{ ro: 'Erau tolerați, dar nu recunoscuți ca una dintre confesiunile oficiale', de: 'Sie wurden geduldet, aber nicht als eine der anerkannten Konfessionen geführt' }, { ro: 'Aveau exact aceleași drepturi', de: 'Sie hatten genau dieselben Rechte' }, { ro: 'Erau interziși', de: 'Sie waren verboten' }], a: 0,
+      hint: { ro: 'Edictul avea în vedere patru confesiuni; ortodoxia nu era printre ele.', de: 'Das Edikt betraf vier Konfessionen; die Orthodoxie war nicht darunter.' }, why: { ro: 'Erau doar tolerați.', de: 'Sie wurden nur geduldet.' } },
+    { q: { ro: 'Ce confesiune au adoptat sașii din Transilvania, prin Honterus?', de: 'Welche Konfession nahmen die Siebenbürger Sachsen durch Honterus an?' },
+      o: [{ ro: 'Luteranismul', de: 'Das Luthertum' }, { ro: 'Anglicanismul', de: 'Den Anglikanismus' }, { ro: 'Islamul', de: 'Den Islam' }], a: 0,
+      hint: { ro: 'Honterus a condus Reforma de tip Luther.', de: 'Honterus führte die Reformation nach Luthers Vorbild an.' }, why: { ro: 'Sașii au devenit luterani.', de: 'Die Sachsen wurden lutherisch.' } },
     { q: { ro: 'În ce parte a Europei s-a răspândit Reforma protestantă?', de: 'In welchem Teil Europas breitete sich die protestantische Reformation aus?' },
       o: [{ ro: 'Mai ales în Europa de Nord și de Nord-Vest', de: 'Vor allem in Nord- und Nordwesteuropa' }, { ro: 'Mai ales în sudul Europei', de: 'Vor allem in Südeuropa' }, { ro: 'Numai în Rusia', de: 'Nur in Russland' }], a: 0,
       hint: { ro: 'Uită-te unde e violetul pe hartă.', de: 'Sieh dir an, wo das Violett auf der Karte ist.' }, why: { ro: 'Anglia, Scoția, Scandinavia și o parte din Germania.', de: 'England, Schottland, Skandinavien und ein Teil Deutschlands.' } },
@@ -811,7 +853,7 @@ function Stepper(host, steps) {
     ['Reformă', 'Reformation'], ['Contrareformă', 'Gegenreformation'], ['indulgență', 'Ablass'], ['predestinare', 'Prädestination'], ['confesiune', 'Konfession'],
     ['protestanți', 'Protestanten'], ['luteranism', 'Luthertum'], ['calvinism', 'Kalvinismus'], ['anglicanism', 'Anglikanismus'], ['hughenoți', 'Hugenotten'],
     ['Inchiziție', 'Inquisition'], ['Conciliul din Trento', 'Konzil von Trient'], ['Indexul cărților interzise', 'Index der verbotenen Bücher'], ['sacrament', 'Sakrament'],
-    ['cult', 'Gottesdienst / Kult'], ['Actul de Supremație', 'Suprematsakte'], ['clerici (cler)', 'Geistliche (Klerus)'], ['nepotism', 'Vetternwirtschaft']
+    ['cult', 'Gottesdienst / Kult'], ['Actul de Supremație', 'Suprematsakte'], ['clerici (cler)', 'Geistliche (Klerus)'], ['nepotism', 'Vetternwirtschaft'], ['edict', 'Edikt'], ['unitarianism', 'Unitarismus'], ['dietă (adunare a stărilor)', 'Landtag (Ständeversammlung)'], ['toleranță', 'Duldung / Toleranz']
   ];
   var gl = $('#gloss');
   GL.forEach(function (g) { gl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });

@@ -172,4 +172,21 @@ export const reformaSiContrareformaTest: Question[] = [
       de: 'Comenius war der erste Autor, der Bilder in Schulbüchern verwendete (<i>Die Welt in Bildern</i>, 1658), und ordnete die Schüler nach Altersgruppen.',
     },
   },
+  {
+    q: {
+      ro: 'Ce a hotărât Edictul de la Turda (1568), în Transilvania?',
+      de: 'Was beschloss das Edikt von Turda (1568) in Siebenbürgen?',
+    },
+    options: [
+      { ro: 'Libertatea religioasă pentru catolici, luterani, calvini și unitarieni', de: 'Religionsfreiheit für Katholiken, Lutheraner, Calvinisten und Unitarier' },
+      { ro: 'Interzicerea tuturor confesiunilor protestante', de: 'Das Verbot aller protestantischen Konfessionen' },
+      { ro: 'Introducerea Inchiziției', de: 'Die Einführung der Inquisition' },
+      { ro: 'Obligativitatea limbii latine în biserici', de: 'Die Pflicht zu Latein in den Kirchen' },
+    ],
+    correct: 0,
+    explain: {
+      ro: 'Dieta Transilvaniei, sub Ioan Sigismund Zápolya, a proclamat libertatea religioasă pentru patru confesiuni; ortodocșii (majoritatea românilor) erau doar tolerați.',
+      de: 'Der siebenbürgische Landtag unter Johann Sigismund Zápolya verkündete Religionsfreiheit für vier Konfessionen; die Orthodoxen (die meisten Rumänen) wurden nur geduldet.',
+    },
+  },
 ];
