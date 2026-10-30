@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Statele și harta politică a lumii</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Die Staaten und die politische Weltkarte';
+})();
+</script>
+<script src="../../lib/d3-7.8.5.min.js"></script>
+<script src="../../lib/topojson-client-3.1.0.min.js"></script>
+<style>
+:root{
+  --paper:#f3f7f6; --card:#ffffff; --ink:#1b2a2e; --muted:#566468; --rule:#d9e3e2; --sheet:#e9f1ef;
+  --accent:#1f8a78; --accent-soft:#e1f3ef;
+  --sea:#dcebf2; --land:#efe6d2; --coast:#b9ae95; --grat:#c7d6de;
+  --good:#27a36f; --good-soft:#e6f6ee; --bad:#d64545; --bad-soft:#fdeaea;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,select,input{font:inherit;color:inherit}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.hint{font-size:14.5px;color:var(--muted)}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.score{font-weight:700}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#b02e2e;background:var(--bad-soft)}
+.pick[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:#fff}
+.pick.placed{border-color:var(--good);background:var(--good-soft);color:var(--ink);cursor:default}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.fact{background:var(--card);border:1px solid var(--rule);border-left:4px solid #c98a1a;border-radius:10px;padding:10px 14px}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:14px}
+.facts .fact b{display:block;font-family:var(--display);font-size:19px}
+.facts .fact p{font-size:15px;color:var(--muted)}
+.two{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start}
+.sub3{margin:26px 0 2px;font-size:22px}
+
+/* hărți */
+.map{background:var(--sea);border:1px solid var(--rule);border-radius:12px;overflow:hidden;position:relative}
+.map svg{display:block;width:100%;height:auto}
+.map .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-weight:700}
+.sea{fill:var(--sea)} .land{fill:var(--land);stroke:var(--coast);stroke-width:.6;vector-effect:non-scaling-stroke}
+.grat{fill:none;stroke:var(--grat);stroke-width:.5;vector-effect:non-scaling-stroke}
+.cn{stroke:#fff;stroke-width:.5;vector-effect:non-scaling-stroke;cursor:pointer}
+.cn:hover{filter:brightness(.93)}
+.cn.sel{stroke:var(--ink);stroke-width:2}
+.mlbl{font:700 14px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.map-btns{position:absolute;right:8px;top:8px;display:flex;gap:6px;z-index:2}
+.map-btns button{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:4px 10px;font-size:14px;font-weight:700;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14.5px;margin-top:8px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px;border:1px solid rgba(0,0,0,.15)}
+
+/* 1. este stat? */
+.crit{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.crit div{background:var(--accent-soft);border-radius:10px;padding:8px 12px;font-size:15.5px}
+.crit b{display:block;font-family:var(--display);font-size:18px}
+.eras{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin:14px 0 18px}
+.era{background:var(--card);border:1px solid var(--rule);border-top:4px solid var(--accent);border-radius:8px;padding:8px 12px;font-size:15px}
+.era b{display:block;font-family:var(--display);font-size:17px}
+.qs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.qs .card.done{border-color:var(--good)}
+.qs .opts{display:flex;gap:6px}
+.qs .why{font-size:14.5px;color:var(--muted)}
+
+/* 2. granițe */
+.cut{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:6px}
+.cut svg{display:block;width:100%;height:auto}
+.hot{cursor:pointer}
+.hot:hover .hl,.hot.on .hl{opacity:1}
+.hl{opacity:0;fill:rgba(31,138,120,.18);stroke:var(--accent);stroke-width:2;stroke-dasharray:6 4;transition:opacity .15s}
+.bsort{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+
+/* 3, 4 info */
+.info{display:grid;gap:10px;align-content:start}
+.info h3{font-size:26px}
+.big{font:800 40px/1 var(--display);color:var(--accent)}
+.bars{display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:130px 1fr 34px;gap:8px;align-items:center;font-size:15px;cursor:pointer;border:0;background:none;text-align:left;padding:2px 0}
+.bar span.t{height:16px;border-radius:4px;background:#9fb7b2;display:block}
+.bar.on span.t{background:var(--accent)}
+.bar b{text-align:right}
+
+/* 5. harta se schimbă */
+.range{width:100%;accent-color:var(--accent)}
+.yrow{display:flex;align-items:center;gap:12px;margin:8px 0}
+.yrow .y{font:800 34px/1 var(--display);min-width:92px}
+.stack{display:grid;gap:6px;margin-top:10px}
+.stack .row{display:grid;grid-template-columns:150px 1fr 40px;gap:8px;align-items:center;font-size:15px}
+.stack .row i{display:block;height:18px;border-radius:4px;background:var(--c);transition:width .5s;min-width:2px}
+.stack .row b{text-align:right}
+.tbl-wrap{overflow-x:auto}
+table.num{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;margin-top:14px}
+table.num th,table.num td{border:1px solid var(--rule);padding:5px 8px;text-align:center}
+table.num th{background:#fdf0d4}
+table.num tr.on td{background:var(--accent-soft);font-weight:700}
+
+/* 6. distanțe și suprafețe */
+.tool{display:grid;gap:10px;align-content:start}
+.field{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.field input{width:120px;border:2px solid var(--rule);border-radius:8px;padding:5px 8px;background:#fff;min-height:38px}
+.field input.ok{border-color:var(--good);background:var(--good-soft)}
+.field input.bad{border-color:var(--bad);background:var(--bad-soft)}
+.field .fb{font-size:14.5px;color:var(--muted);flex-basis:100%}
+.msr{width:100%;border-collapse:collapse;font-size:15.5px}
+.msr td{border-bottom:1px solid var(--rule);padding:4px 6px}
+.cell{cursor:pointer}
+.cell rect{fill:rgba(255,255,255,.08);stroke:#6b7f86;stroke-width:.7}
+.cell:hover rect{fill:rgba(31,138,120,.25)}
+.cell.on rect{fill:rgba(31,138,120,.55);stroke:#0f5c4f}
+.cell.good rect{fill:rgba(39,163,111,.6)}
+.cell.bad rect{fill:rgba(214,69,69,.55)}
+.cell.miss rect{fill:rgba(240,200,60,.65)}
+.cell.part rect{fill:rgba(240,200,60,.3)}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #a9c3bd;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted)}
+
+@media (max-width:860px){ .two{grid-template-columns:1fr} .gloss-head{max-width:none} }
+@media (max-width:600px){ .map-btns{position:static;justify-content:flex-end;padding:6px 6px 0} .bar{grid-template-columns:100px 1fr 30px} .stack .row{grid-template-columns:110px 1fr 36px} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Geografie · Clasa a 6-a · Statele și harta politică a lumii</span><span class="de">Geografie · Klasse 6 · Die Staaten und die politische Weltkarte</span></p>
+  <h1><span class="ro">Statele și harta politică a lumii</span><span class="de">Die Staaten und die politische Weltkarte</span></h1>
+  <p class="lead">
+    <span class="ro">Pe Pământ sunt peste 190 de state. Unele sunt cât un continent, altele încap într-un oraș. Vei afla ce este un stat, cum se deosebesc statele între ele, cum s-a schimbat harta politică și cum măsori distanțe și suprafețe pe o hartă.</span>
+    <span class="de">Auf der Erde gibt es über 190 Staaten. Manche sind so groß wie ein Kontinent, andere passen in eine Stadt. Du erfährst, was ein Staat ist, wodurch sich Staaten unterscheiden, wie sich die politische Karte verändert hat und wie man auf einer Karte Entfernungen und Flächen misst.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Este Groenlanda un stat? Dar Antarctida?</span><span class="de">Ist Grönland ein Staat? Und die Antarktis?</span></li>
+        <li><span class="ro">De ce au Rusia și China cei mai mulți vecini?</span><span class="de">Warum haben Russland und China die meisten Nachbarn?</span></li>
+        <li><span class="ro">Câte state erau în Africa în 1914 și câte sunt azi?</span><span class="de">Wie viele Staaten gab es 1914 in Afrika und wie viele heute?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Ce este un stat?</span><span class="de">Was ist ein Staat?</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Granițele</span><span class="de">Die Grenzen</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Cum se deosebesc statele</span><span class="de">Wie Staaten sich unterscheiden</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Câți vecini?</span><span class="de">Wie viele Nachbarn?</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Harta se schimbă</span><span class="de">Die Karte verändert sich</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Distanțe și suprafețe</span><span class="de">Entfernungen und Flächen</span></a>
+    <a href="#s7"><b>7</b><span class="ro">Hărți care deformează</span><span class="de">Karten, die verzerren</span></a>
+  </nav>
+</header>
+
+<!-- 1. Ce este un stat? -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Ce este un stat?</span><span class="de">Was ist ein Staat?</span></h2>
+  <p class="section-sub"><span class="ro">Oamenii au trăit mereu în comunități organizate. Forma lor s-a schimbat de-a lungul timpului. Azi, în sensul actual, <b>statul</b> (țara) este un teritoriu care îndeplinește patru condiții.</span><span class="de">Die Menschen lebten immer in organisierten Gemeinschaften. Deren Form hat sich im Lauf der Zeit verändert. Heute ist ein <b>Staat</b> (Land) im heutigen Sinn ein Gebiet, das vier Bedingungen erfüllt.</span></p>
+  <div class="eras">
+    <div class="era"><b><span class="ro">Antichitate</span><span class="de">Altertum</span></b><span class="ro">orașe-stat, regate și imperii</span><span class="de">Stadtstaaten, Königreiche und Reiche</span></div>
+    <div class="era"><b><span class="ro">Evul Mediu</span><span class="de">Mittelalter</span></b><span class="ro">state feudale</span><span class="de">Feudalstaaten</span></div>
+    <div class="era"><b><span class="ro">După Marile Descoperiri</span><span class="de">Nach den Entdeckungen</span></b><span class="ro">imperii coloniale</span><span class="de">Kolonialreiche</span></div>
+    <div class="era"><b><span class="ro">Prezent</span><span class="de">Gegenwart</span></b><span class="ro">peste 190 de state independente</span><span class="de">über 190 unabhängige Staaten</span></div>
+  </div>
+  <div class="crit">
+    <div><b>1 · <span class="ro">Teritoriu</span><span class="de">Gebiet</span></b><span class="ro">delimitat de granițe, bine conturate</span><span class="de">durch Grenzen klar abgegrenzt</span></div>
+    <div><b>2 · <span class="ro">Populație</span><span class="de">Bevölkerung</span></b><span class="ro">permanentă, adică locuiește acolo constant</span><span class="de">ständig, also dauerhaft ansässig</span></div>
+    <div><b>3 · <span class="ro">Conducere suverană</span><span class="de">Souveräne Führung</span></b><span class="ro">o autoritate politică internă, care hotărăște singură</span><span class="de">eine eigene politische Führung, die selbst entscheidet</span></div>
+    <div><b>4 · <span class="ro">Recunoaștere</span><span class="de">Anerkennung</span></b><span class="ro">granițele sunt recunoscute internațional</span><span class="de">die Grenzen sind international anerkannt</span></div>
+  </div>
+  <h3 class="sub3"><span class="ro">Stat sau nu?</span><span class="de">Staat oder nicht?</span></h3>
+  <p class="hint"><span class="ro">Pentru fiecare loc alege „Stat” sau „Nu e stat” și citește de ce.</span><span class="de">Wähle für jeden Ort „Staat“ oder „Kein Staat“ und lies, warum.</span></p>
+  <div class="qs" id="qs" style="margin-top:10px"></div>
+  <div class="check" id="c1"></div>
+</section>
+
+<!-- 2. Granițe -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Granițele statelor</span><span class="de">Die Grenzen der Staaten</span></h2>
+  <p class="section-sub"><span class="ro"><b>Granița</b> este limita dintre două state vecine. Pe hartă e o linie, dar în realitate este un <b>plan vertical imaginar</b> care delimitează suprafața geografică a statului, subsolul și spațiul aerian de deasupra. Apasă pe părțile desenului.</span><span class="de">Die <b>Grenze</b> ist die Linie zwischen zwei Nachbarstaaten. Auf der Karte ist sie eine Linie, in Wirklichkeit aber eine <b>gedachte senkrechte Fläche</b>, die die Oberfläche des Staates, den Untergrund und den Luftraum darüber abgrenzt. Tippe auf die Teile der Zeichnung.</span></p>
+  <div class="two">
+    <div class="cut">
+      <svg viewBox="0 0 560 300" role="img" id="cut-svg" aria-label="Schema"></svg>
+    </div>
+    <div class="info" id="cut-info" aria-live="polite"></div>
+  </div>
+  <h3 class="sub3"><span class="ro">Granițe naturale sau convenționale?</span><span class="de">Natürliche oder vereinbarte Grenzen?</span></h3>
+  <p class="hint"><span class="ro"><b>Naturale</b>: urmează un element al reliefului (curs de apă, culme montană). <b>Convenționale</b>: trasate pe baza unei înțelegeri între state, adesea drepte sau după paralele și meridiane.</span><span class="de"><b>Natürliche</b> Grenzen folgen einem Element des Reliefs (Fluss, Gebirgskamm). <b>Vereinbarte</b> Grenzen wurden durch eine Übereinkunft zwischen Staaten festgelegt, oft gerade oder entlang von Breiten- und Längenkreisen.</span></p>
+  <div class="bsort" id="bsort" style="margin-top:10px"></div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Cum se deosebesc statele -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Cum se deosebesc statele între ele</span><span class="de">Wodurch sich Staaten unterscheiden</span></h2>
+  <p class="section-sub"><span class="ro">Statele se compară după cinci criterii. Alege un criteriu, vezi harta colorată și apasă pe țări ca să vezi din ce categorie fac parte. Țările colorate sunt exemplele din manual și câteva în plus.</span><span class="de">Staaten vergleicht man nach fünf Kriterien. Wähle ein Kriterium, sieh dir die gefärbte Karte an und tippe auf Länder, um ihre Kategorie zu sehen. Gefärbt sind die Beispiele aus dem Buch und einige mehr.</span></p>
+  <div class="chips" id="cr-btns" role="group"></div>
+  <div class="two">
+    <div>
+      <div class="map" id="cr-map"><div class="map-btns"><button type="button" id="cr-zoom"></button><button type="button" id="cr-reset"></button></div><svg id="cr-svg" role="img"></svg><div class="loading"></div></div>
+      <div class="legend" id="cr-legend"></div>
+    </div>
+    <div class="info" id="cr-info" aria-live="polite"></div>
+  </div>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Vecini -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Câți vecini are un stat?</span><span class="de">Wie viele Nachbarn hat ein Staat?</span></h2>
+  <p class="section-sub"><span class="ro">Apasă pe o țară: vecinii ei terestri se colorează și sunt numărați de calculator din harta lumii. În dreapta e clasamentul țărilor cu cei mai mulți vecini; apasă pe un rând ca să vezi țara pe hartă.</span><span class="de">Tippe auf ein Land: Seine Landnachbarn werden eingefärbt und vom Computer aus der Weltkarte gezählt. Rechts siehst du die Rangliste der Länder mit den meisten Nachbarn; tippe auf eine Zeile, um das Land auf der Karte zu sehen.</span></p>
+  <div class="two">
+    <div class="map" id="nb-map"><div class="map-btns"><button type="button" id="nb-zoom"></button><button type="button" id="nb-reset"></button></div><svg id="nb-svg" role="img"></svg><div class="loading"></div></div>
+    <div class="info">
+      <div class="card" id="nb-info" aria-live="polite"></div>
+      <div class="card"><b><span class="ro">Cei mai mulți vecini terestri</span><span class="de">Die meisten Landnachbarn</span></b><div class="bars" id="nb-bars"></div></div>
+    </div>
+  </div>
+  <p class="hint" style="margin-top:8px"><span class="ro">Numărătoarea folosește o hartă simplificată: de pildă, Franța apare cu vecini din America de Sud, pentru că include Guyana Franceză. Țările foarte mici lipsesc de pe hartă.</span><span class="de">Die Zählung beruht auf einer vereinfachten Karte: Frankreich hat dort etwa Nachbarn in Südamerika, weil Französisch-Guayana dazugehört. Sehr kleine Länder fehlen auf der Karte.</span></p>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Harta se schimbă -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Harta politică se schimbă</span><span class="de">Die politische Karte verändert sich</span></h2>
+  <p class="section-sub"><span class="ro"><b>Harta politică a lumii</b> arată toate statele existente la un moment dat. Ea se modifică mereu, deci are un <b>caracter istoric</b>. În secolul al XX-lea au contat mult două războaie mondiale și destrămarea sistemului colonial. Mută cursorul și vezi Africa între 1914 și 2011.</span><span class="de">Die <b>politische Weltkarte</b> zeigt alle zu einem Zeitpunkt bestehenden Staaten. Sie ändert sich ständig und hat daher einen <b>historischen Charakter</b>. Im 20. Jahrhundert spielten zwei Weltkriege und das Ende des Kolonialsystems eine große Rolle. Bewege den Regler und sieh dir Afrika zwischen 1914 und 2011 an.</span></p>
+  <div class="chips" id="af-chips" role="group"></div>
+  <div class="yrow"><span class="y" id="af-year">1914</span><input class="range" id="af-range" type="range" min="1914" max="2011" value="1914" step="1" aria-label="An"></div>
+  <div class="two">
+    <div>
+      <div class="map" id="af-map"><svg id="af-svg" role="img"></svg><div class="loading"></div></div>
+      <div class="legend" id="af-legend"></div>
+    </div>
+    <div class="info"><div class="card" id="af-info" aria-live="polite"></div>
+      <p class="hint"><span class="ro">Hartă simplificată: granițele sunt cele de azi, iar culorile arată cine stăpânea teritoriul. Unele schimbări (de exemplu din timpul războaielor) nu apar.</span><span class="de">Vereinfachte Karte: Die Grenzen sind die heutigen, die Farben zeigen, wer das Gebiet beherrschte. Manche Änderungen (zum Beispiel in Kriegszeiten) fehlen.</span></p>
+    </div>
+  </div>
+  <h3 class="sub3"><span class="ro">Câte state erau pe fiecare continent?</span><span class="de">Wie viele Staaten gab es auf jedem Kontinent?</span></h3>
+  <p class="hint"><span class="ro">Alege un an din tabelul manualului și compară barele.</span><span class="de">Wähle ein Jahr aus der Tabelle des Buches und vergleiche die Balken.</span></p>
+  <div class="chips" id="st-chips" role="group" style="margin-top:8px"></div>
+  <div class="stack" id="st-stack"></div>
+  <div class="tbl-wrap"><table class="num" id="st-tbl"></table></div>
+  <p class="hint" style="margin-top:6px"><span class="ro">* și ** includ Turcia, care e numărată și în Europa, și în Asia. De aceea 47 + 46 + 54 + 35 + 14 = 196, dar totalul este 195.</span><span class="de">* und ** schließen die Türkei ein, die sowohl in Europa als auch in Asien gezählt wird. Deshalb ist 47 + 46 + 54 + 35 + 14 = 196, die Gesamtzahl aber 195.</span></p>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro"><b>Harta politică a lumii</b> este reprezentarea cartografică a tuturor statelor existente la un moment dat; ea se modifică permanent.</span><span class="de">Die <b>politische Weltkarte</b> ist die kartographische Darstellung aller zu einem Zeitpunkt bestehenden Staaten; sie verändert sich ständig.</span></li>
+      <li><span class="ro">În secolul al XX-lea, majoritatea coloniilor din Africa și Asia și-au câștigat <b>independența</b>, iar numărul statelor a crescut de la 48 la 195.</span><span class="de">Im 20. Jahrhundert erlangten die meisten Kolonien in Afrika und Asien die <b>Unabhängigkeit</b>, und die Zahl der Staaten stieg von 48 auf 195.</span></li>
+      <li><span class="ro">Pe harta de azi apar și <b>teritorii dependente</b> (de exemplu Groenlanda), rămășițe ale fostelor imperii coloniale.</span><span class="de">Auf der heutigen Karte gibt es auch <b>abhängige Gebiete</b> (zum Beispiel Grönland), Reste der früheren Kolonialreiche.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c5"></div>
+</section>
+
+<!-- 6. Distanțe și suprafețe -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Aplicație: distanțe și suprafețe pe hartă</span><span class="de">Anwendung: Entfernungen und Flächen auf der Karte</span></h2>
+  <p class="section-sub"><span class="ro">Ești un faimos pirat și ai aflat că undeva în Australia, la punctul <b>X</b>, e îngropată o comoară. Corabia ta e în <b>A</b>, dar trebuie să acostezi întâi în portul <b>B</b>. Cât ai de parcurs? Harta are <b>scara 1 : 40 000 000</b>. Pe ecran, „cm” sunt centimetri ai hărții (hartă imaginară, mărită sau micșorată odată cu ecranul).</span><span class="de">Du bist ein berüchtigter Pirat und hast erfahren, dass irgendwo in Australien, im Punkt <b>X</b>, ein Schatz vergraben ist. Dein Schiff liegt in <b>A</b>, doch du musst zuerst im Hafen <b>B</b> anlegen. Wie weit musst du fahren? Die Karte hat den <b>Maßstab 1 : 40 000 000</b>. Auf dem Bildschirm sind „cm“ Zentimeter der Karte (eine gedachte Karte, die mit dem Bildschirm größer oder kleiner wird).</span></p>
+
+  <h3 class="sub3" style="margin-top:0"><span class="ro">Pasul 1. Măsoară pe hartă</span><span class="de">Schritt 1. Auf der Karte messen</span></h3>
+  <p class="hint"><span class="ro">Apasă pe două puncte (A și B, apoi B și X): se trasează dreapta și apare lungimea ei în cm.</span><span class="de">Tippe auf zwei Punkte (A und B, dann B und X): Die Gerade wird gezeichnet und ihre Länge in cm angezeigt.</span></p>
+  <div class="two" style="margin-top:8px">
+    <div class="map" id="ds-map"><svg id="ds-svg" role="img"></svg><div class="loading"></div></div>
+    <div class="tool" id="ds-tool"></div>
+  </div>
+
+  <h3 class="sub3"><span class="ro">Suprafața Australiei</span><span class="de">Die Fläche Australiens</span></h3>
+  <p class="section-sub" style="margin-bottom:8px"><span class="ro">Cu hârtie milimetrică pui pe hartă o rețea de pătrate. Aici ai pătrate cu latura de <b>1 cm pe hartă</b>. <b>Pasul 3:</b> apasă pătratele care sunt <b>întregi</b> în interiorul conturului, apoi verifică. <b>Pasul 4:</b> calculează.</span><span class="de">Mit Millimeterpapier legst du ein Quadratnetz auf die Karte. Hier hast du Quadrate mit <b>1 cm Seitenlänge auf der Karte</b>. <b>Schritt 3:</b> Tippe die Quadrate an, die <b>ganz</b> innerhalb der Umrisslinie liegen, und prüfe dann. <b>Schritt 4:</b> Rechne.</span></p>
+  <div class="two">
+    <div class="map" id="ar-map"><svg id="ar-svg" role="img"></svg><div class="loading"></div></div>
+    <div class="tool" id="ar-tool"></div>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><b>Claudius Ptolemeu (90–168)</b><p><span class="ro">Unul dintre cei mai mari geografi și cartografi ai Antichității. În lucrarea <i>Geographia</i> a folosit o rețea asemănătoare paralelelor și meridianelor, care a servit secole la orientarea pe hărți și la măsurarea distanțelor.</span><span class="de">Einer der größten Geographen und Kartographen des Altertums. In seinem Werk <i>Geographia</i> verwendete er ein Netz ähnlich den Breiten- und Längenkreisen, das jahrhundertelang zur Orientierung auf Karten und zum Messen von Entfernungen diente.</span></p></div>
+    <div class="fact"><b>Gerardus Mercator (1512–1594)</b><p><span class="ro">A introdus noțiunea de <i>atlas</i> și a publicat o colecție de hărți. A inventat proiecția cartografică ce îi poartă numele și a făcut prima hartă de mare precizie a Europei.</span><span class="de">Er führte den Begriff <i>Atlas</i> ein und veröffentlichte eine Kartensammlung. Er erfand die nach ihm benannte Kartenprojektion und schuf die erste sehr genaue Karte Europas.</span></p></div>
+  </div>
+  <div class="check" id="c6"></div>
+</section>
+
+<!-- 7. Mercator -->
+<section class="block" id="s7" aria-labelledby="t7">
+  <h2 class="section-title" id="t7"><span class="step">7</span><span class="ro">Hărți care deformează: Mercator</span><span class="de">Karten, die verzerren: Mercator</span></h2>
+  <p class="section-sub"><span class="ro">Un glob nu se poate desface pe o foaie fără deformări. Pe harta lui Mercator, țările de lângă poli par uriașe. Schimbă proiecția și compară <b>Groenlanda</b> (roșu) cu <b>Africa</b> (verde).</span><span class="de">Eine Kugel lässt sich nicht ohne Verzerrung auf ein Blatt legen. Auf Mercators Karte wirken Länder nahe den Polen riesig. Wechsle die Projektion und vergleiche <b>Grönland</b> (rot) mit <b>Afrika</b> (grün).</span></p>
+  <div class="chips" id="mc-btns" role="group"></div>
+  <div class="map" id="mc-map"><svg id="mc-svg" role="img"></svg><div class="loading"></div></div>
+  <p class="fact" id="mc-fact" aria-live="polite" style="margin-top:10px"></p>
+  <div class="check" id="c7"></div>
+</section>
+
+<section class="block" aria-labelledby="t8">
+  <h2 class="section-title" id="t8"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <div class="gloss-head" style="margin-top:14px"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După manualul de Geografie, clasa a 6-a, „Statele și harta politică a lumii” și „Aplicație: exerciții de apreciere a distanțelor și a suprafețelor”. Numerele (suprafață, populație) sunt rotunjite. Contururile hărților: Natural Earth. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Geographiebuch der 6. Klasse, „Die Staaten und die politische Weltkarte“ und „Anwendung: Übungen zur Einschätzung von Entfernungen und Flächen“. Zahlen (Fläche, Einwohner) sind gerundet. Kartengrundlage: Natural Earth. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var NS = 'http://www.w3.org/2000/svg';
+
+/** Întrebări scurte de verificare, cu răspuns imediat. */
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.textContent = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* ================= nume de țări (ro / de) ================= */
+var NM = {};
+"Fiji|Fiji|Fidschi;Tanzania|Tanzania|Tansania;W. Sahara|Sahara Occidentală|Westsahara;Canada|Canada|Kanada;United States of America|Statele Unite ale Americii|Vereinigte Staaten;Kazakhstan|Kazahstan|Kasachstan;Uzbekistan|Uzbekistan|Usbekistan;Papua New Guinea|Papua Noua Guinee|Papua-Neuguinea;Indonesia|Indonezia|Indonesien;Argentina|Argentina|Argentinien;Chile|Chile|Chile;Dem. Rep. Congo|Republica Democratică Congo|Demokratische Republik Kongo;Somalia|Somalia|Somalia;Kenya|Kenya|Kenia;Sudan|Sudan|Sudan;Chad|Ciad|Tschad;Haiti|Haiti|Haiti;Dominican Rep.|Republica Dominicană|Dominikanische Republik;Russia|Federația Rusă|Russland;Bahamas|Bahamas|Bahamas;Falkland Is.|Insulele Falkland|Falklandinseln;Norway|Norvegia|Norwegen;Greenland|Groenlanda|Grönland;Fr. S. Antarctic Lands|Teritoriile Australe Franceze|Französische Südgebiete;Timor-Leste|Timorul de Est|Osttimor;South Africa|Africa de Sud|Südafrika;Lesotho|Lesotho|Lesotho;Mexico|Mexic|Mexiko;Uruguay|Uruguay|Uruguay;Brazil|Brazilia|Brasilien;Bolivia|Bolivia|Bolivien;Peru|Peru|Peru;Colombia|Columbia|Kolumbien;Panama|Panama|Panama;Costa Rica|Costa Rica|Costa Rica;Nicaragua|Nicaragua|Nicaragua;Honduras|Honduras|Honduras;El Salvador|El Salvador|El Salvador;Guatemala|Guatemala|Guatemala;Belize|Belize|Belize;Venezuela|Venezuela|Venezuela;Guyana|Guyana|Guyana;Suriname|Surinam|Suriname;France|Franța|Frankreich;Ecuador|Ecuador|Ecuador;Puerto Rico|Puerto Rico|Puerto Rico;Jamaica|Jamaica|Jamaika;Cuba|Cuba|Kuba;Zimbabwe|Zimbabwe|Simbabwe;Botswana|Botswana|Botswana;Namibia|Namibia|Namibia;Senegal|Senegal|Senegal;Mali|Mali|Mali;Mauritania|Mauritania|Mauretanien;Benin|Benin|Benin;Niger|Niger|Niger;Nigeria|Nigeria|Nigeria;Cameroon|Camerun|Kamerun;Togo|Togo|Togo;Ghana|Ghana|Ghana;Côte d'Ivoire|Coasta de Fildeș|Elfenbeinküste;Guinea|Guineea|Guinea;Guinea-Bissau|Guineea-Bissau|Guinea-Bissau;Liberia|Liberia|Liberia;Sierra Leone|Sierra Leone|Sierra Leone;Burkina Faso|Burkina Faso|Burkina Faso;Central African Rep.|Republica Centrafricană|Zentralafrikanische Republik;Congo|Congo|Kongo;Gabon|Gabon|Gabun;Eq. Guinea|Guineea Ecuatorială|Äquatorialguinea;Zambia|Zambia|Sambia;Malawi|Malawi|Malawi;Mozambique|Mozambic|Mosambik;eSwatini|Eswatini|Eswatini;Angola|Angola|Angola;Burundi|Burundi|Burundi;Israel|Israel|Israel;Lebanon|Liban|Libanon;Madagascar|Madagascar|Madagaskar;Palestine|Palestina|Palästina;Gambia|Gambia|Gambia;Tunisia|Tunisia|Tunesien;Algeria|Algeria|Algerien;Jordan|Iordania|Jordanien;United Arab Emirates|Emiratele Arabe Unite|Vereinigte Arabische Emirate;Qatar|Qatar|Katar;Kuwait|Kuweit|Kuwait;Iraq|Irak|Irak;Oman|Oman|Oman;Vanuatu|Vanuatu|Vanuatu;Cambodia|Cambodgia|Kambodscha;Thailand|Thailanda|Thailand;Laos|Laos|Laos;Myanmar|Myanmar|Myanmar;Vietnam|Vietnam|Vietnam;North Korea|Coreea de Nord|Nordkorea;South Korea|Coreea de Sud|Südkorea;Mongolia|Mongolia|Mongolei;India|India|Indien;Bangladesh|Bangladesh|Bangladesch;Bhutan|Bhutan|Bhutan;Nepal|Nepal|Nepal;Pakistan|Pakistan|Pakistan;Afghanistan|Afganistan|Afghanistan;Tajikistan|Tadjikistan|Tadschikistan;Kyrgyzstan|Kârgâzstan|Kirgisistan;Turkmenistan|Turkmenistan|Turkmenistan;Iran|Iran|Iran;Syria|Siria|Syrien;Armenia|Armenia|Armenien;Sweden|Suedia|Schweden;Belarus|Belarus|Belarus;Ukraine|Ucraina|Ukraine;Poland|Polonia|Polen;Austria|Austria|Österreich;Hungary|Ungaria|Ungarn;Moldova|Republica Moldova|Moldau;Romania|România|Rumänien;Lithuania|Lituania|Litauen;Latvia|Letonia|Lettland;Estonia|Estonia|Estland;Germany|Germania|Deutschland;Bulgaria|Bulgaria|Bulgarien;Greece|Grecia|Griechenland;Turkey|Turcia|Türkei;Albania|Albania|Albanien;Croatia|Croația|Kroatien;Switzerland|Elveția|Schweiz;Luxembourg|Luxemburg|Luxemburg;Belgium|Belgia|Belgien;Netherlands|Țările de Jos|Niederlande;Portugal|Portugalia|Portugal;Spain|Spania|Spanien;Ireland|Irlanda|Irland;New Caledonia|Noua Caledonie|Neukaledonien;Solomon Is.|Insulele Solomon|Salomonen;New Zealand|Noua Zeelandă|Neuseeland;Australia|Australia|Australien;Sri Lanka|Sri Lanka|Sri Lanka;China|China|China;Taiwan|Taiwan|Taiwan;Italy|Italia|Italien;Denmark|Danemarca|Dänemark;United Kingdom|Regatul Unit|Vereinigtes Königreich;Iceland|Islanda|Island;Azerbaijan|Azerbaidjan|Aserbaidschan;Georgia|Georgia|Georgien;Philippines|Filipine|Philippinen;Malaysia|Malaysia|Malaysia;Brunei|Brunei|Brunei;Slovenia|Slovenia|Slowenien;Finland|Finlanda|Finnland;Slovakia|Slovacia|Slowakei;Czechia|Cehia|Tschechien;Eritrea|Eritreea|Eritrea;Japan|Japonia|Japan;Paraguay|Paraguay|Paraguay;Yemen|Yemen|Jemen;Saudi Arabia|Arabia Saudită|Saudi-Arabien;Antarctica|Antarctida|Antarktis;N. Cyprus|Cipru de Nord|Nordzypern;Cyprus|Cipru|Zypern;Morocco|Maroc|Marokko;Egypt|Egipt|Ägypten;Libya|Libia|Libyen;Ethiopia|Etiopia|Äthiopien;Djibouti|Djibouti|Dschibuti;Somaliland|Somaliland|Somaliland;Uganda|Uganda|Uganda;Rwanda|Rwanda|Ruanda;Bosnia and Herz.|Bosnia și Herțegovina|Bosnien und Herzegowina;Macedonia|Macedonia de Nord|Nordmazedonien;Serbia|Serbia|Serbien;Montenegro|Muntenegru|Montenegro;Kosovo|Kosovo|Kosovo;Trinidad and Tobago|Trinidad și Tobago|Trinidad und Tobago;S. Sudan|Sudanul de Sud|Südsudan"
+  .split(';').forEach(function (s) { var p = s.split('|'); NM[p[0]] = { ro: p[1], de: p[2] }; });
+function nm(en) { return NM[en] ? T(NM[en]) : en; }
+
+/* ================= hărți: date și ajutoare ================= */
+var DATA = Promise.all([
+  fetch('../../lib/land-50m.json').then(function (r) { return r.json(); }),
+  fetch('../../lib/countries-110m.json').then(function (r) { return r.json(); })
+]).then(function (res) {
+  var geoms = res[1].objects.countries.geometries;
+  return { land: topojson.feature(res[0], res[0].objects.land), countries: topojson.feature(res[1], res[1].objects.countries).features,
+           nb: topojson.neighbors(geoms) };
+});
+function loaded(id) { var l = $('#' + id + ' .loading'); if (l) l.remove(); }
+document.querySelectorAll('.map .loading').forEach(function (l) { l.textContent = tx('Se încarcă harta…', 'Karte wird geladen …'); });
+
+function makeMap(svgSel, W, H, proj, land) {
+  var svg = d3.select(svgSel).attr('viewBox', '0 0 ' + W + ' ' + H);
+  var path = d3.geoPath(proj);
+  var g = svg.append('g');
+  g.append('path').datum({ type: 'Sphere' }).attr('class', 'sea').attr('d', path);
+  g.append('path').datum(d3.geoGraticule10()).attr('class', 'grat').attr('d', path);
+  if (land) g.append('path').datum(land).attr('class', 'land').attr('d', path);
+  var tr = d3.zoomIdentity, listeners = [];
+  var zoom = d3.zoom().on('zoom', function (e) { g.attr('transform', e.transform); tr = e.transform; listeners.forEach(function (f) { f(tr); }); });
+  return {
+    svg: svg, g: g, path: path, proj: proj, W: W, H: H,
+    t: function () { return tr; },
+    onZoom: function (f) { listeners.push(f); },
+    zoomTo: function (coords, maxK) {
+      var pts = coords.map(proj).filter(Boolean);
+      var xs = pts.map(function (p) { return p[0]; }), ys = pts.map(function (p) { return p[1]; });
+      var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+      var w = Math.max(x1 - x0, 40), hh = Math.max(y1 - y0, 30);
+      var s = Math.max(1, Math.min(maxK || 4, 0.7 / Math.max(w / W, hh / H)));
+      var t = d3.zoomIdentity.translate(W / 2, H / 2).scale(s).translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
+      var tx0 = Math.min(0, Math.max(W - W * s, t.x)), ty0 = Math.min(0, Math.max(H - H * s, t.y));
+      t = d3.zoomIdentity.translate(tx0, ty0).scale(s);
+      (reduce ? svg : svg.transition().duration(700)).call(zoom.transform, t);
+    },
+    reset: function () { (reduce ? svg : svg.transition().duration(600)).call(zoom.transform, d3.zoomIdentity); }
+  };
+}
+function boundsCorners(f) { var b = d3.geoBounds(f); return (b[1][0] - b[0][0] > 150 || b[1][0] < b[0][0]) ? null : [[b[0][0], b[0][1]], [b[1][0], b[0][1]], [b[0][0], b[1][1]], [b[1][0], b[1][1]]]; }
+function world(svgSel, D, H) {
+  var W = 960; H = H || 500;
+  var proj = d3.geoNaturalEarth1().fitExtent([[4, 4], [W - 4, H - 4]], { type: 'MultiPoint', coordinates: [[-170, 80], [175, 80], [-170, -56], [175, -56]] });
+  return makeMap(svgSel, W, H, proj, null);
+}
+/** Desenează țările; întoarce selecția. */
+function countriesOn(M, D, fillFn, onClick) {
+  var layer = M.g.append('g');
+  var sel = layer.selectAll('path').data(D.countries.filter(function (d) { return d.properties.name !== 'Antarctica'; })).join('path')
+    .attr('class', 'cn').attr('d', M.path).attr('fill', fillFn).on('click', function (e, d) { onClick(d, this); });
+  sel.append('title').text(function (d) { return nm(d.properties.name); });
+  return sel;
+}
+function legend(host, items) {
+  host.innerHTML = '';
+  items.forEach(function (it) { host.appendChild(h('span', '', '<i style="background:' + it[0] + '"></i>' + it[1])); });
+}
+
+/* ================= 1. Stat sau nu? ================= */
+(function () {
+  var IT = [
+    [{ ro: 'Franța', de: 'Frankreich' }, true, { ro: 'Are teritoriu cu granițe, populație permanentă, conducere proprie și este recunoscută internațional.', de: 'Es hat ein Gebiet mit Grenzen, eine ständige Bevölkerung, eine eigene Führung und ist international anerkannt.' }],
+    [{ ro: 'Groenlanda', de: 'Grönland' }, false, { ro: 'Este un teritoriu dependent de Danemarca (rămășiță a unui fost imperiu colonial), deci nu are conducere suverană deplină.', de: 'Es ist ein von Dänemark abhängiges Gebiet (Rest eines früheren Kolonialreichs) und hat daher keine volle souveräne Führung.' }],
+    [{ ro: 'Vatican', de: 'Vatikan' }, true, { ro: 'Este cel mai mic stat din lume, dar are teritoriu, conducere proprie și recunoaștere internațională.', de: 'Es ist der kleinste Staat der Welt, hat aber ein eigenes Gebiet, eine eigene Führung und internationale Anerkennung.' }],
+    [{ ro: 'Bavaria', de: 'Bayern' }, false, { ro: 'Este o regiune (un land) din Germania: face parte dintr-un stat, dar nu e suverană.', de: 'Es ist ein Land innerhalb Deutschlands: Es gehört zu einem Staat, ist aber nicht souverän.' }],
+    [{ ro: 'Antarctida', de: 'Antarktis' }, false, { ro: 'Este un continent, fără populație permanentă și fără o autoritate politică proprie.', de: 'Sie ist ein Kontinent, ohne ständige Bevölkerung und ohne eigene politische Führung.' }],
+    [{ ro: 'Tuvalu', de: 'Tuvalu' }, true, { ro: 'Este un stat insular foarte mic din Oceania, independent și recunoscut internațional.', de: 'Es ist ein sehr kleiner Inselstaat in Ozeanien, unabhängig und international anerkannt.' }],
+    [{ ro: 'Japonia', de: 'Japan' }, true, { ro: 'Este un stat insular mare, cu conducere proprie, monarhie constituțională.', de: 'Es ist ein großer Inselstaat mit eigener Führung, eine konstitutionelle Monarchie.' }],
+    [{ ro: 'Polinezia Franceză', de: 'Französisch-Polynesien' }, false, { ro: 'Este un teritoriu de peste mări al Franței, nu un stat independent.', de: 'Es ist ein Überseegebiet Frankreichs, kein unabhängiger Staat.' }]
+  ];
+  var host = $('#qs');
+  IT.forEach(function (it) {
+    var card = h('div', 'card'), opts = h('div', 'opts'), why = h('p', 'why');
+    card.appendChild(h('b', '', T(it[0])));
+    var yes = btn('pick', tx('Stat', 'Staat')), no = btn('pick', tx('Nu e stat', 'Kein Staat'));
+    [[yes, true], [no, false]].forEach(function (p) {
+      p[0].onclick = function () {
+        if (p[1] === it[1]) { p[0].classList.add('right'); yes.disabled = no.disabled = true; card.classList.add('done'); why.textContent = '✓ ' + T(it[2]); }
+        else { p[0].classList.add('wrong'); why.textContent = tx('Nu chiar. Verifică cele patru condiții de mai sus: teritoriu, populație, conducere suverană, recunoaștere.', 'Nicht ganz. Prüfe die vier Bedingungen oben: Gebiet, Bevölkerung, souveräne Führung, Anerkennung.'); }
+      };
+      opts.appendChild(p[0]);
+    });
+    card.appendChild(opts); card.appendChild(why); host.appendChild(card);
+  });
+  Check($('#c1'), [
+    { q: { ro: 'Ce NU este o condiție pentru ca un teritoriu să fie stat?', de: 'Was ist KEINE Bedingung dafür, dass ein Gebiet ein Staat ist?' },
+      o: [{ ro: 'ieșirea la mare', de: 'der Zugang zum Meer' }, { ro: 'populația permanentă', de: 'die ständige Bevölkerung' }, { ro: 'conducerea suverană', de: 'die souveräne Führung' }], a: 0,
+      why: { ro: 'Multe state nu au ieșire la mare (Austria, Mongolia) și sunt totuși state.', de: 'Viele Staaten haben keinen Zugang zum Meer (Österreich, Mongolei) und sind trotzdem Staaten.' },
+      hint: { ro: 'Caută condiția pe care nu o au toate statele (Austria, de exemplu).', de: 'Such die Bedingung, die nicht alle Staaten erfüllen (zum Beispiel Österreich).' } }
+  ]);
+})();
+
+/* ================= 2. Granițe ================= */
+(function () {
+  var svg = $('#cut-svg');
+  function s(tag, attrs, parent) { var e = document.createElementNS(NS, tag); Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); }); (parent || svg).appendChild(e); return e; }
+  function txt(x, y, t, size, fill, anchor) { var e = s('text', { x: x, y: y, 'font-size': size || 14, fill: fill || '#1b2a2e', 'text-anchor': anchor || 'middle', 'font-family': 'Alegreya Sans, sans-serif', 'font-weight': 700 }); e.textContent = t; return e; }
+  s('rect', { x: 0, y: 0, width: 560, height: 120, fill: '#e8f3fb' });          // cer
+  s('rect', { x: 0, y: 120, width: 400, height: 70, fill: '#d8c9a1' });          // sol
+  s('rect', { x: 0, y: 190, width: 400, height: 110, fill: '#b9a57a' });         // subsol
+  s('rect', { x: 400, y: 120, width: 160, height: 180, fill: '#9cc7e3' });       // mare
+  s('rect', { x: 400, y: 120, width: 160, height: 0, fill: '#9cc7e3' });
+  s('path', { d: 'M395 190 Q410 200 430 205 L560 205 L560 300 L400 300 Z', fill: '#b9a57a' });
+  txt(95, 40, tx('Statul A', 'Staat A'), 17); txt(330, 40, tx('Statul B', 'Staat B'), 17);
+  txt(105, 160, tx('suprafața terestră', 'Landfläche'), 14); txt(105, 250, tx('subsol', 'Untergrund'), 14);
+  txt(480, 160, tx('mare', 'Meer'), 15, '#1d5a82');
+  // planul vertical al graniței terestre, la x = 230
+  s('line', { x1: 230, y1: 6, x2: 230, y2: 296, stroke: '#c0392b', 'stroke-width': 3, 'stroke-dasharray': '8 6' });
+  s('rect', { x: 230, y: 120, width: 0, height: 0, fill: 'none' });
+  s('line', { x1: 232, y1: 120, x2: 232, y2: 190, stroke: '#c0392b', 'stroke-width': 0 });
+  // frontiera maritimă în larg
+  s('line', { x1: 480, y1: 6, x2: 480, y2: 296, stroke: '#2f6fbd', 'stroke-width': 3, 'stroke-dasharray': '8 6', opacity: .0 });
+  s('line', { x1: 290, y1: 120, x2: 560, y2: 120, stroke: '#2f6fbd', 'stroke-width': 0 });
+  s('path', { d: 'M515 118 L515 124', stroke: '#2f6fbd', 'stroke-width': 3 });
+  s('line', { x1: 515, y1: 118, x2: 515, y2: 298, stroke: '#2f6fbd', 'stroke-width': 3, 'stroke-dasharray': '8 6' });
+  s('circle', { cx: 230, cy: 121, r: 7, fill: '#c0392b', stroke: '#fff', 'stroke-width': 2 });
+  txt(230, 18, tx('granița aeriană', 'Luftgrenze'), 14, '#a12f2f');
+  txt(230, 293, tx('plan vertical', 'senkrechte Fläche'), 13, '#a12f2f');
+  txt(515, 18, tx('granița maritimă', 'Seegrenze'), 14, '#1d4f85', 'middle');
+  var H = {
+    ter: { x: 200, y: 100, w: 60, h: 40, t: { ro: 'Granița terestră', de: 'Die Landgrenze' }, d: { ro: 'Pe uscat, granița urmează o linie pe suprafața Pământului: un râu, o culme de munte sau o linie trasată prin înțelegere.', de: 'An Land folgt die Grenze einer Linie auf der Erdoberfläche: einem Fluss, einem Gebirgskamm oder einer vereinbarten Linie.' } },
+    aer: { x: 200, y: 0, w: 60, h: 100, t: { ro: 'Granița aeriană', de: 'Die Luftgrenze' }, d: { ro: 'Planul vertical al graniței continuă în sus: spațiul aerian de deasupra teritoriului aparține statului. Avioanele străine au nevoie de aprobare.', de: 'Die senkrechte Grenzfläche setzt sich nach oben fort: Der Luftraum über dem Gebiet gehört dem Staat. Fremde Flugzeuge brauchen eine Erlaubnis.' } },
+    sub: { x: 200, y: 140, w: 60, h: 160, t: { ro: 'Subsolul', de: 'Der Untergrund' }, d: { ro: 'Planul vertical coboară și în adâncime: resursele din subsol (petrol, cărbune, minereuri) aparțin statului de deasupra.', de: 'Die senkrechte Fläche reicht auch in die Tiefe: Bodenschätze (Erdöl, Kohle, Erze) gehören dem Staat darüber.' } },
+    mar: { x: 485, y: 100, w: 60, h: 200, t: { ro: 'Granița maritimă', de: 'Die Seegrenze' }, d: { ro: 'Pe mare, statul are o fâșie de apă lângă țărm. Granița maritimă trece prin apă, mai departe de țărm, acolo unde se termină zona statului.', de: 'Auf dem Meer hat der Staat einen Wasserstreifen vor der Küste. Die Seegrenze verläuft im Wasser, weiter vom Ufer entfernt, dort wo das Gebiet des Staates endet.' } }
+  };
+  var info = $('#cut-info'), els = {};
+  info.innerHTML = '<p class="muted">' + tx('Apasă pe o zonă: cer, pământ, subsol sau mare.', 'Tippe auf einen Bereich: Himmel, Boden, Untergrund oder Meer.') + '</p>';
+  Object.keys(H).forEach(function (k) {
+    var z = H[k], g = s('g', { class: 'hot', tabindex: 0, role: 'button', 'aria-label': T(z.t) });
+    s('rect', { x: z.x, y: z.y, width: z.w, height: z.h, class: 'hl', rx: 6 }, g);
+    s('rect', { x: z.x, y: z.y, width: z.w, height: z.h, fill: 'transparent' }, g);
+    function open() { Object.keys(els).forEach(function (o) { els[o].classList.toggle('on', o === k); }); info.innerHTML = '<h3>' + T(z.t) + '</h3><p>' + T(z.d) + '</p>'; }
+    g.addEventListener('click', open); g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    els[k] = g;
+  });
+
+  var B = [
+    [{ ro: 'Dunărea, între România și Bulgaria', de: 'Die Donau zwischen Rumänien und Bulgarien' }, 'nat', { ro: 'Natural: urmează un curs de apă.', de: 'Natürlich: Sie folgt einem Fluss.' }],
+    [{ ro: 'Pirineii, între Franța și Spania', de: 'Die Pyrenäen zwischen Frankreich und Spanien' }, 'nat', { ro: 'Natural: urmează culmea munților.', de: 'Natürlich: Sie folgt dem Gebirgskamm.' }],
+    [{ ro: 'Paralela de 49° N, între SUA și Canada (în vest)', de: 'Der 49. Breitenkreis zwischen den USA und Kanada (im Westen)' }, 'con', { ro: 'Convențională: este o linie dreaptă, trasată pe o paralelă prin înțelegere.', de: 'Vereinbart: Sie ist eine gerade Linie entlang eines Breitenkreises, durch Übereinkunft festgelegt.' }],
+    [{ ro: 'Granița Egipt–Libia (în mare parte linie dreaptă)', de: 'Die Grenze Ägypten–Libyen (größtenteils gerade)' }, 'con', { ro: 'Convențională: o linie dreaptă nu urmează relieful.', de: 'Vereinbart: Eine gerade Linie folgt nicht dem Relief.' }],
+    [{ ro: 'Prutul, între România și Republica Moldova', de: 'Der Pruth zwischen Rumänien und der Republik Moldau' }, 'nat', { ro: 'Natural: urmează un curs de apă.', de: 'Natürlich: Sie folgt einem Fluss.' }],
+    [{ ro: 'Granița Namibia–Botswana (în est, linie dreaptă)', de: 'Die Grenze Namibia–Botswana (im Osten, gerade)' }, 'con', { ro: 'Convențională: linie dreaptă stabilită de oameni.', de: 'Vereinbart: eine von Menschen festgelegte gerade Linie.' }]
+  ];
+  var host = $('#bsort');
+  B.forEach(function (it) {
+    var card = h('div', 'card'), opts = h('div', 'opts'), why = h('p', 'why');
+    card.appendChild(h('b', '', T(it[0])));
+    var a = btn('pick', tx('naturală', 'natürlich')), b = btn('pick', tx('convențională', 'vereinbart'));
+    [[a, 'nat'], [b, 'con']].forEach(function (p) {
+      p[0].onclick = function () {
+        if (p[1] === it[1]) { p[0].classList.add('right'); a.disabled = b.disabled = true; why.textContent = '✓ ' + T(it[2]); }
+        else { p[0].classList.add('wrong'); why.textContent = tx('Nu chiar. Se sprijină granița pe un râu sau pe munți, sau este o linie trasată?', 'Nicht ganz. Stützt sich die Grenze auf einen Fluss oder Berge, oder ist sie eine gezogene Linie?'); }
+      };
+      opts.appendChild(p[0]);
+    });
+    card.appendChild(opts); card.appendChild(why); host.appendChild(card);
+  });
+  Check($('#c2'), [
+    { q: { ro: 'Ce tipuri de granițe are România?', de: 'Welche Arten von Grenzen hat Rumänien?' },
+      o: [{ ro: 'doar terestre', de: 'nur Landgrenzen' }, { ro: 'terestre, maritime (Marea Neagră) și aeriene', de: 'Land-, See- (Schwarzes Meer) und Luftgrenzen' }, { ro: 'doar maritime', de: 'nur Seegrenzen' }], a: 1,
+      why: { ro: 'România se învecinează cu alte state pe uscat, are ieșire la Marea Neagră, iar deasupra teritoriului ei este spațiul aerian.', de: 'Rumänien grenzt an Land an andere Staaten, hat einen Zugang zum Schwarzen Meer, und über dem Gebiet liegt der Luftraum.' },
+      hint: { ro: 'Nu uita: orice stat are spațiu aerian; România are și țărm la mare.', de: 'Denk daran: Jeder Staat hat einen Luftraum; Rumänien hat auch eine Meeresküste.' } },
+    { q: { ro: 'Care dintre acestea este un exemplu de graniță naturală?', de: 'Welches ist ein Beispiel für eine natürliche Grenze?' },
+      o: [{ ro: 'o linie dreaptă trasată pe o paralelă', de: 'eine gerade Linie entlang eines Breitenkreises' }, { ro: 'un râu', de: 'ein Fluss' }, { ro: 'o linie stabilită prin tratat', de: 'eine durch Vertrag festgelegte Linie' }], a: 1,
+      why: { ro: 'Cursurile de apă și culmile montane sunt granițe naturale.', de: 'Flüsse und Gebirgskämme sind natürliche Grenzen.' } }
+  ]);
+})();
+
+/* ================= 3. Criterii ================= */
+DATA.then(function (D) {
+  loaded('cr-map');
+  var M = world('#cr-svg', D, 500);
+  M.svg.attr('aria-label', tx('Harta lumii colorată după criteriul ales', 'Weltkarte nach dem gewählten Kriterium gefärbt'));
+  var CRIT = [
+    { k: 'poz', n: { ro: 'Poziția geografică', de: 'Geographische Lage' }, cats: [
+      { c: '#2f6fbd', n: { ro: 'continentale, cu ieșire la mare', de: 'kontinental, mit Meereszugang' }, ex: ['Romania', 'Brazil', 'Poland', 'Nigeria'] },
+      { c: '#e8b830', n: { ro: 'continentale, fără ieșire la mare', de: 'kontinental, ohne Meereszugang' }, ex: ['Austria', 'Mongolia', 'Switzerland', 'Czechia', 'Bolivia', 'Ethiopia', 'Hungary'] },
+      { c: '#c0392b', n: { ro: 'peninsulare', de: 'Halbinselstaaten' }, ex: ['Spain', 'India', 'Italy', 'South Korea'] },
+      { c: '#1f8a78', n: { ro: 'insulare', de: 'Inselstaaten' }, ex: ['Japan', 'Iceland', 'Ireland', 'Cuba', 'Madagascar', 'New Zealand', 'Sri Lanka', 'Philippines'] }] },
+    { k: 'for', n: { ro: 'Forma teritoriului', de: 'Form des Gebiets' }, cats: [
+      { c: '#8e44ad', n: { ro: 'alungite', de: 'langgestreckt' }, ex: ['Norway', 'Sweden', 'Chile', 'Italy', 'Vietnam'] },
+      { c: '#2f6fbd', n: { ro: 'compacte', de: 'kompakt' }, ex: ['Poland', 'Romania', 'Hungary', 'Egypt'] },
+      { c: '#d68910', n: { ro: 'fragmentate (insule, părți separate de apă)', de: 'zersplittert (Inseln, durch Wasser getrennt)' }, ex: ['Greece', 'Japan', 'Indonesia', 'Philippines'] }] },
+    { k: 'sup', n: { ro: 'Suprafața', de: 'Fläche' }, cats: [
+      { c: '#7b1e1e', n: { ro: 'imense (peste 6 mil. km²)', de: 'riesig (über 6 Mio. km²)' }, ex: ['Russia', 'Canada', 'China', 'United States of America', 'Brazil', 'Australia'] },
+      { c: '#c0392b', n: { ro: 'foarte mari / foarte întinse', de: 'sehr groß' }, ex: ['India', 'Argentina', 'Algeria', 'Sudan'] },
+      { c: '#e67e22', n: { ro: 'mari / întinse', de: 'groß' }, ex: ['Nigeria', 'Turkey', 'France'] },
+      { c: '#e8b830', n: { ro: 'mijlocii', de: 'mittelgroß' }, ex: ['Romania', 'Bangladesh', 'Greece'] },
+      { c: '#8fc27a', n: { ro: 'mici', de: 'klein' }, ex: ['Denmark', 'Switzerland', 'Belgium'] }],
+      extra: [{ ro: 'Vatican (foarte mic, ministat)', de: 'Vatikan (sehr klein, Zwergstaat)' }, { ro: 'Monaco (ministat)', de: 'Monaco (Zwergstaat)' }, { ro: 'Nauru (stat pitic)', de: 'Nauru (Zwergstaat)' }] },
+    { k: 'pop', n: { ro: 'Populația', de: 'Bevölkerung' }, cats: [
+      { c: '#7b1e1e', n: { ro: 'miliardare / gigant', de: 'Milliardenstaaten' }, ex: ['China', 'India'] },
+      { c: '#c0392b', n: { ro: 'foarte mari / foarte populate', de: 'sehr volkreich' }, ex: ['United States of America', 'Brazil', 'Nigeria'] },
+      { c: '#e67e22', n: { ro: 'mari', de: 'volkreich' }, ex: ['Germany', 'France'] },
+      { c: '#e8b830', n: { ro: 'mijlocii', de: 'mittelgroß' }, ex: ['Romania', 'Sweden'] },
+      { c: '#8fc27a', n: { ro: 'mici', de: 'klein' }, ex: ['Iceland', 'Luxembourg'] }],
+      extra: [{ ro: 'Vatican (foarte mic)', de: 'Vatikan (sehr klein)' }, { ro: 'Tuvalu (foarte mic)', de: 'Tuvalu (sehr klein)' }] },
+    { k: 'gov', n: { ro: 'Forma de guvernare', de: 'Staatsform' }, cats: [
+      { c: '#2f6fbd', n: { ro: 'republici (conducătorii sunt aleși)', de: 'Republiken (die Führung wird gewählt)' }, ex: ['Romania', 'United States of America', 'Egypt', 'Germany', 'Brazil', 'India', 'Poland'] },
+      { c: '#c0392b', n: { ro: 'monarhii (conducerea se transmite ereditar)', de: 'Monarchien (die Führung wird vererbt)' }, ex: ['Belgium', 'Spain', 'Saudi Arabia', 'United Kingdom', 'Sweden', 'Norway', 'Denmark', 'Japan', 'Netherlands', 'Morocco', 'Thailand'] }] }
+  ];
+  var cur = CRIT[0], sel = null, selFeat = null, info = $('#cr-info');
+  var by = {};
+  var paths = countriesOn(M, D, '#e4dcc8', function (d, el) {
+    if (sel) sel.classList.remove('sel'); sel = el; el.classList.add('sel'); selFeat = d; show(d.properties.name);
+  });
+  function catOf(name) { for (var i = 0; i < cur.cats.length; i++) if (cur.cats[i].ex.indexOf(name) >= 0) return cur.cats[i]; return null; }
+  function paint() {
+    paths.attr('fill', function (d) { var c = catOf(d.properties.name); return c ? c.c : '#e4dcc8'; });
+    legend($('#cr-legend'), cur.cats.map(function (c) { return [c.c, T(c.n)]; }).concat([['#e4dcc8', tx('fără exemplu aici', 'kein Beispiel hier')]]));
+  }
+  function show(name) {
+    var c = catOf(name);
+    info.innerHTML = '<h3>' + nm(name) + '</h3>' +
+      (c ? '<p><b>' + T(cur.n) + ':</b> ' + T(c.n) + '</p><p class="hint">' + tx('Alte exemple din această categorie: ', 'Weitere Beispiele dieser Kategorie: ') + c.ex.filter(function (x) { return x !== name; }).map(nm).join(', ') + '.</p>' :
+        '<p class="muted">' + tx('Țara nu este printre exemplele criteriului „', 'Das Land gehört nicht zu den Beispielen des Kriteriums „') + T(cur.n) + '”.</p>');
+  }
+  function intro() {
+    info.innerHTML = '<h3>' + T(cur.n) + '</h3><ul style="margin:6px 0 0;padding-left:1.1em">' + cur.cats.map(function (c) { return '<li><b style="color:' + c.c + '">' + T(c.n) + '</b>: ' + c.ex.map(nm).join(', ') + '</li>'; }).join('') +
+      (cur.extra ? '<li>' + cur.extra.map(T).join('; ') + ' <span class="muted">(' + tx('prea mici pentru hartă', 'zu klein für die Karte') + ')</span></li>' : '') + '</ul><p class="hint" style="margin-top:6px">' + tx('Apasă pe o țară colorată.', 'Tippe auf ein gefärbtes Land.') + '</p>';
+  }
+  var host = $('#cr-btns');
+  var bs = CRIT.map(function (c) {
+    var b = btn('pick', T(c.n)); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { cur = c; bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); paint(); if (selFeat && catOf(selFeat.properties.name)) show(selFeat.properties.name); else intro(); };
+    host.appendChild(b); return b;
+  });
+  bs[0].setAttribute('aria-pressed', 'true'); paint(); intro();
+  $('#cr-zoom').textContent = tx('Mărește pe țara aleasă', 'Auf das Land zoomen'); $('#cr-reset').textContent = tx('Harta întreagă', 'Ganze Karte');
+  $('#cr-zoom').onclick = function () { if (selFeat) { var c = boundsCorners(selFeat); if (c) M.zoomTo(c, 6); } };
+  $('#cr-reset').onclick = function () { M.reset(); };
+});
+Check($('#c3'), [
+  { q: { ro: 'Japonia este un stat…', de: 'Japan ist ein Staat…' },
+    o: [{ ro: 'continental fără ieșire la mare', de: 'kontinental ohne Meereszugang' }, { ro: 'insular', de: 'ein Inselstaat' }, { ro: 'peninsular', de: 'ein Halbinselstaat' }], a: 1,
+    why: { ro: 'Japonia este formată din insule, deci are poziție insulară (și teritoriu fragmentat).', de: 'Japan besteht aus Inseln, hat also eine Insellage (und ein zersplittertes Gebiet).' } },
+  { q: { ro: 'Care e un exemplu de stat „imens” (peste 6 milioane km²)?', de: 'Welches ist ein Beispiel für einen „riesigen“ Staat (über 6 Mio. km²)?' },
+    o: [{ ro: 'România', de: 'Rumänien' }, { ro: 'Canada', de: 'Kanada' }, { ro: 'Danemarca', de: 'Dänemark' }], a: 1,
+    why: { ro: 'Rusia, Canada, China, SUA, Brazilia și Australia sunt statele imense.', de: 'Russland, Kanada, China, die USA, Brasilien und Australien sind die riesigen Staaten.' } },
+  { q: { ro: 'Ce deosebește o monarhie de o republică?', de: 'Was unterscheidet eine Monarchie von einer Republik?' },
+    o: [{ ro: 'în monarhie conducerea se transmite ereditar', de: 'in der Monarchie wird die Führung vererbt' }, { ro: 'monarhiile sunt mereu mici', de: 'Monarchien sind immer klein' }, { ro: 'republicile nu au granițe', de: 'Republiken haben keine Grenzen' }], a: 0,
+    why: { ro: 'Belgia, Spania sau Arabia Saudită sunt monarhii; România, SUA sau Egiptul sunt republici.', de: 'Belgien, Spanien oder Saudi-Arabien sind Monarchien; Rumänien, die USA oder Ägypten sind Republiken.' } }
+]);
+
+/* ================= 4. Vecini ================= */
+DATA.then(function (D) {
+  loaded('nb-map');
+  var M = world('#nb-svg', D, 500);
+  M.svg.attr('aria-label', tx('Harta lumii: țara aleasă și vecinii ei', 'Weltkarte: das gewählte Land und seine Nachbarn'));
+  var feats = D.countries, selI = -1, info = $('#nb-info');
+  var count = feats.map(function (f, i) { return D.nb[i].length; });
+  var paths = M.g.append('g').selectAll('path').data(feats).join('path').attr('class', 'cn').attr('d', M.path).attr('fill', '#e4dcc8')
+    .on('click', function (e, d) { pick(feats.indexOf(d)); });
+  paths.append('title').text(function (d) { return nm(d.properties.name); });
+  paths.filter(function (d) { return d.properties.name === 'Antarctica'; }).attr('fill', '#f4f4f4');
+  function pick(i) {
+    selI = i;
+    paths.attr('fill', function (d, j) { return j === i ? '#c0392b' : D.nb[i].indexOf(j) >= 0 ? '#f0a34a' : (d.properties.name === 'Antarctica' ? '#f4f4f4' : '#e4dcc8'); })
+      .classed('sel', function (d, j) { return j === i; });
+    var n = D.nb[i].length;
+    info.innerHTML = '<h3>' + nm(feats[i].properties.name) + '</h3><p><span class="big">' + n + '</span> ' + (n === 1 ? tx('vecin terestru', 'Landnachbar') : tx('vecini terestri', 'Landnachbarn')) + '</p>' +
+      (n ? '<p>' + D.nb[i].map(function (j) { return nm(feats[j].properties.name); }).sort().join(', ') + '.</p>' : '<p class="muted">' + tx('Nu are vecini terestri (țară insulară sau cu vecini pe mare).', 'Es hat keine Landnachbarn (Inselstaat oder Nachbarn nur über das Meer).') + '</p>');
+    bars.querySelectorAll('.bar').forEach(function (b) { b.classList.toggle('on', +b.dataset.i === i); });
+  }
+  info.innerHTML = '<p class="muted">' + tx('Apasă pe o țară de pe hartă.', 'Tippe auf ein Land auf der Karte.') + '</p>';
+  var bars = $('#nb-bars');
+  var top = feats.map(function (f, i) { return i; }).filter(function (i) { return feats[i].properties.name !== 'Antarctica'; }).sort(function (a, b) { return count[b] - count[a]; }).slice(0, 8);
+  top.forEach(function (i) {
+    var b = btn('bar', '<span>' + nm(feats[i].properties.name) + '</span><span class="t" style="width:' + (count[i] / count[top[0]] * 100) + '%"></span><b>' + count[i] + '</b>');
+    b.dataset.i = i; b.onclick = function () { pick(i); }; bars.appendChild(b);
+  });
+  $('#nb-zoom').textContent = tx('Mărește pe țara aleasă', 'Auf das Land zoomen'); $('#nb-reset').textContent = tx('Harta întreagă', 'Ganze Karte');
+  $('#nb-zoom').onclick = function () { if (selI >= 0) { var c = boundsCorners(feats[selI]); if (c) M.zoomTo(c, 5); } };
+  $('#nb-reset').onclick = function () { M.reset(); };
+});
+Check($('#c4'), [
+  { q: { ro: 'De ce au Rusia și China cei mai mulți vecini?', de: 'Warum haben Russland und China die meisten Nachbarn?' },
+    o: [{ ro: 'au suprafețe foarte întinse și granițe terestre foarte lungi', de: 'sie haben sehr große Flächen und sehr lange Landgrenzen' }, { ro: 'sunt state insulare', de: 'sie sind Inselstaaten' }, { ro: 'au puțini locuitori', de: 'sie haben wenige Einwohner' }], a: 0,
+    why: { ro: 'Cu cât granița terestră e mai lungă și țara mai întinsă, cu atât are mai mulți vecini. Un stat insular nu are vecini terestri.', de: 'Je länger die Landgrenze und je größer das Land, desto mehr Nachbarn. Ein Inselstaat hat keine Landnachbarn.' },
+    hint: { ro: 'Gândește-te la lungimea granițelor, nu la numărul de locuitori.', de: 'Denk an die Länge der Grenzen, nicht an die Einwohnerzahl.' } }
+]);
+
+/* ================= 5. Harta se schimbă ================= */
+var AF = (function () {
+  // [putere, an independență]; putere: be fr de uk it pt es free
+  var s = 'be:Dem. Rep. Congo=1960;fr:Algeria=1962,Tunisia=1956,Morocco=1956,Mauritania=1960,Senegal=1960,Mali=1960,Niger=1960,Chad=1960,Burkina Faso=1960,Guinea=1958,Côte d\'Ivoire=1960,Benin=1960,Gabon=1960,Congo=1960,Central African Rep.=1960,Djibouti=1977,Madagascar=1960;' +
+    'uk:Egypt=1922,Sudan=1956,S. Sudan=2011,Uganda=1962,Kenya=1963,Nigeria=1960,Ghana=1957,Sierra Leone=1961,Gambia=1965,Zambia=1964,Zimbabwe=1980,Malawi=1964,Botswana=1966,South Africa=1961,Lesotho=1966,eSwatini=1968,Somaliland=1960;' +
+    'it:Libya=1951,Eritrea=1993,Somalia=1960;pt:Angola=1975,Mozambique=1975,Guinea-Bissau=1974;es:Eq. Guinea=1968,W. Sahara=1975;free:Liberia=0,Ethiopia=0';
+  var o = {};
+  s.split(';').forEach(function (g) { var p = g.split(':'); p[1].split(',').forEach(function (e) { var q = e.split('='); o[q[0]] = { p: p[0], y: +q[1] }; }); });
+  // fostele colonii germane până în 1919, apoi mandate
+  o['Togo'] = { p: 'de', y: 1960, m: 'fr' }; o['Cameroon'] = { p: 'de', y: 1960, m: 'fr' };
+  o['Namibia'] = { p: 'de', y: 1990, m: 'uk' }; o['Tanzania'] = { p: 'de', y: 1961, m: 'uk' };
+  o['Rwanda'] = { p: 'de', y: 1962, m: 'be' }; o['Burundi'] = { p: 'de', y: 1962, m: 'be' };
+  return o;
+})();
+DATA.then(function (D) {
+  loaded('af-map');
+  var W = 560, H = 560;
+  var proj = d3.geoNaturalEarth1().fitExtent([[6, 6], [W - 6, H - 6]], { type: 'MultiPoint', coordinates: [[-18, 37.5], [52, 37.5], [-18, -35], [52, -35]] });
+  var M = makeMap('#af-svg', W, H, proj, D.land);
+  M.svg.attr('aria-label', tx('Harta Africii în anul ales', 'Karte Afrikas im gewählten Jahr'));
+  var COL = { be: ['#6d8a5e', { ro: 'Belgia', de: 'Belgien' }], fr: ['#4a78c2', { ro: 'Franța', de: 'Frankreich' }], de: ['#9a7b66', { ro: 'Germania', de: 'Deutschland' }], uk: ['#c0392b', { ro: 'Marea Britanie', de: 'Großbritannien' }],
+    it: ['#e8b830', { ro: 'Italia', de: 'Italien' }], pt: ['#e07b39', { ro: 'Portugalia', de: 'Portugal' }], es: ['#b58ad0', { ro: 'Spania', de: 'Spanien' }], ind: ['#27a36f', { ro: 'state independente', de: 'unabhängige Staaten' }], dis: ['#bdbdbd', { ro: 'teritoriu disputat', de: 'umstrittenes Gebiet' }] };
+  function colOf(name, y) {
+    var a = AF[name]; if (!a) return null;
+    if (a.p === 'free') return 'ind';
+    if (name === 'W. Sahara' && y >= 1975) return 'dis';
+    if (y >= a.y) return 'ind';
+    if (a.p === 'de' && y >= 1919) return a.m;
+    return a.p;
+  }
+  var year = 1914;
+  var paths = M.g.append('g').selectAll('path').data(D.countries.filter(function (d) { return AF[d.properties.name]; })).join('path')
+    .attr('class', 'cn').attr('d', M.path).style('cursor', 'default').attr('fill', '#ccc');
+  paths.append('title').text(function (d) { return nm(d.properties.name); });
+  paths.on('click', function (e, d) { var n = d.properties.name; var a = AF[n]; $('#af-info').innerHTML = '<b>' + nm(n) + '</b><p>' + (a.p === 'free' ? tx('Stat independent în tot acest timp.', 'In dieser ganzen Zeit unabhängig.') : tx('Independentă din ', 'Unabhängig seit ') + a.y + (n === 'South Africa' ? tx(' (republică; din 1910 era dominion britanic)', ' (Republik; ab 1910 britisches Dominion)') : '') + (n === 'W. Sahara' ? tx(' — teritoriul e disputat și azi', ' — das Gebiet ist bis heute umstritten') : '') + '.') + '</p>'; });
+  var EV = [[1914, { ro: '1914: aproape toată Africa e împărțită între puterile europene: Franța, Marea Britanie, Germania, Belgia, Italia, Portugalia și Spania. Doar Liberia și Etiopia sunt independente.', de: '1914: Fast ganz Afrika ist unter den europäischen Mächten aufgeteilt: Frankreich, Großbritannien, Deutschland, Belgien, Italien, Portugal und Spanien. Nur Liberia und Äthiopien sind unabhängig.' }],
+    [1919, { ro: '1919: după Primul Război Mondial, Germania își pierde coloniile; ele trec sub administrarea Franței, Marii Britanii și Belgiei.', de: '1919: Nach dem Ersten Weltkrieg verliert Deutschland seine Kolonien; sie kommen unter die Verwaltung Frankreichs, Großbritanniens und Belgiens.' }],
+    [1951, { ro: 'După Al Doilea Război Mondial începe destrămarea sistemului colonial: Libia devine independentă în 1951, apoi Sudanul, Marocul și Tunisia (1956).', de: 'Nach dem Zweiten Weltkrieg beginnt der Zerfall des Kolonialsystems: Libyen wird 1951 unabhängig, dann Sudan, Marokko und Tunesien (1956).' }],
+    [1960, { ro: '1960 este numit „Anul Africii”: aproape toate coloniile franceze din vest și centru, plus Nigeria și Congo, devin independente.', de: '1960 heißt das „Afrikanische Jahr“: Fast alle französischen Kolonien im Westen und in der Mitte sowie Nigeria und Kongo werden unabhängig.' }],
+    [1975, { ro: '1974–1975: se termină și imperiul portughez (Angola, Mozambic, Guineea-Bissau).', de: '1974–1975: Auch das portugiesische Reich endet (Angola, Mosambik, Guinea-Bissau).' }],
+    [1990, { ro: '1990: Namibia, ultima colonie din sudul Africii, devine independentă.', de: '1990: Namibia, die letzte Kolonie im Süden Afrikas, wird unabhängig.' }],
+    [2011, { ro: '2011: apare cel mai nou stat african, Sudanul de Sud.', de: '2011: Der jüngste Staat Afrikas entsteht, der Südsudan.' }]];
+  function draw() {
+    paths.attr('fill', function (d) { var c = colOf(d.properties.name, year); return c ? COL[c][0] : '#ccc'; });
+    $('#af-year').textContent = year; $('#af-range').value = year;
+    var ev = EV[0]; EV.forEach(function (e) { if (year >= e[0]) ev = e; });
+    $('#af-info').innerHTML = '<p>' + T(ev[1]) + '</p>';
+    var used = {}; D.countries.forEach(function (d) { var c = colOf(d.properties.name, year); if (c) used[c] = 1; });
+    legend($('#af-legend'), Object.keys(COL).filter(function (k) { return used[k]; }).map(function (k) { return [COL[k][0], T(COL[k][1])]; }));
+    Array.prototype.forEach.call($('#af-chips').children, function (b) { b.setAttribute('aria-pressed', +b.dataset.y === year ? 'true' : 'false'); });
+  }
+  EV.forEach(function (e) { var b = btn('pick', e[0]); b.dataset.y = e[0]; b.setAttribute('aria-pressed', 'false'); b.onclick = function () { year = e[0]; draw(); }; $('#af-chips').appendChild(b); });
+  $('#af-range').oninput = function () { year = +this.value; draw(); };
+  draw();
+});
+(function () {
+  var Y = [1900, 1914, 1945, 1989, 2017];
+  var C = [{ n: { ro: 'Europa', de: 'Europa' }, c: '#4a78c2' }, { n: { ro: 'Asia', de: 'Asien' }, c: '#e8b830' }, { n: { ro: 'Africa', de: 'Afrika' }, c: '#27a36f' }, { n: { ro: 'America', de: 'Amerika' }, c: '#c0392b' }, { n: { ro: 'Australia și Oceania', de: 'Australien und Ozeanien' }, c: '#8e44ad' }];
+  var V = { 1900: [21, 5, 2, 20, 0, 48], 1914: [23, 5, 4, 22, 1, 55], 1945: [31, 12, 4, 22, 2, 71], 1989: [32, 38, 51, 35, 11, 167], 2017: [47, 46, 54, 35, 14, 195] };
+  var stack = $('#st-stack'), tbl = $('#st-tbl'), cur = 1989;
+  var rows = C.map(function (c) { var r = h('div', 'row'); r.style.setProperty('--c', c.c); r.innerHTML = '<span>' + T(c.n) + '</span><div><i style="width:0"></i></div><b></b>'; stack.appendChild(r); return r; });
+  var tot = h('div', 'row'); tot.innerHTML = '<span><b>' + tx('TOTAL', 'GESAMT') + '</b></span><div></div><b></b>'; stack.appendChild(tot);
+  var th = '<tr><th>' + tx('Anul', 'Jahr') + '</th>' + C.map(function (c) { return '<th>' + T(c.n) + '</th>'; }).join('') + '<th>' + tx('TOTAL', 'GESAMT') + '</th></tr>';
+  function draw() {
+    var v = V[cur];
+    rows.forEach(function (r, i) { r.querySelector('i').style.width = (v[i] / 54 * 100) + '%'; r.querySelector('b').textContent = v[i] + (cur === 2017 && i === 0 ? '*' : cur === 2017 && i === 1 ? '**' : ''); });
+    tot.querySelector('b').textContent = v[5];
+    tbl.innerHTML = th + Y.map(function (y) { return '<tr class="' + (y === cur ? 'on' : '') + '"><td>' + y + '</td>' + V[y].map(function (x, i) { return '<td>' + x + (y === 2017 && i === 0 ? '*' : y === 2017 && i === 1 ? '**' : '') + '</td>'; }).join('') + '</tr>'; }).join('');
+    Array.prototype.forEach.call($('#st-chips').children, function (b) { b.setAttribute('aria-pressed', +b.dataset.y === cur ? 'true' : 'false'); });
+  }
+  Y.forEach(function (y) { var b = btn('pick', y); b.dataset.y = y; b.setAttribute('aria-pressed', 'false'); b.onclick = function () { cur = y; draw(); }; $('#st-chips').appendChild(b); });
+  draw();
+  Check($('#c5'), [
+    { q: { ro: 'Care dintre aceste evenimente au schimbat cel mai mult harta politică în secolul al XX-lea?', de: 'Welche Ereignisse veränderten die politische Karte im 20. Jahrhundert am stärksten?' },
+      o: [{ ro: 'cele două războaie mondiale și destrămarea sistemului colonial', de: 'die beiden Weltkriege und das Ende des Kolonialsystems' }, { ro: 'apariția telefoanelor mobile', de: 'das Aufkommen der Mobiltelefone' }, { ro: 'schimbarea climei', de: 'der Klimawandel' }], a: 0,
+      why: { ro: 'Războaiele au mutat granițe, iar independența coloniilor a adus zeci de state noi.', de: 'Die Kriege verschoben Grenzen, und die Unabhängigkeit der Kolonien brachte Dutzende neue Staaten.' } },
+    { q: { ro: 'Pe ce continent a crescut cel mai mult numărul statelor între 1945 și 1989?', de: 'Auf welchem Kontinent wuchs die Zahl der Staaten zwischen 1945 und 1989 am stärksten?' },
+      o: [{ ro: 'Europa', de: 'Europa' }, { ro: 'America', de: 'Amerika' }, { ro: 'Africa', de: 'Afrika' }], a: 2,
+      why: { ro: 'Africa a trecut de la 4 la 51 de state: coloniile și-au câștigat independența.', de: 'Afrika ging von 4 auf 51 Staaten: Die Kolonien wurden unabhängig.' },
+      hint: { ro: 'Uită-te în tabel la diferențe. Unde s-a schimbat cel mai mult cifra?', de: 'Sieh dir die Unterschiede in der Tabelle an. Wo änderte sich die Zahl am meisten?' } }
+  ]);
+})();
+
+/* ================= 6. Distanțe și suprafețe ================= */
+function ausProj() {
+  // 1 unitate SVG = 16 km, deci 1 cm pe harta 1 : 40 000 000 = 25 unități (400 km)
+  return d3.geoAzimuthalEquidistant().rotate([-134, 27]).translate([280, 280]).scale(6371 / 16);
+}
+var CM = 25, KM_PER_CM = 400;
+DATA.then(function (D) {
+  loaded('ds-map');
+  var W = 560, H = 560, proj = ausProj();
+  var M = makeMap('#ds-svg', W, H, proj, D.land);
+  M.svg.attr('aria-label', tx('Harta Australiei cu punctele A, B și X', 'Karte Australiens mit den Punkten A, B und X'));
+  M.svg.select('.grat').remove();
+  var P = { A: [113, -42.5], B: [135.9, -34.7], X: [123.5, -27] };
+  var xy = {}; Object.keys(P).forEach(function (k) { xy[k] = proj(P[k]); });
+  var AUS0 = D.countries.filter(function (d) { return d.properties.name === 'Australia'; })[0], bb = M.path.bounds(AUS0);
+  var vb = { x: Math.min(bb[0][0], xy.A[0]) - 20, y: bb[0][1] - 20 }; vb.w = bb[1][0] + 20 - vb.x; vb.h = Math.max(bb[1][1], xy.A[1]) + 50 - vb.y;
+  M.svg.attr('viewBox', vb.x + ' ' + vb.y + ' ' + vb.w + ' ' + vb.h);
+  var g = M.g.append('g'), ln = M.g.append('g');
+  // riglă la scară: 0–10 cm
+  var sb = M.g.append('g').attr('transform', 'translate(' + (vb.x + 16) + ',' + (vb.y + vb.h - 22) + ')');
+  sb.append('rect').attr('x', -8).attr('y', -22).attr('width', 6 * CM + 50).attr('height', 40).attr('rx', 6).attr('fill', 'rgba(255,255,255,.85)');
+  for (var i = 0; i <= 6; i++) { sb.append('line').attr('x1', i * CM).attr('x2', i * CM).attr('y1', 0).attr('y2', 8).attr('stroke', '#1b2a2e'); sb.append('text').attr('x', i * CM).attr('y', 20).attr('text-anchor', 'middle').attr('font-size', 10).attr('font-weight', 700).text(i); }
+  sb.append('line').attr('x1', 0).attr('x2', 6 * CM).attr('y1', 0).attr('y2', 0).attr('stroke', '#1b2a2e').attr('stroke-width', 2);
+  sb.append('text').attr('x', 6 * CM + 6).attr('y', 4).attr('font-size', 11).attr('font-weight', 700).text('cm');
+  sb.append('text').attr('x', 0).attr('y', -8).attr('font-size', 11).attr('font-weight', 700).text(tx('Scara 1 : 40 000 000', 'Maßstab 1 : 40 000 000'));
+  var picked = [], meas = {}, tool = $('#ds-tool');
+  Object.keys(P).forEach(function (k) {
+    var c = g.append('g').style('cursor', 'pointer').attr('tabindex', 0).attr('role', 'button').attr('aria-label', tx('Punctul ', 'Punkt ') + k);
+    c.append('circle').attr('cx', xy[k][0]).attr('cy', xy[k][1]).attr('r', 22).attr('fill', 'transparent');
+    c.append('circle').attr('class', 'dot').attr('cx', xy[k][0]).attr('cy', xy[k][1]).attr('r', 6).attr('fill', '#d6242c');
+    c.append('text').attr('x', xy[k][0] + 12).attr('y', xy[k][1] - 10).attr('font-size', 18).attr('font-weight', 800).attr('class', 'mlbl').text(k);
+    function choose() { onPoint(k); }
+    c.on('click', choose).on('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(); } });
+  });
+  var tbl = h('table', 'msr'), hintP = h('p', 'hint');
+  tool.appendChild(tbl); tool.appendChild(hintP);
+  function render() {
+    tbl.innerHTML = '<tr><td><b>' + tx('Segment', 'Strecke') + '</b></td><td><b>' + tx('Lungime pe hartă', 'Länge auf der Karte') + '</b></td></tr>' +
+      ['AB', 'BX'].map(function (k) { return '<tr><td>' + k[0] + ' – ' + k[1] + '</td><td>' + (meas[k] ? '≈ ' + meas[k].toFixed(1).replace('.', ',') + ' cm' : '—') + '</td></tr>'; }).join('');
+    hintP.textContent = picked.length === 1 ? tx('Alege al doilea punct.', 'Wähle den zweiten Punkt.') : tx('Apasă pe două puncte: A și B, apoi B și X.', 'Tippe zwei Punkte an: A und B, dann B und X.');
+  }
+  var s2 = h('div', 'tool'); s2.innerHTML = '<b>' + tx('Pasul 2. Citește scara', 'Schritt 2. Maßstab lesen') + '</b><p class="hint">' + tx('Scara 1 : 40 000 000 înseamnă că 1 cm pe hartă = 40 000 000 cm în realitate. Câți km sunt 1 cm pe hartă?', 'Der Maßstab 1 : 40 000 000 bedeutet: 1 cm auf der Karte = 40 000 000 cm in Wirklichkeit. Wie viele km sind 1 cm auf der Karte?') + '</p>';
+  tool.appendChild(s2);
+  field('km', 400, 0, s2, tx('Corect! 40 000 000 cm : 100 000 = 400 km.', 'Richtig! 40 000 000 cm : 100 000 = 400 km.'), tx('Indiciu: 1 km = 100 000 cm. Împarte 40 000 000 la 100 000.', 'Tipp: 1 km = 100 000 cm. Teile 40 000 000 durch 100 000.'));
+  var s3 = h('div', 'tool'); s3.innerHTML = '<b>' + tx('Pasul 3. Distanța reală', 'Schritt 3. Wirkliche Entfernung') + '</b><p class="hint">' + tx('Înmulțește lungimea de pe hartă (în cm) cu 400 km. Apoi adună.', 'Multipliziere die Länge auf der Karte (in cm) mit 400 km. Dann addiere.') + '</p>';
+  tool.appendChild(s3);
+  field('A–B, km', null, 0.08, s3, null, null, 'AB'); field('B–X, km', null, 0.08, s3, null, null, 'BX'); field(tx('A–B–X împreună, km', 'A–B–X zusammen, km'), null, 0.08, s3, null, null, 'S');
+  /** Câmp de răspuns; ținta se calculează la verificare din măsurători. */
+  function field(label, ans, tol, parent, okMsg, hint, key) {
+    var f = h('div', 'field'); f.innerHTML = '<label>' + label + ' </label>';
+    var inp = h('input', ''); inp.type = 'text'; inp.inputMode = 'numeric'; inp.setAttribute('aria-label', label); f.appendChild(inp);
+    var b = btn('btn ghost', tx('Verifică', 'Prüfen')), fb = h('p', 'fb'); f.appendChild(b); f.appendChild(fb);
+    b.onclick = function () {
+      var v = parseFloat(inp.value.replace(/\s/g, '').replace(',', '.')); inp.classList.remove('ok', 'bad');
+      if (isNaN(v)) { fb.textContent = tx('Scrie un număr.', 'Schreib eine Zahl.'); return; }
+      var target = ans;
+      if (key) {
+        if (key === 'S') { if (!(meas.AB && meas.BX)) { fb.textContent = tx('Întâi măsoară A–B și B–X pe hartă (pasul 1).', 'Miss zuerst A–B und B–X auf der Karte (Schritt 1).'); return; } target = (meas.AB + meas.BX) * KM_PER_CM; }
+        else { if (!meas[key]) { fb.textContent = tx('Întâi măsoară acest segment pe hartă (pasul 1).', 'Miss zuerst diese Strecke auf der Karte (Schritt 1).'); return; } target = meas[key] * KM_PER_CM; }
+      }
+      var ok = Math.abs(v - target) <= Math.max(tol * target, 0);
+      inp.classList.add(ok ? 'ok' : 'bad');
+      fb.textContent = ok ? '✓ ' + (okMsg || tx('Corect! ≈ ', 'Richtig! ≈ ') + Math.round(target) + ' km') : (hint || tx('Nu chiar. Verifică: lungimea în cm × 400 km.', 'Nicht ganz. Prüfe: Länge in cm × 400 km.'));
+    };
+    parent.appendChild(f); return f;
+  }
+  function onPoint(k) {
+    if (picked.indexOf(k) >= 0) return;
+    picked.push(k);
+    if (picked.length === 2) {
+      var a = picked[0], b = picked[1], key = [a, b].sort().join('');
+      var d = Math.hypot(xy[a][0] - xy[b][0], xy[a][1] - xy[b][1]) / CM;
+      ln.append('line').attr('x1', xy[a][0]).attr('y1', xy[a][1]).attr('x2', xy[b][0]).attr('y2', xy[b][1]).attr('stroke', '#d6242c').attr('stroke-width', 3).attr('stroke-dasharray', '8 5');
+      var mx = (xy[a][0] + xy[b][0]) / 2, my = (xy[a][1] + xy[b][1]) / 2;
+      ln.append('text').attr('class', 'mlbl').attr('x', mx + 8).attr('y', my - 6).attr('font-size', 14).text(d.toFixed(1).replace('.', ',') + ' cm');
+      if (key === 'AB' || key === 'BX') meas[key] = d;
+      picked = [];
+    }
+    render();
+  }
+  $('#ds-map').insertAdjacentHTML('beforeend', '');
+  var rst = btn('btn ghost', tx('Șterge măsurătorile', 'Messungen löschen')); rst.onclick = function () { ln.selectAll('*').remove(); meas = {}; picked = []; render(); };
+  render(); tool.appendChild(rst);
+});
+
+DATA.then(function (D) {
+  loaded('ar-map');
+  var W = 560, H = 560, proj = ausProj();
+  var M = makeMap('#ar-svg', W, H, proj, null);
+  M.svg.select('.grat').remove();
+  M.svg.attr('aria-label', tx('Australia cu rețea de pătrate de 1 cm', 'Australien mit einem Quadratnetz von 1 cm'));
+  var AU = D.countries.filter(function (d) { return d.properties.name === 'Australia'; })[0];
+  M.g.append('path').datum(AU).attr('class', 'land').attr('d', M.path).style('fill', '#9bbf74').style('stroke', '#4d7a35').style('stroke-width', 1.4);
+  var b = M.path.bounds(AU), x0 = Math.floor(b[0][0] / CM) * CM, y0 = Math.floor(b[0][1] / CM) * CM;
+  M.svg.attr('viewBox', (x0 - 12) + ' ' + (y0 - 12) + ' ' + (b[1][0] - x0 + CM + 24) + ' ' + (b[1][1] - y0 + CM + 24));
+  var cells = [], grid = M.g.append('g');
+  for (var y = y0; y < b[1][1]; y += CM) for (var x = x0; x < b[1][0]; x += CM) {
+    var n = 0, tot = 0;
+    for (var i = 1; i <= 5; i++) for (var j = 1; j <= 5; j++) { var p = proj.invert([x + i * CM / 6, y + j * CM / 6]); tot++; if (d3.geoContains(AU, p)) n++; }
+    if (n === 0) continue;
+    var c = { x: x, y: y, full: n === tot, on: false };
+    var gg = grid.append('g').attr('class', 'cell').attr('tabindex', 0).attr('role', 'button').attr('aria-label', tx('pătrat', 'Quadrat'));
+    gg.append('rect').attr('x', x).attr('y', y).attr('width', CM).attr('height', CM);
+    c.el = gg.node(); cells.push(c);
+    (function (c) {
+      function tog() { if (c.locked) return; c.on = !c.on; c.el.classList.toggle('on', c.on); upd(); }
+      d3.select(c.el).on('click', tog).on('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); } });
+    })(c);
+  }
+  var tool = $('#ar-tool');
+  var full = cells.filter(function (c) { return c.full; }).length, part = cells.length - full;
+  tool.innerHTML = '<p class="score" id="ar-count"></p><p class="hint" id="ar-msg" aria-live="polite"></p><div class="actions"><button class="btn" type="button" id="ar-check"></button><button class="btn ghost" type="button" id="ar-clear"></button></div><div id="ar-calc" class="tool"></div>';
+  function upd() { var n = cells.filter(function (c) { return c.on; }).length; $('#ar-count').textContent = tx('Pătrate întregi alese: ', 'Gewählte ganze Quadrate: ') + n; }
+  upd();
+  $('#ar-check').textContent = tx('Verifică pătratele', 'Quadrate prüfen'); $('#ar-clear').textContent = tx('Începe din nou', 'Neu beginnen');
+  $('#ar-clear').onclick = function () { cells.forEach(function (c) { c.on = false; c.locked = false; c.el.setAttribute('class', 'cell'); }); $('#ar-calc').innerHTML = ''; $('#ar-msg').textContent = ''; upd(); };
+  $('#ar-check').onclick = function () {
+    var wrong = 0, miss = 0, ok = 0;
+    cells.forEach(function (c) {
+      c.el.setAttribute('class', 'cell' + (c.on && c.full ? ' good' : c.on && !c.full ? ' bad' : !c.on && c.full ? ' miss' : ' part'));
+      if (c.on && c.full) ok++; else if (c.on) wrong++; else if (c.full) miss++;
+    });
+    $('#ar-msg').textContent = wrong || miss ? tx('Verde: corecte. Roșu: pătrat care nu e întreg în contur (' + wrong + '). Galben puternic: pătrat întreg, neales (' + miss + '). Galben deschis: pătrate de margine, doar în parte în contur.', 'Grün: richtig. Rot: Quadrat nicht ganz in der Umrisslinie (' + wrong + '). Kräftiges Gelb: ganzes Quadrat, nicht gewählt (' + miss + '). Hellgelb: Randquadrate, nur teilweise in der Umrisslinie.')
+      : tx('Corect! Ai ales toate cele ' + ok + ' pătrate întregi. Cele galbene de la margine sunt doar în parte în contur.', 'Richtig! Du hast alle ' + ok + ' ganzen Quadrate gewählt. Die gelben am Rand liegen nur teilweise in der Umrisslinie.');
+    calc(full, part);
+  };
+  function calc(full, part) {
+    var host = $('#ar-calc'); if (host.firstChild) return;
+    host.innerHTML = '<b>' + tx('Pasul 4. Calculează', 'Schritt 4. Rechnen') + '</b><p class="hint">' + tx('Un pătrat are latura de 1 cm pe hartă, adică 400 km în realitate. Câți km² are un pătrat?', 'Ein Quadrat hat 1 cm Seitenlänge auf der Karte, also 400 km in Wirklichkeit. Wie viele km² hat ein Quadrat?') + '</p>';
+    var f = h('div', 'field'); f.innerHTML = '<input inputmode="numeric" aria-label="km²"><button class="btn ghost" type="button">' + tx('Verifică', 'Prüfen') + '</button><p class="fb"></p>';
+    host.appendChild(f);
+    var inp = f.querySelector('input'), fb = f.querySelector('.fb');
+    f.querySelector('button').onclick = function () {
+      var v = parseFloat(inp.value.replace(/\s/g, '').replace(/\./g, '').replace(',', '.'));
+      inp.classList.remove('ok', 'bad');
+      if (v === 160000) {
+        inp.classList.add('ok');
+        var e1 = full * 160000, e2 = (full + part / 2) * 160000, fmt = function (x) { return Math.round(x / 1000) * 1000; };
+        function nf(x) { return x.toLocaleString(L === 'de' ? 'de-DE' : 'ro-RO'); }
+        fb.innerHTML = '✓ 400 × 400 = 160 000 km².';
+        host.appendChild(h('div', 'fact', '<b>' + tx('Pasul 5. Suprafața aproximativă', 'Schritt 5. Ungefähre Fläche') + '</b><p>' +
+          tx('Numai cu pătratele întregi: ' + full + ' × 160 000 = <b>' + nf(fmt(e1)) + ' km²</b>. Rezultatul e prea mic, pentru că ai lăsat deoparte pătratele de la margine (' + part + ').<br>Dacă numeri cele de margine drept jumătăți: (' + full + ' + ' + part + ' : 2) × 160 000 ≈ <b>' + nf(fmt(e2)) + ' km²</b>.<br>Suprafața reală a Australiei este de aproximativ <b>7 700 000 km²</b>. Cu cât pătratele sunt mai mici (milimetrică!), cu atât estimarea e mai bună.',
+             'Nur mit den ganzen Quadraten: ' + full + ' × 160 000 = <b>' + nf(fmt(e1)) + ' km²</b>. Das Ergebnis ist zu klein, weil du die Randquadrate (' + part + ') weggelassen hast.<br>Zählst du die Randquadrate als Hälften: (' + full + ' + ' + part + ' : 2) × 160 000 ≈ <b>' + nf(fmt(e2)) + ' km²</b>.<br>Die wirkliche Fläche Australiens beträgt etwa <b>7 700 000 km²</b>. Je kleiner die Quadrate (Millimeterpapier!), desto besser die Schätzung.') + '</p>'));
+      } else { inp.classList.add('bad'); fb.textContent = tx('Nu chiar. 1 cm pe hartă = 400 km. Un pătrat: 400 km × 400 km.', 'Nicht ganz. 1 cm auf der Karte = 400 km. Ein Quadrat: 400 km × 400 km.'); }
+    };
+  }
+});
+Check($('#c6'), [
+  { q: { ro: 'La scara 1 : 40 000 000, câți kilometri în realitate înseamnă 3 cm pe hartă?', de: 'Wie viele Kilometer in Wirklichkeit sind beim Maßstab 1 : 40 000 000 3 cm auf der Karte?' },
+    o: [{ ro: '120 km', de: '120 km' }, { ro: '1 200 km', de: '1 200 km' }, { ro: '12 000 km', de: '12 000 km' }], a: 1,
+    why: { ro: '1 cm = 400 km, deci 3 cm = 3 × 400 = 1 200 km.', de: '1 cm = 400 km, also 3 cm = 3 × 400 = 1 200 km.' },
+    hint: { ro: 'Întâi află câți km înseamnă 1 cm (40 000 000 cm = 400 km).', de: 'Finde zuerst heraus, wie viele km 1 cm sind (40 000 000 cm = 400 km).' } },
+  { q: { ro: 'De ce e prea mică suprafața obținută numărând doar pătratele întregi?', de: 'Warum ist die Fläche zu klein, wenn man nur die ganzen Quadrate zählt?' },
+    o: [{ ro: 'pentru că ai omis pătratele din marginea conturului', de: 'weil du die Quadrate am Rand der Umrisslinie weggelassen hast' }, { ro: 'pentru că scara se schimbă', de: 'weil sich der Maßstab ändert' }, { ro: 'pentru că hărțile nu sunt exacte deloc', de: 'weil Karten überhaupt nicht genau sind' }], a: 0,
+    why: { ro: 'Pătratele de margine sunt doar în parte în contur. Numărate ca jumătăți, ele apropie rezultatul de realitate.', de: 'Die Randquadrate liegen nur teilweise in der Umrisslinie. Als Hälften gezählt, nähern sie das Ergebnis der Wirklichkeit an.' } }
+]);
+
+/* ================= 7. Mercator ================= */
+DATA.then(function (D) {
+  loaded('mc-map');
+  var W = 900, H = 610;
+  var svg = d3.select('#mc-svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('aria-label', tx('Harta lumii în două proiecții', 'Weltkarte in zwei Projektionen'));
+  var feats = D.countries.filter(function (d) { return d.properties.name !== 'Antarctica'; });
+  var P = [
+    { n: { ro: 'Proiecția Mercator', de: 'Mercator-Projektion' }, mk: function () { var k = W / (2 * Math.PI); return d3.geoMercator().scale(k).translate([W / 2, 400 * k / 143 + 30]).clipExtent([[0, 0], [W, H]]); },
+      f: { ro: 'Pe harta Mercator, Groenlanda pare cât Africa. În realitate Africa (aprox. 30 mil. km²) este de circa 14 ori mai mare decât Groenlanda (aprox. 2 mil. km²).', de: 'Auf Mercators Karte wirkt Grönland so groß wie Afrika. In Wirklichkeit ist Afrika (rund 30 Mio. km²) etwa 14-mal größer als Grönland (rund 2 Mio. km²).' } },
+    { n: { ro: 'Proiecție cu suprafețe corecte', de: 'Flächentreue Projektion' }, mk: function () { return d3.geoEqualEarth().fitExtent([[10, 10], [W - 10, H - 10]], { type: 'Sphere' }); },
+      f: { ro: 'Aici suprafețele sunt păstrate: Groenlanda e mult mai mică decât Africa. Dar formele țărilor din apropierea polilor sunt mai deformate.', de: 'Hier bleiben die Flächen erhalten: Grönland ist viel kleiner als Afrika. Dafür sind die Formen der Länder nahe den Polen stärker verzerrt.' } }
+  ];
+  var AFN = Object.keys(AF);
+  var g = svg.append('g'), cur = 0;
+  function draw() {
+    g.selectAll('*').remove();
+    var proj = P[cur].mk(), path = d3.geoPath(proj);
+    g.append('path').datum({ type: 'Sphere' }).attr('d', cur ? path : null).attr('fill', '#dcebf2').attr('stroke', '#c7d6de');
+    if (!cur) g.append('rect').attr('width', W).attr('height', H).attr('fill', '#dcebf2');
+    g.append('path').datum(d3.geoGraticule10()).attr('d', path).attr('fill', 'none').attr('stroke', '#c7d6de').attr('stroke-width', .5);
+    g.selectAll('.c').data(feats).join('path').attr('class', 'c').attr('d', path).attr('stroke', '#fff').attr('stroke-width', .5)
+      .attr('fill', function (d) { var n = d.properties.name; return n === 'Greenland' ? '#d6242c' : AFN.indexOf(n) >= 0 || n === 'Somaliland' ? '#27a36f' : '#e4dcc8'; });
+    var gl = feats.filter(function (d) { return d.properties.name === 'Greenland'; })[0], c = path.centroid(gl);
+    g.append('text').attr('class', 'mlbl').attr('x', c[0]).attr('y', c[1]).attr('text-anchor', 'middle').attr('font-size', 18).text(tx('Groenlanda', 'Grönland'));
+    var af = proj([20, 2]);
+    g.append('text').attr('class', 'mlbl').attr('x', af[0]).attr('y', af[1]).attr('text-anchor', 'middle').attr('font-size', 20).text(tx('Africa', 'Afrika'));
+    $('#mc-fact').textContent = T(P[cur].f);
+    Array.prototype.forEach.call($('#mc-btns').children, function (b, i) { b.setAttribute('aria-pressed', i === cur ? 'true' : 'false'); });
+  }
+  P.forEach(function (p, i) { var b = btn('pick', T(p.n)); b.setAttribute('aria-pressed', 'false'); b.onclick = function () { cur = i; draw(); }; $('#mc-btns').appendChild(b); });
+  draw();
+});
+Check($('#c7'), [
+  { q: { ro: 'De ce pare Groenlanda uriașă pe harta Mercator?', de: 'Warum wirkt Grönland auf Mercators Karte riesig?' },
+    o: [{ ro: 'pentru că proiecția mărește țările apropiate de poli', de: 'weil die Projektion Länder nahe den Polen vergrößert' }, { ro: 'pentru că e mai mare decât Africa', de: 'weil es größer als Afrika ist' }, { ro: 'pentru că e acoperită de gheață', de: 'weil es von Eis bedeckt ist' }], a: 0,
+    why: { ro: 'Orice hartă plană deformează ceva. Mercator păstrează bine direcțiile, dar mărește mult suprafețele de lângă poli.', de: 'Jede flache Karte verzerrt etwas. Mercator bewahrt die Richtungen gut, vergrößert aber die Flächen nahe den Polen stark.' } }
+]);
+
+/* ================= Mic dicționar ================= */
+(function () {
+  var G = [
+    ['stat (țară)', 'der Staat (das Land)'], ['teritoriu', 'das Gebiet'], ['graniță', 'die Grenze'], ['graniță terestră', 'die Landgrenze'],
+    ['graniță maritimă', 'die Seegrenze'], ['graniță aeriană', 'die Luftgrenze'], ['graniță naturală', 'die natürliche Grenze'], ['graniță convențională', 'die vereinbarte Grenze'],
+    ['suveran', 'souverän'], ['republică', 'die Republik'], ['monarhie', 'die Monarchie'], ['ministat', 'der Zwergstaat'],
+    ['stat insular', 'der Inselstaat'], ['stat peninsular', 'der Halbinselstaat'], ['fără ieșire la mare', 'ohne Meereszugang'], ['harta politică', 'die politische Karte'],
+    ['colonie', 'die Kolonie'], ['independență', 'die Unabhängigkeit'], ['teritoriu dependent', 'das abhängige Gebiet'], ['vecin', 'der Nachbar'],
+    ['scara hărții', 'der Kartenmaßstab'], ['distanță', 'die Entfernung'], ['suprafață', 'die Fläche'], ['atlas', 'der Atlas'], ['proiecție cartografică', 'die Kartenprojektion']
+  ];
+  var dl = $('#gloss');
+  G.forEach(function (g) { dl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
+})();
+})();
+</script>
+</body>
+</html>

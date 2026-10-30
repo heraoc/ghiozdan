@@ -15,6 +15,7 @@ import { fotosintezaTest } from './content/fotosinteza-test';
 import { descoperireaLumiiTest } from './content/descoperirea-lumii-test';
 import { vikingiiTest } from './content/vikingii-test';
 import { poliiSiOceaneleTest } from './content/polii-si-oceanele-test';
+import { stateleSiHartaPoliticaTest } from './content/statele-si-harta-politica-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import { operatiiCuMultimiTest } from './content/operatii-cu-multimi-test';
@@ -380,6 +381,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         src: 'lectii/clasa-6/geografie/polii-si-oceanele.html',
         done: true,
         test: { questions: poliiSiOceaneleTest, minutes: 6 },
+      },
+      {
+        slug: 'statele-si-harta-politica',
+        title: {
+          ro: 'Statele și harta politică a lumii',
+          de: 'Die Staaten und die politische Weltkarte',
+        },
+        summary: {
+          ro: 'Ce este un stat, ce tipuri de granițe există, cum se deosebesc statele, cum s-a schimbat harta (Africa 1914–2011) și cum calculezi distanțe și suprafețe pe hartă.',
+          de: 'Was ist ein Staat, welche Grenzarten gibt es, wodurch unterscheiden sich Staaten, wie hat sich die Karte verändert (Afrika 1914–2011) und wie berechnest du Entfernungen und Flächen auf der Karte.',
+        },
+        src: 'lectii/clasa-6/geografie/statele-si-harta-politica.html',
+        test: { questions: stateleSiHartaPoliticaTest, minutes: 8 },
       },
     ],
     ist: [
