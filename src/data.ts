@@ -16,6 +16,7 @@ import { descoperireaLumiiTest } from './content/descoperirea-lumii-test';
 import { vikingiiTest } from './content/vikingii-test';
 import { poliiSiOceaneleTest } from './content/polii-si-oceanele-test';
 import { stateleSiHartaPoliticaTest } from './content/statele-si-harta-politica-test';
+import { sigurantaPeInternetTest } from './content/siguranta-pe-internet-test';
 import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import { operatiiCuMultimiTest } from './content/operatii-cu-multimi-test';
@@ -436,6 +437,21 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/geografie/statele-si-harta-politica.html',
         test: { questions: stateleSiHartaPoliticaTest, minutes: 8 },
+      },
+    ],
+    tic: [
+      {
+        slug: 'siguranta-pe-internet',
+        title: {
+          ro: 'Siguranța pe internet',
+          de: 'Sicherheit im Internet',
+        },
+        summary: {
+          ro: 'Internet, browser și WWW; viruși, viermi, troieni și viruși spion; firewall și antivirus; parole puternice, date personale și identitatea virtuală; regulile comunicării în siguranță.',
+          de: 'Internet, Browser und WWW; Viren, Würmer, Trojaner und Spionageprogramme; Firewall und Virenschutz; starke Passwörter, persönliche Daten und virtuelle Identität; die Regeln für sicheres Kommunizieren.',
+        },
+        src: 'lectii/clasa-6/tic/siguranta-pe-internet.html',
+        test: { questions: sigurantaPeInternetTest, minutes: 8 },
       },
     ],
     ist: [

@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Siguranța pe internet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Sicherheit im Internet';
+})();
+</script>
+<style>
+:root{
+  --paper:#f7f6f0; --card:#ffffff; --ink:#1f2530; --muted:#5a6270; --rule:#e2e0d6; --sheet:#f1efe6;
+  --accent:#5b6cf0; --accent-soft:#eaecfd; --blue:#2f6fd6; --blue-soft:#e3edfc; --ok:#1f8a5b; --bad:#c23b3b; --red:#d2452f;
+  --good-soft:#e3f5ec; --bad-soft:#fbe4e4;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+sup{font-size:.7em;line-height:0}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.hint{font-size:14px;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{border:1.5px solid var(--accent);background:transparent;border-radius:99px;padding:5px 13px;cursor:pointer;font-weight:700}
+.chip[aria-pressed="true"]{background:var(--accent);color:#fff}
+
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:6px}
+.toc a{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:4px 12px 4px 5px;color:var(--ink);text-decoration:none;font-weight:700;font-size:15px}
+.toc a b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 13px/1 var(--display)}
+.toc a:hover{border-color:var(--ink)}
+
+section.block{margin-top:56px;scroll-margin-top:12px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:70ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.story{background:#fffbea;border:1px solid #f0e2a8;border-radius:10px;padding:14px 18px;margin-top:16px}
+.story h3{font-size:19px;color:#8a6a00;margin-bottom:4px}
+.know{margin-top:16px;background:#eef4fd;border:1px solid #c9dbf5;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.know h3{font-size:20px;color:#1f4f99}
+.know ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+
+.split{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.fig svg{display:block;width:100%;height:auto}
+.panel{display:grid;gap:10px;align-content:start}
+.slider{display:grid;gap:2px}
+.slider label{font-weight:700}
+.slider input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
+.slider,.panel>*,.split>*{min-width:0}
+.readout{background:var(--sheet);border-radius:10px;padding:10px 14px;display:grid;gap:4px}
+.readout .eq{font:800 21px/1.3 var(--display)}
+.readout .rule{font-size:15px;color:var(--muted)}
+.c1{color:var(--blue)} .c2{color:var(--red)} .c3{color:var(--ok)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tab{border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:6px 15px;cursor:pointer;font-weight:700}
+.tab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+/* verifică-te și clasificări */
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--ok);background:var(--ok);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#a12f2f;background:var(--bad-soft)}
+.check{margin-top:18px;background:var(--card);border:1px dashed #b7c0f5;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted);min-height:1.2em}
+.cls{display:grid;gap:0;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:6px 14px}
+.cls .row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:6px 14px;padding:10px 0;border-bottom:1px solid var(--rule);align-items:center}
+.cls .row:last-child{border-bottom:0}
+.cls .row .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cls .row .why{grid-column:1/-1;font-size:15px;color:var(--muted);min-height:0}
+.cls .row .why:empty{display:none}
+
+/* câmpuri de răspuns */
+.vin{width:110px;font:800 20px/1 var(--display);text-align:center;padding:6px 8px;border:2px solid var(--rule);border-radius:10px;background:#fff}
+.vin.wide{width:130px}
+.vin.ok{border-color:var(--ok);background:var(--good-soft)}
+.vin.bad{border-color:var(--bad);background:var(--bad-soft)}
+.row2{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.result{border-radius:10px;padding:10px 14px;font-weight:700}
+.result.good{background:var(--good-soft);color:#17744d}
+.result.try{background:#fdf0d5;color:#8a5a00}
+.score{font-weight:700;color:var(--muted)}
+.ex{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:10px;max-width:680px}
+.fillbox{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:6px 16px}
+.fillbox p{padding:10px 0;border-bottom:1px solid var(--rule);line-height:2.1}
+.fillbox p:last-child{border-bottom:0}
+.fillbox select{border:2px solid var(--rule);border-radius:8px;padding:3px 6px;background:#fff;font-weight:700}
+.fillbox select.ok{border-color:var(--ok);background:var(--good-soft)}
+.fillbox select.bad{border-color:var(--bad);background:var(--bad-soft)}
+
+/* text în SVG */
+svg text{font-family:var(--body)}
+.lbl{font:700 15px var(--body);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.lbl.big{font-size:18px}
+.lbl.sm{font-size:13px;font-weight:500}
+
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+  .cls .row{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .lbl{font-size:19px} .lbl.big{font-size:22px} .lbl.sm{font-size:16px}
+  body{font-size:16.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+
+
+
+.pwbar{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;max-width:340px}
+.pwbar span{height:12px;border-radius:6px;background:#e2e0d6;transition:background .2s}
+.crit{list-style:none;margin:0;padding:12px 16px;background:var(--card);border:1px solid var(--rule);border-radius:12px;display:grid;gap:6px;font-weight:700;color:var(--muted)}
+.crit li.on{color:var(--ok)}
+.chat{display:grid;gap:8px}
+.bubble{background:#fff;border:1.5px solid var(--rule);border-radius:14px 14px 14px 4px;padding:9px 14px;max-width:92%}
+.readout.alert{background:var(--bad-soft)}
+.readout.alert .eq{color:#a12f2f}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="head">
+  <p class="eyebrow"><span class="ro">TIC · Clasa a 6-a · Internetul</span><span class="de">IKT · Klasse 6 · Das Internet</span></p>
+  <h1><span class="ro">Siguranța pe internet</span><span class="de">Sicherheit im Internet</span></h1>
+  <p class="lead">
+    <span class="ro">Internetul e plin de lucruri bune: informații, jocuri, prieteni noi. Dar, ca pe stradă, trebuie să știi la ce să fii atent. Vei vedea cum arată internetul, ce sunt programele distructive și cum te aperi de ele, cum alegi o parolă puternică și de ce o persoană întâlnită online poate să nu fie cine spune că este.</span>
+    <span class="de">Das Internet ist voller guter Dinge: Informationen, Spiele, neue Freunde. Aber wie auf der Straße musst du wissen, worauf du achten sollst. Du siehst, wie das Internet aufgebaut ist, was Schadprogramme sind und wie du dich schützt, wie du ein starkes Passwort wählst und warum jemand, den du online triffst, vielleicht nicht der ist, der er vorgibt zu sein.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Ce este mai important: să ai un antivirus sau să nu apeși pe orice link? Sau amândouă?</span><span class="de">Was ist wichtiger: ein Virenschutz oder nicht auf jeden Link zu klicken? Oder beides?</span></li>
+        <li><span class="ro">Ai da cheia de la casă unui străin? Dar adresa ta unui „prieten” din joc?</span><span class="de">Würdest du einem Fremden den Hausschlüssel geben? Und deine Adresse einem „Freund“ aus einem Spiel?</span></li>
+        <li><span class="ro">Cum ai face o parolă pe care nimeni n-o ghicește, dar tu o ții minte ușor?</span><span class="de">Wie würdest du ein Passwort bauen, das niemand errät, das du dir aber leicht merkst?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Internet, browser, WWW</span><span class="de">Internet, Browser, WWW</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Programe distructive</span><span class="de">Schadprogramme</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Firewall și antivirus</span><span class="de">Firewall und Virenschutz</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Date personale și parole</span><span class="de">Persönliche Daten und Passwörter</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Identitatea virtuală</span><span class="de">Die virtuelle Identität</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Regulile de siguranță</span><span class="de">Die Sicherheitsregeln</span></a>
+  </nav>
+</header>
+
+<!-- 1. Recapitulare -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Recapitulare: internet, browser, WWW</span><span class="de">Wiederholung: Internet, Browser, WWW</span></h2>
+  <p class="section-sub"><span class="ro">Trei cuvinte care se confundă ușor. Apasă pe fiecare și urmărește desenul: ce anume se schimbă?</span><span class="de">Drei Wörter, die man leicht verwechselt. Tippe auf jedes und beobachte die Zeichnung: Was verändert sich?</span></p>
+  <div class="split">
+    <div class="fig"><svg id="net-svg" viewBox="0 0 640 250" role="img" aria-label="Internet, browser și WWW"></svg></div>
+    <div class="panel">
+      <div class="chips" id="net-chips" role="group" aria-label="Alege"></div>
+      <div class="readout" id="net-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro"><strong>Internetul</strong> este o rețea mondială de calculatoare interconectate, care permite schimbul de informații stocate în format electronic. Informațiile pot fi publice sau private, gratuite sau contra cost.</span><span class="de"><strong>Das Internet</strong> ist ein weltweites Netz miteinander verbundener Computer, das den Austausch elektronisch gespeicherter Informationen ermöglicht. Die Informationen können öffentlich oder privat, kostenlos oder kostenpflichtig sein.</span></li>
+      <li><span class="ro"><strong>Browserul</strong> este aplicația cu ajutorul căreia navigăm pe internet. Unele browsere sunt în componența sistemului de operare, altele trebuie instalate.</span><span class="de"><strong>Der Browser</strong> ist die Anwendung, mit der wir im Internet surfen. Manche Browser gehören zum Betriebssystem, andere müssen installiert werden.</span></li>
+      <li><span class="ro"><strong>WWW (World Wide Web)</strong> este ansamblul tuturor documentelor și informațiilor conectate între ele, care pot fi accesate navigând pe internet.</span><span class="de"><strong>WWW (World Wide Web)</strong> ist die Gesamtheit aller miteinander verknüpften Dokumente und Informationen, auf die man beim Surfen im Internet zugreifen kann.</span></li>
+    </ul>
+  </div>
+  <div id="c1"></div>
+</section>
+
+<!-- 2. Malware -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Programe distructive: malware</span><span class="de">Schadprogramme: Malware</span></h2>
+  <p class="section-sub"><span class="ro">Când descarci informații, aplicații sau fișiere de pe internet, pot pătrunde în calculator, tabletă sau telefon programe cu rol distructiv, numite <strong>malware</strong>. Ele pot deteriora sau șterge date și pot copia parolele ca să ajungă la informațiile tale personale. Alege un tip și privește cum acționează.</span><span class="de">Wenn du Informationen, Apps oder Dateien aus dem Internet herunterlädst, können Schadprogramme, sogenannte <strong>Malware</strong>, in Computer, Tablet oder Smartphone gelangen. Sie können Daten beschädigen oder löschen und Passwörter kopieren, um an deine persönlichen Informationen zu kommen. Wähle eine Art und sieh, wie sie vorgeht.</span></p>
+  <div class="split">
+    <div class="fig">
+      <svg id="mal-svg" viewBox="0 0 640 230" role="img" aria-label="Cum acționează un program distructiv"></svg>
+      <div class="actions" style="justify-content:center;margin-top:4px"><button class="btn ghost" type="button" id="mal-play"></button></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="mal-chips" role="group" aria-label="Tipul de program distructiv"></div>
+      <div class="readout" id="mal-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="know">
+    <h3><span class="ro">Bine de știut</span><span class="de">Wissenswertes</span></h3>
+    <p><span class="ro"><strong>Malware</strong> este un program distructiv care se instalează singur pe dispozitivele electronice, fără voia utilizatorului. Programele care infectează de obicei sunt cele executabile, cu extensiile <strong>exe, com, bat, pif</strong>.</span><span class="de"><strong>Malware</strong> ist ein zerstörerisches Programm, das sich von selbst und ohne Willen des Nutzers auf elektronischen Geräten installiert. Befallen werden meist ausführbare Dateien mit den Endungen <strong>exe, com, bat, pif</strong>.</span></p>
+  </div>
+  <h3 style="margin:26px 0 8px;font-size:22px"><span class="ro">Ce fel de program este?</span><span class="de">Was für ein Programm ist das?</span></h3>
+  <div id="cls-mal"></div>
+  <div id="c2"></div>
+</section>
+
+<!-- 3. Firewall + antivirus -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Cum ne apărăm: firewall și antivirus</span><span class="de">Wie wir uns schützen: Firewall und Virenschutz</span></h2>
+  <p class="section-sub"><span class="ro">Din internet vin mesaje și fișiere bune, dar și unele periculoase. Pornește și oprește cele două scuturi și urmărește ce se întâmplă cu pachetele care se apropie de calculator: cele verzi sunt inofensive, cele roșii sunt programe distructive.</span><span class="de">Aus dem Internet kommen gute, aber auch gefährliche Nachrichten und Dateien. Schalte die beiden Schutzschilde an und aus und beobachte, was mit den Paketen geschieht, die sich dem Computer nähern: Grüne sind harmlos, rote sind Schadprogramme.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="fw-svg" viewBox="0 0 640 240" role="img" aria-label="Calculator protejat de firewall și antivirus"></svg></div>
+    <div class="panel">
+      <div class="chips" id="fw-chips" role="group" aria-label="Scuturi"></div>
+      <div class="readout" id="fw-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro"><strong>Antivirusul</strong> este programul anti-malware instalat pe dispozitiv. El izolează programele distructive și le poate chiar șterge. Trebuie <strong>actualizat periodic</strong>, ca să recunoască și programele noi.</span><span class="de"><strong>Das Antivirenprogramm</strong> ist das Anti-Malware-Programm auf dem Gerät. Es isoliert Schadprogramme und kann sie sogar löschen. Es muss <strong>regelmäßig aktualisiert</strong> werden, damit es auch neue Programme erkennt.</span></li>
+      <li><span class="ro"><strong>Firewall-ul</strong> este un sistem de protecție care previne accesul la datele din calculator.</span><span class="de"><strong>Die Firewall</strong> ist ein Schutzsystem, das den Zugriff auf die Daten im Computer verhindert.</span></li>
+    </ul>
+  </div>
+  <div class="story">
+    <h3><span class="ro">Știai că? De ce „firewall”?</span><span class="de">Wusstest du? Warum „Firewall“?</span></h3>
+    <p><span class="ro">În engleză, <em>firewall</em> înseamnă „zid antifoc”. Așa cum un zid gros oprește focul să treacă dintr-o clădire în alta, firewall-ul oprește accesul periculos dintre internet și calculatorul tău. De aceea e desenat în manual ca un zid de cărămidă.</span><span class="de">Auf Englisch bedeutet <em>firewall</em> „Brandmauer“. Wie eine dicke Mauer verhindert, dass das Feuer von einem Gebäude auf das nächste übergreift, hält die Firewall gefährliche Zugriffe zwischen Internet und deinem Computer auf. Deshalb ist sie im Buch als Ziegelmauer gezeichnet.</span></p>
+  </div>
+  <div id="c3"></div>
+</section>
+
+<!-- 4. Date personale și parole -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Date personale și parole</span><span class="de">Persönliche Daten und Passwörter</span></h2>
+  <p class="section-sub"><span class="ro">Când navighezi pe internet, parolează dispozitivele pe care le folosești. Așa îți protejezi <strong>datele personale</strong>: numele, adresa de acasă, numărul de telefon, informațiile despre familia ta. Mai întâi, sortează informațiile.</span><span class="de">Wenn du im Internet surfst, sichere die Geräte, die du benutzt, mit einem Passwort. So schützt du deine <strong>persönlichen Daten</strong>: Namen, Wohnadresse, Telefonnummer, Informationen über deine Familie. Sortiere zuerst die Informationen.</span></p>
+  <div id="cls-data"></div>
+  <h3 style="margin:30px 0 6px;font-size:24px"><span class="ro">Cum arată o parolă puternică?</span><span class="de">Wie sieht ein starkes Passwort aus?</span></h3>
+  <p class="section-sub"><span class="ro">Scrie în câmp o parolă de probă și vezi cât de puternică este. <strong>Nu scrie aici o parolă pe care o folosești de-adevăratelea!</strong></span><span class="de">Schreibe ein Probe-Passwort ins Feld und sieh, wie stark es ist. <strong>Gib hier kein Passwort ein, das du wirklich benutzt!</strong></span></p>
+  <div class="split">
+    <div class="panel">
+      <div class="row2"><input type="text" class="vin" id="pw" style="width:100%;max-width:340px;font-size:20px" autocomplete="off" spellcheck="false" aria-label="Parolă de probă" placeholder="…"></div>
+      <div id="pw-bar" class="pwbar" role="img" aria-label=""></div>
+      <div class="readout" id="pw-out" aria-live="polite"></div>
+    </div>
+    <div class="panel">
+      <ul class="crit" id="pw-crit"></ul>
+    </div>
+  </div>
+  <div class="story">
+    <h3><span class="ro">Cum o ții minte ușor? Un vers sau un proverb</span><span class="de">Wie merkst du sie dir leicht? Ein Vers oder ein Sprichwort</span></h3>
+    <p style="margin-bottom:8px"><span class="ro">Ia prima literă din fiecare cuvânt al unui vers sau proverb, apoi adaugă cifre și caractere speciale. Alege un proverb:</span><span class="de">Nimm den ersten Buchstaben jedes Wortes eines Verses oder Sprichworts und füge dann Ziffern und Sonderzeichen hinzu. Wähle ein Sprichwort:</span></p>
+    <div class="chips" id="vs-chips" role="group" aria-label="Proverb"></div>
+    <div class="readout" id="vs-out" aria-live="polite"></div>
+    <div class="actions"><button class="btn ghost" type="button" id="vs-try"></button></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro">O parolă cu grad ridicat de protecție conține <strong>litere mari, litere mici, cifre și caractere speciale</strong> și este cât mai lungă.</span><span class="de">Ein Passwort mit hohem Schutz enthält <strong>Großbuchstaben, Kleinbuchstaben, Ziffern und Sonderzeichen</strong> und ist möglichst lang.</span></li>
+      <li><span class="ro">Nu alege o parolă pe care o pot ghici prietenii tăi.</span><span class="de">Wähle kein Passwort, das deine Freunde erraten können.</span></li>
+      <li><span class="ro"><strong>Atenție!</strong> Dacă navighezi pe site-uri care cer autentificare cu un <strong>cont de utilizator</strong>, creează contul numai sub supravegherea profesorului sau a părinților.</span><span class="de"><strong>Achtung!</strong> Wenn du Seiten besuchst, die eine Anmeldung mit einem <strong>Benutzerkonto</strong> verlangen, lege das Konto nur unter Aufsicht deiner Lehrkraft oder deiner Eltern an.</span></li>
+    </ul>
+  </div>
+  <div id="c4"></div>
+</section>
+
+<!-- 5. Identitate virtuală -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Identitatea virtuală și lipsa certitudinii</span><span class="de">Die virtuelle Identität und die Unsicherheit</span></h2>
+  <p class="section-sub"><span class="ro">Internetul te ajută să cunoști ușor persoane noi, chiar de aceeași vârstă și cu aceleași interese. Dar are și un minus: <strong>lipsa certitudinii</strong>. Citește conversația pas cu pas, apăsând „Pasul următor”.</span><span class="de">Im Internet lernt man leicht neue Menschen kennen, sogar gleichaltrige mit denselben Interessen. Es hat aber auch einen Nachteil: die <strong>Unsicherheit</strong>. Lies das Gespräch Schritt für Schritt mit „Nächster Schritt“.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="id-svg" viewBox="0 0 320 300" role="img" aria-label="Profilul unui prieten nou și persoana necunoscută din spatele lui"></svg></div>
+    <div class="panel">
+      <div class="chat" id="chat" aria-live="polite"></div>
+      <div class="actions" style="margin-top:0"><button class="btn ghost" type="button" id="chat-back"></button><button class="btn" type="button" id="chat-next"></button></div>
+      <div class="readout" id="chat-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro"><strong>Identitatea virtuală nu coincide întotdeauna cu identitatea reală.</strong> Oricât de bine te-ai înțelege cu o persoană pe care ai cunoscut-o în mediul virtual, nu poți avea certitudinea că este într-adevăr cine pretinde că este.</span><span class="de"><strong>Die virtuelle Identität stimmt nicht immer mit der echten überein.</strong> Egal wie gut du dich mit jemandem verstehst, den du online kennengelernt hast: Du kannst nie sicher sein, dass er wirklich der ist, der er vorgibt zu sein.</span></p>
+  </div>
+  <div id="c5"></div>
+</section>
+
+<!-- 6. Reguli -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Fixare: comunică în siguranță pe internet</span><span class="de">Festigung: Sicher im Internet kommunizieren</span></h2>
+  <p class="section-sub"><span class="ro">Mai întâi, spune pentru fiecare situație dacă este un comportament corect sau riscant. Apoi completează cele șapte reguli de aur.</span><span class="de">Sage zuerst bei jeder Situation, ob das Verhalten richtig oder riskant ist. Vervollständige dann die sieben goldenen Regeln.</span></p>
+  <div id="cls-rules"></div>
+  <h3 style="margin:30px 0 8px;font-size:22px"><span class="ro">Cele șapte reguli</span><span class="de">Die sieben Regeln</span></h3>
+  <div id="fill"></div>
+  <p class="hint" style="margin-top:10px"><span class="ro">Temă de gândire: alege o regulă și explică, pentru un coleg mai mic, de ce este importantă.</span><span class="de">Denkaufgabe: Wähle eine Regel und erkläre einem jüngeren Mitschüler, warum sie wichtig ist.</span></p>
+</section>
+
+<section class="block" aria-labelledby="t-gloss">
+  <h2 class="section-title" id="t-gloss"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <p class="section-sub"><span class="ro">Cuvintele-cheie ale lecției, în română și în germană.</span><span class="de">Die wichtigsten Wörter der Lektion, auf Rumänisch und auf Deutsch.</span></p>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<footer class="foot">
+  <p><span class="ro">După manualul de TIC pentru clasa a 6-a, Lecția 6 (Siguranța pe internet). Desenele sunt schematice. Parolele din exemple sunt doar pentru exersare: nu folosi niciodată o parolă dintr-un exemplu.</span><span class="de">Nach dem IKT-Buch für die 6. Klasse, Lektion 6 (Sicherheit im Internet). Die Zeichnungen sind schematisch. Die Passwörter in den Beispielen dienen nur zum Üben: Benutze nie ein Passwort aus einem Beispiel.</span></p>
+</footer>
+
+</div>
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang === 'de' ? 'de' : 'ro';
+var NS = 'http://www.w3.org/2000/svg';
+var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function $(s, r) { return (r || document).querySelector(s); }
+function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function T(o) { return o[L]; }
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function el(tag, a, parent, text) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (parent) parent.appendChild(e); if (text != null) e.textContent = text; return e; }
+function fmt(n) { var s = (+(+n).toFixed(4)).toString(), p = s.split('.'); p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' '); return p.join(','); }
+function num(s) { var v = parseFloat(String(s).replace(/\s/g, '').replace(',', '.')); return isNaN(v) ? NaN : v; }
+function same(a, b) { return !isNaN(a) && Math.abs(a - b) <= Math.max(1e-6, Math.abs(b) * 0.005); }
+function rint(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+function hm(min) { return Math.floor(min / 60) + ' h ' + pad2(min % 60) + ' min'; }
+function hmClock(min) { return Math.floor(min / 60) + ':' + pad2(min % 60); }
+
+/* butoane-pastile cu aria-pressed */
+function chips(host, items, start, cb, cls) {
+  var cur = start, bs = [];
+  items.forEach(function (it) {
+    var b = h('button', cls || 'chip', it[1]); b.type = 'button';
+    b.onclick = function () { set(it[0]); cb(it[0]); };
+    b.dataset.k = it[0]; bs.push(b); host.appendChild(b);
+  });
+  function set(k) { cur = k; bs.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === String(k)); }); }
+  set(start);
+  return { set: set };
+}
+
+/* „Verifică-te”: întrebări cu răspuns imediat */
+function Check(host, items) {
+  host.className = 'check';
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('div', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('div', 'q', T(it.q)));
+    it.o.forEach(function (o, i) {
+      var b = h('button', 'pick', T(o)); b.type = 'button';
+      b.onclick = function () {
+        if (i === it.a) { b.className = 'pick right'; $$('button', opts).forEach(function (x) { x.disabled = true; }); why.innerHTML = '✔ ' + T(it.why); }
+        else { b.className = 'pick wrong'; b.disabled = true; why.innerHTML = '💡 ' + T(it.hint); }
+      };
+      opts.appendChild(b);
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* clasificare: fiecare rând are variante pe butoane */
+function Classify(host, cats, rows) {
+  host.className = 'cls';
+  rows.forEach(function (r) {
+    var row = h('div', 'row'), opts = h('div', 'opts'), why = h('div', 'why');
+    why.setAttribute('aria-live', 'polite');
+    row.appendChild(h('div', '', T(r.t)));
+    cats.forEach(function (c, i) {
+      var b = h('button', 'pick', T(c)); b.type = 'button';
+      b.onclick = function () {
+        if (i === r.a) { b.className = 'pick right'; $$('button', opts).forEach(function (x) { x.disabled = true; }); why.innerHTML = '✔ ' + T(r.why); }
+        else { b.className = 'pick wrong'; b.disabled = true; why.innerHTML = '💡 ' + T(r.hint); }
+      };
+      opts.appendChild(b);
+    });
+    row.appendChild(opts); row.appendChild(why); host.appendChild(row);
+  });
+}
+
+/* exerciții de completat cu liste alese */
+function Fill(host, bank, rows) {
+  host.className = 'fillbox';
+  rows.forEach(function (r) {
+    var p = h('p'), sel = h('select'); sel.setAttribute('aria-label', tx('alege cuvântul', 'Wort wählen'));
+    sel.appendChild(h('option', '', '…')).value = '';
+    bank.forEach(function (w, i) { var o = h('option', '', T(w)); o.value = i; sel.appendChild(o); });
+    sel.onchange = function () { sel.className = sel.value === '' ? '' : (+sel.value === r.a ? 'ok' : 'bad'); };
+    var parts = T(r.t).split('___');
+    p.appendChild(document.createTextNode(parts[0])); p.appendChild(sel); p.appendChild(document.createTextNode(parts[1] || ''));
+    host.appendChild(p);
+  });
+}
+
+/* dicționar */
+function Gloss(host, rows) { rows.forEach(function (r) { var d = h('div'); d.appendChild(h('dt', '', r[0])); d.appendChild(h('dd', '', r[1])); host.appendChild(d); }); }
+
+/* animație cu play/pauză; f(t secunde) */
+function Anim(f, btn, startPlaying) {
+  var playing = false, t0 = 0, t = 0, raf = 0;
+  function label() { btn.textContent = playing ? '⏸ ' + tx('Pauză', 'Pause') : '▶ ' + tx('Pornește', 'Start'); btn.setAttribute('aria-pressed', playing); }
+  function frame(now) { if (!playing) return; t = (now - t0) / 1000; f(t); raf = requestAnimationFrame(frame); }
+  function play() { playing = true; t0 = performance.now() - t * 1000; label(); raf = requestAnimationFrame(frame); }
+  function pause() { playing = false; cancelAnimationFrame(raf); label(); }
+  btn.onclick = function () { playing ? pause() : play(); };
+  f(0); label();
+  if (startPlaying && !REDUCED) play();
+  return { play: play, pause: pause, redraw: function () { f(t); }, reset: function () { t = 0; t0 = performance.now(); f(0); } };
+}
+
+/* desen: calculator */
+function pc(parent, x, y, s, fill, stroke) {
+  var g = el('g', { transform: 'translate(' + x + ',' + y + ') scale(' + s + ')' }, parent);
+  el('rect', { x: -22, y: -16, width: 44, height: 30, rx: 4, fill: fill || '#fff', stroke: stroke || '#1f2530', 'stroke-width': 3 }, g);
+  el('line', { x1: 0, y1: 14, x2: 0, y2: 22, stroke: stroke || '#1f2530', 'stroke-width': 3 }, g);
+  el('line', { x1: -12, y1: 23, x2: 12, y2: 23, stroke: stroke || '#1f2530', 'stroke-width': 4, 'stroke-linecap': 'round' }, g);
+  return g;
+}
+function emo(parent, x, y, size, ch, extra) {
+  var a = { x: x, y: y, 'font-size': size, 'text-anchor': 'middle', 'dominant-baseline': 'central' };
+  for (var k in (extra || {})) a[k] = extra[k];
+  return el('text', a, parent, ch);
+}
+function lab(parent, x, y, s, cls, anchor, fill) {
+  return el('text', { x: x, y: y, 'text-anchor': anchor || 'middle', class: 'lbl ' + (cls || 'sm'), fill: fill || '#1f2530' }, parent, s);
+}
+function rd(host, title, rule, extra) {
+  host.innerHTML = '<span class="eq">' + title + '</span><span class="rule">' + rule + '</span>' + (extra ? '<span class="rule">' + extra + '</span>' : '');
+}
+
+/* ================= 1. Internet, browser, WWW ================= */
+(function () {
+  var svg = $('#net-svg'), mode = 'internet';
+  var N = [[80, 70], [235, 38], [400, 72], [555, 48], [150, 195], [325, 205], [500, 190]];
+  var LK = [[0, 1], [1, 2], [2, 3], [1, 4], [2, 5], [4, 5], [5, 6], [3, 6], [0, 4]];
+  var P = [[85, 62], [250, 40], [425, 72], [545, 175], [330, 172], [130, 178]];
+  var PL = [[0, 1], [1, 2], [2, 3], [1, 4], [4, 5], [5, 0], [4, 3]];
+  var ICONS = ['📄', '🖼️', '🎬', '📰', '🎵', '📄'];
+  function draw(t) {
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: 640, height: 250, fill: '#f4f6ff' }, svg);
+    var i;
+    if (mode === 'internet') {
+      LK.forEach(function (l) { el('line', { x1: N[l[0]][0], y1: N[l[0]][1], x2: N[l[1]][0], y2: N[l[1]][1], stroke: '#5b6cf0', 'stroke-width': 3, opacity: .55 }, svg); });
+      LK.forEach(function (l, k) {
+        var p = (t * 0.4 + k * 0.17) % 1, a = N[l[0]], b = N[l[1]];
+        if (k % 2) p = 1 - p;
+        el('circle', { cx: a[0] + (b[0] - a[0]) * p, cy: a[1] + (b[1] - a[1]) * p, r: 5, fill: '#e8a317', stroke: '#fff', 'stroke-width': 1.5 }, svg);
+      });
+      N.forEach(function (n) { pc(svg, n[0], n[1], 1, '#fff'); });
+      lab(svg, 320, 242, tx('calculatoare interconectate → schimb de informații', 'verbundene Computer → Austausch von Informationen'), 'sm');
+    } else if (mode === 'browser') {
+      LK.forEach(function (l) { el('line', { x1: N[l[0]][0], y1: N[l[0]][1], x2: N[l[1]][0], y2: N[l[1]][1], stroke: '#c9cff5', 'stroke-width': 2 }, svg); });
+      N.forEach(function (n) { pc(svg, n[0], n[1], 1, '#fff', '#b6bdd6'); });
+      el('rect', { x: 140, y: 18, width: 360, height: 200, rx: 10, fill: '#fff', stroke: '#1f2530', 'stroke-width': 3 }, svg);
+      el('rect', { x: 140, y: 18, width: 360, height: 30, rx: 10, fill: '#5b6cf0' }, svg);
+      [0, 1, 2].forEach(function (k) { el('circle', { cx: 158 + k * 18, cy: 33, r: 5, fill: '#fff' }, svg); });
+      el('rect', { x: 150, y: 56, width: 340, height: 26, rx: 13, fill: '#eaecfd', stroke: '#5b6cf0', 'stroke-width': 2 }, svg);
+      lab(svg, 168, 74, 'www.exemplu.ro', 'sm', 'start', '#2d3a99');
+      el('rect', { x: 160, y: 98, width: 150, height: 14, rx: 4, fill: '#c9cff5' }, svg);
+      el('rect', { x: 160, y: 122, width: 150, height: 8, rx: 3, fill: '#e2e5f7' }, svg);
+      el('rect', { x: 160, y: 138, width: 130, height: 8, rx: 3, fill: '#e2e5f7' }, svg);
+      el('rect', { x: 160, y: 154, width: 150, height: 8, rx: 3, fill: '#e2e5f7' }, svg);
+      el('rect', { x: 335, y: 98, width: 140, height: 90, rx: 6, fill: '#ffe9b3' }, svg);
+      emo(svg, 405, 143, 40, '🖼️');
+      lab(svg, 320, 208, tx('browserul = fereastra prin care navighezi', 'Browser = das Fenster, durch das du surfst'), 'sm');
+      lab(svg, 320, 240, 'Edge · Safari · Chrome · Firefox', 'sm', 'middle', '#5a6270');
+    } else {
+      PL.forEach(function (l) { el('line', { x1: P[l[0]][0], y1: P[l[0]][1], x2: P[l[1]][0], y2: P[l[1]][1], stroke: '#5b6cf0', 'stroke-width': 3, 'stroke-dasharray': '2 6', 'stroke-linecap': 'round' }, svg); });
+      var hot = Math.floor(t * 1.2) % P.length;
+      P.forEach(function (p, k) {
+        el('rect', { x: p[0] - 34, y: p[1] - 28, width: 68, height: 56, rx: 8, fill: '#fff', stroke: k === hot ? '#e8a317' : '#1f2530', 'stroke-width': k === hot ? 5 : 3 }, svg);
+        emo(svg, p[0], p[1], 30, ICONS[k]);
+      });
+      lab(svg, (P[1][0] + P[4][0]) / 2 + 14, (P[1][1] + P[4][1]) / 2 + 2, tx('link', 'Link'), 'sm', 'start', '#2d3a99');
+      lab(svg, 320, 242, tx('documente conectate între ele prin linkuri', 'durch Links miteinander verbundene Dokumente'), 'sm');
+    }
+  }
+  var host = $('#net-svg').parentNode, ab = h('div', 'actions'), btn = h('button', 'btn ghost'); btn.type = 'button'; ab.style.justifyContent = 'center'; ab.style.marginTop = '4px'; ab.appendChild(btn); host.appendChild(ab);
+  var an = Anim(draw, btn, true);
+  function info() {
+    var o = $('#net-out');
+    if (mode === 'internet') rd(o, tx('Internetul', 'Das Internet'), tx('Este rețeaua: cablurile și calculatoarele de pe tot globul. Punctele galbene sunt informațiile care circulă.', 'Das ist das Netz: die Kabel und Computer auf der ganzen Welt. Die gelben Punkte sind die Informationen, die unterwegs sind.'), tx('Informațiile pot fi publice sau private, gratuite sau contra cost.', 'Die Informationen können öffentlich oder privat, kostenlos oder kostenpflichtig sein.'));
+    else if (mode === 'browser') rd(o, tx('Browserul', 'Der Browser'), tx('Este aplicația (programul) cu care ajungi pe internet, cu bara de adrese în care scrii adresa unui site.', 'Das ist die Anwendung (das Programm), mit der du ins Internet gelangst, mit der Adressleiste, in die du die Adresse einer Seite schreibst.'), tx('Unele browsere vin odată cu sistemul de operare (de ex. Edge pe Windows, Safari pe Mac), altele trebuie instalate (de ex. Chrome, Firefox).', 'Manche Browser kommen mit dem Betriebssystem (z. B. Edge unter Windows, Safari am Mac), andere müssen installiert werden (z. B. Chrome, Firefox).'));
+    else rd(o, tx('WWW (World Wide Web)', 'WWW (World Wide Web)'), tx('Este „pânza” de documente: pagini, imagini, filme, muzică, legate între ele prin linkuri. Le găsești navigând pe internet.', 'Das ist das „Netz“ aus Dokumenten: Seiten, Bilder, Filme, Musik, durch Links verbunden. Du findest sie, wenn du im Internet surfst.'), tx('Internetul este drumul, WWW este ce găsești pe el.', 'Das Internet ist der Weg, das WWW ist das, was du darauf findest.'));
+    svg.setAttribute('aria-label', mode);
+    an.redraw();
+  }
+  chips($('#net-chips'), [['internet', tx('Internet', 'Internet')], ['browser', tx('Browser', 'Browser')], ['www', 'WWW']], 'internet', function (k) { mode = k; info(); });
+  info();
+})();
+Check($('#c1'), [
+  { q: { ro: 'Cu ce navigăm pe internet?', de: 'Womit surfen wir im Internet?' },
+    o: [{ ro: 'cu browserul', de: 'mit dem Browser' }, { ro: 'cu antivirusul', de: 'mit dem Virenschutz' }, { ro: 'cu firewall-ul', de: 'mit der Firewall' }], a: 0,
+    why: { ro: 'Browserul este aplicația pentru navigare.', de: 'Der Browser ist die Anwendung zum Surfen.' },
+    hint: { ro: 'Care dintre ele este „fereastra” în care scrii adresa unui site?', de: 'Welches ist das „Fenster“, in das du die Adresse einer Seite schreibst?' } },
+  { q: { ro: 'Ce este internetul?', de: 'Was ist das Internet?' },
+    o: [{ ro: 'un program de pe calculator', de: 'ein Programm auf dem Computer' }, { ro: 'o rețea mondială de calculatoare interconectate', de: 'ein weltweites Netz verbundener Computer' }, { ro: 'un tip de virus', de: 'eine Art Virus' }], a: 1,
+    why: { ro: 'Internetul este rețeaua; WWW este ansamblul documentelor conectate între ele.', de: 'Das Internet ist das Netz; das WWW ist die Gesamtheit der verknüpften Dokumente.' },
+    hint: { ro: 'Uită-te la desenul cu „Internet”: ce vezi legat între ele?', de: 'Sieh dir die Zeichnung „Internet“ an: Was ist dort miteinander verbunden?' } }
+]);
+
+/* ================= 2. Malware ================= */
+(function () {
+  var svg = $('#mal-svg'), kind = 'virus';
+  var FILES = ['joc.exe', 'prog.com', 'run.bat', 'setup.pif', 'poza.jpg'];
+  function draw(t) {
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: 640, height: 230, fill: '#fbf7f7' }, svg);
+    var c = t % 8, i;
+    if (kind === 'virus') {
+      lab(svg, 320, 28, tx('fișiere descărcate de pe internet', 'aus dem Internet heruntergeladene Dateien'), 'sm', 'middle', '#5a6270');
+      FILES.forEach(function (f, k) {
+        var x = 38 + k * 118, bad = k < 4 && c > 0.8 + k * 1.2;
+        el('rect', { x: x, y: 60, width: 88, height: 104, rx: 8, fill: bad ? '#fbe4e4' : '#fff', stroke: bad ? '#c23b3b' : '#1f2530', 'stroke-width': 3 }, svg);
+        emo(svg, x + 44, 100, 30, bad ? '🦠' : (k < 4 ? '⚙️' : '🖼️'));
+        lab(svg, x + 44, 148, f, 'sm', 'middle', bad ? '#a12f2f' : '#1f2530');
+      });
+      lab(svg, 320, 200, tx('virusul se strecoară în fișierele executabile (exe, com, bat, pif)', 'der Virus schleicht sich in ausführbare Dateien ein (exe, com, bat, pif)'), 'sm');
+    } else if (kind === 'worm') {
+      for (i = 0; i < 3; i++) el('line', { x1: 90 + i * 150, y1: 115, x2: 240 + i * 150, y2: 115, stroke: '#9aa3b2', 'stroke-width': 3 }, svg);
+      for (i = 0; i < 4; i++) {
+        var inf = c > i * 1.8 - 0.1 || i === 0;
+        pc(svg, 90 + i * 150, 115, 1.25, inf ? '#fbe4e4' : '#fff', inf ? '#c23b3b' : '#1f2530');
+        if (inf) emo(svg, 90 + i * 150, 62, 30, '🐛');
+      }
+      for (i = 0; i < 3; i++) {
+        var p = (c - i * 1.8) / 1.6;
+        if (p > 0 && p < 1) emo(svg, 90 + i * 150 + 150 * p, 92, 26, '✉️');
+      }
+      lab(svg, 320, 28, tx('rețeaua din care face parte calculatorul', 'das Netz, zu dem der Computer gehört'), 'sm', 'middle', '#5a6270');
+      lab(svg, 320, 200, tx('viermele se multiplică singur și trece ca fișier atașat de la un calculator la altul', 'der Wurm vermehrt sich selbst und wandert als Dateianhang von Computer zu Computer'), 'sm');
+    } else if (kind === 'trojan') {
+      var ph = c < 2 ? 0 : (c < 4 ? 1 : 2), bx = ph === 0 ? 300 : (ph === 1 ? 300 + (c - 2) / 2 * 150 : 450);
+      pc(svg, 70, 150, 1.1, '#fff'); lab(svg, 70, 205, tx('atacator, de la distanță', 'Angreifer, aus der Ferne'), 'sm');
+      pc(svg, 560, 150, 1.25, ph === 2 ? '#fbe4e4' : '#fff', ph === 2 ? '#c23b3b' : '#1f2530'); lab(svg, 560, 205, tx('calculatorul tău', 'dein Computer'), 'sm');
+      emo(svg, bx, 110, 54, ph === 2 ? '🐴' : '🎁');
+      lab(svg, bx, 156, ph === 2 ? tx('troian!', 'Trojaner!') : tx('„joc gratuit”', '„Gratis-Spiel“'), 'sm', 'middle', ph === 2 ? '#a12f2f' : '#1f2530');
+      if (ph === 2) {
+        el('line', { x1: 108, y1: 150, x2: 515, y2: 150, stroke: '#c23b3b', 'stroke-width': 3, 'stroke-dasharray': '8 6' }, svg);
+        lab(svg, 320, 52, tx('acces la calculatorul infectat, prin internet', 'Zugriff auf den infizierten Computer über das Internet'), 'sm', 'middle', '#a12f2f');
+      } else lab(svg, 320, 52, ph === 0 ? tx('arată ca ceva inofensiv…', 'sieht harmlos aus …') : tx('îl descarci și îl pornești…', 'du lädst es herunter und startest es …'), 'sm', 'middle', '#5a6270');
+    } else {
+      pc(svg, 110, 120, 1.5, '#fff'); emo(svg, 110, 114, 30, '👁️'); lab(svg, 110, 190, tx('calculatorul tău', 'dein Computer'), 'sm');
+      emo(svg, 540, 120, 50, '🖥️'); lab(svg, 540, 190, tx('persoană străină', 'fremde Person'), 'sm');
+      el('line', { x1: 170, y1: 120, x2: 490, y2: 120, stroke: '#9aa3b2', 'stroke-width': 3, 'stroke-dasharray': '6 6' }, svg);
+      var T = [tx('site-uri', 'Webseiten'), tx('parole', 'Passwörter'), tx('date bancare', 'Bankdaten')];
+      T.forEach(function (s, k) {
+        var p = (t * 0.28 + k / 3) % 1, x = 190 + p * 280;
+        el('rect', { x: x - 38, y: 92, width: 76, height: 24, rx: 12, fill: '#fff', stroke: '#c23b3b', 'stroke-width': 2 }, svg);
+        lab(svg, x, 109, s, 'sm', 'middle', '#a12f2f');
+      });
+      lab(svg, 320, 215, tx('virusul spion colectează și trimite datele tale', 'der Spionageprogramm sammelt und schickt deine Daten'), 'sm');
+    }
+  }
+  var an = Anim(draw, $('#mal-play'), true);
+  var INFO = {
+    virus: [tx('Virus', 'Virus'), tx('Este prezent în fișierele descărcate de pe internet. Infectează dispozitivele electronice și le strică funcționarea, în general prin fișierele executabile (exe, com, bat, pif).', 'Er steckt in Dateien, die aus dem Internet heruntergeladen wurden. Er infiziert elektronische Geräte und stört ihre Funktion, meist über ausführbare Dateien (exe, com, bat, pif).')],
+    worm: [tx('Vierme', 'Wurm'), tx('Se răspândește singur și se multiplică folosind rețeaua din care face parte calculatorul virusat. Trece de la un calculator la altul ca fișier atașat.', 'Er verbreitet sich selbst und vermehrt sich über das Netz, zu dem der befallene Computer gehört. Er wandert als Dateianhang von einem Computer zum anderen.')],
+    trojan: [tx('Virus de tip troian', 'Trojaner'), tx('Se deghizează, ca și calul troian din mitologia greacă. Oferă posibilitatea de a accesa de la distanță calculatorul infectat, foarte simplu, prin internet.', 'Er tarnt sich wie das Trojanische Pferd der griechischen Sage. Er ermöglicht es, den infizierten Computer ganz einfach aus der Ferne über das Internet zu erreichen.')],
+    spy: [tx('Virus de tip spion', 'Spionageprogramm (Spyware)'), tx('Colectează și transmite adresele site-urilor accesate, date personale și bancare. Datele sunt folosite pentru furtul de identitate și pentru fraude bancare.', 'Es sammelt und übermittelt die besuchten Webadressen, persönliche und Bankdaten. Die Daten werden für Identitätsdiebstahl und Bankbetrug benutzt.')]
+  };
+  function info() { rd($('#mal-out'), INFO[kind][0], INFO[kind][1]); svg.setAttribute('aria-label', INFO[kind][0]); an.redraw(); }
+  chips($('#mal-chips'), [['virus', tx('Viruși', 'Viren')], ['worm', tx('Viermi', 'Würmer')], ['trojan', tx('Troieni', 'Trojaner')], ['spy', tx('Spioni', 'Spione')]], 'virus', function (k) { kind = k; an.reset(); info(); });
+  info();
+})();
+Classify($('#cls-mal'), [{ ro: 'virus', de: 'Virus' }, { ro: 'vierme', de: 'Wurm' }, { ro: 'troian', de: 'Trojaner' }, { ro: 'spion', de: 'Spion' }], [
+  { t: { ro: 'Un „joc gratuit” care, odată pornit, lasă pe altcineva să-ți controleze calculatorul de la distanță', de: 'Ein „Gratis-Spiel“, das, einmal gestartet, jemand anderen deinen Computer aus der Ferne steuern lässt' }, a: 2, why: { ro: 'Deghizarea în ceva inofensiv și accesul de la distanță sunt semnele troianului.', de: 'Die Tarnung als etwas Harmloses und der Fernzugriff sind die Kennzeichen des Trojaners.' }, hint: { ro: 'Gândește-te la calul din povestea greacă: arăta ca un dar.', de: 'Denk an das Pferd aus der griechischen Sage: Es sah aus wie ein Geschenk.' } },
+  { t: { ro: 'Un program care se trimite singur, ca fișier atașat, tuturor calculatoarelor din rețeaua școlii', de: 'Ein Programm, das sich selbst als Dateianhang an alle Computer im Schulnetz schickt' }, a: 1, why: { ro: 'Se răspândește singur prin rețea și se multiplică: vierme.', de: 'Es verbreitet sich selbst im Netz und vermehrt sich: Wurm.' }, hint: { ro: 'Care tip se răspândește singur de la un calculator la altul?', de: 'Welche Art verbreitet sich von selbst von Computer zu Computer?' } },
+  { t: { ro: 'Un program ascuns care notează ce parole scrii și ce site-uri vizitezi și le trimite unui străin', de: 'Ein verstecktes Programm, das aufschreibt, welche Passwörter du eingibst und welche Seiten du besuchst, und sie an einen Fremden schickt' }, a: 3, why: { ro: 'Colectează și transmite datele tale: virus de tip spion.', de: 'Es sammelt und übermittelt deine Daten: Spionageprogramm.' }, hint: { ro: 'Ce face programul cu informațiile tale?', de: 'Was macht das Programm mit deinen Informationen?' } },
+  { t: { ro: 'Un program ascuns într-un fișier setup.exe descărcat de pe internet, care îi strică funcționarea calculatorului', de: 'Ein Programm, das sich in einer aus dem Internet geladenen Datei setup.exe versteckt und den Computer in seiner Funktion stört' }, a: 0, why: { ro: 'Infectează fișierele executabile și afectează funcționarea dispozitivului: virus.', de: 'Es infiziert ausführbare Dateien und stört die Funktion des Geräts: Virus.' }, hint: { ro: 'Nu se răspândește singur prin rețea și nu spionează: infectează fișiere.', de: 'Es verbreitet sich nicht selbst im Netz und spioniert nicht: Es infiziert Dateien.' } }
+]);
+Check($('#c2'), [
+  { q: { ro: 'Ce este malware?', de: 'Was ist Malware?' },
+    o: [{ ro: 'un program distructiv care se instalează fără voia utilizatorului', de: 'ein zerstörerisches Programm, das sich ohne Willen des Nutzers installiert' }, { ro: 'un program care protejează calculatorul', de: 'ein Programm, das den Computer schützt' }, { ro: 'un tip de browser', de: 'eine Art Browser' }], a: 0,
+    why: { ro: 'Malware = program distructiv; antivirusul este programul care ne apără de el.', de: 'Malware = Schadprogramm; das Antivirenprogramm schützt uns davor.' },
+    hint: { ro: 'Cuvântul vine de la „rău intenționat”. Ce rol are un astfel de program?', de: 'Das Wort bedeutet „böswillig“. Welche Rolle hat so ein Programm?' } }
+]);
+
+/* ================= 3. Firewall + antivirus ================= */
+(function () {
+  var svg = $('#fw-svg'), fw = true, av = true, host = svg.parentNode;
+  var SEQ = ['good', 'bad', 'good', 'bad', 'good', 'bad'], GAP = 1.4, CYC = SEQ.length * GAP, DUR = 3.2;
+  function draw(t) {
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: 640, height: 240, fill: '#f4f6ff' }, svg);
+    var infected = !fw && !av;
+    el('line', { x1: 80, y1: 120, x2: 560, y2: 120, stroke: '#c9cff5', 'stroke-width': 4 }, svg);
+    pc(svg, 64, 120, 1.5, infected ? '#fbe4e4' : '#e3f5ec', infected ? '#c23b3b' : '#1f8a5b');
+    lab(svg, 64, 188, infected ? tx('infectat!', 'infiziert!') : tx('calculatorul tău', 'dein Computer'), 'sm', 'middle', infected ? '#a12f2f' : '#1f2530');
+    if (infected) emo(svg, 64, 80, 30, '🦠');
+    emo(svg, 580, 120, 58, '🌐'); lab(svg, 580, 188, 'Internet', 'sm');
+    if (av) { emo(svg, 215, 120, 44, '🛡️'); lab(svg, 215, 168, tx('antivirus', 'Virenschutz'), 'sm'); }
+    else { emo(svg, 215, 120, 44, '🛡️', { opacity: .18 }); lab(svg, 215, 168, tx('antivirus oprit', 'Virenschutz aus'), 'sm', 'middle', '#8a93a3'); }
+    if (fw) {
+      for (var r = 0; r < 5; r++) for (var c = 0; c < 2; c++) el('rect', { x: 366 + c * 20 - (r % 2) * 10, y: 56 + r * 26, width: 20, height: 26, fill: r % 2 ? '#e0714f' : '#c9532f', stroke: '#fff', 'stroke-width': 2 }, svg);
+      lab(svg, 376, 204, 'firewall', 'sm', 'middle', '#a03a1c');
+    } else {
+      el('rect', { x: 356, y: 56, width: 40, height: 130, fill: 'none', stroke: '#b6bdd6', 'stroke-width': 2, 'stroke-dasharray': '5 5' }, svg);
+      lab(svg, 376, 204, tx('firewall oprit', 'Firewall aus'), 'sm', 'middle', '#8a93a3');
+    }
+    SEQ.forEach(function (kind, i) {
+      var p = (((t - i * GAP) % CYC) + CYC) % CYC / DUR;
+      if (p > 1.3) return;
+      var x = 540 - 440 * p, stop = null, op = 1, ch = kind === 'good' ? '📄' : '🦠';
+      if (kind === 'bad') stop = fw ? 396 : (av ? 238 : null);
+      if (stop !== null && x < stop) {
+        var ps = (540 - stop) / 440;
+        x = stop; op = Math.max(0, 1 - (p - ps) / 0.25);
+        if (op <= 0) return;
+        el('circle', { cx: x, cy: 120, r: 22, fill: 'none', stroke: '#c23b3b', 'stroke-width': 3, opacity: op }, svg);
+      } else if (p > 1) return;
+      el('rect', { x: x - 20, y: 100, width: 40, height: 40, rx: 8, fill: kind === 'good' ? '#e3f5ec' : '#fbe4e4', stroke: kind === 'good' ? '#1f8a5b' : '#c23b3b', 'stroke-width': 3, opacity: op }, svg);
+      emo(svg, x, 120, 22, ch, { opacity: op });
+    });
+  }
+  var ab = h('div', 'actions'), btn = h('button', 'btn ghost'); btn.type = 'button'; ab.style.justifyContent = 'center'; ab.style.marginTop = '4px'; ab.appendChild(btn); host.appendChild(ab);
+  var an = Anim(draw, btn, true);
+  function info() {
+    var o = $('#fw-out');
+    if (fw && av) rd(o, tx('Calculator în siguranță', 'Computer in Sicherheit'), tx('Firewall-ul oprește la intrare accesul periculos. Dacă ceva totuși trece, antivirusul îl izolează. Două scuturi sunt mai bune decât unul.', 'Die Firewall stoppt gefährliche Zugriffe schon am Eingang. Schlüpft doch etwas durch, isoliert es das Antivirenprogramm. Zwei Schilde sind besser als eines.'));
+    else if (fw) rd(o, tx('Doar firewall', 'Nur Firewall'), tx('Firewall-ul oprește pachetele periculoase la intrare. Dar un program periculos pe care îl descarci chiar tu nu e oprit așa ușor: ai nevoie și de antivirus.', 'Die Firewall stoppt gefährliche Pakete am Eingang. Ein gefährliches Programm, das du selbst herunterlädst, wird aber nicht so leicht aufgehalten: Du brauchst auch ein Antivirenprogramm.'));
+    else if (av) rd(o, tx('Doar antivirus', 'Nur Virenschutz'), tx('Antivirusul izolează programele distructive care ajung în calculator. Merge, dar mai bine este să fie oprite chiar de la intrare.', 'Das Antivirenprogramm isoliert Schadprogramme, die im Computer ankommen. Das funktioniert, besser ist es aber, sie schon am Eingang zu stoppen.'));
+    else rd(o, tx('Fără protecție', 'Ohne Schutz'), tx('Programele distructive ajung în calculator și îl infectează. Pornește un scut!', 'Die Schadprogramme gelangen in den Computer und infizieren ihn. Schalte einen Schild ein!'));
+    svg.setAttribute('aria-label', (fw ? 'firewall: on' : 'firewall: off') + ', ' + (av ? 'antivirus: on' : 'antivirus: off'));
+    an.redraw();
+  }
+  function mk(id, label, get, set) {
+    var b = h('button', 'chip', label); b.type = 'button';
+    function sync() { b.setAttribute('aria-pressed', get()); }
+    b.onclick = function () { set(!get()); sync(); info(); };
+    sync(); $(id).appendChild(b);
+  }
+  mk('#fw-chips', '🧱 Firewall', function () { return fw; }, function (v) { fw = v; });
+  mk('#fw-chips', '🛡️ ' + tx('Antivirus', 'Virenschutz'), function () { return av; }, function (v) { av = v; });
+  info();
+})();
+Check($('#c3'), [
+  { q: { ro: 'Ce face un antivirus cu un program distructiv?', de: 'Was macht ein Antivirenprogramm mit einem Schadprogramm?' },
+    o: [{ ro: 'îl izolează și îl poate șterge', de: 'es isoliert es und kann es löschen' }, { ro: 'îl copiază pe alte calculatoare', de: 'es kopiert es auf andere Computer' }, { ro: 'îl lasă să ruleze', de: 'es lässt es laufen' }], a: 0,
+    why: { ro: 'Asta e rolul antivirusului. Și nu uita să îl actualizezi periodic!', de: 'Das ist die Aufgabe des Antivirenprogramms. Und vergiss nicht, es regelmäßig zu aktualisieren!' },
+    hint: { ro: 'Antivirusul ne apără: ce ar face un apărător?', de: 'Das Antivirenprogramm schützt uns: Was würde ein Beschützer tun?' } },
+  { q: { ro: 'Ce previne firewall-ul?', de: 'Was verhindert die Firewall?' },
+    o: [{ ro: 'accesul la datele din calculator', de: 'den Zugriff auf die Daten im Computer' }, { ro: 'scrierea parolelor', de: 'das Schreiben von Passwörtern' }, { ro: 'pornirea browserului', de: 'das Starten des Browsers' }], a: 0,
+    why: { ro: 'Este un sistem de protecție, ca un zid între internet și calculator.', de: 'Sie ist ein Schutzsystem, wie eine Mauer zwischen Internet und Computer.' },
+    hint: { ro: 'Privește zidul din desen: ce oprește el să treacă?', de: 'Sieh dir die Mauer in der Zeichnung an: Was hält sie auf?' } }
+]);
+
+/* ================= 4. Date personale și parole ================= */
+Classify($('#cls-data'), [{ ro: 'Nu public', de: 'Nicht veröffentlichen' }, { ro: 'Pot spune', de: 'Darf ich sagen' }], [
+  { t: { ro: 'Numele tău complet', de: 'Dein vollständiger Name' }, a: 0, why: { ro: 'Numele este dată personală. Pe internet folosește un pseudonim.', de: 'Der Name ist ein persönliches Datum. Im Internet benutze ein Pseudonym.' }, hint: { ro: 'Ar trebui să afle orice necunoscut cum te cheamă pe adevărat?', de: 'Soll jeder Fremde erfahren, wie du wirklich heißt?' } },
+  { t: { ro: 'Adresa de acasă', de: 'Deine Wohnadresse' }, a: 0, why: { ro: 'Cine știe unde locuiești poate ajunge la tine.', de: 'Wer weiß, wo du wohnst, kann zu dir kommen.' }, hint: { ro: 'Ți-ar plăcea ca un străin să știe unde te găsește?', de: 'Möchtest du, dass ein Fremder weiß, wo er dich findet?' } },
+  { t: { ro: 'Numărul tău de telefon', de: 'Deine Telefonnummer' }, a: 0, why: { ro: 'Este o dată personală, ca adresa.', de: 'Sie ist ein persönliches Datum, wie die Adresse.' }, hint: { ro: 'Gândește-te la cine te-ar putea suna.', de: 'Denk daran, wer dich anrufen könnte.' } },
+  { t: { ro: '„Mergem toți la mare săptămâna viitoare, casa rămâne goală.”', de: '„Wir fahren alle nächste Woche ans Meer, das Haus bleibt leer.“' }, a: 0, why: { ro: 'Informațiile despre familie și despre casă sunt personale, iar acesta ar fi un anunț pentru hoți.', de: 'Informationen über Familie und Haus sind persönlich, und das wäre eine Einladung für Diebe.' }, hint: { ro: 'Cine ar putea citi mesajul și ce ar face cu el?', de: 'Wer könnte die Nachricht lesen und was würde er damit tun?' } },
+  { t: { ro: 'Pseudonimul „LupulAlb” (nu seamănă cu numele tău)', de: 'Das Pseudonym „WeißerWolf“ (ähnelt nicht deinem Namen)' }, a: 1, why: { ro: 'Un pseudonim care nu dezvăluie nimic despre tine te protejează.', de: 'Ein Pseudonym, das nichts über dich verrät, schützt dich.' }, hint: { ro: 'Spune acest cuvânt ceva despre cine ești de fapt?', de: 'Sagt dieses Wort etwas darüber, wer du wirklich bist?' } },
+  { t: { ro: 'Că ție îți place un anumit film sau un joc', de: 'Dass du einen bestimmten Film oder ein Spiel magst' }, a: 1, why: { ro: 'Un gust general nu te dă de gol.', de: 'Ein allgemeiner Geschmack verrät dich nicht.' }, hint: { ro: 'Poate cineva să te găsească doar pentru că îți place un film?', de: 'Kann dich jemand finden, nur weil du einen Film magst?' } },
+  { t: { ro: 'Parola contului tău (nici măcar unui prieten)', de: 'Das Passwort deines Kontos (nicht einmal einem Freund)' }, a: 0, why: { ro: 'Parola rămâne secretă. Un prieten o poate spune mai departe sau o poate ghici.', de: 'Das Passwort bleibt geheim. Ein Freund kann es weitersagen oder erraten.' }, hint: { ro: 'La ce folosește o parolă dacă o știu mai mulți?', de: 'Wozu dient ein Passwort, wenn es mehrere kennen?' } }
+]);
+(function () {
+  var inp = $('#pw'), crit = $('#pw-crit'), bar = $('#pw-bar'), out = $('#pw-out');
+  var C = [
+    [tx('cel puțin 12 caractere', 'mindestens 12 Zeichen'), function (s) { return s.length >= 12; }],
+    [tx('litere mari', 'Großbuchstaben'), function (s) { return /[A-ZĂÂÎȘȚ]/.test(s); }],
+    [tx('litere mici', 'Kleinbuchstaben'), function (s) { return /[a-zăâîșț]/.test(s); }],
+    [tx('cifre', 'Ziffern'), function (s) { return /[0-9]/.test(s); }],
+    [tx('caractere speciale (! # _ ? …)', 'Sonderzeichen (! # _ ? …)'), function (s) { return /[^A-Za-z0-9ăâîșțĂÂÎȘȚ\s]/.test(s); }]
+  ];
+  var NAMES = [tx('foarte slabă', 'sehr schwach'), tx('foarte slabă', 'sehr schwach'), tx('slabă', 'schwach'), tx('medie', 'mittel'), tx('bună', 'gut'), tx('foarte puternică', 'sehr stark')];
+  var COL = ['#c23b3b', '#c23b3b', '#e0714f', '#e8a317', '#7cb342', '#1f8a5b'];
+  var lis = C.map(function (c) { var li = h('li', '', c[0]); crit.appendChild(li); return li; });
+  for (var k = 0; k < 5; k++) bar.appendChild(h('span'));
+  function upd() {
+    var s = inp.value, n = 0;
+    C.forEach(function (c, i) { var ok = c[1](s); if (ok) n++; lis[i].className = ok ? 'on' : ''; lis[i].textContent = (ok ? '✔ ' : '○ ') + c[0]; });
+    if (!s) n = 0;
+    $$('span', bar).forEach(function (sp, i) { sp.style.background = i < n ? COL[n] : '#e2e0d6'; });
+    bar.setAttribute('aria-label', NAMES[n]);
+    var msg = s ? tx('Parola este: ', 'Das Passwort ist: ') + '<span style="color:' + COL[n] + '">' + NAMES[n] + '</span>' : tx('Scrie ceva în câmp.', 'Schreibe etwas ins Feld.');
+    rd(out, msg, n === 5 ? tx('Are toate ingredientele. Cu cât e mai lungă, cu atât e mai greu de ghicit.', 'Sie hat alle Zutaten. Je länger, desto schwerer zu erraten.') : tx('Încearcă să adaugi ce lipsește din listă.', 'Versuche, das Fehlende aus der Liste zu ergänzen.'));
+  }
+  inp.addEventListener('input', upd); upd();
+  var VERSES = [
+    ['Cine se scoală de dimineață, departe ajunge', 'Cine se scoală de dimineață, departe ajunge'],
+    ['Lupul își schimbă părul, dar năravul ba', 'Lupul își schimbă părul, dar năravul ba'],
+    ['Ce ție nu-ți place, altuia nu face', 'Ce ție nu-ți place, altuia nu face']
+  ];
+  var vs = 0;
+  function pwOf(v) { return v.replace(/[,.]/g, '').split(/\s+/).map(function (w) { return w.charAt(0); }).join('') + '_17#!'; }
+  function vinfo() {
+    var v = VERSES[vs][0];
+    rd($('#vs-out'), '„' + v + '”', tx('prima literă din fiecare cuvânt + cifre și semne: ', 'erster Buchstabe jedes Wortes + Ziffern und Zeichen: ') + '<span class="c1 num" style="font-weight:800">' + pwOf(v) + '</span>');
+  }
+  chips($('#vs-chips'), VERSES.map(function (v, i) { return [i, '„' + v[0].split(' ').slice(0, 2).join(' ') + '…”']; }), 0, function (k) { vs = +k; vinfo(); });
+  var vt = $('#vs-try'); vt.textContent = tx('Pune-o în verificator ↑', 'In den Prüfer einsetzen ↑');
+  vt.onclick = function () { inp.value = pwOf(VERSES[vs][0]); upd(); inp.focus(); };
+  vinfo();
+})();
+Check($('#c4'), [
+  { q: { ro: 'Care parolă este mai puternică?', de: 'Welches Passwort ist stärker?' },
+    o: [{ ro: 'maria2012', de: 'maria2012' }, { ro: 'Cts_17#!pHb4', de: 'Cts_17#!pHb4' }, { ro: 'parola', de: 'parola' }], a: 1,
+    why: { ro: 'Are litere mari și mici, cifre, caractere speciale și e lungă. Celelalte pot fi ghicite ușor.', de: 'Sie hat Groß- und Kleinbuchstaben, Ziffern, Sonderzeichen und ist lang. Die anderen lassen sich leicht erraten.' },
+    hint: { ro: 'Caută parola care are toate ingredientele: litere mari, mici, cifre, semne speciale.', de: 'Suche das Passwort mit allen Zutaten: Groß- und Kleinbuchstaben, Ziffern, Sonderzeichen.' } },
+  { q: { ro: 'Un site îți cere să-ți faci un cont de utilizator. Cum procedezi?', de: 'Eine Seite verlangt, dass du ein Benutzerkonto anlegst. Was tust du?' },
+    o: [{ ro: 'îl fac singur, repede', de: 'ich lege es schnell allein an' }, { ro: 'îl fac sub supravegherea profesorului sau a părinților', de: 'ich lege es unter Aufsicht der Lehrkraft oder der Eltern an' }], a: 1,
+    why: { ro: 'Așa te asiguri că site-ul este sigur și că nu dai date personale pe care nu trebuie.', de: 'So stellst du sicher, dass die Seite sicher ist und du keine persönlichen Daten preisgibst, die du nicht geben solltest.' },
+    hint: { ro: 'Cine te poate ajuta să vezi dacă site-ul este de încredere?', de: 'Wer kann dir helfen zu erkennen, ob die Seite vertrauenswürdig ist?' } }
+]);
+
+/* ================= 5. Identitatea virtuală ================= */
+(function () {
+  var svg = $('#id-svg'), chat = $('#chat'), out = $('#chat-out'), step = 0;
+  var MSG = [
+    { ro: 'Salut! Am 12 ani și îmi place același joc ca ție 🎮 Ne jucăm împreună?', de: 'Hallo! Ich bin 12 und mag dasselbe Spiel wie du 🎮 Spielen wir zusammen?' },
+    { ro: 'Și mie îmi place fotbalul! Suntem la fel, sigur putem fi prieteni buni.', de: 'Ich mag auch Fußball! Wir sind gleich, bestimmt können wir gute Freunde sein.' },
+    { ro: 'Spune-mi cum te cheamă pe adevărat, unde stai și ce număr de telefon ai. Dar să nu spui nimănui!', de: 'Sag mir, wie du wirklich heißt, wo du wohnst und welche Telefonnummer du hast. Aber sag es niemandem!' }
+  ];
+  var NOTE = [
+    [tx('Un profil nou', 'Ein neues Profil'), tx('Vezi o poză și câteva cuvinte. Atât. Orice poate fi scris într-un profil.', 'Du siehst ein Bild und ein paar Worte. Mehr nicht. In ein Profil kann man alles schreiben.')],
+    [tx('Cine scrie, de fapt?', 'Wer schreibt wirklich?'), tx('Vă înțelegeți bine, dar nu poți avea certitudinea că persoana este cine pretinde că este.', 'Ihr versteht euch gut, aber du kannst nicht sicher sein, dass die Person wirklich die ist, die sie vorgibt zu sein.')],
+    [tx('⚠ Semnal de alarmă', '⚠ Alarmsignal'), tx('Cere date personale și îți spune să păstrezi secretul. Nu răspunde, nu mai scrie, blochează profilul și spune unui adult.', 'Die Person verlangt persönliche Daten und sagt, du sollst schweigen. Antworte nicht, schreibe nicht weiter, blockiere das Profil und sage es einem Erwachsenen.')]
+  ];
+  function draw() {
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: 320, height: 300, fill: '#f4f6ff' }, svg);
+    el('circle', { cx: 160, cy: 78, r: 50, fill: '#fff3d6', stroke: '#e8a317', 'stroke-width': 4 }, svg);
+    emo(svg, 160, 78, 52, '🦊');
+    lab(svg, 160, 148, 'StarGamer12', 'big');
+    lab(svg, 160, 168, tx('ce vezi tu: un profil', 'was du siehst: ein Profil'), 'sm', 'middle', '#5a6270');
+    if (step >= 1) {
+      el('line', { x1: 160, y1: 178, x2: 160, y2: 198, stroke: '#9aa3b2', 'stroke-width': 3, 'stroke-dasharray': '4 4' }, svg);
+      el('circle', { cx: 160, cy: 242, r: 40, fill: '#eef0f5', stroke: step >= 2 ? '#c23b3b' : '#9aa3b2', 'stroke-width': 4, 'stroke-dasharray': '7 6' }, svg);
+      emo(svg, 160, 242, 44, '❓');
+      lab(svg, 160, 292, tx('cine e în spatele ecranului?', 'wer steckt hinter dem Bildschirm?'), 'sm', 'middle', step >= 2 ? '#a12f2f' : '#5a6270');
+    }
+    svg.setAttribute('aria-label', NOTE[step][0]);
+  }
+  function render() {
+    chat.innerHTML = '';
+    for (var i = 0; i <= step; i++) { var b = h('div', 'bubble', T(MSG[i])); chat.appendChild(b); }
+    rd(out, NOTE[step][0], NOTE[step][1]);
+    out.className = 'readout' + (step === 2 ? ' alert' : '');
+    $('#chat-back').disabled = step === 0; $('#chat-next').disabled = step === 2;
+    draw();
+  }
+  $('#chat-back').textContent = '← ' + tx('Înapoi', 'Zurück'); $('#chat-next').textContent = tx('Pasul următor', 'Nächster Schritt') + ' →';
+  $('#chat-back').onclick = function () { if (step > 0) { step--; render(); } };
+  $('#chat-next').onclick = function () { if (step < 2) { step++; render(); } };
+  render();
+})();
+Check($('#c5'), [
+  { q: { ro: 'Un „prieten” cunoscut online îți cere adresa. Ce faci?', de: 'Ein „Freund“, den du online kennengelernt hast, fragt nach deiner Adresse. Was tust du?' },
+    o: [{ ro: 'i-o dau, doar e prieten', de: 'ich gebe sie ihm, er ist ja ein Freund' }, { ro: 'nu răspund, îl blochez și spun unui adult', de: 'ich antworte nicht, blockiere ihn und sage es einem Erwachsenen' }, { ro: 'îi dau doar numele străzii', de: 'ich gebe nur den Straßennamen' }], a: 1,
+    why: { ro: 'Nu poți fi sigur cine este. Datele personale nu se dau, iar un adult te poate ajuta.', de: 'Du kannst nicht sicher sein, wer es ist. Persönliche Daten gibt man nicht weiter, und ein Erwachsener kann dir helfen.' },
+    hint: { ro: 'Întreabă-te: știu sigur cine este în spatele profilului?', de: 'Frag dich: Weiß ich sicher, wer hinter dem Profil steckt?' } },
+  { q: { ro: 'Identitatea virtuală coincide întotdeauna cu cea reală.', de: 'Die virtuelle Identität stimmt immer mit der echten überein.' },
+    o: [{ ro: 'Adevărat', de: 'Wahr' }, { ro: 'Fals', de: 'Falsch' }], a: 1,
+    why: { ro: 'Fals: oricine poate scrie într-un profil ce vrea. Nu poți avea certitudinea.', de: 'Falsch: Jeder kann in ein Profil schreiben, was er will. Du kannst nicht sicher sein.' },
+    hint: { ro: 'Gândește-te la „StarGamer12” din conversație.', de: 'Denk an „StarGamer12“ aus dem Gespräch.' } }
+]);
+
+/* ================= 6. Reguli ================= */
+Classify($('#cls-rules'), [{ ro: 'corect', de: 'richtig' }, { ro: 'riscant', de: 'riskant' }], [
+  { t: { ro: 'Primești „Ai câștigat un telefon! Apasă aici!” și apeși pe link', de: 'Du bekommst „Du hast ein Handy gewonnen! Klick hier!“ und klickst auf den Link' }, a: 1, why: { ro: 'Linkurile suspecte nu se accesează.', de: 'Verdächtige Links klickt man nicht an.' }, hint: { ro: 'Cine ar oferi un telefon unui necunoscut, pe degeaba?', de: 'Wer würde einem Unbekannten einfach so ein Handy schenken?' } },
+  { t: { ro: 'Îți faci un cont pe un site nou împreună cu un părinte', de: 'Du legst zusammen mit einem Elternteil ein Konto auf einer neuen Seite an' }, a: 0, why: { ro: 'Conturile se creează sub supravegherea părinților sau a profesorului.', de: 'Konten legt man unter Aufsicht der Eltern oder der Lehrkraft an.' }, hint: { ro: 'Cine te supraveghează aici?', de: 'Wer beaufsichtigt dich hier?' } },
+  { t: { ro: 'Descarci un joc „gratis” de pe un site necunoscut', de: 'Du lädst ein „Gratis“-Spiel von einer unbekannten Seite herunter' }, a: 1, why: { ro: 'Fișierele din surse necunoscute pot conține malware, de exemplu un troian.', de: 'Dateien aus unbekannten Quellen können Malware enthalten, zum Beispiel einen Trojaner.' }, hint: { ro: 'Îți amintești calul troian?', de: 'Erinnerst du dich an das Trojanische Pferd?' } },
+  { t: { ro: 'După ce îți verifici mesajele pe un calculator din bibliotecă, te deconectezi', de: 'Nachdem du deine Nachrichten an einem Computer in der Bibliothek gelesen hast, meldest du dich ab' }, a: 0, why: { ro: 'Deconectează-te mereu de pe site-urile accesate.', de: 'Melde dich immer von den besuchten Seiten ab.' }, hint: { ro: 'Ce s-ar întâmpla dacă următoarea persoană ar deschide contul tău?', de: 'Was passiert, wenn die nächste Person dein Konto öffnet?' } },
+  { t: { ro: 'Îți lași telefonul deblocat, cu contul deschis, pe bancă în pauză', de: 'Du lässt dein Handy entsperrt und mit geöffnetem Konto in der Pause auf der Bank liegen' }, a: 1, why: { ro: 'Nu lăsa telefonul nesupravegheat.', de: 'Lass dein Handy nie unbeaufsichtigt.' }, hint: { ro: 'Cine ar putea să-l ia sau să-l folosească?', de: 'Wer könnte es nehmen oder benutzen?' } },
+  { t: { ro: 'Antivirusul îți cere o actualizare și o faci', de: 'Das Antivirenprogramm bittet um ein Update und du machst es' }, a: 0, why: { ro: 'Antivirusul se actualizează periodic, ca să recunoască și programele noi.', de: 'Das Antivirenprogramm wird regelmäßig aktualisiert, damit es auch neue Programme erkennt.' }, hint: { ro: 'Apar programe distructive noi în fiecare zi.', de: 'Jeden Tag tauchen neue Schadprogramme auf.' } },
+  { t: { ro: 'În jocuri folosești un pseudonim, nu numele tău adevărat', de: 'In Spielen benutzt du ein Pseudonym statt deines echten Namens' }, a: 0, why: { ro: 'Pseudonimul te protejează.', de: 'Ein Pseudonym schützt dich.' }, hint: { ro: 'Ce divulgă un pseudonim despre tine?', de: 'Was verrät ein Pseudonym über dich?' } }
+]);
+var BANK = [{ ro: 'personale', de: 'persönliche' }, { ro: 'pseudonim', de: 'Pseudonym' }, { ro: 'Deconectează', de: 'Melde dich ab' }, { ro: 'nesupravegheat', de: 'unbeaufsichtigt' }, { ro: 'necunoscute', de: 'unbekannten' }, { ro: 'suspecte', de: 'verdächtige' }, { ro: 'antivirus', de: 'Virenschutz' }];
+Fill($('#fill'), BANK, [
+  { t: { ro: '1. Nu publica niciodată informații ___ când ești în mediul online.', de: '1. Veröffentliche niemals ___ Informationen, wenn du online bist.' }, a: 0 },
+  { t: { ro: '2. Folosește un ___, nu divulga numele adevărat.', de: '2. Benutze ein ___, verrate nicht deinen echten Namen.' }, a: 1 },
+  { t: { ro: '3. ___-te de pe site-urile accesate.', de: '3. ___ von den besuchten Seiten.' }, a: 2 },
+  { t: { ro: '4. Dacă folosești internetul de pe telefonul mobil, nu lăsa telefonul ___.', de: '4. Wenn du das Internet mit dem Handy nutzt, lass das Handy nicht ___.' }, a: 3 },
+  { t: { ro: '5. Nu descărca fișiere din surse ___.', de: '5. Lade keine Dateien aus ___ Quellen herunter.' }, a: 4 },
+  { t: { ro: '6. Nu accesa linkuri ___.', de: '6. Rufe keine ___ Links auf.' }, a: 5 },
+  { t: { ro: '7. Utilizează un program ___ și actualizează-l periodic.', de: '7. Benutze ein ___-Programm und aktualisiere es regelmäßig.' }, a: 6 }
+]);
+
+Gloss($('#gloss'), [
+  ['internet', 'Internet'], ['browser', 'Browser'], ['WWW (World Wide Web)', 'WWW (World Wide Web)'],
+  ['site, pagină web', 'Webseite'], ['link (legătură)', 'Link (Verknüpfung)'],
+  ['malware (program distructiv)', 'Malware (Schadprogramm)'], ['virus', 'Virus'], ['vierme', 'Wurm'], ['troian', 'Trojaner'], ['virus spion', 'Spionageprogramm (Spyware)'],
+  ['fișier executabil', 'ausführbare Datei'], ['a descărca', 'herunterladen'], ['antivirus', 'Antivirenprogramm'], ['firewall', 'Firewall (Brandmauer)'],
+  ['date personale', 'persönliche Daten'], ['parolă', 'Passwort'], ['cont de utilizator', 'Benutzerkonto'], ['pseudonim', 'Pseudonym'],
+  ['identitate virtuală', 'virtuelle Identität'], ['a se deconecta', 'sich abmelden'], ['link suspect', 'verdächtiger Link']
+]);
+
+})();
+</script>
+</body>
+</html>
