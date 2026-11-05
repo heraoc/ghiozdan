@@ -23,6 +23,9 @@ import { numerePrimeTest } from './content/numere-prime-test';
 import { renastereaTest } from './content/renasterea-test';
 import { mariOameniAiRenasteriiTest } from './content/mari-oameni-ai-renasterii-test';
 import { reformaSiContrareformaTest } from './content/reforma-si-contrareforma-test';
+import { miscareSiRepausTest } from './content/miscare-si-repaus-test';
+import { distantaSiDurataTest } from './content/distanta-si-durata-test';
+import { vitezaTest } from './content/viteza-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -337,6 +340,45 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         src: 'lectii/clasa-6/fizica/unitati-de-masura.html',
         done: true,
         test: { questions: unitatiDeMasuraTest, minutes: 10 },
+      },
+      {
+        slug: 'miscare-si-repaus',
+        title: {
+          ro: 'Mișcare și repaus: corp, reper, traiectorie',
+          de: 'Bewegung und Ruhe: Körper, Bezugskörper, Bahn',
+        },
+        summary: {
+          ro: 'Punctul material, reperul și sistemul de referință, de ce mișcarea este relativă, cabina lui Galilei, traiectoria rectilinie, curbilinie și circulară și cicloida roții de bicicletă.',
+          de: 'Der Massenpunkt, Bezugskörper und Bezugssystem, warum Bewegung relativ ist, Galileis Kajüte, geradlinige, krummlinige und kreisförmige Bahnen und die Zykloide des Fahrradrads.',
+        },
+        src: 'lectii/clasa-6/fizica/miscare-si-repaus.html',
+        test: { questions: miscareSiRepausTest, minutes: 8 },
+      },
+      {
+        slug: 'distanta-si-durata',
+        title: {
+          ro: 'Distanța parcursă și durata mișcării',
+          de: 'Zurückgelegte Strecke und Dauer der Bewegung',
+        },
+        summary: {
+          ro: 'Originea distanțelor și kilometrul zero, poziția și distanța parcursă, drumul și deplasarea, originea timpului, momentul și durata, fusurile orare și litera Δ.',
+          de: 'Nullpunkt der Strecken und Kilometer null, Lage und zurückgelegte Strecke, Weg und Verschiebung, Nullpunkt der Zeit, Zeitpunkt und Dauer, Zeitzonen und der Buchstabe Δ.',
+        },
+        src: 'lectii/clasa-6/fizica/distanta-si-durata.html',
+        test: { questions: distantaSiDurataTest, minutes: 8 },
+      },
+      {
+        slug: 'viteza',
+        title: {
+          ro: 'Viteza: medie, momentană, direcție și sens',
+          de: 'Die Geschwindigkeit: mittlere, momentane, Richtung und Richtungssinn',
+        },
+        summary: {
+          ro: 'Viteza medie și formulele ei, m/s și km/h, scara vitezelor de la fulg la lumină, vitezometrul, direcția și sensul și viteza desenată ca o săgeată.',
+          de: 'Die mittlere Geschwindigkeit und ihre Formeln, m/s und km/h, die Geschwindigkeitsskala von der Flocke bis zum Licht, der Tachometer, Richtung und Richtungssinn und die Geschwindigkeit als Pfeil.',
+        },
+        src: 'lectii/clasa-6/fizica/viteza.html',
+        test: { questions: vitezaTest, minutes: 10 },
       },
     ],
     geo: [

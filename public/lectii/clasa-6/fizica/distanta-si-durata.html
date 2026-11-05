@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Distanța parcursă și durata mișcării</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Zurückgelegte Strecke und Dauer der Bewegung';
+})();
+</script>
+<style>
+:root{
+  --paper:#f7f6f0; --card:#ffffff; --ink:#1f2530; --muted:#5a6270; --rule:#e2e0d6; --sheet:#f1efe6;
+  --accent:#c98a00; --accent-soft:#fdf2d4; --blue:#2f6fd6; --blue-soft:#e3edfc; --ok:#1f8a5b; --bad:#c23b3b; --red:#d2452f;
+  --good-soft:#e3f5ec; --bad-soft:#fbe4e4;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+sup{font-size:.7em;line-height:0}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.hint{font-size:14px;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{border:1.5px solid var(--accent);background:transparent;border-radius:99px;padding:5px 13px;cursor:pointer;font-weight:700}
+.chip[aria-pressed="true"]{background:var(--accent);color:#fff}
+
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:6px}
+.toc a{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:4px 12px 4px 5px;color:var(--ink);text-decoration:none;font-weight:700;font-size:15px}
+.toc a b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 13px/1 var(--display)}
+.toc a:hover{border-color:var(--ink)}
+
+section.block{margin-top:56px;scroll-margin-top:12px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:70ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.story{background:#fffbea;border:1px solid #f0e2a8;border-radius:10px;padding:14px 18px;margin-top:16px}
+.story h3{font-size:19px;color:#8a6a00;margin-bottom:4px}
+.know{margin-top:16px;background:#eef4fd;border:1px solid #c9dbf5;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.know h3{font-size:20px;color:#1f4f99}
+.know ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+
+.split{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.fig svg{display:block;width:100%;height:auto}
+.panel{display:grid;gap:10px;align-content:start}
+.slider{display:grid;gap:2px}
+.slider label{font-weight:700}
+.slider input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
+.slider,.panel>*,.split>*{min-width:0}
+.readout{background:var(--sheet);border-radius:10px;padding:10px 14px;display:grid;gap:4px}
+.readout .eq{font:800 21px/1.3 var(--display)}
+.readout .rule{font-size:15px;color:var(--muted)}
+.c1{color:var(--blue)} .c2{color:var(--red)} .c3{color:var(--ok)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tab{border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:6px 15px;cursor:pointer;font-weight:700}
+.tab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+/* verifică-te și clasificări */
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--ok);background:var(--ok);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#a12f2f;background:var(--bad-soft)}
+.check{margin-top:18px;background:var(--card);border:1px dashed #e8cf8f;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted);min-height:1.2em}
+.cls{display:grid;gap:0;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:6px 14px}
+.cls .row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:6px 14px;padding:10px 0;border-bottom:1px solid var(--rule);align-items:center}
+.cls .row:last-child{border-bottom:0}
+.cls .row .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cls .row .why{grid-column:1/-1;font-size:15px;color:var(--muted);min-height:0}
+.cls .row .why:empty{display:none}
+
+/* câmpuri de răspuns */
+.vin{width:110px;font:800 20px/1 var(--display);text-align:center;padding:6px 8px;border:2px solid var(--rule);border-radius:10px;background:#fff}
+.vin.wide{width:130px}
+.vin.ok{border-color:var(--ok);background:var(--good-soft)}
+.vin.bad{border-color:var(--bad);background:var(--bad-soft)}
+.row2{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.result{border-radius:10px;padding:10px 14px;font-weight:700}
+.result.good{background:var(--good-soft);color:#17744d}
+.result.try{background:#fdf0d5;color:#8a5a00}
+.score{font-weight:700;color:var(--muted)}
+.ex{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:10px;max-width:680px}
+.fillbox{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:6px 16px}
+.fillbox p{padding:10px 0;border-bottom:1px solid var(--rule);line-height:2.1}
+.fillbox p:last-child{border-bottom:0}
+.fillbox select{border:2px solid var(--rule);border-radius:8px;padding:3px 6px;background:#fff;font-weight:700}
+.fillbox select.ok{border-color:var(--ok);background:var(--good-soft)}
+.fillbox select.bad{border-color:var(--bad);background:var(--bad-soft)}
+
+/* text în SVG */
+svg text{font-family:var(--body)}
+.lbl{font:700 15px var(--body);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.lbl.big{font-size:18px}
+.lbl.sm{font-size:13px;font-weight:500}
+
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0;border-left:3px solid var(--accent);margin-left:8px}
+.timeline li{position:relative;padding:0 0 14px 20px}
+.timeline li::before{content:"";position:absolute;left:-9px;top:6px;width:15px;height:15px;border-radius:50%;background:var(--card);border:3px solid var(--accent)}
+.timeline b{font-family:var(--display);font-size:18px}
+
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+  .cls .row{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .lbl{font-size:19px} .lbl.big{font-size:22px} .lbl.sm{font-size:16px}
+  body{font-size:16.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="head">
+  <p class="eyebrow"><span class="ro">Fizică · Clasa a 6-a · Fenomene mecanice</span><span class="de">Physik · Klasse 6 · Mechanische Erscheinungen</span></p>
+  <h1><span class="ro">Distanța parcursă și durata mișcării</span><span class="de">Zurückgelegte Strecke und Dauer der Bewegung</span></h1>
+  <p class="lead">
+    <span class="ro">Ca să știm unde se află un mobil și cât a mers, avem nevoie de două „zerouri”: unul pentru distanțe (kilometrul 0) și unul pentru timp (miezul nopții sau pornirea cronometrului). Vei învăța să faci deosebirea între poziție și distanță parcursă, între momentul unui eveniment și durata lui, și să folosești litera greacă Δ.</span>
+    <span class="de">Um zu wissen, wo sich ein bewegter Körper befindet und wie weit er gekommen ist, brauchen wir zwei „Nullpunkte“: einen für Strecken (Kilometer null) und einen für die Zeit (Mitternacht oder Start der Stoppuhr). Du lernst, Lage und zurückgelegte Strecke, den Zeitpunkt eines Ereignisses und seine Dauer zu unterscheiden, und du benutzt den griechischen Buchstaben Δ.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Dacă un meci începe la 20:30 la Lisabona, la ce oră începe în București?</span><span class="de">Wenn ein Spiel in Lissabon um 20:30 Uhr beginnt, wann beginnt es in Bukarest?</span></li>
+        <li><span class="ro">Mergi 30 m spre est, apoi 30 m spre vest. Câți metri ai parcurs? Cât de departe ești de start?</span><span class="de">Du gehst 30 m nach Osten und dann 30 m nach Westen. Wie viele Meter bist du gegangen? Wie weit bist du vom Start entfernt?</span></li>
+        <li><span class="ro">Care e diferența dintre „ora 9:05” și „10 minute”?</span><span class="de">Was ist der Unterschied zwischen „9:05 Uhr“ und „10 Minuten“?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Originea distanțelor</span><span class="de">Nullpunkt der Strecke</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Distanța parcursă</span><span class="de">Zurückgelegte Strecke</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Momentul și durata</span><span class="de">Zeitpunkt und Dauer</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Litera Δ</span><span class="de">Der Buchstabe Δ</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Fixare</span><span class="de">Festigung</span></a>
+  </nav>
+</header>
+
+<!-- 1. Originea distanțelor -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Originea distanțelor și poziția</span><span class="de">Nullpunkt der Strecken und Lage</span></h2>
+  <p class="section-sub"><span class="ro">Pentru a determina poziția unui mobil pe traiectorie, alegem un punct față de care măsurăm distanțele: <strong>originea distanțelor</strong>. Pe șosele, el se numește <strong>kilometrul zero</strong>, iar distanțele sunt marcate prin borne kilometrice. Alege originea, apoi mută mașina cu cursorul: numerele de sub drum se schimbă odată cu originea!</span><span class="de">Um die Lage eines bewegten Körpers auf der Bahn zu bestimmen, wählen wir einen Punkt, von dem aus wir Strecken messen: den <strong>Nullpunkt der Strecken</strong>. Auf Straßen heißt er <strong>Kilometer null</strong>, und die Entfernungen sind durch Kilometersteine markiert. Wähle den Nullpunkt und verschiebe das Auto mit dem Regler: Die Zahlen unter der Straße ändern sich mit dem Nullpunkt!</span></p>
+  <div class="split">
+    <div class="fig"><svg id="road-svg" viewBox="0 0 640 230" role="img" aria-label="Un drum cu localitățile A, B și C și o mașină"></svg></div>
+    <div class="panel">
+      <div><strong><span class="ro">Originea distanțelor</span><span class="de">Nullpunkt der Strecken</span></strong></div>
+      <div class="chips" id="org-chips" role="group" aria-label="Originea"></div>
+      <div class="slider"><label for="car-pos"><span class="ro">Poziția mașinii pe drum</span><span class="de">Position des Autos auf der Straße</span></label><input type="range" id="car-pos" min="0" max="100" value="60"></div>
+      <div class="readout" id="road-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro"><strong>Poziția unui mobil pe o traiectorie rectilinie</strong> se determină prin măsurarea distanței de la punctul de origine a distanțelor până la mobil. Se notează cu <strong>x</strong>. Originea poate fi aleasă arbitrar, după situație: elevul care merge la școală măsoară distanțele față de casă, la o cursă originea este locul de start.</span><span class="de"><strong>Die Lage eines bewegten Körpers auf einer geraden Bahn</strong> bestimmt man, indem man die Entfernung vom Nullpunkt bis zum Körper misst. Sie wird mit <strong>x</strong> bezeichnet. Der Nullpunkt darf beliebig gewählt werden: Wer zur Schule geht, misst Entfernungen von zu Hause aus, bei einem Rennen ist der Startplatz der Nullpunkt.</span></p>
+  </div>
+  <div class="story">
+    <h3><span class="ro">Știai că? Locuri care sunt „kilometrul zero”</span><span class="de">Wusstest du? Orte, die „Kilometer null“ sind</span></h3>
+    <ul class="timeline" style="margin-top:8px">
+      <li><span class="ro"><b>20 î.Hr., Roma</b>: împăratul Augustus a așezat în Forum <em>Milliarium Aureum</em>, „borna de aur”, de unde se socoteau distanțele drumurilor Imperiului. De aici vine zicala „toate drumurile duc la Roma”.</span><span class="de"><b>20 v. Chr., Rom</b>: Kaiser Augustus ließ auf dem Forum das <em>Milliarium Aureum</em>, den „goldenen Meilenstein“, aufstellen, von dem aus die Straßen des Reiches gezählt wurden. Daher stammt das Sprichwort „Alle Wege führen nach Rom“.</span></li>
+      <li><span class="ro"><b>1924, Paris</b>: o placă de bronz din fața catedralei Notre-Dame marchează „punctul zero” al drumurilor Franței.</span><span class="de"><b>1924, Paris</b>: Eine Bronzeplatte vor der Kathedrale Notre-Dame markiert den „Nullpunkt“ der Straßen Frankreichs.</span></li>
+      <li><span class="ro"><b>București</b>: locul Kilometrului 0 a fost stabilit de topografii care au făcut primele hărți după venirea lui Carol I (1866). Monumentul a fost realizat în 1938 și renovat în 1998.</span><span class="de"><b>Bukarest</b>: Den Ort von Kilometer 0 legten die Landvermesser fest, die nach der Ankunft von Karl I. (1866) die ersten Karten zeichneten. Das Denkmal entstand 1938 und wurde 1998 renoviert.</span></li>
+    </ul>
+  </div>
+  <div id="c1"></div>
+</section>
+
+<!-- 2. Distanța parcursă -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Distanța parcursă</span><span class="de">Die zurückgelegte Strecke</span></h2>
+  <p class="section-sub"><span class="ro"><strong>Distanța parcursă de mobil</strong> este lungimea drumului străbătut de acesta; se notează cu <em>d</em> sau Δ<em>x</em>. Alege locul de plecare și cel de sosire, apoi schimbă originea: poziția fiecărui punct se schimbă, dar distanța parcursă nu!</span><span class="de">Die <strong>zurückgelegte Strecke</strong> ist die Länge des vom Körper durchlaufenen Weges; sie wird mit <em>d</em> oder Δ<em>x</em> bezeichnet. Wähle Start- und Zielort und wechsle dann den Nullpunkt: Die Lage jedes Punktes ändert sich, die zurückgelegte Strecke aber nicht!</span></p>
+  <div class="split">
+    <div class="fig"><svg id="line-svg" viewBox="0 0 640 190" role="img" aria-label="Axă cu punctul de plecare și cel de sosire"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="p1"><span class="ro">Plecare, x₁ față de A</span><span class="de">Start, x₁ gegenüber A</span> = <span id="p1v" class="num"></span> km</label><input type="range" id="p1" min="0" max="100" value="45"></div>
+      <div class="slider"><label for="p2"><span class="ro">Sosire, x₂ față de A</span><span class="de">Ziel, x₂ gegenüber A</span> = <span id="p2v" class="num"></span> km</label><input type="range" id="p2" min="0" max="100" value="75"></div>
+      <div class="readout" id="line-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro">Între punctele <em>B</em> și <em>C</em> de pe traiectorie: <strong>d = Δx = x<sub>C</sub> − x<sub>B</sub></strong>. De exemplu, d = 75 km − 45 km = 30 km.</span><span class="de">Zwischen den Punkten <em>B</em> und <em>C</em> der Bahn: <strong>d = Δx = x<sub>C</sub> − x<sub>B</sub></strong>. Zum Beispiel d = 75 km − 45 km = 30 km.</span></p>
+  </div>
+  <div class="know">
+    <h3><span class="ro">Atenție!</span><span class="de">Achtung!</span></h3>
+    <p><span class="ro">Trebuie să faci deosebirea clară între <strong>poziția</strong> unui mobil pe traiectorie și <strong>distanța parcursă</strong> de acesta. Poziția spune „unde este”, distanța spune „cât a mers”.</span><span class="de">Du musst klar zwischen der <strong>Lage</strong> eines bewegten Körpers auf der Bahn und der von ihm <strong>zurückgelegten Strecke</strong> unterscheiden. Die Lage sagt „wo er ist“, die Strecke „wie weit er gegangen ist“.</span></p>
+  </div>
+
+  <h3 style="margin:30px 0 6px;font-size:24px"><span class="ro">Drumul parcurs și deplasarea nu sunt același lucru</span><span class="de">Zurückgelegter Weg und Verschiebung sind nicht dasselbe</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Un om pornește din punctul A, merge 30 m spre est, apoi 60 m spre vest, 90 m spre nord și, la final, 50 m spre sud, ajungând în punctul B. Urmărește pas cu pas. Un pătrățel de pe hartă înseamnă 10 m.</span><span class="de">Ein Mensch startet in Punkt A, geht 30 m nach Osten, dann 60 m nach Westen, 90 m nach Norden und zuletzt 50 m nach Süden und kommt in Punkt B an. Verfolge es Schritt für Schritt. Ein Kästchen auf der Karte bedeutet 10 m.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="walk-svg" viewBox="0 0 640 330" role="img" aria-label="Drumul unui om pe hartă, cu punctele A și B"></svg></div>
+    <div class="panel">
+      <div class="actions" style="margin-top:0">
+        <button class="btn ghost" type="button" id="walk-prev">← <span class="ro">Înapoi</span><span class="de">Zurück</span></button>
+        <button class="btn" type="button" id="walk-next"><span class="ro">Pasul următor</span><span class="de">Nächster Schritt</span> →</button>
+      </div>
+      <div class="readout" id="walk-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro"><strong>Distanța parcursă</strong> măsoară tot drumul, cu toate cotiturile (230 m). <strong>Deplasarea</strong> este distanța în linie dreaptă între poziția inițială și cea finală (50 m).</span><span class="de">Die <strong>zurückgelegte Strecke</strong> misst den ganzen Weg mit allen Kurven (230 m). Die <strong>Verschiebung</strong> ist der Abstand in gerader Linie zwischen Anfangs- und Endlage (50 m).</span></p>
+  </div>
+  <div id="c2"></div>
+</section>
+
+<!-- 3. Momentul și durata -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Originea timpului, momentul și durata</span><span class="de">Nullpunkt der Zeit, Zeitpunkt und Dauer</span></h2>
+  <p class="section-sub"><span class="ro">Și timpul are nevoie de un „zero”: <strong>originea timpului</strong> este momentul față de care măsurăm toate duratele. Într-o zi, timpul se măsoară de la miezul nopții (ora zero); la o cursă, de la startul cronometrului. <strong>Momentul</strong> unui eveniment spune <em>când</em> are loc, iar <strong>durata</strong> spune <em>cât timp</em> ține. Alege momentul plecării și al sosirii autobuzului.</span><span class="de">Auch die Zeit braucht einen „Nullpunkt“: Der <strong>Nullpunkt der Zeit</strong> ist der Zeitpunkt, von dem aus wir alle Dauern messen. An einem Tag misst man die Zeit ab Mitternacht (null Uhr); bei einem Rennen ab dem Start der Stoppuhr. Der <strong>Zeitpunkt</strong> eines Ereignisses sagt, <em>wann</em> es stattfindet, die <strong>Dauer</strong> sagt, <em>wie lange</em> es dauert. Wähle Abfahrts- und Ankunftszeit des Busses.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="clock-svg" viewBox="0 0 300 270" role="img" aria-label="Ceas cu sectorul dintre momentul plecării și cel al sosirii"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="tm1"><span class="ro">Plecarea din A, t₁</span><span class="de">Abfahrt in A, t₁</span> = <span id="t1v" class="num"></span></label><input type="range" id="tm1" min="0" max="1435" step="5" value="545"></div>
+      <div class="slider"><label for="tm2"><span class="ro">Sosirea în B, t₂</span><span class="de">Ankunft in B, t₂</span> = <span id="t2v" class="num"></span></label><input type="range" id="tm2" min="0" max="1435" step="5" value="555"></div>
+      <div class="readout" id="clock-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro"><strong>Momentul</strong> unui eveniment se obține măsurând intervalul de timp de la originea timpului până la eveniment.</span><span class="de">Den <strong>Zeitpunkt</strong> eines Ereignisses erhält man, indem man die Zeitspanne vom Nullpunkt der Zeit bis zum Ereignis misst.</span></li>
+      <li><span class="ro"><strong>Durata mișcării</strong> (Δt) este mărimea intervalului de timp între momentul final și cel inițial: <strong>Δt = t₂ − t₁</strong>.</span><span class="de">Die <strong>Dauer der Bewegung</strong> (Δt) ist die Größe der Zeitspanne zwischen Endzeitpunkt und Anfangszeitpunkt: <strong>Δt = t₂ − t₁</strong>.</span></li>
+    </ul>
+  </div>
+  <div class="know">
+    <h3><span class="ro">Atenție!</span><span class="de">Achtung!</span></h3>
+    <p><span class="ro">Fă deosebirea clară între <strong>momentul de timp</strong> (<em>t</em>, „la ce oră”) și <strong>durata mișcării</strong> (Δ<em>t</em>, „cât a durat”).</span><span class="de">Unterscheide klar zwischen dem <strong>Zeitpunkt</strong> (<em>t</em>, „um wie viel Uhr“) und der <strong>Dauer der Bewegung</strong> (Δ<em>t</em>, „wie lange es dauerte“).</span></p>
+  </div>
+
+  <h3 style="margin:30px 0 6px;font-size:24px"><span class="ro">Același moment, ore diferite: fusurile orare</span><span class="de">Derselbe Zeitpunkt, verschiedene Uhrzeiten: die Zeitzonen</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Fiecare localitate își numără ora de la propriul „miez de noapte”, adică are propria origine a timpului. Mută cursorul pe ora de la Lisabona și vezi ce oră e în același moment în București.</span><span class="de">Jeder Ort zählt seine Uhrzeit ab seiner eigenen „Mitternacht“, hat also seinen eigenen Nullpunkt der Zeit. Verschiebe den Regler auf die Uhrzeit in Lissabon und sieh, wie spät es im selben Moment in Bukarest ist.</span></p>
+  <div class="split">
+    <div class="fig" style="padding:14px"><svg id="zone-svg" viewBox="0 0 640 150" role="img" aria-label="Ora la Lisabona și la București"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="lis"><span class="ro">Ora la Lisabona</span><span class="de">Uhrzeit in Lissabon</span> = <span id="lisv" class="num"></span></label><input type="range" id="lis" min="0" max="1430" step="10" value="1230"></div>
+      <div class="readout" id="zone-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="story">
+    <h3><span class="ro">Știai că? Cum s-a născut ora oficială</span><span class="de">Wusstest du? Wie die amtliche Uhrzeit entstand</span></h3>
+    <p><span class="ro">Până în secolul al XIX-lea, fiecare oraș își regla ceasurile după Soare, așa că ora diferea de la un oraș la altul. Trenurile au făcut asta imposibil de ținut: un orar nu are sens dacă fiecare stație are altă oră. În 1884, la o conferință la Washington, reprezentanți din 25 de țări au ales meridianul Greenwich drept origine a longitudinilor și a fusurilor orare. Asta e și motivul pentru care Lisabona și București au azi ore diferite: ele sunt în fusuri diferite.</span><span class="de">Bis ins 19. Jahrhundert stellte jede Stadt ihre Uhren nach der Sonne, sodass die Uhrzeit von Stadt zu Stadt verschieden war. Die Eisenbahn machte das untragbar: Ein Fahrplan ergibt keinen Sinn, wenn jeder Bahnhof eine andere Uhrzeit hat. 1884 wählten auf einer Konferenz in Washington Vertreter aus 25 Ländern den Meridian von Greenwich als Nullmeridian für Längengrade und Zeitzonen. Deshalb haben Lissabon und Bukarest heute verschiedene Uhrzeiten: Sie liegen in verschiedenen Zeitzonen.</span></p>
+  </div>
+  <div id="c3"></div>
+</section>
+
+<!-- 4. Delta -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Litera Δ: „cât s-a schimbat”</span><span class="de">Der Buchstabe Δ: „wie viel hat sich geändert“</span></h2>
+  <p class="section-sub"><span class="ro">Litera greacă Δ (delta), așezată în fața unei mărimi fizice, este un simbol care indică <strong>diferența dintre valoarea finală și valoarea inițială</strong> a mărimii. Alege o mărime și mută valorile: observă că Δ poate fi și negativ!</span><span class="de">Der griechische Buchstabe Δ (Delta) vor einer physikalischen Größe ist ein Symbol für die <strong>Differenz zwischen Endwert und Anfangswert</strong> der Größe. Wähle eine Größe und verschiebe die Werte: Du siehst, dass Δ auch negativ sein kann!</span></p>
+  <div class="split">
+    <div class="fig"><svg id="delta-svg" viewBox="0 0 640 170" role="img" aria-label="Axă cu valoarea inițială și valoarea finală"></svg></div>
+    <div class="panel">
+      <div class="chips" id="dq-chips" role="group" aria-label="Mărimea"></div>
+      <div class="slider"><label for="da"><span class="ro">Valoarea inițială</span><span class="de">Anfangswert</span> = <span id="dav" class="num"></span></label><input type="range" id="da"></div>
+      <div class="slider"><label for="db"><span class="ro">Valoarea finală</span><span class="de">Endwert</span> = <span id="dbv" class="num"></span></label><input type="range" id="db"></div>
+      <div class="readout" id="delta-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro"><strong>Δ mărime = valoarea finală − valoarea inițială.</strong> Astfel: Δt = t<sub>final</sub> − t<sub>inițial</sub> = t₂ − t₁ și Δx = x<sub>final</sub> − x<sub>inițial</sub> = x₂ − x₁.</span><span class="de"><strong>Δ Größe = Endwert − Anfangswert.</strong> So gilt: Δt = t<sub>End</sub> − t<sub>Anfang</sub> = t₂ − t₁ und Δx = x<sub>End</sub> − x<sub>Anfang</sub> = x₂ − x₁.</span></p>
+  </div>
+  <div id="c4"></div>
+</section>
+
+<!-- 5. Fixare -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Fixare: poziție, distanță, moment sau durată?</span><span class="de">Festigung: Lage, Strecke, Zeitpunkt oder Dauer?</span></h2>
+  <p class="section-sub"><span class="ro">Pentru fiecare propoziție, alege ce mărime este descrisă. Exemplu: „Trebuie să cobor în stația de la 124 km de Timișoara” se referă la <em>poziția pe șosea</em>, x = 124 km.</span><span class="de">Wähle bei jedem Satz, welche Größe beschrieben wird. Beispiel: „Ich muss an der Haltestelle 124 km von Temeswar aussteigen“ bezieht sich auf die <em>Lage auf der Straße</em>, x = 124 km.</span></p>
+  <div id="cls-q"></div>
+  <h3 style="margin:30px 0 10px;font-size:24px"><span class="ro">Probleme pentru tine</span><span class="de">Aufgaben für dich</span></h3>
+  <div class="ex" id="drill"></div>
+</section>
+
+<section class="block" aria-labelledby="t-gloss">
+  <h2 class="section-title" id="t-gloss"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <p class="section-sub"><span class="ro">Cuvintele-cheie ale lecției, în română și în germană.</span><span class="de">Die wichtigsten Wörter der Lektion, auf Rumänisch und auf Deutsch.</span></p>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<footer class="foot">
+  <p><span class="ro">După manualul de Fizică pentru clasa a 6-a, capitolul „Fenomene mecanice” (III.1.2). Desenele sunt schematice. Datele istorice sunt prezentate pe scurt.</span><span class="de">Nach dem Physikbuch für die 6. Klasse, Kapitel „Mechanische Erscheinungen“ (III.1.2). Die Zeichnungen sind schematisch. Die historischen Angaben sind stark verkürzt.</span></p>
+</footer>
+
+</div>
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang === 'de' ? 'de' : 'ro';
+var NS = 'http://www.w3.org/2000/svg';
+var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function $(s, r) { return (r || document).querySelector(s); }
+function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function T(o) { return o[L]; }
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function el(tag, a, parent, text) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (parent) parent.appendChild(e); if (text != null) e.textContent = text; return e; }
+function fmt(n) { var s = (+(+n).toFixed(4)).toString(), p = s.split('.'); p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' '); return p.join(','); }
+function num(s) { var v = parseFloat(String(s).replace(/\s/g, '').replace(',', '.')); return isNaN(v) ? NaN : v; }
+function same(a, b) { return !isNaN(a) && Math.abs(a - b) <= Math.max(1e-6, Math.abs(b) * 0.005); }
+function rint(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+function hm(min) { return Math.floor(min / 60) + ' h ' + pad2(min % 60) + ' min'; }
+function hmClock(min) { return Math.floor(min / 60) + ':' + pad2(min % 60); }
+
+/* butoane-pastile cu aria-pressed */
+function chips(host, items, start, cb, cls) {
+  var cur = start, bs = [];
+  items.forEach(function (it) {
+    var b = h('button', cls || 'chip', it[1]); b.type = 'button';
+    b.onclick = function () { set(it[0]); cb(it[0]); };
+    b.dataset.k = it[0]; bs.push(b); host.appendChild(b);
+  });
+  function set(k) { cur = k; bs.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === String(k)); }); }
+  set(start);
+  return { set: set };
+}
+
+/* „Verifică-te”: întrebări cu răspuns imediat */
+function Check(host, items) {
+  host.className = 'check';
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('div', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('div', 'q', T(it.q)));
+    it.o.forEach(function (o, i) {
+      var b = h('button', 'pick', T(o)); b.type = 'button';
+      b.onclick = function () {
+        if (i === it.a) { b.className = 'pick right'; $$('button', opts).forEach(function (x) { x.disabled = true; }); why.innerHTML = '✔ ' + T(it.why); }
+        else { b.className = 'pick wrong'; b.disabled = true; why.innerHTML = '💡 ' + T(it.hint); }
+      };
+      opts.appendChild(b);
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* clasificare: fiecare rând are variante pe butoane */
+function Classify(host, cats, rows) {
+  host.className = 'cls';
+  rows.forEach(function (r) {
+    var row = h('div', 'row'), opts = h('div', 'opts'), why = h('div', 'why');
+    why.setAttribute('aria-live', 'polite');
+    row.appendChild(h('div', '', T(r.t)));
+    cats.forEach(function (c, i) {
+      var b = h('button', 'pick', T(c)); b.type = 'button';
+      b.onclick = function () {
+        if (i === r.a) { b.className = 'pick right'; $$('button', opts).forEach(function (x) { x.disabled = true; }); why.innerHTML = '✔ ' + T(r.why); }
+        else { b.className = 'pick wrong'; b.disabled = true; why.innerHTML = '💡 ' + T(r.hint); }
+      };
+      opts.appendChild(b);
+    });
+    row.appendChild(opts); row.appendChild(why); host.appendChild(row);
+  });
+}
+
+/* exerciții de completat cu liste alese */
+function Fill(host, bank, rows) {
+  host.className = 'fillbox';
+  rows.forEach(function (r) {
+    var p = h('p'), sel = h('select'); sel.setAttribute('aria-label', tx('alege cuvântul', 'Wort wählen'));
+    sel.appendChild(h('option', '', '…')).value = '';
+    bank.forEach(function (w, i) { var o = h('option', '', T(w)); o.value = i; sel.appendChild(o); });
+    sel.onchange = function () { sel.className = sel.value === '' ? '' : (+sel.value === r.a ? 'ok' : 'bad'); };
+    var parts = T(r.t).split('___');
+    p.appendChild(document.createTextNode(parts[0])); p.appendChild(sel); p.appendChild(document.createTextNode(parts[1] || ''));
+    host.appendChild(p);
+  });
+}
+
+/* generator de probleme cu răspuns numeric */
+function Drill(host, gens) {
+  var good = 0, total = 0, last = '', keys = Object.keys(gens);
+  function render() {
+    var key; do { key = keys[rint(0, keys.length - 1)]; } while (keys.length > 1 && key === last); last = key;
+    var p = gens[key](), counted = false;
+    host.innerHTML = '';
+    var sc = h('span', 'score', tx('Corecte: ', 'Richtig: ') + good + ' / ' + total);
+    host.appendChild(sc); host.appendChild(h('div', 'story', p.q)); $('.story', host).style.marginTop = '0';
+    var row = h('div', 'row2'), ia = h('input', 'vin wide'); ia.type = 'text'; ia.inputMode = 'decimal'; ia.setAttribute('aria-label', tx('răspuns', 'Antwort'));
+    row.appendChild(ia); if (p.u) row.appendChild(h('span', '', p.u)); host.appendChild(row);
+    var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
+    var act = h('div', 'actions'), c = h('button', 'btn', tx('Verifică', 'Prüfen')), s = h('button', 'btn ghost', tx('Arată rezolvarea', 'Lösung zeigen')), nx = h('button', 'btn ghost', tx('Altă problemă', 'Neue Aufgabe') + ' →');
+    c.type = s.type = nx.type = 'button';
+    act.appendChild(c); act.appendChild(s); act.appendChild(nx); host.appendChild(act); host.appendChild(res);
+    function count(ok) { if (!counted) { counted = true; total++; if (ok) good++; sc.textContent = tx('Corecte: ', 'Richtig: ') + good + ' / ' + total; } }
+    c.onclick = function () {
+      var ok = same(num(ia.value), p.a);
+      ia.className = 'vin wide ' + (ok ? 'ok' : 'bad'); res.hidden = false;
+      if (ok) { count(true); res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! ', 'Richtig! ') + p.s; }
+      else { res.className = 'result try'; res.textContent = tx('Indiciu: ', 'Tipp: ') + p.hint; }
+    };
+    s.onclick = function () { count(false); ia.value = fmt(p.a).replace(/ /g, ''); ia.className = 'vin wide'; res.hidden = false; res.className = 'result good'; res.textContent = p.s; };
+    nx.onclick = render;
+    ia.addEventListener('keydown', function (e) { if (e.key === 'Enter') c.onclick(); });
+  }
+  render();
+}
+
+/* dicționar */
+function Gloss(host, rows) { rows.forEach(function (r) { var d = h('div'); d.appendChild(h('dt', '', r[0])); d.appendChild(h('dd', '', r[1])); host.appendChild(d); }); }
+
+/* animație cu play/pauză; f(t secunde) */
+function Anim(f, btn, startPlaying) {
+  var playing = false, t0 = 0, t = 0, raf = 0;
+  function label() { btn.textContent = playing ? '⏸ ' + tx('Pauză', 'Pause') : '▶ ' + tx('Pornește', 'Start'); btn.setAttribute('aria-pressed', playing); }
+  function frame(now) { if (!playing) return; t = (now - t0) / 1000; f(t); raf = requestAnimationFrame(frame); }
+  function play() { playing = true; t0 = performance.now() - t * 1000; label(); raf = requestAnimationFrame(frame); }
+  function pause() { playing = false; cancelAnimationFrame(raf); label(); }
+  btn.onclick = function () { playing ? pause() : play(); };
+  f(0); label();
+  if (startPlaying && !REDUCED) play();
+  return { play: play, pause: pause, redraw: function () { f(t); }, reset: function () { t = 0; t0 = performance.now(); f(0); } };
+}
+
+var MINUS = '−';
+function sg(n) { return (n < 0 ? MINUS : '') + fmt(Math.abs(n)); }
+function carShape(parent, cx, by, w) {
+  var s = w / 100, c = el('g', { transform: 'translate(' + (cx - w / 2) + ',' + (by - 38 * s) + ') scale(' + s + ')' }, parent);
+  el('rect', { x: 0, y: 12, width: 100, height: 18, rx: 6, fill: '#d2452f' }, c);
+  el('polygon', { points: '22,12 32,0 68,0 82,12', fill: '#d2452f' }, c);
+  el('polygon', { points: '30,12 36,3 48,3 48,12', fill: '#cfe3fb' }, c);
+  el('polygon', { points: '52,12 52,3 64,3 72,12', fill: '#cfe3fb' }, c);
+  el('circle', { cx: 22, cy: 30, r: 8, fill: '#1f2530' }, c);
+  el('circle', { cx: 78, cy: 30, r: 8, fill: '#1f2530' }, c);
+}
+function flag(parent, x, y, label, color) {
+  el('line', { x1: x, y1: y, x2: x, y2: y + 34, stroke: '#1f2530', 'stroke-width': 2.5 }, parent);
+  el('polygon', { points: x + ',' + y + ' ' + (x + 22) + ',' + (y + 7) + ' ' + x + ',' + (y + 14), fill: color || '#2f6fd6' }, parent);
+  el('text', { x: x + 4, y: y - 5, 'text-anchor': 'middle', class: 'lbl sm' }, parent, label);
+}
+
+/* ================= 1. Originea distanțelor ================= */
+(function () {
+  var svg = $('#road-svg'), out = $('#road-out'), sl = $('#car-pos'), org = 0;
+  var X0 = 40, KX = 5.6, gy = 150;
+  var CITIES = [[0, 'A'], [45, 'B'], [75, 'C']];
+  function X(km) { return X0 + km * KX; }
+  function draw() {
+    var p = +sl.value, x = p - org, i;
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: 640, height: 230, fill: '#eef6e6' }, svg);
+    el('rect', { x: 0, y: gy - 16, width: 640, height: 32, fill: '#6b7280' }, svg);
+    el('line', { x1: 0, y1: gy, x2: 640, y2: gy, stroke: '#fff', 'stroke-width': 2, 'stroke-dasharray': '14 12' }, svg);
+    for (i = 0; i <= 100; i += 10) {
+      el('line', { x1: X(i), y1: gy + 16, x2: X(i), y2: gy + 26, stroke: '#1f2530', 'stroke-width': 2 }, svg);
+      el('text', { x: X(i), y: gy + 46, 'text-anchor': 'middle', class: 'lbl sm' }, svg, sg(i - org));
+    }
+    el('text', { x: 628, y: 218, 'text-anchor': 'end', class: 'lbl sm' }, svg, tx('x (km) față de originea aleasă', 'x (km) vom gewählten Nullpunkt'));
+    CITIES.forEach(function (c) {
+      el('rect', { x: X(c[0]) - 11, y: gy - 54, width: 22, height: 30, rx: 4, fill: '#fff', stroke: '#1f2530', 'stroke-width': 2 }, svg);
+      el('text', { x: X(c[0]), y: gy - 33, 'text-anchor': 'middle', style: 'font:800 17px var(--display)' }, svg, c[1]);
+    });
+    el('text', { x: X(20), y: gy - 30, 'text-anchor': 'middle', style: 'font-size:24px' }, svg, '🏠');
+    flag(svg, X(org), 28, tx('origine', 'Nullpunkt'), '#d2452f');
+    carShape(svg, X(p), gy - 4, 52);
+    svg.setAttribute('aria-label', tx('Mașina este la ', 'Das Auto ist bei ') + sg(x) + ' km');
+    var o = org === 0 ? tx('localitatea A', 'Ort A') : org === 45 ? tx('localitatea B', 'Ort B') : tx('casa ta', 'deinem Zuhause');
+    out.innerHTML = '<span class="rule">' + tx('Origine: ', 'Nullpunkt: ') + '<strong>' + o + '</strong> (' + tx('la ', 'bei ') + org + ' km ' + tx('de A', 'von A') + ')</span>' +
+      '<span class="eq">x = ' + p + ' − ' + org + ' = <span class="c2">' + sg(x) + ' km</span></span>' +
+      (x < 0 ? '<span class="rule">' + tx('Minus: mașina se află de partea cealaltă a originii, la ' + Math.abs(x) + ' km de ea.', 'Minus: Das Auto liegt auf der anderen Seite des Nullpunkts, ' + Math.abs(x) + ' km von ihm entfernt.') + '</span>' : '<span class="rule">' + tx('Mașina este la ' + x + ' km de origine.', 'Das Auto ist ' + x + ' km vom Nullpunkt entfernt.') + '</span>');
+  }
+  chips($('#org-chips'), [[0, tx('Localitatea A (km 0)', 'Ort A (km 0)')], [45, tx('Localitatea B', 'Ort B')], [20, tx('Casa ta 🏠', 'Dein Zuhause 🏠')]], 0, function (k) { org = +k; draw(); });
+  sl.addEventListener('input', draw); draw();
+})();
+Check($('#c1'), [
+  { q: { ro: 'Un elev măsoară distanțele de la casă până la școală. Ce este casa lui?', de: 'Ein Schüler misst Entfernungen von zu Hause bis zur Schule. Was ist sein Zuhause?' },
+    o: [{ ro: 'originea distanțelor', de: 'der Nullpunkt der Strecken' }, { ro: 'traiectoria', de: 'die Bahn' }, { ro: 'mobilul', de: 'der bewegte Körper' }], a: 0,
+    why: { ro: 'Punctul față de care se măsoară toate distanțele este originea distanțelor.', de: 'Der Punkt, von dem aus alle Strecken gemessen werden, ist der Nullpunkt der Strecken.' },
+    hint: { ro: 'Casa este punctul de la care încep toate măsurătorile.', de: 'Das Zuhause ist der Punkt, an dem alle Messungen beginnen.' } },
+  { q: { ro: 'Cum se alege originea distanțelor?', de: 'Wie wählt man den Nullpunkt der Strecken?' },
+    o: [{ ro: 'Doar kilometrul 0 al șoselei', de: 'Nur Kilometer null der Straße' }, { ro: 'Arbitrar, după situație, dar trebuie spusă', de: 'Beliebig, je nach Situation, aber man muss sie nennen' }, { ro: 'Doar locul de plecare', de: 'Nur der Startort' }], a: 1,
+    why: { ro: 'Poate fi ales oriunde, dar numerele au sens doar dacă știm unde e originea.', de: 'Er kann überall gewählt werden, aber die Zahlen haben nur einen Sinn, wenn man weiß, wo er liegt.' },
+    hint: { ro: 'Încearcă în desen cele trei origini: merge oricare?', de: 'Probiere im Bild die drei Nullpunkte aus: Geht jeder?' } }
+]);
+
+/* ================= 2. Distanța parcursă ================= */
+(function () {
+  var svg = $('#line-svg'), out = $('#line-out'), s1 = $('#p1'), s2 = $('#p2');
+  var X0 = 40, KX = 5.6, ay = 100;
+  function X(k) { return X0 + k * KX; }
+  function draw() {
+    var a = +s1.value, b = +s2.value, d = b - a, i;
+    $('#p1v').textContent = a; $('#p2v').textContent = b;
+    svg.innerHTML = '';
+    el('line', { x1: X(0), y1: ay, x2: X(100), y2: ay, stroke: '#1f2530', 'stroke-width': 3 }, svg);
+    for (i = 0; i <= 100; i += 10) el('line', { x1: X(i), y1: ay - 6, x2: X(i), y2: ay + 6, stroke: '#1f2530', 'stroke-width': 2 }, svg);
+    for (i = 0; i <= 100; i += 20) el('text', { x: X(i), y: ay + 28, 'text-anchor': 'middle', class: 'lbl sm' }, svg, i);
+    flag(svg, X(0), 104, '', '#9aa3b2'); el('text', { x: X(0), y: ay + 62, 'text-anchor': 'middle', class: 'lbl sm' }, svg, tx('A (origine 1)', 'A (Nullpunkt 1)'));
+    flag(svg, X(45), 104, '', '#9aa3b2'); el('text', { x: X(45), y: ay + 62, 'text-anchor': 'middle', class: 'lbl sm' }, svg, tx('B (origine 2)', 'B (Nullpunkt 2)'));
+    el('path', { d: 'M' + X(a) + ' 58 H' + X(b), stroke: '#c98a00', 'stroke-width': 4, fill: 'none' }, svg);
+    if (d !== 0) el('polygon', { points: (d > 0 ? X(b) + ',58 ' + (X(b) - 10) + ',52 ' + (X(b) - 10) + ',64' : X(b) + ',58 ' + (X(b) + 10) + ',52 ' + (X(b) + 10) + ',64'), fill: '#c98a00' }, svg);
+    el('text', { x: (X(a) + X(b)) / 2, y: 40, 'text-anchor': 'middle', class: 'lbl big', fill: '#8a5a00' }, svg, 'd = ' + fmt(Math.abs(d)) + ' km');
+    el('circle', { cx: X(a), cy: ay, r: 9, fill: '#2f6fd6', stroke: '#fff', 'stroke-width': 2 }, svg);
+    el('circle', { cx: X(b), cy: ay, r: 9, fill: '#d2452f', stroke: '#fff', 'stroke-width': 2 }, svg);
+    el('text', { x: X(a), y: ay - 16, 'text-anchor': 'middle', class: 'lbl sm', fill: '#2f6fd6' }, svg, tx('plecare', 'Start'));
+    el('text', { x: X(b), y: ay - 16, 'text-anchor': 'middle', class: 'lbl sm', fill: '#d2452f' }, svg, tx('sosire', 'Ziel'));
+    out.innerHTML = '<span class="rule">' + tx('Origine A: ', 'Nullpunkt A: ') + 'x₁ = ' + a + ' km, x₂ = ' + b + ' km</span>' +
+      '<span class="eq">d = x₂ − x₁ = ' + b + ' − ' + a + ' = ' + sg(d) + ' km</span>' +
+      '<span class="rule">' + tx('Origine B: ', 'Nullpunkt B: ') + 'x₁ = ' + sg(a - 45) + ' km, x₂ = ' + sg(b - 45) + ' km</span>' +
+      '<span class="eq">d = ' + sg(b - 45) + ' − (' + sg(a - 45) + ') = <span class="c2">' + sg(d) + ' km</span></span>' +
+      '<span class="rule">' + (d < 0 ? tx('x₂ < x₁: mobilul merge în sens invers. Distanța parcursă este lungimea drumului: ' + Math.abs(d) + ' km.', 'x₂ < x₁: Der Körper fährt in Gegenrichtung. Die zurückgelegte Strecke ist die Länge des Weges: ' + Math.abs(d) + ' km.') : tx('Pozițiile s-au schimbat odată cu originea, dar distanța parcursă este aceeași.', 'Die Lagen haben sich mit dem Nullpunkt geändert, die zurückgelegte Strecke ist gleich geblieben.')) + '</span>';
+    svg.setAttribute('aria-label', tx('Distanța parcursă: ', 'Zurückgelegte Strecke: ') + Math.abs(d) + ' km');
+  }
+  s1.addEventListener('input', draw); s2.addEventListener('input', draw); draw();
+})();
+
+/* traseu: distanță vs deplasare */
+(function () {
+  var svg = $('#walk-svg'), out = $('#walk-out'), step = 0;
+  var OX = 320, OY = 290, K = 3;
+  var P = [[0, 0], [30, 0], [-30, 0], [-30, 90], [-30, 40]];
+  var LEG = [null, tx('30 m spre est', '30 m nach Osten'), tx('60 m spre vest', '60 m nach Westen'), tx('90 m spre nord', '90 m nach Norden'), tx('50 m spre sud', '50 m nach Süden')];
+  var DIST = [0, 30, 90, 180, 230];
+  function px(p) { return [OX + K * p[0], OY - K * p[1]]; }
+  function draw() {
+    var i, last = Math.min(step, 4);
+    svg.innerHTML = '';
+    for (i = -6; i <= 6; i++) el('line', { x1: OX + i * 30, y1: 10, x2: OX + i * 30, y2: 310, stroke: '#e2e0d6', 'stroke-width': 1 }, svg);
+    for (i = -1; i <= 9; i++) el('line', { x1: OX - 180, y1: OY - i * 30, x2: OX + 180, y2: OY - i * 30, stroke: '#e2e0d6', 'stroke-width': 1 }, svg);
+    // busolă
+    el('path', { d: 'M560 40 V110 M525 75 H595', stroke: '#5a6270', 'stroke-width': 2, fill: 'none' }, svg);
+    el('text', { x: 560, y: 34, 'text-anchor': 'middle', class: 'lbl sm' }, svg, 'N');
+    el('text', { x: 560, y: 126, 'text-anchor': 'middle', class: 'lbl sm' }, svg, 'S');
+    el('text', { x: 598, y: 80, class: 'lbl sm' }, svg, tx('E', 'O'));
+    el('text', { x: 508, y: 80, 'text-anchor': 'end', class: 'lbl sm' }, svg, tx('V', 'W'));
+    // drumul
+    var pts = [];
+    for (i = 0; i <= last; i++) pts.push(px(P[i]).join(','));
+    if (last > 0) el('polyline', { points: pts.join(' '), fill: 'none', stroke: '#c98a00', 'stroke-width': 5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+    if (step >= 5) {
+      var a = px(P[0]), b = px(P[4]);
+      el('polyline', { points: a[0] + ',' + a[1] + ' ' + b[0] + ',' + a[1] + ' ' + b[0] + ',' + b[1], fill: 'none', stroke: '#9aa3b2', 'stroke-width': 1.5, 'stroke-dasharray': '4 4' }, svg);
+      el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#1f8a5b', 'stroke-width': 4, 'stroke-dasharray': '10 6' }, svg);
+      el('text', { x: (a[0] + b[0]) / 2 + 22, y: (a[1] + b[1]) / 2 - 2, class: 'lbl', fill: '#1f8a5b' }, svg, tx('deplasarea AB', 'Verschiebung AB'));
+    }
+    var s = px(P[0]); el('circle', { cx: s[0], cy: s[1], r: 8, fill: '#2f6fd6', stroke: '#fff', 'stroke-width': 2 }, svg);
+    el('text', { x: s[0] + 14, y: s[1] + 6, class: 'lbl big', fill: '#2f6fd6' }, svg, 'A');
+    if (step >= 1 && step < 4) { var m = px(P[step]); el('circle', { cx: m[0], cy: m[1], r: 7, fill: '#c98a00', stroke: '#fff', 'stroke-width': 2 }, svg); }
+    if (step >= 4) { var e = px(P[4]); el('circle', { cx: e[0], cy: e[1], r: 8, fill: '#d2452f', stroke: '#fff', 'stroke-width': 2 }, svg); el('text', { x: e[0] - 14, y: e[1] + 6, 'text-anchor': 'end', class: 'lbl big', fill: '#d2452f' }, svg, 'B'); }
+    if (step >= 1 && step <= 4) { var q = px(P[step - 1]), r = px(P[step]); el('text', { x: (q[0] + r[0]) / 2 + (step === 3 || step === 4 ? -12 : 0), y: (q[1] + r[1]) / 2 + (step === 3 || step === 4 ? 0 : -12), 'text-anchor': step === 3 || step === 4 ? 'end' : 'middle', class: 'lbl', fill: '#8a5a00' }, svg, LEG[step]); }
+    var html = '';
+    if (step === 0) html = '<span class="rule">' + tx('Pornești din A. Apasă „Pasul următor”.', 'Du startest in A. Drücke „Nächster Schritt“.') + '</span>';
+    else html = '<span class="rule">' + (step <= 4 ? tx('Pasul ', 'Schritt ') + step + ': ' + LEG[step] : tx('Ai ajuns în B. Unește A cu B în linie dreaptă.', 'Du bist in B. Verbinde A und B in gerader Linie.')) + '</span>';
+    html += '<span class="eq">' + tx('Distanța parcursă', 'Zurückgelegte Strecke') + ': <span class="c2">' + DIST[last] + ' m</span></span>';
+    if (step >= 5) html += '<span class="eq">' + tx('Deplasarea AB', 'Verschiebung AB') + ': <span class="c3">50 m</span></span><span class="rule">' + tx('Măsoară cu rigla pe desen: AB are 5 pătrățele ca lungime, deci 50 m.', 'Miss mit dem Lineal im Bild: AB ist 5 Kästchen lang, also 50 m.') + '</span>';
+    out.innerHTML = html;
+    $('#walk-prev').disabled = step === 0; $('#walk-next').disabled = step === 5;
+    svg.setAttribute('aria-label', tx('Drumul omului: pasul ', 'Weg des Menschen: Schritt ') + step);
+  }
+  $('#walk-prev').onclick = function () { if (step > 0) { step--; draw(); } };
+  $('#walk-next').onclick = function () { if (step < 5) { step++; draw(); } };
+  draw();
+})();
+Check($('#c2'), [
+  { q: { ro: 'Muți originea distanțelor de la A la B. Ce se schimbă?', de: 'Du verschiebst den Nullpunkt von A nach B. Was ändert sich?' },
+    o: [{ ro: 'poziția punctelor', de: 'die Lage der Punkte' }, { ro: 'distanța parcursă', de: 'die zurückgelegte Strecke' }, { ro: 'amândouă', de: 'beides' }], a: 0,
+    why: { ro: 'Pozițiile se măsoară de la origine, deci se schimbă. Distanța parcursă (x₂ − x₁) rămâne la fel.', de: 'Die Lagen werden vom Nullpunkt aus gemessen, ändern sich also. Die zurückgelegte Strecke (x₂ − x₁) bleibt gleich.' },
+    hint: { ro: 'Încearcă în desenul de mai sus: ce numere se schimbă când treci de la origine A la B?', de: 'Probiere es im Bild oben: Welche Zahlen ändern sich, wenn du von Nullpunkt A zu B wechselst?' } },
+  { q: { ro: 'Omul de pe hartă a parcurs 230 m, dar a ajuns la 50 m de start. Cât este deplasarea lui?', de: 'Der Mensch auf der Karte ist 230 m gegangen, kam aber nur 50 m vom Start entfernt an. Wie groß ist seine Verschiebung?' },
+    o: [{ ro: '230 m', de: '230 m' }, { ro: '50 m', de: '50 m' }, { ro: '90 m', de: '90 m' }], a: 1,
+    why: { ro: 'Deplasarea este distanța în linie dreaptă între poziția inițială și cea finală.', de: 'Die Verschiebung ist der Abstand in gerader Linie zwischen Anfangs- und Endlage.' },
+    hint: { ro: 'Deplasarea nu ține cont de cotiturile drumului, ci doar de capete.', de: 'Die Verschiebung berücksichtigt nicht die Kurven des Weges, sondern nur die Endpunkte.' } }
+]);
+
+/* ================= 3. Momentul și durata ================= */
+(function () {
+  var svg = $('#clock-svg'), out = $('#clock-out'), a = $('#tm1'), b = $('#tm2');
+  var CX = 150, CY = 135, R = 100;
+  function pt(r, min) { var an = (min % 60) * Math.PI / 30; return [CX + r * Math.sin(an), CY - r * Math.cos(an)]; }
+  function ptH(r, m) { var an = (m % 720) / 720 * 2 * Math.PI; return [CX + r * Math.sin(an), CY - r * Math.cos(an)]; }
+  function draw() {
+    var t1 = +a.value, t2 = +b.value, i, d = t2 - t1;
+    $('#t1v').textContent = hm(t1); $('#t2v').textContent = hm(t2);
+    svg.innerHTML = '';
+    el('circle', { cx: CX, cy: CY, r: R + 8, fill: '#fff', stroke: '#1f2530', 'stroke-width': 4 }, svg);
+    if (d >= 60) el('circle', { cx: CX, cy: CY, r: R - 4, fill: '#f6c9c0' }, svg);
+    else if (d > 0) {
+      var p1 = pt(R - 4, t1), p2 = pt(R - 4, t2);
+      el('path', { d: 'M' + CX + ' ' + CY + ' L' + p1[0] + ' ' + p1[1] + ' A' + (R - 4) + ' ' + (R - 4) + ' 0 ' + (d > 30 ? 1 : 0) + ' 1 ' + p2[0] + ' ' + p2[1] + ' Z', fill: '#f2a08f', opacity: .85 }, svg);
+    }
+    for (i = 0; i < 60; i++) { var o = pt(R, i), n = pt(i % 5 ? R - 6 : R - 12, i); el('line', { x1: o[0], y1: o[1], x2: n[0], y2: n[1], stroke: '#1f2530', 'stroke-width': i % 5 ? 1 : 3 }, svg); }
+    for (i = 1; i <= 12; i++) { var q = pt(R - 26, i * 5); el('text', { x: q[0], y: q[1] + 6, 'text-anchor': 'middle', style: 'font:800 17px var(--display)' }, svg, i); }
+    var mh = pt(R - 14, t2), hh = ptH(R - 42, t2);
+    el('line', { x1: CX, y1: CY, x2: hh[0], y2: hh[1], stroke: '#1f2530', 'stroke-width': 6, 'stroke-linecap': 'round' }, svg);
+    el('line', { x1: CX, y1: CY, x2: mh[0], y2: mh[1], stroke: '#2f6fd6', 'stroke-width': 4, 'stroke-linecap': 'round' }, svg);
+    el('circle', { cx: CX, cy: CY, r: 6, fill: '#1f2530' }, svg);
+    var l1 = pt(R + 26, t1), l2 = pt(R + 26, t2);
+    el('text', { x: l1[0], y: l1[1] + 5, 'text-anchor': 'middle', class: 'lbl', fill: '#2f6fd6' }, svg, 't₁');
+    el('text', { x: l2[0], y: l2[1] + 5, 'text-anchor': 'middle', class: 'lbl', fill: '#d2452f' }, svg, 't₂');
+    var dur = d === 0 ? '0 min' : (d < 60 ? d + ' min' : hm(d).replace(' 00 min', ''));
+    out.innerHTML = '<span class="rule">' + tx('Originea timpului: miezul nopții (0 h 00 min)', 'Nullpunkt der Zeit: Mitternacht (0 h 00 min)') + '</span>' +
+      '<span class="eq">t₁ = ' + hm(t1) + '</span><span class="eq">t₂ = ' + hm(t2) + '</span>' +
+      '<span class="eq">Δt = t₂ − t₁ = ' + hm(t2) + ' − ' + hm(t1) + ' = <span class="c2">' + dur + '</span></span>' +
+      (d === 0 ? '<span class="rule">' + tx('Momentele sunt la fel: nu a trecut niciun timp.', 'Die Zeitpunkte sind gleich: Es ist keine Zeit vergangen.') + '</span>' : '<span class="rule">' + tx('Sectorul colorat arată cât timp a străbătut minutarul.', 'Der gefärbte Sektor zeigt, wie viel Zeit der Minutenzeiger durchlaufen hat.') + '</span>');
+    svg.setAttribute('aria-label', tx('Ceas: de la ', 'Uhr: von ') + hm(t1) + tx(' la ', ' bis ') + hm(t2));
+  }
+  a.addEventListener('input', function () { if (+a.value > +b.value) b.value = a.value; draw(); });
+  b.addEventListener('input', function () { if (+b.value < +a.value) a.value = b.value; draw(); });
+  draw();
+})();
+(function () {
+  var svg = $('#zone-svg'), out = $('#zone-out'), s = $('#lis');
+  function card(x, city, min, tag, col) {
+    el('rect', { x: x, y: 10, width: 290, height: 125, rx: 14, fill: '#fff', stroke: col, 'stroke-width': 3 }, svg);
+    el('text', { x: x + 145, y: 42, 'text-anchor': 'middle', style: 'font:800 20px var(--display)' }, svg, city);
+    el('text', { x: x + 145, y: 96, 'text-anchor': 'middle', style: 'font:800 46px var(--display)', fill: col }, svg, hmClock(min));
+    if (tag) el('text', { x: x + 145, y: 122, 'text-anchor': 'middle', class: 'lbl sm', fill: '#5a6270' }, svg, tag);
+  }
+  function draw() {
+    var lis = +s.value, buc = lis + 120, next = buc >= 1440;
+    if (next) buc -= 1440;
+    $('#lisv').textContent = hmClock(lis);
+    svg.innerHTML = '';
+    card(20, tx('Lisabona', 'Lissabon'), lis, '', '#2f6fd6');
+    card(330, tx('București', 'Bukarest'), buc, next ? tx('în ziua următoare', 'am nächsten Tag') : '', '#d2452f');
+    el('text', { x: 320, y: 80, 'text-anchor': 'middle', style: 'font:800 22px var(--display)' }, svg, '=');
+    out.innerHTML = '<span class="eq">' + tx('Același moment, două ore', 'Derselbe Zeitpunkt, zwei Uhrzeiten') + '</span>' +
+      '<span class="rule">' + tx('București este cu 2 ore înaintea Lisabonei: miezul nopții ajunge acolo mai devreme, deci originea timpului diferă cu 2 h.', 'Bukarest ist Lissabon 2 Stunden voraus: Mitternacht kommt dort früher, der Nullpunkt der Zeit unterscheidet sich also um 2 h.') + '</span>';
+    svg.setAttribute('aria-label', tx('La Lisabona e ', 'In Lissabon ist es ') + hmClock(lis) + tx(', în București ', ', in Bukarest ') + hmClock(buc));
+  }
+  s.addEventListener('input', draw); draw();
+})();
+Check($('#c3'), [
+  { q: { ro: 'Autobuzul pleacă la 9:05 și ajunge la 9:15. Cât este durata mișcării?', de: 'Der Bus fährt um 9:05 Uhr ab und kommt um 9:15 Uhr an. Wie lang ist die Dauer der Bewegung?' },
+    o: [{ ro: '10 min', de: '10 min' }, { ro: '9 h 15 min', de: '9 h 15 min' }, { ro: '20 min', de: '20 min' }], a: 0,
+    why: { ro: 'Δt = t₂ − t₁ = 9 h 15 min − 9 h 05 min = 10 min. „9:15” este un moment, nu o durată.', de: 'Δt = t₂ − t₁ = 9 h 15 min − 9 h 05 min = 10 min. „9:15“ ist ein Zeitpunkt, keine Dauer.' },
+    hint: { ro: 'Durata este diferența dintre momentul final și cel inițial.', de: 'Die Dauer ist die Differenz zwischen End- und Anfangszeitpunkt.' } },
+  { q: { ro: 'Meciul începe la 20:30 la Lisabona și la 22:30 în București. Sunt două momente diferite?', de: 'Das Spiel beginnt um 20:30 Uhr in Lissabon und um 22:30 Uhr in Bukarest. Sind das zwei verschiedene Zeitpunkte?' },
+    o: [{ ro: 'Da, în București începe mai târziu', de: 'Ja, in Bukarest beginnt es später' }, { ro: 'Nu, e același moment, dar ceasurile numără de la origini diferite', de: 'Nein, es ist derselbe Zeitpunkt, aber die Uhren zählen ab verschiedenen Nullpunkten' }], a: 1,
+    why: { ro: 'Este același eveniment; fusurile orare au origini ale timpului diferite, cu 2 h.', de: 'Es ist dasselbe Ereignis; die Zeitzonen haben um 2 h verschiedene Nullpunkte der Zeit.' },
+    hint: { ro: 'Meciul începe o singură dată. Ce diferă de la un oraș la altul?', de: 'Das Spiel beginnt nur einmal. Was ist von Stadt zu Stadt verschieden?' } }
+]);
+
+/* ================= 4. Delta ================= */
+(function () {
+  var svg = $('#delta-svg'), out = $('#delta-out'), sa = $('#da'), sb = $('#db'), cur;
+  var Q = {
+    x: { n: tx('Poziția pe șosea', 'Lage auf der Straße'), u: ' km', min: 0, max: 100, a: 45, b: 75, s: 'Δx', t: 10 },
+    T: { n: tx('Temperatura', 'Temperatur'), u: ' °C', min: -10, max: 40, a: 18, b: 7, s: 'Δθ', t: 10 },
+    h: { n: tx('Nivelul apei', 'Wasserstand'), u: ' cm', min: 0, max: 10, a: 3, b: 8, s: 'Δh', t: 1 }
+  };
+  var X0 = 40, W = 560;
+  function draw() {
+    var q = Q[cur], a = +sa.value, b = +sb.value, d = b - a, i;
+    function X(v) { return X0 + (v - q.min) / (q.max - q.min) * W; }
+    $('#dav').textContent = sg(a) + q.u; $('#dbv').textContent = sg(b) + q.u;
+    svg.innerHTML = '';
+    el('line', { x1: X0, y1: 110, x2: X0 + W, y2: 110, stroke: '#1f2530', 'stroke-width': 3 }, svg);
+    for (i = q.min; i <= q.max; i += q.t) {
+      el('line', { x1: X(i), y1: 104, x2: X(i), y2: 116, stroke: '#1f2530', 'stroke-width': 2 }, svg);
+      el('text', { x: X(i), y: 138, 'text-anchor': 'middle', class: 'lbl sm' }, svg, sg(i));
+    }
+    if (d !== 0) {
+      el('path', { d: 'M' + X(a) + ' 68 H' + X(b), stroke: d > 0 ? '#1f8a5b' : '#d2452f', 'stroke-width': 4, fill: 'none' }, svg);
+      el('polygon', { points: X(b) + ',68 ' + (X(b) - Math.sign(d) * 11) + ',61 ' + (X(b) - Math.sign(d) * 11) + ',75', fill: d > 0 ? '#1f8a5b' : '#d2452f' }, svg);
+    }
+    el('text', { x: (X(a) + X(b)) / 2, y: 46, 'text-anchor': 'middle', class: 'lbl big', fill: d > 0 ? '#1f8a5b' : d < 0 ? '#d2452f' : '#5a6270' }, svg, q.s + ' = ' + sg(d) + q.u);
+    el('circle', { cx: X(a), cy: 110, r: 9, fill: '#2f6fd6', stroke: '#fff', 'stroke-width': 2 }, svg);
+    el('circle', { cx: X(b), cy: 110, r: 9, fill: '#d2452f', stroke: '#fff', 'stroke-width': 2 }, svg);
+    el('text', { x: X(a), y: 94, 'text-anchor': 'middle', class: 'lbl sm', fill: '#2f6fd6' }, svg, tx('inițial', 'Anfang'));
+    el('text', { x: X(b) + (Math.abs(X(a) - X(b)) < 50 ? 18 : 0), y: Math.abs(X(a) - X(b)) < 50 ? 160 : 94, 'text-anchor': 'middle', class: 'lbl sm', fill: '#d2452f' }, svg, tx('final', 'Ende'));
+    out.innerHTML = '<span class="eq">' + q.s + ' = ' + tx('final − inițial', 'Ende − Anfang') + '</span><span class="eq">' + q.s + ' = ' + sg(b) + ' − (' + sg(a) + ') = <span class="c2">' + sg(d) + q.u + '</span></span>' +
+      '<span class="rule">' + (d > 0 ? tx('Δ pozitiv: valoarea a crescut.', 'Δ positiv: Der Wert ist gewachsen.') : d < 0 ? tx('Δ negativ: valoarea a scăzut.', 'Δ negativ: Der Wert ist gesunken.') : tx('Δ = 0: nu s-a schimbat nimic.', 'Δ = 0: Nichts hat sich geändert.')) + '</span>';
+    svg.setAttribute('aria-label', q.n + ': ' + q.s + ' = ' + sg(d) + q.u);
+  }
+  function pick(k) { cur = k; var q = Q[k]; sa.min = sb.min = q.min; sa.max = sb.max = q.max; sa.value = q.a; sb.value = q.b; draw(); }
+  chips($('#dq-chips'), Object.keys(Q).map(function (k) { return [k, Q[k].n]; }), 'x', pick);
+  sa.addEventListener('input', draw); sb.addEventListener('input', draw);
+  pick('x');
+})();
+Check($('#c4'), [
+  { q: { ro: 'Temperatura crește de la 5 °C la 12 °C. Cât este Δθ?', de: 'Die Temperatur steigt von 5 °C auf 12 °C. Wie groß ist Δθ?' },
+    o: [{ ro: '7 °C', de: '7 °C' }, { ro: '−7 °C', de: '−7 °C' }, { ro: '17 °C', de: '17 °C' }], a: 0,
+    why: { ro: 'Δθ = 12 − 5 = 7 °C, pozitiv fiindcă temperatura a crescut.', de: 'Δθ = 12 − 5 = 7 °C, positiv, weil die Temperatur gestiegen ist.' },
+    hint: { ro: 'Final minus inițial.', de: 'Ende minus Anfang.' } },
+  { q: { ro: 'Apa dintr-un vas scade de la 8 cm la 5 cm. Cât este Δh?', de: 'Das Wasser in einem Gefäß sinkt von 8 cm auf 5 cm. Wie groß ist Δh?' },
+    o: [{ ro: '+3 cm', de: '+3 cm' }, { ro: '−3 cm', de: '−3 cm' }, { ro: '13 cm', de: '13 cm' }], a: 1,
+    why: { ro: 'Δh = 5 − 8 = −3 cm. Minusul arată că nivelul a scăzut.', de: 'Δh = 5 − 8 = −3 cm. Das Minus zeigt, dass der Wasserstand gesunken ist.' },
+    hint: { ro: 'Scrie „final − inițial”: 5 − 8. Iese pozitiv sau negativ?', de: 'Schreibe „Ende − Anfang“: 5 − 8. Kommt es positiv oder negativ heraus?' } }
+]);
+
+/* ================= 5. Fixare ================= */
+Classify($('#cls-q'), [{ ro: 'poziție x', de: 'Lage x' }, { ro: 'distanță d', de: 'Strecke d' }, { ro: 'moment t', de: 'Zeitpunkt t' }, { ro: 'durată Δt', de: 'Dauer Δt' }], [
+  { t: { ro: 'Biciclistul se află la 35 km de București.', de: 'Der Radfahrer ist 35 km von Bukarest entfernt.' }, a: 0, why: { ro: 'Spune unde se află, față de originea București.', de: 'Es sagt, wo er ist, gemessen vom Nullpunkt Bukarest.' }, hint: { ro: 'Spune „unde este” sau „cât a mers”?', de: 'Sagt es „wo er ist“ oder „wie weit er gefahren ist“?' } },
+  { t: { ro: 'Trenul a plecat la ora 2:30 din gara Sinaia.', de: 'Der Zug fuhr um 2:30 Uhr vom Bahnhof Sinaia ab.' }, a: 2, why: { ro: '„La ora 2:30” spune când, deci un moment.', de: '„Um 2:30 Uhr“ sagt wann, also ein Zeitpunkt.' }, hint: { ro: 'Răspunde la „la ce oră?”.', de: 'Es antwortet auf „um wie viel Uhr?“.' } },
+  { t: { ro: 'Spectacolul de teatru a durat 2 ore.', de: 'Die Theateraufführung dauerte 2 Stunden.' }, a: 3, why: { ro: 'Spune cât timp a ținut: o durată.', de: 'Es sagt, wie lange es dauerte: eine Dauer.' }, hint: { ro: 'Răspunde la „cât timp?”.', de: 'Es antwortet auf „wie lange?“.' } },
+  { t: { ro: 'Mașina mea are cel mai mic consum de benzină la 100 km.', de: 'Mein Auto hat den geringsten Benzinverbrauch auf 100 km.' }, a: 1, why: { ro: '100 km este lungimea drumului parcurs: o distanță parcursă.', de: '100 km ist die Länge des zurückgelegten Weges: eine zurückgelegte Strecke.' }, hint: { ro: 'Cât de lung este drumul pentru care se măsoară consumul?', de: 'Wie lang ist der Weg, für den der Verbrauch gemessen wird?' } },
+  { t: { ro: 'Meciul începe la ora 20:30.', de: 'Das Spiel beginnt um 20:30 Uhr.' }, a: 2, why: { ro: 'Spune când începe: un moment.', de: 'Es sagt, wann es beginnt: ein Zeitpunkt.' }, hint: { ro: 'Răspunde la „când?”.', de: 'Es antwortet auf „wann?“.' } },
+  { t: { ro: 'Am mers pe jos 3 km până la școală.', de: 'Ich bin 3 km zu Fuß zur Schule gegangen.' }, a: 1, why: { ro: 'Este lungimea drumului străbătut.', de: 'Es ist die Länge des durchlaufenen Weges.' }, hint: { ro: 'Câți kilometri a străbătut?', de: 'Wie viele Kilometer hat er durchlaufen?' } },
+  { t: { ro: 'Drumul cu trenul a ținut 45 de minute.', de: 'Die Zugfahrt dauerte 45 Minuten.' }, a: 3, why: { ro: 'Este intervalul de timp dintre plecare și sosire.', de: 'Es ist die Zeitspanne zwischen Abfahrt und Ankunft.' }, hint: { ro: 'Este un interval sau un moment anume?', de: 'Ist es eine Zeitspanne oder ein bestimmter Zeitpunkt?' } }
+]);
+Drill($('#drill'), {
+  borna: function () {
+    var a = rint(20, 150), dd = rint(8, 60), t1 = rint(7, 20) * 60 + rint(0, 11) * 5, t2 = t1 + rint(3, 18) * 5;
+    return { q: tx('O mașină trece prin dreptul bornei kilometrice ' + a + ' km la ora ' + hm(t1) + ' și ajunge în dreptul bornei de ' + (a + dd) + ' km la ora ' + hm(t2) + '. Ce distanță a parcurs?', 'Ein Auto passiert den Kilometerstein ' + a + ' km um ' + hm(t1) + ' und erreicht den Stein ' + (a + dd) + ' km um ' + hm(t2) + '. Welche Strecke hat es zurückgelegt?'),
+      a: dd, u: 'km', s: 'd = x₂ − x₁ = ' + (a + dd) + ' − ' + a + ' = ' + dd + ' km', hint: tx('d = x₂ − x₁: scade poziția inițială din cea finală.', 'd = x₂ − x₁: Ziehe die Anfangslage von der Endlage ab.') };
+  },
+  durata: function () {
+    var t1 = rint(6, 15) * 60 + rint(0, 11) * 5, dm = rint(5, 60) * 5, t2 = t1 + dm;
+    return { q: tx('Un tren pleacă la ora ' + hm(t1) + ' și ajunge la ora ' + hm(t2) + '. Cât a durat drumul, în minute?', 'Ein Zug fährt um ' + hm(t1) + ' ab und kommt um ' + hm(t2) + ' an. Wie lange dauerte die Fahrt, in Minuten?'),
+      a: dm, u: 'min', s: 'Δt = t₂ − t₁ = ' + hm(t2) + ' − ' + hm(t1) + ' = ' + dm + ' min', hint: tx('Scade momentul inițial din cel final; dacă treci de o oră, transformă orele în minute.', 'Ziehe den Anfangszeitpunkt vom Endzeitpunkt ab; bei mehr als einer Stunde rechne Stunden in Minuten um.') };
+  },
+  origine: function () {
+    var b = rint(10, 60), c = b + rint(5, 70);
+    return { q: tx('Localitatea B este la ' + b + ' km de A. Un camion se află la ' + c + ' km de A, pe același drum, dincolo de B. Ce poziție are camionul dacă originea distanțelor este în B?', 'Ort B ist ' + b + ' km von A entfernt. Ein Lkw ist auf derselben Straße ' + c + ' km von A entfernt, hinter B. Welche Lage hat der Lkw, wenn der Nullpunkt in B liegt?'),
+      a: c - b, u: 'km', s: 'x = ' + c + ' − ' + b + ' = ' + (c - b) + ' km', hint: tx('Distanța de la noua origine: scade distanța până la B din distanța până la camion.', 'Entfernung vom neuen Nullpunkt: Ziehe die Entfernung bis B von der Entfernung bis zum Lkw ab.') };
+  }
+});
+
+Gloss($('#gloss'), [
+  ['poziție', 'Lage, Ort (x)'], ['originea distanțelor', 'Nullpunkt der Strecken'], ['kilometrul zero', 'Kilometer null'], ['borna kilometrică', 'Kilometerstein'],
+  ['distanța parcursă', 'zurückgelegte Strecke'], ['deplasare', 'Verschiebung'], ['moment', 'Zeitpunkt'], ['originea timpului', 'Nullpunkt der Zeit'],
+  ['durata mișcării', 'Dauer der Bewegung'], ['intervalul de timp', 'Zeitspanne'], ['Δ (delta)', 'Delta, Differenz'], ['valoare inițială / finală', 'Anfangswert / Endwert'],
+  ['cronometru', 'Stoppuhr'], ['fus orar', 'Zeitzone'], ['miezul nopții', 'Mitternacht']
+]);
+
+})();
+</script>
+</body>
+</html>

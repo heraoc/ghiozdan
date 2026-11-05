@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mișcare și repaus: corp, reper, traiectorie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Bewegung und Ruhe: Körper, Bezugskörper, Bahn';
+})();
+</script>
+<style>
+:root{
+  --paper:#f7f6f0; --card:#ffffff; --ink:#1f2530; --muted:#5a6270; --rule:#e2e0d6; --sheet:#f1efe6;
+  --accent:#c98a00; --accent-soft:#fdf2d4; --blue:#2f6fd6; --blue-soft:#e3edfc; --ok:#1f8a5b; --bad:#c23b3b; --red:#d2452f;
+  --good-soft:#e3f5ec; --bad-soft:#fbe4e4;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+sup{font-size:.7em;line-height:0}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.hint{font-size:14px;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{border:1.5px solid var(--accent);background:transparent;border-radius:99px;padding:5px 13px;cursor:pointer;font-weight:700}
+.chip[aria-pressed="true"]{background:var(--accent);color:#fff}
+
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:6px}
+.toc a{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:4px 12px 4px 5px;color:var(--ink);text-decoration:none;font-weight:700;font-size:15px}
+.toc a b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 13px/1 var(--display)}
+.toc a:hover{border-color:var(--ink)}
+
+section.block{margin-top:56px;scroll-margin-top:12px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:70ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.story{background:#fffbea;border:1px solid #f0e2a8;border-radius:10px;padding:14px 18px;margin-top:16px}
+.story h3{font-size:19px;color:#8a6a00;margin-bottom:4px}
+.know{margin-top:16px;background:#eef4fd;border:1px solid #c9dbf5;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.know h3{font-size:20px;color:#1f4f99}
+.know ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+
+.split{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.fig svg{display:block;width:100%;height:auto}
+.panel{display:grid;gap:10px;align-content:start}
+.slider{display:grid;gap:2px}
+.slider label{font-weight:700}
+.slider input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
+.slider,.panel>*,.split>*{min-width:0}
+.readout{background:var(--sheet);border-radius:10px;padding:10px 14px;display:grid;gap:4px}
+.readout .eq{font:800 21px/1.3 var(--display)}
+.readout .rule{font-size:15px;color:var(--muted)}
+.c1{color:var(--blue)} .c2{color:var(--red)} .c3{color:var(--ok)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tab{border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:6px 15px;cursor:pointer;font-weight:700}
+.tab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+/* verifică-te și clasificări */
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--ok);background:var(--ok);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#a12f2f;background:var(--bad-soft)}
+.check{margin-top:18px;background:var(--card);border:1px dashed #e8cf8f;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted);min-height:1.2em}
+.cls{display:grid;gap:0;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:6px 14px}
+.cls .row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:6px 14px;padding:10px 0;border-bottom:1px solid var(--rule);align-items:center}
+.cls .row:last-child{border-bottom:0}
+.cls .row .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cls .row .why{grid-column:1/-1;font-size:15px;color:var(--muted);min-height:0}
+.cls .row .why:empty{display:none}
+
+/* câmpuri de răspuns */
+.vin{width:110px;font:800 20px/1 var(--display);text-align:center;padding:6px 8px;border:2px solid var(--rule);border-radius:10px;background:#fff}
+.vin.wide{width:130px}
+.vin.ok{border-color:var(--ok);background:var(--good-soft)}
+.vin.bad{border-color:var(--bad);background:var(--bad-soft)}
+.row2{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.result{border-radius:10px;padding:10px 14px;font-weight:700}
+.result.good{background:var(--good-soft);color:#17744d}
+.result.try{background:#fdf0d5;color:#8a5a00}
+.score{font-weight:700;color:var(--muted)}
+.ex{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:10px;max-width:680px}
+.fillbox{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:6px 16px}
+.fillbox p{padding:10px 0;border-bottom:1px solid var(--rule);line-height:2.1}
+.fillbox p:last-child{border-bottom:0}
+.fillbox select{border:2px solid var(--rule);border-radius:8px;padding:3px 6px;background:#fff;font-weight:700}
+.fillbox select.ok{border-color:var(--ok);background:var(--good-soft)}
+.fillbox select.bad{border-color:var(--bad);background:var(--bad-soft)}
+
+/* text în SVG */
+svg text{font-family:var(--body)}
+.lbl{font:700 15px var(--body);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.lbl.big{font-size:18px}
+.lbl.sm{font-size:13px;font-weight:500}
+
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0;border-left:3px solid var(--accent);margin-left:8px}
+.timeline li{position:relative;padding:0 0 14px 20px}
+.timeline li::before{content:"";position:absolute;left:-9px;top:6px;width:15px;height:15px;border-radius:50%;background:var(--card);border:3px solid var(--accent)}
+.timeline b{font-family:var(--display);font-size:18px}
+
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+  .cls .row{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .lbl{font-size:19px} .lbl.big{font-size:22px} .lbl.sm{font-size:16px}
+  body{font-size:16.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="head">
+  <p class="eyebrow"><span class="ro">Fizică · Clasa a 6-a · Fenomene mecanice</span><span class="de">Physik · Klasse 6 · Mechanische Erscheinungen</span></p>
+  <h1><span class="ro">Mișcare și repaus: corp, reper, traiectorie</span><span class="de">Bewegung und Ruhe: Körper, Bezugskörper, Bahn</span></h1>
+  <p class="lead">
+    <span class="ro">Stai liniștit pe scaun și totuși te miști: față de Soare, cu aproape 30 de kilometri pe secundă! Cum de pot fi ambele adevărate? Vei afla că „mișcare” și „repaus” nu înseamnă nimic până nu spunem față de ce, vei învăța când un corp mare poate fi socotit un simplu punct și vei desena drumul pe care îl lasă un corp în urma lui.</span>
+    <span class="de">Du sitzt ruhig auf deinem Stuhl und bewegst dich trotzdem: gegenüber der Sonne mit fast 30 Kilometern pro Sekunde! Wie können beide Aussagen stimmen? Du erfährst, dass „Bewegung“ und „Ruhe“ nichts bedeuten, solange man nicht sagt, wozu, du lernst, wann ein großer Körper als bloßer Punkt gelten darf, und du zeichnest den Weg, den ein Körper hinterlässt.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Ești în repaus când stai în bancă? Dar dacă te uiți din spațiu?</span><span class="de">Bist du in Ruhe, wenn du in der Bank sitzt? Und wenn man vom Weltall aus schaut?</span></li>
+        <li><span class="ro">Când poate o mașină să fie desenată doar ca un punct?</span><span class="de">Wann darf man ein Auto nur als Punkt zeichnen?</span></li>
+        <li><span class="ro">Ce drum descrie o lampă fixată pe roata unei biciclete în mișcare?</span><span class="de">Welchen Weg beschreibt eine Lampe am Rad eines fahrenden Fahrrads?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Punct material</span><span class="de">Massenpunkt</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Reper</span><span class="de">Bezugskörper</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Mișcarea e relativă</span><span class="de">Bewegung ist relativ</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Traiectorie</span><span class="de">Bahn</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Fixare</span><span class="de">Festigung</span></a>
+  </nav>
+</header>
+
+<!-- 1. Punctul material -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Corp mare sau simplu punct?</span><span class="de">Großer Körper oder einfacher Punkt?</span></h2>
+  <p class="section-sub"><span class="ro">Un corp ale cărui dimensiuni sunt neglijabile față de deplasarea lui poate fi înlocuit cu un punct, numit <strong>punct material</strong>. Un punct material aflat în mișcare se numește <strong>mobil</strong>. Alege situația și urmărește cum se micșorează mașina de 4 m pe măsură ce drumul devine mai lung.</span><span class="de">Ein Körper, dessen Ausdehnung gegenüber seiner Verschiebung vernachlässigbar ist, kann durch einen Punkt ersetzt werden, den <strong>Massenpunkt</strong>. Ein Massenpunkt in Bewegung heißt <strong>bewegter Körper</strong> (Mobil). Wähle die Situation und beobachte, wie das 4 m lange Auto schrumpft, je länger die Strecke wird.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="zoom-svg" viewBox="0 0 640 210" role="img" aria-label="O mașină pe un drum de lungime variabilă"></svg></div>
+    <div class="panel">
+      <div class="chips" id="zoom-chips" role="group" aria-label="Situația"></div>
+      <div class="readout" id="zoom-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro">Nu contează cât de mare e corpul, ci <strong>cât de mare e față de distanța pe care o parcurge</strong>. O mașină care merge de la București la Iași este un punct material. Aceeași mașină, manevrată într-o parcare, nu este.</span><span class="de">Nicht die Größe des Körpers zählt, sondern <strong>wie groß er im Vergleich zur zurückgelegten Strecke ist</strong>. Ein Auto, das von Bukarest nach Iași fährt, ist ein Massenpunkt. Dasselbe Auto beim Einparken ist keiner.</span></p>
+  </div>
+  <div class="story">
+    <h3><span class="ro">Știai că? Pământul, un punct pentru Newton</span><span class="de">Wusstest du? Die Erde, ein Punkt für Newton</span></h3>
+    <p><span class="ro">În 1687, în cartea <em>Principia</em>, Isaac Newton a calculat mișcarea planetelor tratându-le drept puncte. Are sens: Pământul are cam 12 700 km în diametru, dar orbita lui în jurul Soarelui are raza de aproape 150 de milioane de km, de circa 11 700 de ori mai mult. Dar nu uita: când studiem succesiunea zilei și a nopții, Pământul nu mai poate fi un punct, fiindcă ne interesează tocmai rotirea lui.</span><span class="de">1687 berechnete Isaac Newton in seinem Buch <em>Principia</em> die Bewegung der Planeten, indem er sie als Punkte behandelte. Das ist sinnvoll: Die Erde hat etwa 12 700 km Durchmesser, ihre Bahn um die Sonne aber einen Radius von fast 150 Millionen km, rund 11 700-mal mehr. Aber Vorsicht: Beim Wechsel von Tag und Nacht darf die Erde kein Punkt sein, denn dann interessiert uns gerade ihre Drehung.</span></p>
+  </div>
+  <div id="c1"></div>
+</section>
+
+<!-- 2. Reper -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Reperul și sistemul de referință</span><span class="de">Bezugskörper und Bezugssystem</span></h2>
+  <p class="section-sub"><span class="ro">Pasagerul din tren stă pe scaun. Se mișcă sau nu? Depinde de cine răspunde! Alege <strong>reperul</strong>, adică obiectul față de care privești, și vezi cum se schimbă povestea. Poți schimba și viteza trenului B.</span><span class="de">Der Fahrgast sitzt im Zug auf seinem Platz. Bewegt er sich oder nicht? Das hängt davon ab, wer antwortet! Wähle den <strong>Bezugskörper</strong>, also den Körper, von dem aus du schaust, und sieh, wie sich die Geschichte ändert. Du kannst auch die Geschwindigkeit von Zug B ändern.</span></p>
+  <div class="split">
+    <div class="fig">
+      <svg id="frame-svg" viewBox="0 0 640 250" role="img" aria-label="Doi trenuri și un copac; privite din reperul ales"></svg>
+      <div class="actions" style="justify-content:center;margin-top:4px"><button class="btn ghost" type="button" id="frame-play"></button></div>
+    </div>
+    <div class="panel">
+      <div><strong><span class="ro">Privesc din…</span><span class="de">Ich schaue von…</span></strong></div>
+      <div class="chips" id="ref-chips" role="group" aria-label="Reper"></div>
+      <div><strong><span class="ro">Trenul B</span><span class="de">Zug B</span></strong></div>
+      <div class="chips" id="vb-chips" role="group" aria-label="Viteza trenului B"></div>
+      <div class="readout" id="frame-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro"><strong>Un reper</strong> (corp de referință) este un obiect în raport cu care descriem mișcarea.</span><span class="de"><strong>Ein Bezugskörper</strong> ist ein Körper, in Bezug auf den wir die Bewegung beschreiben.</span></li>
+      <li><span class="ro"><strong>Un sistem de referință</strong> este format dintr-un reper căruia i se asociază instrumentele de măsură pentru distanță și timp (riglă, ceas).</span><span class="de"><strong>Ein Bezugssystem</strong> besteht aus einem Bezugskörper, dem die Messgeräte für Strecke und Zeit (Lineal, Uhr) zugeordnet sind.</span></li>
+      <li><span class="ro"><strong>Un corp este în mișcare</strong> când își schimbă poziția față de un sistem de referință; <strong>este în repaus</strong> când nu și-o schimbă.</span><span class="de"><strong>Ein Körper bewegt sich</strong>, wenn er seine Lage gegenüber einem Bezugssystem ändert; <strong>er ruht</strong>, wenn er sie nicht ändert.</span></li>
+    </ul>
+  </div>
+  <div class="story">
+    <h3><span class="ro">Știai că? Cabina lui Galilei</span><span class="de">Wusstest du? Galileis Kajüte</span></h3>
+    <p><span class="ro">În 1632, în <em>Dialog despre cele două sisteme principale ale lumii</em>, Galileo Galilei a cerut cititorilor să-și închipuie că stau închiși într-o cabină, sub puntea unui vapor mare, cu fluturi, pești într-un vas și picături care curg într-o găleată. Dacă vaporul merge uniform și fără zguduiri, nimic din ce se întâmplă în cabină nu arată dacă vaporul se mișcă sau stă. Argumentul a ajutat la acceptarea ideii că Pământul se poate mișca fără ca noi să simțim.</span><span class="de">1632 forderte Galileo Galilei in seinem <em>Dialog über die beiden hauptsächlichen Weltsysteme</em> die Leser auf, sich in einer Kajüte unter Deck eines großen Schiffes eingeschlossen vorzustellen, mit Schmetterlingen, Fischen in einem Glas und Tropfen, die in einen Eimer fallen. Fährt das Schiff gleichmäßig und ohne Erschütterung, verrät nichts in der Kajüte, ob es fährt oder steht. Das Argument half, die Idee zu akzeptieren, dass sich die Erde bewegen kann, ohne dass wir es spüren.</span></p>
+  </div>
+  <div id="c2"></div>
+</section>
+
+<!-- 3. Mișcarea e relativă -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Mișcarea este relativă</span><span class="de">Bewegung ist relativ</span></h2>
+  <p class="section-sub"><span class="ro">Același corp poate fi în același timp în mișcare față de un reper și în repaus față de altul. Pentru fiecare rând, alege starea corpului față de reperul dat.</span><span class="de">Derselbe Körper kann gleichzeitig gegenüber einem Bezugskörper in Bewegung und gegenüber einem anderen in Ruhe sein. Wähle in jeder Zeile den Zustand des Körpers gegenüber dem angegebenen Bezugskörper.</span></p>
+  <div id="rel"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro"><strong>Mișcarea este relativă</strong>, adică ea depinde de sistemul de referință ales. De aceea, când spunem că un corp se mișcă sau stă, trebuie să precizăm și <strong>corpul față de care are loc mișcarea</strong>.</span><span class="de"><strong>Bewegung ist relativ</strong>, das heißt, sie hängt vom gewählten Bezugssystem ab. Deshalb müssen wir, wenn wir sagen, ein Körper bewege sich oder ruhe, auch den <strong>Körper nennen, auf den sich die Bewegung bezieht</strong>.</span></p>
+  </div>
+  <div class="know">
+    <h3><span class="ro">Bine de știut</span><span class="de">Wissenswertes</span></h3>
+    <p><span class="ro">Pământul se rotește în jurul Soarelui cu aproape 30 km/s, adică peste 100 000 km/h. Tu, care „stai pe loc”, ești în repaus față de Pământ, dar în mișcare rapidă față de Soare.</span><span class="de">Die Erde umkreist die Sonne mit fast 30 km/s, also mehr als 100 000 km/h. Du, der du „stillsitzt“, bist gegenüber der Erde in Ruhe, aber gegenüber der Sonne in schneller Bewegung.</span></p>
+  </div>
+</section>
+
+<!-- 4. Traiectoria -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Traiectoria: drumul lăsat de mobil</span><span class="de">Die Bahn: der Weg des bewegten Körpers</span></h2>
+  <p class="section-sub"><span class="ro"><strong>Traiectoria</strong> este curba descrisă de un mobil în mișcare, față de un sistem de referință. Pe roata unei biciclete e prinsă o lampă roșie. Trage de cursor (sau apasă „Pornește”) și vezi ce traiectorie are lampa, privită din două repere diferite.</span><span class="de">Die <strong>Bahn</strong> (Trajektorie) ist die Kurve, die ein bewegter Körper in Bezug auf ein Bezugssystem beschreibt. Am Rad eines Fahrrads ist eine rote Lampe befestigt. Zieh am Regler (oder drücke „Start“) und sieh, welche Bahn die Lampe hat, von zwei verschiedenen Bezugskörpern aus betrachtet.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="wheel-svg" viewBox="0 0 640 230" role="img" aria-label="Roată care se rostogolește și traiectoria unui punct de pe margine"></svg></div>
+    <div class="panel">
+      <div class="chips" id="wheel-chips" role="group" aria-label="Reper"></div>
+      <div class="slider"><label for="wheel-range"><span class="ro">Rotația roții</span><span class="de">Drehung des Rades</span>: <span id="wheel-turns" class="num"></span></label><input type="range" id="wheel-range" min="0" max="720" value="180"></div>
+      <div class="actions" style="margin-top:0"><button class="btn ghost" type="button" id="wheel-play"></button></div>
+      <div class="readout" id="wheel-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="story">
+    <h3><span class="ro">Știai că? „Elena geometrilor”</span><span class="de">Wusstest du? Die „Helena der Geometer“</span></h3>
+    <p><span class="ro">Curba desenată de lampă față de șosea se numește <strong>cicloidă</strong>. Galileo a studiat-o în jurul anului 1599 și chiar i-a dat numele. În secolul al XVII-lea, matematicienii se certau atât de des pe seama ei, încât au poreclit-o „Elena geometrilor”, după frumoasa Elena din Troia, pentru care s-a purtat un război. În 1696, Johann Bernoulli a arătat că un corp coboară cel mai repede între două puncte pe o rampă în formă de cicloidă răsturnată.</span><span class="de">Die Kurve, die die Lampe in Bezug auf die Straße zeichnet, heißt <strong>Zykloide</strong>. Galileo untersuchte sie um 1599 und gab ihr den Namen. Im 17. Jahrhundert stritten sich die Mathematiker so oft darüber, dass sie sie „Helena der Geometer“ nannten, nach der schönen Helena von Troja, um die ein Krieg geführt wurde. 1696 zeigte Johann Bernoulli, dass ein Körper zwischen zwei Punkten auf einer umgekehrten Zykloide am schnellsten hinabrollt.</span></p>
+  </div>
+  <h3 style="margin:26px 0 8px;font-size:22px"><span class="ro">Cum poate fi traiectoria?</span><span class="de">Welche Formen kann eine Bahn haben?</span></h3>
+  <ul class="timeline" style="border-left-color:var(--blue);margin-bottom:14px">
+    <li style="--c:var(--blue)"><span class="ro"><b>rectilinie</b>: în linie dreaptă, ca mașina pe un drum drept față de Pământ;</span><span class="de"><b>geradlinig</b>: in gerader Linie, wie ein Auto auf gerader Straße gegenüber der Erde;</span></li>
+    <li><span class="ro"><b>curbilinie</b>: o linie curbă, ca mingea aruncată sau lampa bicicletei față de șosea;</span><span class="de"><b>krummlinig</b>: eine gekrümmte Linie, wie beim geworfenen Ball oder bei der Fahrradlampe gegenüber der Straße;</span></li>
+    <li><span class="ro"><b>circulară</b>: un caz particular de traiectorie curbilinie, ca cabina roții panoramice față de Pământ.</span><span class="de"><b>kreisförmig</b>: ein Sonderfall der krummlinigen Bahn, wie die Gondel eines Riesenrads gegenüber der Erde.</span></li>
+  </ul>
+  <div id="cls-traj"></div>
+  <div class="remember">
+    <h3><span class="ro">Observație</span><span class="de">Bemerkung</span></h3>
+    <p><span class="ro">Și traiectoria depinde de reper. Când spui ce stare de mișcare are un corp, spune și <strong>reperul stabilit</strong>.</span><span class="de">Auch die Bahn hängt vom Bezugskörper ab. Wenn du den Bewegungszustand eines Körpers angibst, nenne auch den <strong>festgelegten Bezugskörper</strong>.</span></p>
+  </div>
+  <div id="c4"></div>
+</section>
+
+<!-- 5. Fixare -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Fixare: completează afirmațiile</span><span class="de">Festigung: Vervollständige die Aussagen</span></h2>
+  <p class="section-sub"><span class="ro">Alege din fiecare listă cuvântul potrivit. Cuvântul bun face câmpul verde; dacă e greșit, câmpul devine roșu și poți încerca din nou.</span><span class="de">Wähle in jeder Liste das passende Wort. Das richtige Wort färbt das Feld grün; ist es falsch, wird das Feld rot und du kannst es noch einmal versuchen.</span></p>
+  <div id="fill"></div>
+  <p class="hint" style="margin-top:10px"><span class="ro">Temă de gândire: dă două exemple în care un corp poate fi considerat punct material și două în care nu poate, în funcție de situație.</span><span class="de">Denkaufgabe: Nenne zwei Beispiele, in denen ein Körper als Massenpunkt gelten kann, und zwei, in denen er es nicht kann, je nach Situation.</span></p>
+</section>
+
+<section class="block" aria-labelledby="t-gloss">
+  <h2 class="section-title" id="t-gloss"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <p class="section-sub"><span class="ro">Cuvintele-cheie ale lecției, în română și în germană.</span><span class="de">Die wichtigsten Wörter der Lektion, auf Rumänisch und auf Deutsch.</span></p>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<footer class="foot">
+  <p><span class="ro">După manualul de Fizică pentru clasa a 6-a, capitolul „Fenomene mecanice” (III.1.1). Desenele sunt schematice și nu păstrează proporțiile reale. Datele istorice sunt prezentate pe scurt.</span><span class="de">Nach dem Physikbuch für die 6. Klasse, Kapitel „Mechanische Erscheinungen“ (III.1.1). Die Zeichnungen sind schematisch und nicht maßstabsgetreu. Die historischen Angaben sind stark verkürzt.</span></p>
+</footer>
+
+</div>
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang === 'de' ? 'de' : 'ro';
+var NS = 'http://www.w3.org/2000/svg';
+var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function $(s, r) { return (r || document).querySelector(s); }
+function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function T(o) { return o[L]; }
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function el(tag, a, parent, text) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (parent) parent.appendChild(e); if (text != null) e.textContent = text; return e; }
+function fmt(n) { var s = (+(+n).toFixed(4)).toString(), p = s.split('.'); p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' '); return p.join(','); }
+function num(s) { var v = parseFloat(String(s).replace(/\s/g, '').replace(',', '.')); return isNaN(v) ? NaN : v; }
+function same(a, b) { return !isNaN(a) && Math.abs(a - b) <= Math.max(1e-6, Math.abs(b) * 0.005); }
+function rint(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+function hm(min) { return Math.floor(min / 60) + ' h ' + pad2(min % 60) + ' min'; }
+function hmClock(min) { return Math.floor(min / 60) + ':' + pad2(min % 60); }
+
+/* butoane-pastile cu aria-pressed */
+function chips(host, items, start, cb, cls) {
+  var cur = start, bs = [];
+  items.forEach(function (it) {
+    var b = h('button', cls || 'chip', it[1]); b.type = 'button';
+    b.onclick = function () { set(it[0]); cb(it[0]); };
+    b.dataset.k = it[0]; bs.push(b); host.appendChild(b);
+  });
+  function set(k) { cur = k; bs.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === String(k)); }); }
+  set(start);
+  return { set: set };
+}
+
+/* „Verifică-te”: întrebări cu răspuns imediat */
+function Check(host, items) {
+  host.className = 'check';
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('div', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('div', 'q', T(it.q)));
+    it.o.forEach(function (o, i) {
+      var b = h('button', 'pick', T(o)); b.type = 'button';
+      b.onclick = function () {
+        if (i === it.a) { b.className = 'pick right'; $$('button', opts).forEach(function (x) { x.disabled = true; }); why.innerHTML = '✔ ' + T(it.why); }
+        else { b.className = 'pick wrong'; b.disabled = true; why.innerHTML = '💡 ' + T(it.hint); }
+      };
+      opts.appendChild(b);
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* clasificare: fiecare rând are variante pe butoane */
+function Classify(host, cats, rows) {
+  host.className = 'cls';
+  rows.forEach(function (r) {
+    var row = h('div', 'row'), opts = h('div', 'opts'), why = h('div', 'why');
+    why.setAttribute('aria-live', 'polite');
+    row.appendChild(h('div', '', T(r.t)));
+    cats.forEach(function (c, i) {
+      var b = h('button', 'pick', T(c)); b.type = 'button';
+      b.onclick = function () {
+        if (i === r.a) { b.className = 'pick right'; $$('button', opts).forEach(function (x) { x.disabled = true; }); why.innerHTML = '✔ ' + T(r.why); }
+        else { b.className = 'pick wrong'; b.disabled = true; why.innerHTML = '💡 ' + T(r.hint); }
+      };
+      opts.appendChild(b);
+    });
+    row.appendChild(opts); row.appendChild(why); host.appendChild(row);
+  });
+}
+
+/* exerciții de completat cu liste alese */
+function Fill(host, bank, rows) {
+  host.className = 'fillbox';
+  rows.forEach(function (r) {
+    var p = h('p'), sel = h('select'); sel.setAttribute('aria-label', tx('alege cuvântul', 'Wort wählen'));
+    sel.appendChild(h('option', '', '…')).value = '';
+    bank.forEach(function (w, i) { var o = h('option', '', T(w)); o.value = i; sel.appendChild(o); });
+    sel.onchange = function () { sel.className = sel.value === '' ? '' : (+sel.value === r.a ? 'ok' : 'bad'); };
+    var parts = T(r.t).split('___');
+    p.appendChild(document.createTextNode(parts[0])); p.appendChild(sel); p.appendChild(document.createTextNode(parts[1] || ''));
+    host.appendChild(p);
+  });
+}
+
+/* generator de probleme cu răspuns numeric */
+function Drill(host, gens) {
+  var good = 0, total = 0, last = '', keys = Object.keys(gens);
+  function render() {
+    var key; do { key = keys[rint(0, keys.length - 1)]; } while (keys.length > 1 && key === last); last = key;
+    var p = gens[key](), counted = false;
+    host.innerHTML = '';
+    var sc = h('span', 'score', tx('Corecte: ', 'Richtig: ') + good + ' / ' + total);
+    host.appendChild(sc); host.appendChild(h('div', 'story', p.q)); $('.story', host).style.marginTop = '0';
+    var row = h('div', 'row2'), ia = h('input', 'vin wide'); ia.type = 'text'; ia.inputMode = 'decimal'; ia.setAttribute('aria-label', tx('răspuns', 'Antwort'));
+    row.appendChild(ia); if (p.u) row.appendChild(h('span', '', p.u)); host.appendChild(row);
+    var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
+    var act = h('div', 'actions'), c = h('button', 'btn', tx('Verifică', 'Prüfen')), s = h('button', 'btn ghost', tx('Arată rezolvarea', 'Lösung zeigen')), nx = h('button', 'btn ghost', tx('Altă problemă', 'Neue Aufgabe') + ' →');
+    c.type = s.type = nx.type = 'button';
+    act.appendChild(c); act.appendChild(s); act.appendChild(nx); host.appendChild(act); host.appendChild(res);
+    function count(ok) { if (!counted) { counted = true; total++; if (ok) good++; sc.textContent = tx('Corecte: ', 'Richtig: ') + good + ' / ' + total; } }
+    c.onclick = function () {
+      var ok = same(num(ia.value), p.a);
+      ia.className = 'vin wide ' + (ok ? 'ok' : 'bad'); res.hidden = false;
+      if (ok) { count(true); res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! ', 'Richtig! ') + p.s; }
+      else { res.className = 'result try'; res.textContent = tx('Indiciu: ', 'Tipp: ') + p.hint; }
+    };
+    s.onclick = function () { count(false); ia.value = fmt(p.a).replace(/ /g, ''); ia.className = 'vin wide'; res.hidden = false; res.className = 'result good'; res.textContent = p.s; };
+    nx.onclick = render;
+    ia.addEventListener('keydown', function (e) { if (e.key === 'Enter') c.onclick(); });
+  }
+  render();
+}
+
+/* dicționar */
+function Gloss(host, rows) { rows.forEach(function (r) { var d = h('div'); d.appendChild(h('dt', '', r[0])); d.appendChild(h('dd', '', r[1])); host.appendChild(d); }); }
+
+/* animație cu play/pauză; f(t secunde) */
+function Anim(f, btn, startPlaying) {
+  var playing = false, t0 = 0, t = 0, raf = 0;
+  function label() { btn.textContent = playing ? '⏸ ' + tx('Pauză', 'Pause') : '▶ ' + tx('Pornește', 'Start'); btn.setAttribute('aria-pressed', playing); }
+  function frame(now) { if (!playing) return; t = (now - t0) / 1000; f(t); raf = requestAnimationFrame(frame); }
+  function play() { playing = true; t0 = performance.now() - t * 1000; label(); raf = requestAnimationFrame(frame); }
+  function pause() { playing = false; cancelAnimationFrame(raf); label(); }
+  btn.onclick = function () { playing ? pause() : play(); };
+  f(0); label();
+  if (startPlaying && !REDUCED) play();
+  return { play: play, pause: pause, redraw: function () { f(t); }, reset: function () { t = 0; t0 = performance.now(); f(0); } };
+}
+
+/* ================= 1. Corp sau punct ================= */
+(function () {
+  var svg = $('#zoom-svg'), out = $('#zoom-out');
+  var CTX = [
+    { D: 8, l: '8 m', n: tx('Manevră în parcare', 'Einparken') },
+    { D: 40, l: '40 m', n: tx('Traversezi o intersecție', 'Über eine Kreuzung') },
+    { D: 200, l: '200 m', n: tx('Pe un bulevard', 'Auf einer Allee') },
+    { D: 2000, l: '2 km', n: tx('Prin oraș', 'Durch die Stadt') },
+    { D: 400000, l: '≈ 400 km', n: tx('București–Iași', 'Bukarest–Iași') }
+  ];
+  var x0 = 60, W = 520, gy = 140;
+  function car(g, x, w) {
+    var s = w / 100;
+    var c = el('g', { transform: 'translate(' + x + ',' + (gy - 38 * s) + ') scale(' + s + ')' }, g);
+    el('rect', { x: 0, y: 12, width: 100, height: 18, rx: 6, fill: '#d2452f' }, c);
+    el('polygon', { points: '22,12 32,0 68,0 82,12', fill: '#d2452f' }, c);
+    el('polygon', { points: '30,12 36,3 48,3 48,12', fill: '#cfe3fb' }, c);
+    el('polygon', { points: '52,12 52,3 64,3 72,12', fill: '#cfe3fb' }, c);
+    el('circle', { cx: 22, cy: 30, r: 8, fill: '#1f2530' }, c);
+    el('circle', { cx: 78, cy: 30, r: 8, fill: '#1f2530' }, c);
+  }
+  function draw(i) {
+    var c = CTX[i], w = 4 / c.D * W;
+    svg.innerHTML = '';
+    el('line', { x1: x0, y1: gy, x2: x0 + W, y2: gy, stroke: '#1f2530', 'stroke-width': 3 }, svg);
+    el('line', { x1: x0, y1: gy - 6, x2: x0, y2: gy + 6, stroke: '#1f2530', 'stroke-width': 3 }, svg);
+    el('line', { x1: x0 + W, y1: gy - 6, x2: x0 + W, y2: gy + 6, stroke: '#1f2530', 'stroke-width': 3 }, svg);
+    el('text', { x: x0, y: gy + 28, 'text-anchor': 'middle', class: 'lbl' }, svg, tx('start', 'Start'));
+    el('text', { x: x0 + W, y: gy + 28, 'text-anchor': 'middle', class: 'lbl' }, svg, tx('sosire', 'Ziel'));
+    // cota drumului
+    el('path', { d: 'M' + x0 + ' 185 H' + (x0 + W), stroke: '#2f6fd6', 'stroke-width': 2, fill: 'none' }, svg);
+    el('text', { x: x0 + W / 2, y: 205, 'text-anchor': 'middle', class: 'lbl', fill: '#2f6fd6' }, svg, tx('drumul: ', 'Strecke: ') + c.l);
+    if (w >= 8) car(svg, x0, w); else el('circle', { cx: x0, cy: gy - 5, r: 5, fill: '#d2452f' }, svg);
+    el('path', { d: 'M' + x0 + ' 90 H' + (x0 + Math.max(w, 2)), stroke: '#d2452f', 'stroke-width': 2, fill: 'none' }, svg);
+    el('text', { x: x0 + Math.max(w, 2) / 2 + (w < 60 ? 28 : 0), y: 80, 'text-anchor': w < 60 ? 'start' : 'middle', class: 'lbl', fill: '#d2452f' }, svg, tx('mașina: 4 m', 'Auto: 4 m'));
+    svg.setAttribute('aria-label', tx('Mașina de 4 m pe un drum de ', 'Das 4 m lange Auto auf einer Strecke von ') + c.l);
+    var r = c.D / 4, v;
+    if (r < 20) v = '<strong class="c2">' + tx('✘ Nu este punct material', '✘ Kein Massenpunkt') + '</strong><span class="rule">' + tx('Dimensiunile mașinii contează față de drum.', 'Die Größe des Autos zählt im Vergleich zur Strecke.') + '</span>';
+    else if (r < 100) v = '<strong style="color:#8a5a00">' + tx('🤔 La limită', '🤔 Grenzfall') + '</strong><span class="rule">' + tx('Depinde cât de exact vrei să calculezi.', 'Es hängt davon ab, wie genau du rechnen willst.') + '</span>';
+    else v = '<strong class="c3">' + tx('✔ Punct material', '✔ Massenpunkt') + '</strong><span class="rule">' + tx('Lungimea mașinii se poate neglija față de drum.', 'Die Länge des Autos kann gegenüber der Strecke vernachlässigt werden.') + '</span>';
+    out.innerHTML = '<span class="eq">' + c.n + '</span><span class="rule">' + tx('Drumul este de ', 'Die Strecke ist ') + fmt(r) + tx(' ori mai lung decât mașina.', '-mal so lang wie das Auto.') + '</span>' + v;
+  }
+  chips($('#zoom-chips'), CTX.map(function (c, i) { return [i, c.n]; }), 0, draw);
+  draw(0);
+})();
+Check($('#c1'), [
+  { q: { ro: 'Un vapor este acostat în port. Poate fi considerat punct material?', de: 'Ein Schiff liegt im Hafen. Darf es als Massenpunkt betrachtet werden?' },
+    o: [{ ro: 'Da, pentru că e pe apă', de: 'Ja, weil es auf dem Wasser liegt' }, { ro: 'Nu, dimensiunile lui contează față de distanțele din port', de: 'Nein, seine Größe zählt im Vergleich zu den Entfernungen im Hafen' }, { ro: 'Da, pentru că nu se mișcă', de: 'Ja, weil es sich nicht bewegt' }], a: 1,
+    why: { ro: 'Față de distanțele din port, un vapor nu e neglijabil. Pe ocean, față de mii de kilometri, ar fi un punct.', de: 'Im Vergleich zu den Entfernungen im Hafen ist ein Schiff nicht vernachlässigbar. Auf dem Ozean, gegenüber Tausenden Kilometern, wäre es ein Punkt.' },
+    hint: { ro: 'Compară lungimea vaporului cu distanțele pe care le are de străbătut în port.', de: 'Vergleiche die Länge des Schiffes mit den Strecken, die es im Hafen zurücklegt.' } },
+  { q: { ro: 'În care caz poate fi considerat un punct material?', de: 'In welchem Fall darf man von einem Massenpunkt sprechen?' },
+    o: [{ ro: 'Avionul care zboară de la Iași la Londra', de: 'Das Flugzeug von Iași nach London' }, { ro: 'Mașina care parchează între două mașini', de: 'Das Auto beim Einparken zwischen zwei Autos' }, { ro: 'Un elev care se așază în bancă', de: 'Ein Schüler, der sich in die Bank setzt' }], a: 0,
+    why: { ro: 'Avionul are zeci de metri, iar drumul are mii de kilometri: dimensiunile lui se pot neglija.', de: 'Das Flugzeug ist einige Dutzend Meter lang, die Strecke tausende Kilometer: Seine Größe kann man vernachlässigen.' },
+    hint: { ro: 'Caută cazul în care deplasarea e uriașă față de mărimea corpului.', de: 'Suche den Fall, in dem die Verschiebung riesig im Vergleich zur Größe des Körpers ist.' } }
+]);
+
+/* ================= 2. Reper (trenuri) ================= */
+(function () {
+  var svg = $('#frame-svg'), out = $('#frame-out');
+  var ref = 'earth', vB = 30, vA = 60, MOD = 1000;
+  var trees = [], ticks = [], gA, gB;
+  el('rect', { x: 0, y: 0, width: 640, height: 250, fill: '#eef6ff' }, svg);
+  el('rect', { x: 0, y: 225, width: 640, height: 25, fill: '#d9e8c4' }, svg);
+  el('line', { x1: 0, y1: 175, x2: 640, y2: 175, stroke: '#7b7f87', 'stroke-width': 3 }, svg);
+  el('line', { x1: 0, y1: 105, x2: 640, y2: 105, stroke: '#7b7f87', 'stroke-width': 3 }, svg);
+  for (var k = 0; k < 25; k++) ticks.push(el('line', { x1: 0, y1: 232, x2: 0, y2: 246, stroke: '#7a8f57', 'stroke-width': 3 }, svg));
+  for (k = 0; k < 4; k++) {
+    var g = el('g', {}, svg);
+    el('rect', { x: -5, y: -34, width: 10, height: 34, fill: '#7b4f25' }, g);
+    el('circle', { cx: 0, cy: -48, r: 26, fill: '#3f9b4a' }, g);
+    el('circle', { cx: -15, cy: -36, r: 16, fill: '#4aae56' }, g);
+    trees.push(g);
+  }
+  function train(color, w, hgt, person) {
+    var g = el('g', {}, svg);
+    el('rect', { x: -w / 2, y: -hgt, width: w, height: hgt - 8, rx: 8, fill: color }, g);
+    el('rect', { x: -w / 2, y: -10, width: w, height: 4, fill: '#1f2530', opacity: .4 }, g);
+    var n = 4, ww = (w - 30) / n;
+    for (var i = 0; i < n; i++) el('rect', { x: -w / 2 + 12 + i * (ww + 2), y: -hgt + 8, width: ww - 6, height: hgt * 0.42, rx: 3, fill: '#e8f3ff' }, g);
+    if (person) {
+      var px = -w / 2 + 12 + (ww + 2) + (ww - 6) / 2;
+      el('circle', { cx: px, cy: -hgt + 18, r: 7, fill: '#f0b27a' }, g);
+      el('rect', { x: px - 8, y: -hgt + 25, width: 16, height: 11, rx: 5, fill: '#d2452f' }, g);
+    }
+    el('circle', { cx: -w / 2 + 28, cy: -4, r: 7, fill: '#1f2530' }, g);
+    el('circle', { cx: w / 2 - 28, cy: -4, r: 7, fill: '#1f2530' }, g);
+    return g;
+  }
+  gB = train('#c98a00', 150, 46, false);
+  gA = train('#2f6fd6', 170, 54, true);
+  var tA = el('text', { x: 0, y: 0, 'text-anchor': 'middle', class: 'lbl' }, svg, tx('Tren A', 'Zug A'));
+  var tB = el('text', { x: 0, y: 0, 'text-anchor': 'middle', class: 'lbl' }, svg, tx('Tren B', 'Zug B'));
+  function wrap(d) { return ((d + MOD / 2) % MOD + MOD) % MOD - MOD / 2; }
+  function pos(t) { return { earth: 0, A: 40 + vA * t, B: 300 + vB * t }; }
+  function draw(t) {
+    var p = pos(t), xr = p[ref];
+    trees.forEach(function (g, i) { var sx = 320 + wrap(i * 250 - xr); g.setAttribute('transform', 'translate(' + sx + ',226) scale(.95)'); });
+    ticks.forEach(function (l, i) { var xx = 320 + wrap(i * 40 - xr); l.setAttribute('x1', xx); l.setAttribute('x2', xx); });
+    var ax = 320 + wrap(p.A - xr), bx = 320 + wrap(p.B - xr);
+    gA.setAttribute('transform', 'translate(' + ax + ',172)');
+    gB.setAttribute('transform', 'translate(' + bx + ',102)');
+    tA.setAttribute('x', ax); tA.setAttribute('y', 108); tB.setAttribute('x', bx); tB.setAttribute('y', 38);
+  }
+  var NAME = { earth: tx('Pământ (copacul)', 'Erde (Baum)'), A: tx('trenul A', 'Zug A'), B: tx('trenul B', 'Zug B') };
+  function who(k) { return { P: tx('pasagerul din trenul A', 'der Fahrgast in Zug A'), tree: tx('copacul', 'der Baum'), B: tx('trenul B', 'Zug B'), A: tx('trenul A', 'Zug A') }[k]; }
+  function info() {
+    var v = { earth: 0, A: vA, B: vB }, vr = v[ref], lines = [];
+    function line(label, vx) {
+      var rel = vx - vr;
+      lines.push('<span class="eq">' + label + ': ' + (rel === 0 ? '<span class="c3">' + tx('în repaus', 'in Ruhe') + '</span>' : '<span class="c2">' + tx('în mișcare', 'in Bewegung') + '</span> ' + (rel > 0 ? '→' : '←')) + '</span>');
+    }
+    if (ref !== 'A') line(who('P'), vA); else lines.push('<span class="eq">' + who('P') + ': <span class="c3">' + tx('în repaus', 'in Ruhe') + '</span></span>');
+    if (ref !== 'earth') line(who('tree'), 0);
+    if (ref !== 'B') line(who('B'), vB);
+    out.innerHTML = '<span class="rule">' + tx('Reperul ales: ', 'Gewählter Bezugskörper: ') + '<strong>' + NAME[ref] + '</strong></span>' + lines.join('') +
+      '<span class="rule">' + (ref === 'A' ? tx('Din tren, pasagerul stă pe loc, iar peisajul „fuge” înapoi.', 'Vom Zug aus sitzt der Fahrgast still, und die Landschaft „rast“ nach hinten.') : ref === 'earth' ? tx('Față de Pământ, trenul și pasagerul se mișcă împreună.', 'Gegenüber der Erde bewegen sich Zug und Fahrgast gemeinsam.') : (vB === vA ? tx('Cele două trenuri merg la fel: unul față de altul stau pe loc!', 'Beide Züge fahren gleich schnell: zueinander stehen sie still!') : tx('Trenul A merge mai repede decât B, deci se depărtează de el.', 'Zug A fährt schneller als B und entfernt sich von ihm.'))) + '</span>';
+    svg.setAttribute('aria-label', tx('Privit din: ', 'Betrachtet von: ') + NAME[ref]);
+  }
+  var an = Anim(draw, $('#frame-play'), true);
+  chips($('#ref-chips'), [['earth', tx('Pământ (copacul)', 'Erde (Baum)')], ['A', tx('Trenul A (pasagerul)', 'Zug A (Fahrgast)')], ['B', tx('Trenul B', 'Zug B')]], 'earth', function (k) { ref = k; info(); an.redraw(); });
+  chips($('#vb-chips'), [[0, tx('stă pe loc', 'steht')], [30, tx('merge mai încet', 'fährt langsamer')], [60, tx('merge ca A', 'fährt wie A')]], 30, function (k) { vB = +k; info(); an.redraw(); });
+  info();
+})();
+Check($('#c2'), [
+  { q: { ro: 'Pasagerul stă pe scaunul lui din tren. Față de ce este în repaus?', de: 'Der Fahrgast sitzt auf seinem Platz im Zug. Wozu ist er in Ruhe?' },
+    o: [{ ro: 'față de copacul de pe peron', de: 'zum Baum am Bahnsteig' }, { ro: 'față de scaunul lui', de: 'zu seinem Sitz' }, { ro: 'față de un tren care merge mai încet', de: 'zu einem langsameren Zug' }], a: 1,
+    why: { ro: 'Pasagerul și scaunul se mișcă împreună, deci distanța dintre ele nu se schimbă.', de: 'Fahrgast und Sitz bewegen sich gemeinsam, ihr Abstand ändert sich also nicht.' },
+    hint: { ro: 'Caută obiectul față de care pasagerul nu își schimbă poziția.', de: 'Suche den Körper, zu dem der Fahrgast seine Lage nicht ändert.' } },
+  { q: { ro: 'Două trenuri merg în același sens, cu aceeași viteză. Cum este unul față de celălalt?', de: 'Zwei Züge fahren in dieselbe Richtung mit gleicher Geschwindigkeit. Wie ist der eine zum anderen?' },
+    o: [{ ro: 'în mișcare', de: 'in Bewegung' }, { ro: 'în repaus', de: 'in Ruhe' }, { ro: 'nu se poate spune', de: 'lässt sich nicht sagen' }], a: 1,
+    why: { ro: 'Distanța dintre ele rămâne constantă, deci sunt în repaus unul față de celălalt, deși ambele se mișcă față de Pământ.', de: 'Ihr Abstand bleibt gleich, also ruhen sie zueinander, obwohl beide sich gegenüber der Erde bewegen.' },
+    hint: { ro: 'Se schimbă distanța dintre ele? Încearcă în desen: alege „merge ca A”.', de: 'Ändert sich der Abstand zwischen ihnen? Probiere es im Bild: Wähle „fährt wie A“.' } }
+]);
+
+/* ================= 3. Mișcarea e relativă ================= */
+Classify($('#rel'), [{ ro: 'repaus', de: 'Ruhe' }, { ro: 'mișcare', de: 'Bewegung' }], [
+  { t: { ro: 'Un om în stația de autobuz, față de <strong>Pământ</strong>', de: 'Ein Mensch an der Bushaltestelle, gegenüber der <strong>Erde</strong>' }, a: 0,
+    why: { ro: 'Nu își schimbă poziția față de Pământ.', de: 'Er ändert seine Lage gegenüber der Erde nicht.' }, hint: { ro: 'Se schimbă distanța dintre om și Pământ?', de: 'Ändert sich der Abstand zwischen dem Menschen und der Erde?' } },
+  { t: { ro: 'Același om, față de <strong>autobuzul care se apropie</strong>', de: 'Derselbe Mensch, gegenüber dem <strong>herannahenden Bus</strong>' }, a: 1,
+    why: { ro: 'Distanța dintre om și autobuz scade tot timpul.', de: 'Der Abstand zwischen Mensch und Bus wird ständig kleiner.' }, hint: { ro: 'Ce se întâmplă cu distanța dintre om și autobuz?', de: 'Was passiert mit dem Abstand zwischen Mensch und Bus?' } },
+  { t: { ro: 'Un elev care stă în bancă la școală, față de <strong>Pământ</strong>', de: 'Ein Schüler in seiner Schulbank, gegenüber der <strong>Erde</strong>' }, a: 0,
+    why: { ro: 'Elevul stă pe loc în clasă, deci nu își schimbă poziția față de Pământ.', de: 'Der Schüler sitzt im Klassenzimmer, ändert also seine Lage gegenüber der Erde nicht.' }, hint: { ro: 'Gândește-te la banca și la clădirea școlii.', de: 'Denk an die Bank und das Schulgebäude.' } },
+  { t: { ro: 'Același elev, față de <strong>Soare</strong>', de: 'Derselbe Schüler, gegenüber der <strong>Sonne</strong>' }, a: 1,
+    why: { ro: 'Pământul se mișcă în jurul Soarelui, iar elevul se mișcă împreună cu el.', de: 'Die Erde bewegt sich um die Sonne, und der Schüler bewegt sich mit ihr.' }, hint: { ro: 'Ce face Pământul față de Soare, iar elevul fiind pe Pământ?', de: 'Was tut die Erde gegenüber der Sonne, und der Schüler ist ja auf der Erde?' } },
+  { t: { ro: 'Sportivii A și B aleargă la fel de repede, în același sens. Sportivul A, față de <strong>sportivul B</strong>', de: 'Die Sportler A und B laufen gleich schnell in dieselbe Richtung. Sportler A, gegenüber <strong>Sportler B</strong>' }, a: 0,
+    why: { ro: 'Distanța dintre ei rămâne aceeași, deci A este în repaus față de B.', de: 'Ihr Abstand bleibt gleich, also ist A gegenüber B in Ruhe.' }, hint: { ro: 'Rămâne aceeași distanța dintre ei?', de: 'Bleibt der Abstand zwischen ihnen gleich?' } },
+  { t: { ro: 'Același sportiv A, față de <strong>Pământ</strong>', de: 'Derselbe Sportler A, gegenüber der <strong>Erde</strong>' }, a: 1,
+    why: { ro: 'Aleargă, deci își schimbă poziția față de Pământ.', de: 'Er läuft, ändert also seine Lage gegenüber der Erde.' }, hint: { ro: 'Își schimbă poziția față de pistă?', de: 'Ändert er seine Lage gegenüber der Bahn?' } }
+]);
+
+/* ================= 4. Traiectoria roții ================= */
+(function () {
+  var svg = $('#wheel-svg'), rg = $('#wheel-range'), out = $('#wheel-out'), mode = 'ground';
+  var R = 44, gy = 200, btn = $('#wheel-play'), playing = false, raf = 0, last = 0;
+  function draw() {
+    var deg = +rg.value, th = deg * Math.PI / 180, trace = [], i, cx, cy;
+    $('#wheel-turns').textContent = fmt(deg / 360) + tx(' rotații', ' Umdrehungen');
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: 640, height: 230, fill: '#f6fbff' }, svg);
+    if (mode === 'ground') {
+      cx = 50 + R * th; cy = gy - R;
+      el('line', { x1: 0, y1: gy, x2: 640, y2: gy, stroke: '#7b7f87', 'stroke-width': 3 }, svg);
+      for (i = 0; i < 17; i++) el('line', { x1: 20 + i * 40, y1: gy, x2: 8 + i * 40, y2: gy + 14, stroke: '#7b7f87', 'stroke-width': 2 }, svg);
+      el('line', { x1: 50, y1: cy, x2: cx, y2: cy, stroke: '#9aa3b2', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' }, svg);
+      for (var f = 0; f <= deg; f += 3) { var p = f * Math.PI / 180; trace.push((50 + R * p - R * Math.sin(p)).toFixed(1) + ',' + (cy + R * Math.cos(p)).toFixed(1)); }
+    } else {
+      cx = 320; cy = 110;
+      var off = (R * th) % 40;
+      el('line', { x1: 0, y1: cy + R, x2: 640, y2: cy + R, stroke: '#7b7f87', 'stroke-width': 3 }, svg);
+      for (i = -1; i < 17; i++) el('line', { x1: 20 + i * 40 - off, y1: cy + R, x2: 8 + i * 40 - off, y2: cy + R + 14, stroke: '#7b7f87', 'stroke-width': 2 }, svg);
+      el('text', { x: 600, y: cy + R + 38, 'text-anchor': 'end', class: 'lbl sm', fill: '#5a6270' }, svg, tx('← șoseaua „fuge” înapoi', '← die Straße „rennt“ nach hinten'));
+      for (var f2 = 0; f2 <= deg; f2 += 3) { var q = f2 * Math.PI / 180; trace.push((cx - R * Math.sin(q)).toFixed(1) + ',' + (cy + R * Math.cos(q)).toFixed(1)); }
+    }
+    if (trace.length > 1) el('polyline', { points: trace.join(' '), fill: 'none', stroke: '#d2452f', 'stroke-width': 3, 'stroke-linejoin': 'round' }, svg);
+    var w = el('g', { transform: 'translate(' + cx + ',' + cy + ') rotate(' + deg + ')' }, svg);
+    el('circle', { r: R, fill: 'none', stroke: '#1f2530', 'stroke-width': 5 }, w);
+    for (i = 0; i < 8; i++) el('line', { x1: 0, y1: 0, x2: R * Math.sin(i * Math.PI / 4), y2: R * Math.cos(i * Math.PI / 4), stroke: '#8a93a3', 'stroke-width': 1.5 }, w);
+    el('circle', { r: 4, fill: '#1f2530' }, svg).setAttribute('transform', 'translate(' + cx + ',' + cy + ')');
+    var px = cx - R * Math.sin(th), py = cy + R * Math.cos(th);
+    el('circle', { cx: px, cy: py, r: 7, fill: '#d2452f', stroke: '#fff', 'stroke-width': 2 }, svg);
+    el('text', { x: cx, y: cy - R - 24, 'text-anchor': 'middle', class: 'lbl sm' }, svg, tx('axul roții', 'Radachse'));
+    svg.setAttribute('aria-label', mode === 'ground' ? tx('Traiectoria lămpii față de șosea: cicloidă', 'Bahn der Lampe gegenüber der Straße: Zykloide') : tx('Traiectoria lămpii față de axul roții: cerc', 'Bahn der Lampe gegenüber der Radachse: Kreis'));
+    out.innerHTML = mode === 'ground'
+      ? '<span class="eq">' + tx('Față de șosea', 'Gegenüber der Straße') + ': <span class="c2">' + tx('traiectorie curbilinie (cicloidă)', 'krummlinige Bahn (Zykloide)') + '</span></span><span class="rule">' + tx('Lampa urcă, coboară și înaintează în același timp.', 'Die Lampe steigt, sinkt und kommt gleichzeitig voran.') + '</span>'
+      : '<span class="eq">' + tx('Față de axul roții', 'Gegenüber der Radachse') + ': <span class="c2">' + tx('traiectorie circulară', 'kreisförmige Bahn') + '</span></span><span class="rule">' + tx('Din punctul de vedere al axului, lampa doar se învârte în cerc.', 'Aus Sicht der Achse dreht sich die Lampe nur im Kreis.') + '</span>';
+  }
+  function label() { btn.textContent = playing ? '⏸ ' + tx('Pauză', 'Pause') : '▶ ' + tx('Pornește', 'Start'); }
+  function step(now) { if (!playing) return; var dt = Math.min(0.05, (now - last) / 1000); last = now; var v = +rg.value + dt * 130; rg.value = v > 720 ? 0 : v; draw(); raf = requestAnimationFrame(step); }
+  btn.onclick = function () { playing = !playing; label(); if (playing) { last = performance.now(); raf = requestAnimationFrame(step); } else cancelAnimationFrame(raf); };
+  rg.addEventListener('input', function () { playing = false; cancelAnimationFrame(raf); label(); draw(); });
+  chips($('#wheel-chips'), [['ground', tx('Reper: șoseaua', 'Bezug: Straße')], ['axle', tx('Reper: axul roții', 'Bezug: Radachse')]], 'ground', function (k) { mode = k; draw(); });
+  label(); draw();
+})();
+Classify($('#cls-traj'), [{ ro: 'rectilinie', de: 'geradlinig' }, { ro: 'curbilinie', de: 'krummlinig' }, { ro: 'circulară', de: 'kreisförmig' }], [
+  { t: { ro: 'Mașina pe un drum drept, față de Pământ', de: 'Ein Auto auf gerader Straße, gegenüber der Erde' }, a: 0, why: { ro: 'Drumul e o linie dreaptă.', de: 'Der Weg ist eine gerade Linie.' }, hint: { ro: 'Cum arată linia desenată de mașină?', de: 'Wie sieht die Linie aus, die das Auto zeichnet?' } },
+  { t: { ro: 'Mingea de tenis aruncată în aer, față de Pământ', de: 'Ein in die Luft geworfener Tennisball, gegenüber der Erde' }, a: 1, why: { ro: 'Mingea urcă și coboară pe o curbă, nu pe un cerc.', de: 'Der Ball steigt und fällt auf einer Kurve, nicht auf einem Kreis.' }, hint: { ro: 'Urmărește drumul mingii: e dreaptă, curbă oarecare sau cerc?', de: 'Verfolge den Weg des Balls: gerade, beliebige Kurve oder Kreis?' } },
+  { t: { ro: 'Cabina roții panoramice, față de Pământ', de: 'Die Gondel eines Riesenrads, gegenüber der Erde' }, a: 2, why: { ro: 'Cabina se învârte în jurul axului: cerc.', de: 'Die Gondel dreht sich um die Achse: Kreis.' }, hint: { ro: 'Cabina rămâne la aceeași distanță de ax.', de: 'Die Gondel bleibt im gleichen Abstand von der Achse.' } },
+  { t: { ro: 'Vârful limbii mari a unui ceas, față de cadran', de: 'Die Spitze des großen Zeigers einer Uhr, gegenüber dem Zifferblatt' }, a: 2, why: { ro: 'Vârful limbii merge în cerc în jurul centrului.', de: 'Die Zeigerspitze läuft im Kreis um die Mitte.' }, hint: { ro: 'Distanța de la vârf la centrul cadranului nu se schimbă.', de: 'Der Abstand von der Spitze zur Mitte ändert sich nicht.' } },
+  { t: { ro: 'Un măr care cade liber dintr-un pom, față de Pământ', de: 'Ein Apfel, der frei vom Baum fällt, gegenüber der Erde' }, a: 0, why: { ro: 'Cade pe verticală, în linie dreaptă.', de: 'Er fällt senkrecht, in gerader Linie.' }, hint: { ro: 'Încotro cade mărul?', de: 'Wohin fällt der Apfel?' } },
+  { t: { ro: 'Lampa de pe roata bicicletei, față de șosea', de: 'Die Lampe am Fahrradrad, gegenüber der Straße' }, a: 1, why: { ro: 'Este o cicloidă: curbilinie, dar nu un cerc.', de: 'Es ist eine Zykloide: krummlinig, aber kein Kreis.' }, hint: { ro: 'Uită-te la desenul de mai sus, cu reperul „șoseaua”.', de: 'Schau dir das Bild oben mit dem Bezug „Straße“ an.' } }
+]);
+Check($('#c4'), [
+  { q: { ro: 'Care e traiectoria lămpii de pe roată, față de axul roții?', de: 'Welche Bahn hat die Lampe am Rad, gegenüber der Radachse?' },
+    o: [{ ro: 'o dreaptă', de: 'eine Gerade' }, { ro: 'un cerc', de: 'ein Kreis' }, { ro: 'o cicloidă', de: 'eine Zykloide' }], a: 1,
+    why: { ro: 'Față de ax, lampa se află mereu la distanța R de el, deci se rotește pe un cerc.', de: 'Gegenüber der Achse hat die Lampe immer den Abstand R, sie dreht sich also auf einem Kreis.' },
+    hint: { ro: 'Alege în desen reperul „axul roții” și privește urma roșie.', de: 'Wähle im Bild den Bezug „Radachse“ und sieh dir die rote Spur an.' } },
+  { q: { ro: 'Un corp are aceeași traiectorie, indiferent de reper.', de: 'Ein Körper hat unabhängig vom Bezugskörper dieselbe Bahn.' },
+    o: [{ ro: 'Adevărat', de: 'Wahr' }, { ro: 'Fals', de: 'Falsch' }], a: 1,
+    why: { ro: 'Fals: lampa are o cicloidă față de șosea și un cerc față de ax. Și traiectoria depinde de reper.', de: 'Falsch: Die Lampe hat gegenüber der Straße eine Zykloide und gegenüber der Achse einen Kreis. Auch die Bahn hängt vom Bezugskörper ab.' },
+    hint: { ro: 'Compară cele două desene ale lămpii.', de: 'Vergleiche die beiden Bilder der Lampe.' } }
+]);
+
+/* ================= 5. Fixare ================= */
+var BANK = [{ ro: 'reperul', de: 'der Bezugskörper' }, { ro: 'punct material', de: 'Massenpunkt' }, { ro: 'repaus', de: 'Ruhe' }, { ro: 'mișcare', de: 'Bewegung' }, { ro: 'traiectorie', de: 'Bahn' }, { ro: 'mobil', de: 'bewegter Körper' }];
+Fill($('#fill'), BANK, [
+  { t: { ro: 'Mișcarea unui corp nu poate fi studiată fără a stabili ___.', de: 'Die Bewegung kann man nur untersuchen, wenn ___ festgelegt ist.' }, a: 0 },
+  { t: { ro: 'Un vapor acostat în port nu poate fi considerat un ___.', de: 'Ein im Hafen liegendes Schiff darf nicht als ___ betrachtet werden.' }, a: 1 },
+  { t: { ro: 'Dacă un corp A nu își schimbă poziția față de un corp B, spunem că A este în ___ față de B.', de: 'Ändert Körper A seine Lage gegenüber Körper B nicht, so ist A in ___ gegenüber B.' }, a: 2 },
+  { t: { ro: 'Un copac de pe Pământ este în ___ față de Soare.', de: 'Ein Baum auf der Erde ist gegenüber der Sonne in ___.' }, a: 3 },
+  { t: { ro: 'Un punct material aflat în mișcare se numește ___.', de: 'Ein Massenpunkt in Bewegung heißt ___.' }, a: 5 },
+  { t: { ro: 'Curba descrisă de un mobil față de un sistem de referință se numește ___.', de: 'Die Kurve, die ein bewegter Körper in Bezug auf ein Bezugssystem beschreibt, heißt ___.' }, a: 4 }
+]);
+
+Gloss($('#gloss'), [
+  ['corp', 'Körper'],
+  ['punct material', 'Massenpunkt'], ['mobil', 'bewegter Körper'], ['reper (corp de referință)', 'Bezugskörper'], ['sistem de referință', 'Bezugssystem'],
+  ['mișcare', 'Bewegung'], ['repaus', 'Ruhe'], ['relativ', 'relativ'], ['poziție', 'Lage, Position'],
+  ['traiectorie', 'Bahn (Trajektorie)'], ['rectilinie', 'geradlinig'], ['curbilinie', 'krummlinig'], ['circulară', 'kreisförmig'], ['cicloidă', 'Zykloide']
+]);
+
+})();
+</script>
+</body>
+</html>

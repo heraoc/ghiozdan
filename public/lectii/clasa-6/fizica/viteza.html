@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Viteza: medie, momentană, direcție și sens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Die Geschwindigkeit: mittlere, momentane, Richtung und Richtungssinn';
+})();
+</script>
+<style>
+:root{
+  --paper:#f7f6f0; --card:#ffffff; --ink:#1f2530; --muted:#5a6270; --rule:#e2e0d6; --sheet:#f1efe6;
+  --accent:#c98a00; --accent-soft:#fdf2d4; --blue:#2f6fd6; --blue-soft:#e3edfc; --ok:#1f8a5b; --bad:#c23b3b; --red:#d2452f;
+  --good-soft:#e3f5ec; --bad-soft:#fbe4e4;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+sup{font-size:.7em;line-height:0}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.hint{font-size:14px;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{border:1.5px solid var(--accent);background:transparent;border-radius:99px;padding:5px 13px;cursor:pointer;font-weight:700}
+.chip[aria-pressed="true"]{background:var(--accent);color:#fff}
+
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:6px}
+.toc a{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:4px 12px 4px 5px;color:var(--ink);text-decoration:none;font-weight:700;font-size:15px}
+.toc a b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 13px/1 var(--display)}
+.toc a:hover{border-color:var(--ink)}
+
+section.block{margin-top:56px;scroll-margin-top:12px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:70ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.story{background:#fffbea;border:1px solid #f0e2a8;border-radius:10px;padding:14px 18px;margin-top:16px}
+.story h3{font-size:19px;color:#8a6a00;margin-bottom:4px}
+.know{margin-top:16px;background:#eef4fd;border:1px solid #c9dbf5;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.know h3{font-size:20px;color:#1f4f99}
+.know ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+
+.split{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.fig svg{display:block;width:100%;height:auto}
+.panel{display:grid;gap:10px;align-content:start}
+.slider{display:grid;gap:2px}
+.slider label{font-weight:700}
+.slider input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
+.slider,.panel>*,.split>*{min-width:0}
+.readout{background:var(--sheet);border-radius:10px;padding:10px 14px;display:grid;gap:4px}
+.readout .eq{font:800 21px/1.3 var(--display)}
+.readout .rule{font-size:15px;color:var(--muted)}
+.c1{color:var(--blue)} .c2{color:var(--red)} .c3{color:var(--ok)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tab{border:1.5px solid var(--rule);background:var(--card);border-radius:99px;padding:6px 15px;cursor:pointer;font-weight:700}
+.tab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+/* verifică-te și clasificări */
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--ok);background:var(--ok);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#a12f2f;background:var(--bad-soft)}
+.check{margin-top:18px;background:var(--card);border:1px dashed #e8cf8f;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted);min-height:1.2em}
+.cls{display:grid;gap:0;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:6px 14px}
+.cls .row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:6px 14px;padding:10px 0;border-bottom:1px solid var(--rule);align-items:center}
+.cls .row:last-child{border-bottom:0}
+.cls .row .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cls .row .why{grid-column:1/-1;font-size:15px;color:var(--muted);min-height:0}
+.cls .row .why:empty{display:none}
+
+/* câmpuri de răspuns */
+.vin{width:110px;font:800 20px/1 var(--display);text-align:center;padding:6px 8px;border:2px solid var(--rule);border-radius:10px;background:#fff}
+.vin.wide{width:130px}
+.vin.ok{border-color:var(--ok);background:var(--good-soft)}
+.vin.bad{border-color:var(--bad);background:var(--bad-soft)}
+.row2{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.result{border-radius:10px;padding:10px 14px;font-weight:700}
+.result.good{background:var(--good-soft);color:#17744d}
+.result.try{background:#fdf0d5;color:#8a5a00}
+.score{font-weight:700;color:var(--muted)}
+.ex{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:10px;max-width:680px}
+.fillbox{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:6px 16px}
+.fillbox p{padding:10px 0;border-bottom:1px solid var(--rule);line-height:2.1}
+.fillbox p:last-child{border-bottom:0}
+.fillbox select{border:2px solid var(--rule);border-radius:8px;padding:3px 6px;background:#fff;font-weight:700}
+.fillbox select.ok{border-color:var(--ok);background:var(--good-soft)}
+.fillbox select.bad{border-color:var(--bad);background:var(--bad-soft)}
+
+/* text în SVG */
+svg text{font-family:var(--body)}
+.lbl{font:700 15px var(--body);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.lbl.big{font-size:18px}
+.lbl.sm{font-size:13px;font-weight:500}
+
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0;border-left:3px solid var(--accent);margin-left:8px}
+.timeline li{position:relative;padding:0 0 14px 20px}
+.timeline li::before{content:"";position:absolute;left:-9px;top:6px;width:15px;height:15px;border-radius:50%;background:var(--card);border:3px solid var(--accent)}
+.timeline b{font-family:var(--display);font-size:18px}
+
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+  .cls .row{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .lbl{font-size:19px} .lbl.big{font-size:22px} .lbl.sm{font-size:16px}
+  body{font-size:16.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+
+#sv-list{display:grid;gap:4px}
+.sv-row{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) 96px;gap:10px;align-items:center;border:1.5px solid transparent;background:transparent;border-radius:10px;padding:5px 8px;cursor:pointer;text-align:left;width:100%}
+.sv-row:hover{background:var(--card)}
+.sv-row[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.sv-row .nm{font-weight:700;line-height:1.2;font-size:15px}
+.sv-row .bar{height:12px;border-radius:6px;background:var(--rule);overflow:hidden}
+.sv-row .bar i{display:block;height:100%;background:var(--blue);border-radius:6px}
+.sv-row[aria-pressed="true"] .bar i{background:var(--accent)}
+.sv-row .vl{font-weight:700;text-align:right;font-size:14px;font-variant-numeric:tabular-nums}
+.hbar{height:16px;border-radius:8px;background:var(--rule);overflow:hidden;margin:2px 0 6px}
+.hbar i{display:block;height:100%;border-radius:8px}
+.cvrow{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding:4px 0}
+.cvrow .what{min-width:210px;font-weight:700}
+.rdf{display:grid;gap:10px}
+.rdf select{border:2px solid var(--rule);border-radius:8px;padding:5px 8px;background:#fff;font-weight:700}
+.rdf label{font-weight:700;display:grid;gap:3px}
+@media (max-width:520px){
+  .sv-row{grid-template-columns:minmax(0,1fr) 88px;grid-template-areas:"nm vl" "bar bar"}
+  .sv-row .nm{grid-area:nm} .sv-row .vl{grid-area:vl} .sv-row .bar{grid-area:bar}
+}
+.rdf select.ok{border-color:var(--ok);background:var(--good-soft)}
+.rdf select.bad{border-color:var(--bad);background:var(--bad-soft)}
+.vec{position:relative;display:inline-block;font-style:normal}
+.vec::after{content:'→';position:absolute;left:50%;top:-.62em;transform:translateX(-50%);font-size:.62em;line-height:1}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="head">
+  <p class="eyebrow"><span class="ro">Fizică · Clasa a 6-a · Fenomene mecanice</span><span class="de">Physik · Klasse 6 · Mechanische Erscheinungen</span></p>
+  <h1><span class="ro">Viteza: medie, momentană, direcție și sens</span><span class="de">Die Geschwindigkeit: mittlere, momentane, Richtung und Richtungssinn</span></h1>
+  <p class="lead">
+    <span class="ro">Un gheparz aleargă repede, o broască țestoasă încet, dar „repede” și „încet” nu sunt măsurători. Fizica măsoară rapiditatea mișcării prin viteză. Vei calcula viteza medie, vei trece din km/h în m/s, vei citi un vitezometru și vei învăța de ce viteza se desenează ca o săgeată.</span>
+    <span class="de">Ein Gepard läuft schnell, eine Schildkröte langsam, aber „schnell“ und „langsam“ sind keine Messwerte. Die Physik misst, wie rasch eine Bewegung ist, mit der Geschwindigkeit. Du berechnest die mittlere Geschwindigkeit, rechnest von km/h in m/s um, liest einen Tachometer ab und erfährst, warum man die Geschwindigkeit als Pfeil zeichnet.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">O mașină parcurge 240 km în 3 ore. Înseamnă că a mers tot timpul cu 80 km/h?</span><span class="de">Ein Auto fährt 240 km in 3 Stunden. Heißt das, es ist die ganze Zeit mit 80 km/h gefahren?</span></li>
+        <li><span class="ro">Ce e mai repede: 20 m/s sau 70 km/h?</span><span class="de">Was ist schneller: 20 m/s oder 70 km/h?</span></li>
+        <li><span class="ro">Două mașini merg cu 90 km/h. Au aceeași viteză dacă una merge spre București și cealaltă spre Constanța?</span><span class="de">Zwei Autos fahren mit 90 km/h. Haben sie dieselbe Geschwindigkeit, wenn eines nach Bukarest und das andere nach Konstanza fährt?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Viteza medie</span><span class="de">Mittlere Geschwindigkeit</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Unități</span><span class="de">Einheiten</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Medie și momentană</span><span class="de">Mittlere und momentane</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Direcție și sens</span><span class="de">Richtung und Richtungssinn</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Săgeata vitezei</span><span class="de">Der Geschwindigkeitspfeil</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Fixare</span><span class="de">Festigung</span></a>
+  </nav>
+</header>
+
+<!-- 1. Viteza medie -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Viteza medie: cât drum într-o secundă</span><span class="de">Die mittlere Geschwindigkeit: wie viel Weg in einer Sekunde</span></h2>
+  <p class="section-sub"><span class="ro"><strong>Viteza medie</strong> a unui mobil este mărimea fizică egală cu raportul dintre distanța parcursă și durata în care este parcursă această distanță: <strong>v<sub>m</sub> = d : Δt</strong>. Alege distanța și durata. Bilele de pe pistă arată unde ajunge mobilul după fiecare secundă: distanța dintre ele este chiar viteza!</span><span class="de">Die <strong>mittlere Geschwindigkeit</strong> eines bewegten Körpers ist die physikalische Größe, die dem Verhältnis von zurückgelegter Strecke zur Zeit entspricht, in der sie zurückgelegt wird: <strong>v<sub>m</sub> = d : Δt</strong>. Wähle Strecke und Dauer. Die Kugeln auf der Bahn zeigen, wo der Körper nach jeder Sekunde ist: Ihr Abstand ist genau die Geschwindigkeit!</span></p>
+  <div class="split">
+    <div class="fig"><svg id="sp-svg" viewBox="0 0 640 195" role="img" aria-label="Poziția mobilului după fiecare secundă"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="sd"><span class="ro">Distanța parcursă, d</span><span class="de">Zurückgelegte Strecke, d</span> = <span id="sdv" class="num"></span> m</label><input type="range" id="sd" min="10" max="200" step="5" value="100"></div>
+      <div class="slider"><label for="st"><span class="ro">Durata, Δt</span><span class="de">Dauer, Δt</span> = <span id="stv" class="num"></span> s</label><input type="range" id="st" min="1" max="20" step="1" value="10"></div>
+      <div class="readout" id="sp-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <h3 style="margin:26px 0 6px;font-size:22px"><span class="ro">Triunghiul formulelor: ce cauți?</span><span class="de">Das Formeldreieck: Was suchst du?</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Din aceeași relație se obțin trei formule. Alege mărimea pe care o cauți și vezi formula cu numerele tale.</span><span class="de">Aus derselben Beziehung ergeben sich drei Formeln. Wähle die gesuchte Größe und sieh die Formel mit deinen Zahlen.</span></p>
+  <div class="split">
+    <div>
+      <div class="chips" id="sp-chips" role="group" aria-label="Mărimea căutată"></div>
+      <div class="readout" id="sp-formula" aria-live="polite"></div>
+    </div>
+    <div class="remember" style="margin-top:0">
+      <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+      <p><span class="ro">Relațiile dintre viteză, distanța parcursă și durată: <strong>v = d : Δt</strong>; <strong>d = v · Δt</strong>; <strong>Δt = d : v</strong>.</span><span class="de">Die Beziehungen zwischen Geschwindigkeit, zurückgelegter Strecke und Dauer: <strong>v = d : Δt</strong>; <strong>d = v · Δt</strong>; <strong>Δt = d : v</strong>.</span></p>
+    </div>
+  </div>
+  <div class="story">
+    <h3><span class="ro">Știai că? De ce navele măsoară viteza în „noduri”</span><span class="de">Wusstest du? Warum Schiffe die Geschwindigkeit in „Knoten“ messen</span></h3>
+    <p><span class="ro">Pe vremea corăbiilor cu pânze, marinarii aruncau în apă o scândură legată de o frânghie cu noduri la distanțe egale. Numărau câte noduri se desfăceau într-un timp măsurat cu clepsidra. De aici vine <strong>nodul</strong>: 1 nod este 1 milă marină pe oră, adică 1,852 km/h. Iar Galileo Galilei, în 1638, a descris mișcarea uniformă ca pe una în care mobilul parcurge distanțe egale în intervale de timp egale, exact ca bilele din desen.</span><span class="de">Zur Zeit der Segelschiffe warfen die Matrosen ein an einer Leine befestigtes Brett ins Wasser, in dem in gleichen Abständen Knoten waren. Sie zählten, wie viele Knoten in einer mit der Sanduhr gemessenen Zeit ausliefen. Daher stammt der <strong>Knoten</strong>: 1 Knoten ist 1 Seemeile pro Stunde, also 1,852 km/h. Und Galileo Galilei beschrieb 1638 die gleichförmige Bewegung als eine, bei der der Körper in gleichen Zeitabschnitten gleiche Strecken zurücklegt, genau wie die Kugeln im Bild.</span></p>
+  </div>
+  <div id="c1"></div>
+</section>
+
+<!-- 2. Unități -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Unități de măsură pentru viteză</span><span class="de">Maßeinheiten der Geschwindigkeit</span></h2>
+  <p class="section-sub"><span class="ro">Unitatea de măsură a vitezei se obține din relația v = d : Δt, scriind unitatea fiecărei mărimi: [v]<sub>SI</sub> = [d]<sub>SI</sub> : [Δt]<sub>SI</sub> = m/s. <strong>Un m/s</strong> este viteza medie a unui mobil care parcurge distanța de un metru în timp de o secundă. În viața de zi cu zi folosim și km/h. Transformă mai jos.</span><span class="de">Die Einheit der Geschwindigkeit ergibt sich aus v = d : Δt, indem man die Einheit jeder Größe schreibt: [v]<sub>SI</sub> = [d]<sub>SI</sub> : [Δt]<sub>SI</sub> = m/s. <strong>Ein m/s</strong> ist die mittlere Geschwindigkeit eines Körpers, der die Strecke von einem Meter in einer Sekunde zurücklegt. Im Alltag benutzen wir auch km/h. Rechne unten um.</span></p>
+  <div class="split">
+    <div class="fig" style="padding:16px">
+      <svg id="cv-svg" viewBox="0 0 640 200" role="img" aria-label="Transformare între km/h și m/s"></svg>
+    </div>
+    <div class="panel">
+      <div class="chips" id="cv-chips" role="group" aria-label="Sensul transformării"></div>
+      <div class="slider"><label for="cv-range"><span class="ro">Viteza de transformat</span><span class="de">Umzurechnende Geschwindigkeit</span> = <span id="cv-val" class="num"></span></label><input type="range" id="cv-range" min="0" max="140" step="1" value="72"></div>
+      <div class="readout" id="cv-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro">Viteza exprimată în km/h se <strong>împarte la 3,6</strong> pentru a găsi valoarea ei în m/s. Viteza exprimată în m/s se <strong>înmulțește cu 3,6</strong> pentru a găsi valoarea ei în km/h. Motivul: 1 km/h = 1 000 m : 3 600 s = 1 : 3,6 m/s.</span><span class="de">Die Geschwindigkeit in km/h wird <strong>durch 3,6 geteilt</strong>, um den Wert in m/s zu erhalten. Die Geschwindigkeit in m/s wird <strong>mit 3,6 multipliziert</strong>, um den Wert in km/h zu erhalten. Der Grund: 1 km/h = 1 000 m : 3 600 s = 1 : 3,6 m/s.</span></p>
+  </div>
+
+  <h3 style="margin:30px 0 6px;font-size:24px"><span class="ro">Scara vitezelor: de la fulgul de zăpadă la lumină</span><span class="de">Die Geschwindigkeitsskala: von der Schneeflocke bis zum Licht</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Apasă pe un rând. Lungimea barei este pe o scară în care fiecare pas înseamnă de 10 ori mai mult, altfel lumina ar face toate celelalte bare invizibile.</span><span class="de">Tippe auf eine Zeile. Die Länge des Balkens folgt einer Skala, auf der jeder Schritt zehnmal so viel bedeutet, sonst würde das Licht alle anderen Balken unsichtbar machen.</span></p>
+  <div class="split">
+    <div id="sv-list" role="list"></div>
+    <div class="readout" id="sv-info" aria-live="polite" style="align-self:start"></div>
+  </div>
+  <div class="story">
+    <h3><span class="ro">Știai că? Metrul este definit prin viteza luminii</span><span class="de">Wusstest du? Der Meter ist über die Lichtgeschwindigkeit definiert</span></h3>
+    <p><span class="ro">Din 1983, metrul este distanța parcursă de lumină în vid în 1/299 792 458 dintr-o secundă. Asta înseamnă că viteza luminii are, prin definiție, valoarea exactă de 299 792 458 m/s. Așa a ajuns una dintre cele mai rapide viteze din natură să ne spună cât de lung este metrul.</span><span class="de">Seit 1983 ist der Meter die Strecke, die das Licht im Vakuum in 1/299 792 458 Sekunde zurücklegt. Das heißt, die Lichtgeschwindigkeit hat per Definition den exakten Wert 299 792 458 m/s. So bestimmt eine der größten Geschwindigkeiten der Natur, wie lang der Meter ist.</span></p>
+  </div>
+  <div id="c2"></div>
+</section>
+
+<!-- 3. Medie și momentană -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Viteza momentană și viteza medie</span><span class="de">Momentangeschwindigkeit und mittlere Geschwindigkeit</span></h2>
+  <p class="section-sub"><span class="ro"><strong>Viteza momentană</strong> este viteza unui mobil la un moment dat; o arată vitezometrul. O mașină parcurge 240 km în 3 h, deci viteza medie este 80 km/h, dar pe drum viteza momentană a variat între 30 și 110 km/h. Trage de cursor sau apasă „Pornește” și urmărește vitezometrul.</span><span class="de">Die <strong>Momentangeschwindigkeit</strong> ist die Geschwindigkeit eines Körpers zu einem bestimmten Zeitpunkt; der Tachometer zeigt sie an. Ein Auto fährt 240 km in 3 h, die mittlere Geschwindigkeit ist also 80 km/h, aber unterwegs schwankte die Momentangeschwindigkeit zwischen 30 und 110 km/h. Zieh am Regler oder drücke „Start“ und beobachte den Tachometer.</span></p>
+  <div class="fig"><svg id="trip-svg" viewBox="0 0 640 270" role="img" aria-label="Vitezometru și graficul vitezei în timpul călătoriei"></svg></div>
+  <div class="split" style="margin-top:12px">
+    <div>
+      <div class="slider"><label for="trip-t"><span class="ro">Timpul de la plecare</span><span class="de">Zeit seit der Abfahrt</span> = <span id="trip-tv" class="num"></span></label><input type="range" id="trip-t" min="0" max="180" step="1" value="45"></div>
+      <div class="actions" style="margin-top:6px"><button class="btn ghost" type="button" id="trip-play"></button></div>
+    </div>
+    <div class="readout" id="trip-out" aria-live="polite"></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <p><span class="ro"><strong>Viteza momentană</strong> este viteza la un moment dat. <strong>Viteza medie</strong> este distanța totală împărțită la durata totală. Viteza medie nu este întotdeauna media aritmetică a vitezelor mobilului.</span><span class="de">Die <strong>Momentangeschwindigkeit</strong> ist die Geschwindigkeit zu einem Zeitpunkt. Die <strong>mittlere Geschwindigkeit</strong> ist die gesamte Strecke geteilt durch die gesamte Dauer. Die mittlere Geschwindigkeit ist nicht immer das arithmetische Mittel der Geschwindigkeiten des Körpers.</span></p>
+  </div>
+
+  <h3 style="margin:30px 0 6px;font-size:24px"><span class="ro">De ce nu putem face media vitezelor?</span><span class="de">Warum darf man die Geschwindigkeiten nicht einfach mitteln?</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Un tren parcurge prima jumătate din drum (60 km) cu o viteză, iar a doua jumătate (60 km) cu alta. Alege vitezele. Cine rămâne mai mult timp cu viteza mică?</span><span class="de">Ein Zug legt die erste Hälfte der Strecke (60 km) mit einer Geschwindigkeit zurück und die zweite Hälfte (60 km) mit einer anderen. Wähle die Geschwindigkeiten. Wer bleibt länger bei der kleinen Geschwindigkeit?</span></p>
+  <div class="split">
+    <div class="panel">
+      <div class="slider"><label for="half1"><span class="ro">Prima jumătate, v₁</span><span class="de">Erste Hälfte, v₁</span> = <span id="half1v" class="num"></span> km/h</label><input type="range" id="half1" min="10" max="120" step="5" value="30"></div>
+      <div class="slider"><label for="half2"><span class="ro">A doua jumătate, v₂</span><span class="de">Zweite Hälfte, v₂</span> = <span id="half2v" class="num"></span> km/h</label><input type="range" id="half2" min="10" max="120" step="5" value="60"></div>
+    </div>
+    <div class="readout" id="half-out" aria-live="polite"></div>
+  </div>
+  <div id="c3"></div>
+</section>
+
+<!-- 4. Direcție și sens -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Direcția și sensul vitezei</span><span class="de">Richtung und Richtungssinn der Geschwindigkeit</span></h2>
+  <p class="section-sub"><span class="ro">În practică ne interesează nu doar cât de repede, ci și <em>încotro</em>. Orientarea vitezei este dată de <strong>direcție</strong> și <strong>sens</strong>. Alege direcția, apoi sensul și mărimea: săgeata se desenează singură. O dreaptă are o direcție, dar două sensuri!</span><span class="de">In der Praxis interessiert uns nicht nur, wie schnell, sondern auch <em>wohin</em>. Die Ausrichtung der Geschwindigkeit ist durch <strong>Richtung</strong> und <strong>Richtungssinn</strong> gegeben. Wähle die Richtung, dann den Richtungssinn und den Betrag: Der Pfeil zeichnet sich von selbst. Eine Gerade hat eine Richtung, aber zwei Richtungssinne!</span></p>
+  <div class="split">
+    <div class="fig"><svg id="cmp-svg" viewBox="0 0 640 380" role="img" aria-label="Săgeata vitezei pe o busolă"></svg></div>
+    <div class="panel">
+      <div><strong><span class="ro">Direcția</span><span class="de">Richtung</span></strong></div>
+      <div class="chips" id="dir-chips" role="group" aria-label="Direcția"></div>
+      <div><strong><span class="ro">Sensul</span><span class="de">Richtungssinn</span></strong></div>
+      <div class="chips" id="sense-chips" role="group" aria-label="Sensul"></div>
+      <div class="slider"><label for="mag"><span class="ro">Mărimea vitezei</span><span class="de">Betrag der Geschwindigkeit</span> = <span id="magv" class="num"></span> km/h</label><input type="range" id="mag" min="10" max="50" step="10" value="30"></div>
+      <div class="readout" id="cmp-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Definiție și reține</span><span class="de">Definition und Merksatz</span></h3>
+    <ul>
+      <li><span class="ro"><strong>Direcția vitezei</strong> este dreapta după care se deplasează mobilul la un moment dat.</span><span class="de">Die <strong>Richtung der Geschwindigkeit</strong> ist die Gerade, auf der sich der Körper zu einem Zeitpunkt bewegt.</span></li>
+      <li><span class="ro">Pe o direcție dată, <strong>sensul</strong> indică spre ce extremitate a dreptei suport se îndreaptă mobilul. O direcție are două sensuri. Pe Autostrada Soarelui sunt două sensuri de circulație: spre Constanța sau spre București; pe verticală există sensul „în sus” și sensul „în jos”.</span><span class="de">Auf einer gegebenen Richtung zeigt der <strong>Richtungssinn</strong>, zu welchem Ende der Trägergeraden sich der Körper bewegt. Eine Richtung hat zwei Richtungssinne. Auf der Autobahn A2 („Autostrada Soarelui“) gibt es zwei Fahrtrichtungen: nach Konstanza oder nach Bukarest; senkrecht gibt es den Richtungssinn „nach oben“ und „nach unten“.</span></li>
+    </ul>
+  </div>
+  <h3 style="margin:26px 0 8px;font-size:22px"><span class="ro">Direcție sau sens?</span><span class="de">Richtung oder Richtungssinn?</span></h3>
+  <div id="cls-ds"></div>
+  <div id="c4"></div>
+</section>
+
+<!-- 5. Săgeata vitezei -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Viteza se desenează ca o săgeată</span><span class="de">Die Geschwindigkeit wird als Pfeil gezeichnet</span></h2>
+  <p class="section-sub"><span class="ro">Viteza unui mobil se caracterizează prin <strong>mărime</strong> (valoare numerică și unitate de măsură), <strong>direcție</strong>, <strong>sens</strong> și <strong>punct de aplicație</strong>. Se reprezintă printr-un segment de dreaptă mărginit de un punct și o săgeată; lungimea segmentului este proporțională cu mărimea vitezei. Mărimile caracterizate de direcție și sens se notează cu o mică săgeată deasupra: <strong><span class="vec">v</span></strong>.</span><span class="de">Die Geschwindigkeit eines Körpers wird durch <strong>Betrag</strong> (Zahlenwert und Einheit), <strong>Richtung</strong>, <strong>Richtungssinn</strong> und <strong>Angriffspunkt</strong> beschrieben. Sie wird durch eine Strecke dargestellt, die von einem Punkt und einer Pfeilspitze begrenzt ist; die Länge der Strecke ist proportional zum Betrag der Geschwindigkeit. Größen mit Richtung und Richtungssinn schreibt man mit einem kleinen Pfeil darüber: <strong><span class="vec">v</span></strong>.</span></p>
+
+  <h3 style="margin:8px 0 8px;font-size:22px"><span class="ro">Două mașini pe același drum</span><span class="de">Zwei Autos auf derselben Straße</span></h3>
+  <div class="split">
+    <div class="fig"><svg id="cars-svg" viewBox="0 0 640 200" role="img" aria-label="Două mașini cu săgețile vitezelor"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="va"><span class="ro">Mașina A</span><span class="de">Auto A</span>: v<sub>A</sub> = <span id="vav" class="num"></span> km/h</label><input type="range" id="va" min="10" max="120" step="10" value="90"></div>
+      <div class="slider"><label for="vb"><span class="ro">Mașina B</span><span class="de">Auto B</span>: v<sub>B</sub> = <span id="vbv" class="num"></span> km/h</label><input type="range" id="vb" min="10" max="120" step="10" value="50"></div>
+      <div class="chips" id="vb-sense" role="group" aria-label="Sensul mașinii B"></div>
+      <div class="readout" id="cars-out" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <h3 style="margin:30px 0 6px;font-size:22px"><span class="ro">Pe o traiectorie curbă, direcția vitezei se schimbă</span><span class="de">Auf einer gekrümmten Bahn ändert sich die Richtung der Geschwindigkeit</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Viteza este mereu tangentă la traiectorie. Alege traiectoria, apoi mută mobilul cu cursorul sau cu butonul „Pornește”. Pe un drum drept săgeata arată mereu într-o direcție; pe curbă, își schimbă direcția la fiecare moment, chiar dacă mărimea rămâne aceeași.</span><span class="de">Die Geschwindigkeit ist immer tangential zur Bahn. Wähle die Bahn und bewege den Körper mit dem Regler oder dem Knopf „Start“. Auf gerader Strecke zeigt der Pfeil immer in dieselbe Richtung; auf der Kurve ändert er seine Richtung in jedem Moment, auch wenn der Betrag gleich bleibt.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="vec-svg" viewBox="0 0 640 300" role="img" aria-label="Mobil pe o traiectorie, cu săgeata vitezei"></svg></div>
+    <div class="panel">
+      <div class="chips" id="path-chips" role="group" aria-label="Traiectoria"></div>
+      <div class="slider"><label for="vec-s"><span class="ro">Poziția pe traiectorie</span><span class="de">Lage auf der Bahn</span></label><input type="range" id="vec-s" min="0" max="1000" value="250"></div>
+      <div class="actions" style="margin-top:0"><button class="btn ghost" type="button" id="vec-play"></button></div>
+      <div class="readout" id="vec-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div id="c5"></div>
+</section>
+
+<!-- 6. Fixare -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Fixare: probleme și săgeți de citit</span><span class="de">Festigung: Aufgaben und Pfeile lesen</span></h2>
+  <h3 style="margin:14px 0 8px;font-size:22px"><span class="ro">1. Transformă toate vitezele în m/s</span><span class="de">1. Rechne alle Geschwindigkeiten in m/s um</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Pe șoseaua dintre A și B circulă mai multe vehicule: v₁ = 5 m/s spre A, v₂ = 18 km/h spre B, v₃ = 54 km/h spre A, v₄ = 20 m/s spre A și v₅ = 72 km/h spre B. Scrie fiecare viteză în m/s.</span><span class="de">Auf der Straße zwischen A und B fahren mehrere Fahrzeuge: v₁ = 5 m/s nach A, v₂ = 18 km/h nach B, v₃ = 54 km/h nach A, v₄ = 20 m/s nach A und v₅ = 72 km/h nach B. Schreibe jede Geschwindigkeit in m/s.</span></p>
+  <div class="ex" id="conv-table"></div>
+
+  <h3 style="margin:30px 0 8px;font-size:22px"><span class="ro">2. Citește săgeata</span><span class="de">2. Lies den Pfeil</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Un segment al săgeții înseamnă 10 km/h. Precizează caracteristicile vitezei.</span><span class="de">Ein Abschnitt des Pfeils bedeutet 10 km/h. Gib die Merkmale der Geschwindigkeit an.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="rd-svg" viewBox="0 0 640 340" role="img" aria-label="O săgeată de viteză pe o busolă"></svg></div>
+    <div class="ex" id="rd-form"></div>
+  </div>
+
+  <h3 style="margin:30px 0 10px;font-size:22px"><span class="ro">3. Probleme pentru tine</span><span class="de">3. Aufgaben für dich</span></h3>
+  <div class="ex" id="drill"></div>
+</section>
+
+<section class="block" aria-labelledby="t-gloss">
+  <h2 class="section-title" id="t-gloss"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <p class="section-sub"><span class="ro">Cuvintele-cheie ale lecției, în română și în germană.</span><span class="de">Die wichtigsten Wörter der Lektion, auf Rumänisch und auf Deutsch.</span></p>
+  <div class="gloss-head"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<footer class="foot">
+  <p><span class="ro">După manualul de Fizică pentru clasa a 6-a, capitolul „Fenomene mecanice” (III.1.3). Valorile vitezelor din scara vitezelor sunt aproximative, în afară de viteza luminii. Desenele sunt schematice.</span><span class="de">Nach dem Physikbuch für die 6. Klasse, Kapitel „Mechanische Erscheinungen“ (III.1.3). Die Werte in der Geschwindigkeitsskala sind Näherungswerte, außer der Lichtgeschwindigkeit. Die Zeichnungen sind schematisch.</span></p>
+</footer>
+
+</div>
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang === 'de' ? 'de' : 'ro';
+var NS = 'http://www.w3.org/2000/svg';
+var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function $(s, r) { return (r || document).querySelector(s); }
+function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function T(o) { return o[L]; }
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function el(tag, a, parent, text) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (parent) parent.appendChild(e); if (text != null) e.textContent = text; return e; }
+function fmt(n) { var s = (+(+n).toFixed(4)).toString(), p = s.split('.'); p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' '); return p.join(','); }
+function num(s) { var v = parseFloat(String(s).replace(/\s/g, '').replace(',', '.')); return isNaN(v) ? NaN : v; }
+function same(a, b) { return !isNaN(a) && Math.abs(a - b) <= Math.max(1e-6, Math.abs(b) * 0.005); }
+function rint(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+function hm(min) { return Math.floor(min / 60) + ' h ' + pad2(min % 60) + ' min'; }
+function hmClock(min) { return Math.floor(min / 60) + ':' + pad2(min % 60); }
+
+/* butoane-pastile cu aria-pressed */
+function chips(host, items, start, cb, cls) {
+  var cur = start, bs = [];
+  items.forEach(function (it) {
+    var b = h('button', cls || 'chip', it[1]); b.type = 'button';
+    b.onclick = function () { set(it[0]); cb(it[0]); };
+    b.dataset.k = it[0]; bs.push(b); host.appendChild(b);
+  });
+  function set(k) { cur = k; bs.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === String(k)); }); }
+  set(start);
+  return { set: set };
+}
+
+/* „Verifică-te”: întrebări cu răspuns imediat */
+function Check(host, items) {
+  host.className = 'check';
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('div', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('div', 'q', T(it.q)));
+    it.o.forEach(function (o, i) {
+      var b = h('button', 'pick', T(o)); b.type = 'button';
+      b.onclick = function () {
+        if (i === it.a) { b.className = 'pick right'; $$('button', opts).forEach(function (x) { x.disabled = true; }); why.innerHTML = '✔ ' + T(it.why); }
+        else { b.className = 'pick wrong'; b.disabled = true; why.innerHTML = '💡 ' + T(it.hint); }
+      };
+      opts.appendChild(b);
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/* clasificare: fiecare rând are variante pe butoane */
+function Classify(host, cats, rows) {
+  host.className = 'cls';
+  rows.forEach(function (r) {
+    var row = h('div', 'row'), opts = h('div', 'opts'), why = h('div', 'why');
+    why.setAttribute('aria-live', 'polite');
+    row.appendChild(h('div', '', T(r.t)));
+    cats.forEach(function (c, i) {
+      var b = h('button', 'pick', T(c)); b.type = 'button';
+      b.onclick = function () {
+        if (i === r.a) { b.className = 'pick right'; $$('button', opts).forEach(function (x) { x.disabled = true; }); why.innerHTML = '✔ ' + T(r.why); }
+        else { b.className = 'pick wrong'; b.disabled = true; why.innerHTML = '💡 ' + T(r.hint); }
+      };
+      opts.appendChild(b);
+    });
+    row.appendChild(opts); row.appendChild(why); host.appendChild(row);
+  });
+}
+
+/* exerciții de completat cu liste alese */
+function Fill(host, bank, rows) {
+  host.className = 'fillbox';
+  rows.forEach(function (r) {
+    var p = h('p'), sel = h('select'); sel.setAttribute('aria-label', tx('alege cuvântul', 'Wort wählen'));
+    sel.appendChild(h('option', '', '…')).value = '';
+    bank.forEach(function (w, i) { var o = h('option', '', T(w)); o.value = i; sel.appendChild(o); });
+    sel.onchange = function () { sel.className = sel.value === '' ? '' : (+sel.value === r.a ? 'ok' : 'bad'); };
+    var parts = T(r.t).split('___');
+    p.appendChild(document.createTextNode(parts[0])); p.appendChild(sel); p.appendChild(document.createTextNode(parts[1] || ''));
+    host.appendChild(p);
+  });
+}
+
+/* generator de probleme cu răspuns numeric */
+function Drill(host, gens) {
+  var good = 0, total = 0, last = '', keys = Object.keys(gens);
+  function render() {
+    var key; do { key = keys[rint(0, keys.length - 1)]; } while (keys.length > 1 && key === last); last = key;
+    var p = gens[key](), counted = false;
+    host.innerHTML = '';
+    var sc = h('span', 'score', tx('Corecte: ', 'Richtig: ') + good + ' / ' + total);
+    host.appendChild(sc); host.appendChild(h('div', 'story', p.q)); $('.story', host).style.marginTop = '0';
+    var row = h('div', 'row2'), ia = h('input', 'vin wide'); ia.type = 'text'; ia.inputMode = 'decimal'; ia.setAttribute('aria-label', tx('răspuns', 'Antwort'));
+    row.appendChild(ia); if (p.u) row.appendChild(h('span', '', p.u)); host.appendChild(row);
+    var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
+    var act = h('div', 'actions'), c = h('button', 'btn', tx('Verifică', 'Prüfen')), s = h('button', 'btn ghost', tx('Arată rezolvarea', 'Lösung zeigen')), nx = h('button', 'btn ghost', tx('Altă problemă', 'Neue Aufgabe') + ' →');
+    c.type = s.type = nx.type = 'button';
+    act.appendChild(c); act.appendChild(s); act.appendChild(nx); host.appendChild(act); host.appendChild(res);
+    function count(ok) { if (!counted) { counted = true; total++; if (ok) good++; sc.textContent = tx('Corecte: ', 'Richtig: ') + good + ' / ' + total; } }
+    c.onclick = function () {
+      var ok = same(num(ia.value), p.a);
+      ia.className = 'vin wide ' + (ok ? 'ok' : 'bad'); res.hidden = false;
+      if (ok) { count(true); res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect! ', 'Richtig! ') + p.s; }
+      else { res.className = 'result try'; res.textContent = tx('Indiciu: ', 'Tipp: ') + p.hint; }
+    };
+    s.onclick = function () { count(false); ia.value = fmt(p.a).replace(/ /g, ''); ia.className = 'vin wide'; res.hidden = false; res.className = 'result good'; res.textContent = p.s; };
+    nx.onclick = render;
+    ia.addEventListener('keydown', function (e) { if (e.key === 'Enter') c.onclick(); });
+  }
+  render();
+}
+
+/* dicționar */
+function Gloss(host, rows) { rows.forEach(function (r) { var d = h('div'); d.appendChild(h('dt', '', r[0])); d.appendChild(h('dd', '', r[1])); host.appendChild(d); }); }
+
+/* animație cu play/pauză; f(t secunde) */
+function Anim(f, btn, startPlaying) {
+  var playing = false, t0 = 0, t = 0, raf = 0;
+  function label() { btn.textContent = playing ? '⏸ ' + tx('Pauză', 'Pause') : '▶ ' + tx('Pornește', 'Start'); btn.setAttribute('aria-pressed', playing); }
+  function frame(now) { if (!playing) return; t = (now - t0) / 1000; f(t); raf = requestAnimationFrame(frame); }
+  function play() { playing = true; t0 = performance.now() - t * 1000; label(); raf = requestAnimationFrame(frame); }
+  function pause() { playing = false; cancelAnimationFrame(raf); label(); }
+  btn.onclick = function () { playing ? pause() : play(); };
+  f(0); label();
+  if (startPlaying && !REDUCED) play();
+  return { play: play, pause: pause, redraw: function () { f(t); }, reset: function () { t = 0; t0 = performance.now(); f(0); } };
+}
+
+var MINUS = '−';
+function sg(n) { return (n < 0 ? MINUS : '') + fmt(Math.abs(n)); }
+function r2(n) { return fmt(+(+n).toFixed(2)); }
+function arrow(parent, x1, y1, x2, y2, color, w) {
+  var dx = x2 - x1, dy = y2 - y1, L0 = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / L0, uy = dy / L0, hs = 14;
+  el('line', { x1: x1, y1: y1, x2: x2 - ux * hs * 0.7, y2: y2 - uy * hs * 0.7, stroke: color, 'stroke-width': w || 5, 'stroke-linecap': 'round' }, parent);
+  el('polygon', { points: x2 + ',' + y2 + ' ' + (x2 - ux * hs - uy * hs * 0.55) + ',' + (y2 - uy * hs + ux * hs * 0.55) + ' ' + (x2 - ux * hs + uy * hs * 0.55) + ',' + (y2 - uy * hs - ux * hs * 0.55), fill: color }, parent);
+}
+function playBtn(btn, slider, speed, redraw) {
+  var playing = false, raf = 0, last = 0;
+  function label() { btn.textContent = playing ? '⏸ ' + tx('Pauză', 'Pause') : '▶ ' + tx('Pornește', 'Start'); }
+  function step(now) {
+    if (!playing) return;
+    var dt = Math.min(0.05, (now - last) / 1000); last = now;
+    var v = +slider.value + dt * speed, mx = +slider.max;
+    if (v >= mx) { v = mx; playing = false; label(); }
+    slider.value = v; redraw();
+    if (playing) raf = requestAnimationFrame(step);
+  }
+  btn.onclick = function () {
+    if (playing) { playing = false; cancelAnimationFrame(raf); label(); return; }
+    if (+slider.value >= +slider.max) slider.value = slider.min;
+    playing = true; label(); last = performance.now(); raf = requestAnimationFrame(step);
+  };
+  slider.addEventListener('input', function () { playing = false; cancelAnimationFrame(raf); label(); });
+  label();
+}
+
+/* ================= 1. Viteza medie ================= */
+(function () {
+  var svg = $('#sp-svg'), out = $('#sp-out'), fo = $('#sp-formula'), sd = $('#sd'), st = $('#st'), unk = 'v';
+  var X0 = 40, W = 560, ty = 100;
+  function X(m) { return X0 + m / 200 * W; }
+  function formula(d, t, v) {
+    var vs = r2(v), L1 = '<span class="eq">';
+    var rows = {
+      v: 'v = d : Δt = ' + fmt(d) + ' m : ' + t + ' s = ' + vs + ' m/s',
+      d: 'd = v · Δt = ' + vs + ' m/s · ' + t + ' s = ' + fmt(d) + ' m',
+      t: 'Δt = d : v = ' + fmt(d) + ' m : ' + vs + ' m/s = ' + t + ' s'
+    };
+    fo.innerHTML = ['v', 'd', 't'].map(function (k) {
+      return '<span class="eq" style="' + (k === unk ? 'color:var(--red)' : 'opacity:.45;font-size:17px') + '">' + (k === unk ? '▶ ' : '') + rows[k] + '</span>';
+    }).join('') + '<span class="rule">' + tx('Cea căutată este în roșu; celelalte două sunt cunoscute.', 'Die gesuchte Größe ist rot; die beiden anderen sind bekannt.') + '</span>';
+  }
+  function draw() {
+    var d = +sd.value, t = +st.value, v = d / t, i;
+    $('#sdv').textContent = d; $('#stv').textContent = t;
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: 640, height: 195, fill: '#f6fbff' }, svg);
+    el('line', { x1: X0, y1: ty, x2: X0 + W, y2: ty, stroke: '#1f2530', 'stroke-width': 3 }, svg);
+    for (i = 0; i <= 200; i += 20) {
+      el('line', { x1: X(i), y1: ty + 4, x2: X(i), y2: ty + 14, stroke: '#1f2530', 'stroke-width': 2 }, svg);
+      if (i % 40 === 0) el('text', { x: X(i), y: ty + 34, 'text-anchor': 'middle', class: 'lbl sm' }, svg, i + ' m');
+    }
+    var every = Math.ceil(t / 10), gap = X(v) - X(0);
+    for (i = 0; i <= t; i++) {
+      var x = X(v * i), end = i === t, first = i === 0;
+      el('circle', { cx: x, cy: ty - 18, r: gap < 9 ? 3.5 : 7, fill: first ? '#2f6fd6' : end ? '#d2452f' : '#c98a00', stroke: '#fff', 'stroke-width': 2 }, svg);
+      if ((i % every === 0 || end) && gap * every > 22 || first || end) el('text', { x: x, y: ty - 36, 'text-anchor': 'middle', class: 'lbl sm' }, svg, i + ' s');
+    }
+    if (t >= 2 && gap >= 24) {
+      el('path', { d: 'M' + X(0) + ' 168 H' + X(v), stroke: '#1f8a5b', 'stroke-width': 3, fill: 'none' }, svg);
+      el('text', { x: X(v / 2), y: 160, 'text-anchor': 'middle', class: 'lbl sm', fill: '#1f8a5b' }, svg, r2(v) + ' m');
+    }
+    el('text', { x: 628, y: 188, 'text-anchor': 'end', class: 'lbl sm', fill: '#1f8a5b' }, svg, tx('distanța dintre două bile = distanța pe secundă = viteza', 'Abstand zweier Kugeln = Strecke pro Sekunde = Geschwindigkeit'));
+    svg.setAttribute('aria-label', tx('Viteza este ', 'Die Geschwindigkeit ist ') + r2(v) + ' m/s');
+    out.innerHTML = '<span class="eq">v<sub>m</sub> = d : Δt = ' + fmt(d) + ' : ' + t + ' = <span class="c2">' + r2(v) + ' m/s</span></span>' +
+      '<span class="rule">' + tx('Adică ', 'Das sind ') + r2(v * 3.6) + ' km/h. ' + tx('În fiecare secundă, mobilul parcurge ', 'In jeder Sekunde legt der Körper ') + r2(v) + tx(' m.', ' m zurück.') + '</span>';
+    formula(d, t, v);
+  }
+  chips($('#sp-chips'), [['v', tx('viteza v', 'Geschwindigkeit v')], ['d', tx('distanța d', 'Strecke d')], ['t', tx('durata Δt', 'Dauer Δt')]], 'v', function (k) { unk = k; draw(); });
+  sd.addEventListener('input', draw); st.addEventListener('input', draw); draw();
+})();
+Check($('#c1'), [
+  { q: { ro: 'Un biciclist parcurge 60 m în 12 s. Care este viteza lui medie?', de: 'Ein Radfahrer legt 60 m in 12 s zurück. Wie groß ist seine mittlere Geschwindigkeit?' },
+    o: [{ ro: '5 m/s', de: '5 m/s' }, { ro: '720 m/s', de: '720 m/s' }, { ro: '0,2 m/s', de: '0,2 m/s' }], a: 0,
+    why: { ro: 'v = d : Δt = 60 m : 12 s = 5 m/s.', de: 'v = d : Δt = 60 m : 12 s = 5 m/s.' },
+    hint: { ro: 'Viteza este distanța împărțită la durată, nu invers.', de: 'Die Geschwindigkeit ist Strecke geteilt durch Dauer, nicht umgekehrt.' } },
+  { q: { ro: 'Un tren merge cu 90 km/h timp de 2 ore. Ce distanță parcurge?', de: 'Ein Zug fährt 2 Stunden lang mit 90 km/h. Welche Strecke legt er zurück?' },
+    o: [{ ro: '45 km', de: '45 km' }, { ro: '180 km', de: '180 km' }, { ro: '92 km', de: '92 km' }], a: 1,
+    why: { ro: 'd = v · Δt = 90 km/h · 2 h = 180 km.', de: 'd = v · Δt = 90 km/h · 2 h = 180 km.' },
+    hint: { ro: 'Caută formula pentru distanță: se înmulțesc viteza și durata.', de: 'Suche die Formel für die Strecke: Geschwindigkeit und Dauer werden multipliziert.' } }
+]);
+
+/* ================= 2. Unități ================= */
+(function () {
+  var svg = $('#cv-svg'), out = $('#cv-out'), rg = $('#cv-range'), mode = 'kmh';
+  function box(x, big, unit, on) {
+    el('rect', { x: x, y: 50, width: 210, height: 100, rx: 14, fill: on ? '#fdf2d4' : '#fff', stroke: on ? '#c98a00' : '#1f2530', 'stroke-width': on ? 4 : 2.5 }, svg);
+    el('text', { x: x + 105, y: 105, 'text-anchor': 'middle', style: 'font:800 38px var(--display)' }, svg, big);
+    el('text', { x: x + 105, y: 134, 'text-anchor': 'middle', class: 'lbl' }, svg, unit);
+  }
+  function draw() {
+    var v = +rg.value, k = mode === 'kmh', a = k ? v : v / 3.6, b = k ? v / 3.6 : v * 3.6;
+    svg.innerHTML = '';
+    var kmh = k ? v : b, ms = k ? b : v;
+    box(20, r2(kmh), 'km/h', k); box(410, r2(ms), 'm/s', !k);
+    el('text', { x: 320, y: 48, 'text-anchor': 'middle', class: 'lbl big', fill: k ? '#c98a00' : '#b8bec9' }, svg, '÷ 3,6');
+    arrow(svg, 240, 70, 400, 70, k ? '#c98a00' : '#d3d7de', 5);
+    el('text', { x: 320, y: 172, 'text-anchor': 'middle', class: 'lbl big', fill: !k ? '#c98a00' : '#b8bec9' }, svg, '× 3,6');
+    arrow(svg, 400, 130, 240, 130, !k ? '#c98a00' : '#d3d7de', 5);
+    $('#cv-val').textContent = r2(v) + (k ? ' km/h' : ' m/s');
+    svg.setAttribute('aria-label', r2(kmh) + ' km/h = ' + r2(ms) + ' m/s');
+    out.innerHTML = k ? '<span class="eq">' + r2(v) + ' km/h = ' + r2(v) + ' : 3,6 = <span class="c2">' + r2(b) + ' m/s</span></span>' : '<span class="eq">' + r2(v) + ' m/s = ' + r2(v) + ' · 3,6 = <span class="c2">' + r2(b) + ' km/h</span></span>';
+    out.innerHTML += '<span class="rule">1 km/h = 1 000 m : 3 600 s = 1 : 3,6 m/s</span>';
+  }
+  chips($('#cv-chips'), [['kmh', 'km/h → m/s'], ['ms', 'm/s → km/h']], 'kmh', function (k) { mode = k; rg.max = k === 'kmh' ? 140 : 40; rg.value = k === 'kmh' ? 72 : 20; draw(); });
+  rg.addEventListener('input', draw); draw();
+})();
+(function () {
+  var N = [
+    { n: tx('fulg de zăpadă care cade', 'fallende Schneeflocke'), v: 0.2, a: '0,2 m/s', b: '0,72 km/h', t: tx('Cădere liniștită, fără vânt.', 'Ruhiger Fall ohne Wind.') },
+    { n: tx('om, mers normal', 'Mensch, normaler Gang'), v: 1.5, a: '1,5 m/s', b: '5,4 km/h', t: tx('Un pas de mers are cam 0,75 m.', 'Ein Schritt ist etwa 0,75 m lang.') },
+    { n: tx('biciclist', 'Radfahrer'), v: 5, a: '5 m/s', b: '18 km/h', t: tx('Un ritm obișnuit la plimbare.', 'Ein gewöhnliches Tempo bei einer Radtour.') },
+    { n: tx('Usain Bolt, la maximum', 'Usain Bolt, auf Höchstgeschwindigkeit'), v: 12.4, a: '≈ 12,4 m/s', b: '≈ 44,7 km/h', t: tx('Recordul mondial la 100 m: 9,58 s (2009). Viteza medie pe cursă este mai mică, fiindcă a pornit din loc.', 'Weltrekord über 100 m: 9,58 s (2009). Die mittlere Geschwindigkeit im Rennen ist kleiner, weil er aus dem Stand startete.') },
+    { n: tx('mașină în oraș', 'Auto in der Stadt'), v: 13.9, a: '≈ 13,9 m/s', b: '50 km/h', t: tx('Limita obișnuită în localități.', 'Übliches Tempolimit in Ortschaften.') },
+    { n: tx('ghepard', 'Gepard'), v: 30, a: '≈ 30 m/s', b: '≈ 108 km/h', t: tx('Cel mai rapid animal terestru, dar ține viteza maximă doar câteva secunde.', 'Das schnellste Landtier, hält die Höchstgeschwindigkeit aber nur wenige Sekunden.') },
+    { n: tx('mașină pe autostradă', 'Auto auf der Autobahn'), v: 36.1, a: '≈ 36,1 m/s', b: '130 km/h', t: tx('Limita maximă pe autostrăzile din România.', 'Höchstgeschwindigkeit auf rumänischen Autobahnen.') },
+    { n: tx('tren de mare viteză (record)', 'Hochgeschwindigkeitszug (Rekord)'), v: 159.7, a: '≈ 160 m/s', b: '≈ 575 km/h', t: tx('Trenul francez TGV a atins 574,8 km/h în 2007, pe o cale de test.', 'Der französische TGV erreichte 2007 auf einer Teststrecke 574,8 km/h.') },
+    { n: tx('avion de linie', 'Verkehrsflugzeug'), v: 250, a: '≈ 250 m/s', b: '≈ 900 km/h', t: tx('Viteza de croazieră a unui avion de pasageri.', 'Reisegeschwindigkeit eines Passagierflugzeugs.') },
+    { n: tx('sunetul în aer', 'Schall in der Luft'), v: 340, a: '≈ 340 m/s', b: '≈ 1 224 km/h', t: tx('Valoarea depinde de temperatura aerului.', 'Der Wert hängt von der Lufttemperatur ab.') },
+    { n: tx('lumina în vid', 'Licht im Vakuum'), v: 299792458, a: '299 792 458 m/s', b: '≈ 1,08 miliarde km/h', t: tx('Nimic nu poate merge mai repede. Într-o secundă, lumina face de aproape 7,5 ori ocolul Pământului.', 'Nichts ist schneller. In einer Sekunde umrundet das Licht die Erde fast 7,5-mal.') }
+  ];
+  var list = $('#sv-list'), info = $('#sv-info'), rows = [];
+  var lo = Math.log10(0.1), hi = Math.log10(3e8);
+  N.forEach(function (it, i) {
+    var b = h('button', 'sv-row'); b.type = 'button'; b.setAttribute('role', 'listitem');
+    var pct = (Math.log10(it.v) - lo) / (hi - lo) * 100;
+    b.innerHTML = '<span class="nm">' + it.n + '</span><span class="bar"><i style="width:' + pct.toFixed(1) + '%"></i></span><span class="vl">' + it.a + '</span>';
+    b.onclick = function () { pick(i); };
+    list.appendChild(b); rows.push(b);
+  });
+  function pick(i) {
+    rows.forEach(function (r, j) { r.setAttribute('aria-pressed', i === j); });
+    info.innerHTML = '<span class="eq">' + N[i].n + '</span><span class="eq">' + N[i].a + ' = ' + N[i].b + '</span><span class="rule">' + N[i].t + '</span>';
+  }
+  pick(3);
+})();
+Check($('#c2'), [
+  { q: { ro: 'Cât fac 72 km/h în m/s?', de: 'Wie viel sind 72 km/h in m/s?' },
+    o: [{ ro: '20 m/s', de: '20 m/s' }, { ro: '259,2 m/s', de: '259,2 m/s' }, { ro: '72 m/s', de: '72 m/s' }], a: 0,
+    why: { ro: '72 : 3,6 = 20 m/s.', de: '72 : 3,6 = 20 m/s.' },
+    hint: { ro: 'Din km/h în m/s se împarte la 3,6. Valoarea în m/s trebuie să fie mai mică.', de: 'Von km/h in m/s wird durch 3,6 geteilt. Der Wert in m/s muss kleiner sein.' } },
+  { q: { ro: 'Ce este mai repede: 20 m/s sau 70 km/h?', de: 'Was ist schneller: 20 m/s oder 70 km/h?' },
+    o: [{ ro: '20 m/s', de: '20 m/s' }, { ro: '70 km/h', de: '70 km/h' }, { ro: 'sunt egale', de: 'sie sind gleich' }], a: 0,
+    why: { ro: '20 m/s = 20 · 3,6 = 72 km/h, iar 72 > 70.', de: '20 m/s = 20 · 3,6 = 72 km/h, und 72 > 70.' },
+    hint: { ro: 'Compară în aceeași unitate: transformă 20 m/s în km/h.', de: 'Vergleiche in derselben Einheit: Rechne 20 m/s in km/h um.' } }
+]);
+
+/* ================= 3. Medie și momentană ================= */
+(function () {
+  var svg = $('#trip-svg'), out = $('#trip-out'), sl = $('#trip-t');
+  var P = [60, 110, 30, 100, 90, 90];
+  function at(tm) {
+    var th = tm / 60, i = Math.min(5, Math.floor(th / 0.5 + 1e-9)), d = 0, k;
+    for (k = 0; k < i; k++) d += P[k] * 0.5;
+    d += P[i] * (th - i * 0.5);
+    return { v: P[i], d: d, i: i, avg: th > 0 ? d / th : null };
+  }
+  var CX = 150, CY = 150, R = 112;
+  function polar(r, v) { var a = (-120 + v * 2) * Math.PI / 180; return [CX + r * Math.sin(a), CY - r * Math.cos(a)]; }
+  function draw() {
+    var tm = +sl.value, s = at(tm), i;
+    $('#trip-tv').textContent = Math.floor(tm / 60) + ' h ' + pad2(tm % 60) + ' min';
+    svg.innerHTML = '';
+    el('circle', { cx: CX, cy: CY, r: R + 10, fill: '#8aa0ad' }, svg);
+    el('circle', { cx: CX, cy: CY, r: R, fill: '#1d4452' }, svg);
+    for (i = 0; i <= 120; i += 5) { var o = polar(R - 4, i), n = polar(i % 20 ? R - 14 : R - 22, i); el('line', { x1: o[0], y1: o[1], x2: n[0], y2: n[1], stroke: '#e6f2f6', 'stroke-width': i % 20 ? 1.5 : 3 }, svg); }
+    for (i = 0; i <= 120; i += 20) { var q = polar(R - 38, i); el('text', { x: q[0], y: q[1] + 5, 'text-anchor': 'middle', style: 'font:800 15px var(--body);fill:#e6f2f6' }, svg, i); }
+    var nd = polar(R - 24, s.v);
+    el('line', { x1: CX, y1: CY, x2: nd[0], y2: nd[1], stroke: '#ff6a4d', 'stroke-width': 5, 'stroke-linecap': 'round', style: 'transition:all .25s' }, svg);
+    el('circle', { cx: CX, cy: CY, r: 9, fill: '#ff6a4d' }, svg);
+    el('text', { x: CX, y: CY + 66, 'text-anchor': 'middle', style: 'font:800 28px var(--display);fill:#fff' }, svg, s.v + ' km/h');
+    el('text', { x: CX, y: CY + 86, 'text-anchor': 'middle', style: 'font:700 12px var(--body);fill:#b9d3dd' }, svg, tx('viteza momentană', 'Momentangeschw.'));
+    // grafic
+    var gx = 340, gw = 280, gy0 = 228, gh = 150, w6 = gw / 6;
+    el('line', { x1: gx, y1: gy0, x2: gx + gw, y2: gy0, stroke: '#1f2530', 'stroke-width': 2 }, svg);
+    el('line', { x1: gx, y1: gy0, x2: gx, y2: gy0 - gh - 6, stroke: '#1f2530', 'stroke-width': 2 }, svg);
+    for (i = 0; i < 6; i++) el('rect', { x: gx + i * w6 + 1, y: gy0 - P[i] / 120 * gh, width: w6 - 2, height: P[i] / 120 * gh, fill: i === s.i ? '#2f6fd6' : '#bcd3f3' }, svg);
+    for (i = 0; i <= 3; i++) el('text', { x: gx + i * gw / 3, y: gy0 + 18, 'text-anchor': 'middle', class: 'lbl sm' }, svg, i + ' h');
+    [0, 60, 120].forEach(function (v) { el('text', { x: gx - 6, y: gy0 - v / 120 * gh + 4, 'text-anchor': 'end', class: 'lbl sm' }, svg, v); });
+    el('text', { x: gx + 4, y: 52, class: 'lbl sm' }, svg, 'km/h');
+    if (s.avg !== null) {
+      var ay = gy0 - s.avg / 120 * gh;
+      el('line', { x1: gx, y1: ay, x2: gx + gw, y2: ay, stroke: '#d2452f', 'stroke-width': 2.5, 'stroke-dasharray': '7 5' }, svg);
+      el('text', { x: gx + gw, y: ay - 6, 'text-anchor': 'end', class: 'lbl sm', fill: '#d2452f' }, svg, tx('viteza medie până acum: ', 'bisherige mittlere Geschw.: ') + r2(s.avg));
+    }
+    var cx = gx + tm / 180 * gw;
+    el('line', { x1: cx, y1: gy0 + 4, x2: cx, y2: gy0 - gh - 6, stroke: '#1f2530', 'stroke-width': 2 }, svg);
+    svg.setAttribute('aria-label', tx('Vitezometru: ', 'Tachometer: ') + s.v + ' km/h');
+    out.innerHTML = '<span class="eq">' + tx('Viteza momentană', 'Momentangeschwindigkeit') + ': <span class="c1">' + s.v + ' km/h</span></span>' +
+      '<span class="eq">' + tx('Distanța parcursă', 'Zurückgelegte Strecke') + ': ' + r2(s.d) + ' km</span>' +
+      '<span class="eq">' + tx('Viteza medie până acum', 'Mittlere Geschwindigkeit bisher') + ': <span class="c2">' + (s.avg === null ? '—' : r2(s.avg) + ' km/h') + '</span></span>' +
+      (tm === 180 ? '<span class="rule">' + tx('La final: 240 km : 3 h = 80 km/h, deși vitezometrul n-a arătat 80 tot timpul.', 'Am Ende: 240 km : 3 h = 80 km/h, obwohl der Tachometer nicht die ganze Zeit 80 zeigte.') + '</span>' : '');
+  }
+  playBtn($('#trip-play'), sl, 15, draw);
+  sl.addEventListener('input', draw); draw();
+})();
+(function () {
+  var s1 = $('#half1'), s2 = $('#half2'), out = $('#half-out');
+  function draw() {
+    var v1 = +s1.value, v2 = +s2.value, t1 = 60 / v1, t2 = 60 / v2, vm = 120 / (t1 + t2), ma = (v1 + v2) / 2;
+    $('#half1v').textContent = v1; $('#half2v').textContent = v2;
+    out.innerHTML = '<span class="rule">' + tx('Timpi: ', 'Zeiten: ') + '60 : ' + v1 + ' = ' + r2(t1) + ' h; 60 : ' + v2 + ' = ' + r2(t2) + ' h</span>' +
+      '<span class="eq">v<sub>m</sub> = 120 km : ' + r2(t1 + t2) + ' h = <span class="c2">' + r2(vm) + ' km/h</span></span>' +
+      '<div class="hbar" aria-hidden="true"><i style="width:' + (vm / 120 * 100) + '%;background:var(--red)"></i></div>' +
+      '<span class="eq">' + tx('Media aritmetică', 'Arithmetisches Mittel') + ': (' + v1 + ' + ' + v2 + ') : 2 = <span class="c1">' + r2(ma) + ' km/h</span></span>' +
+      '<div class="hbar" aria-hidden="true"><i style="width:' + (ma / 120 * 100) + '%;background:var(--blue)"></i></div>' +
+      '<span class="rule">' + (v1 === v2 ? tx('Vitezele sunt egale, deci media aritmetică și viteza medie coincid.', 'Die Geschwindigkeiten sind gleich, also stimmen arithmetisches Mittel und mittlere Geschwindigkeit überein.') : tx('Diferă! Trenul rămâne mai mult timp cu viteza mică, deci viteza medie e mai aproape de ea.', 'Sie unterscheiden sich! Der Zug bleibt länger bei der kleinen Geschwindigkeit, die mittlere Geschwindigkeit liegt also näher an ihr.')) + '</span>';
+  }
+  s1.addEventListener('input', draw); s2.addEventListener('input', draw); draw();
+})();
+Check($('#c3'), [
+  { q: { ro: 'O mașină a parcurs 240 km în 3 h. La un moment dat, vitezometrul a arătat 110 km/h. Care este viteza medie pe tot drumul?', de: 'Ein Auto legte 240 km in 3 h zurück. Zu einem Zeitpunkt zeigte der Tachometer 110 km/h. Wie groß ist die mittlere Geschwindigkeit auf der ganzen Strecke?' },
+    o: [{ ro: '110 km/h', de: '110 km/h' }, { ro: '80 km/h', de: '80 km/h' }, { ro: '720 km/h', de: '720 km/h' }], a: 1,
+    why: { ro: 'v<sub>m</sub> = 240 km : 3 h = 80 km/h. Cei 110 km/h sunt o viteză momentană.', de: 'v<sub>m</sub> = 240 km : 3 h = 80 km/h. Die 110 km/h sind eine Momentangeschwindigkeit.' },
+    hint: { ro: 'Viteza medie folosește distanța totală și durata totală, nu o citire de pe vitezometru.', de: 'Die mittlere Geschwindigkeit nutzt die gesamte Strecke und die gesamte Dauer, nicht einen Tachometerwert.' } },
+  { q: { ro: 'Ce arată vitezometrul unei mașini?', de: 'Was zeigt der Tachometer eines Autos an?' },
+    o: [{ ro: 'viteza medie', de: 'die mittlere Geschwindigkeit' }, { ro: 'viteza momentană', de: 'die Momentangeschwindigkeit' }, { ro: 'distanța parcursă', de: 'die zurückgelegte Strecke' }], a: 1,
+    why: { ro: 'Vitezometrul arată viteza la momentul în care te uiți la el.', de: 'Der Tachometer zeigt die Geschwindigkeit in dem Moment, in dem du hinschaust.' },
+    hint: { ro: 'Se schimbă acul pe parcursul drumului? Gândește-te la simulatorul de mai sus.', de: 'Ändert sich die Nadel während der Fahrt? Denk an die Simulation oben.' } }
+]);
+
+/* ================= 4. Direcție și sens ================= */
+(function () {
+  var svg = $('#cmp-svg'), out = $('#cmp-out'), mg = $('#mag'), senseHost = $('#sense-chips'), dir = 'NS', sense = 0, sc;
+  var DIRS = {
+    NS: { a: 0, n: tx('Nord–Sud', 'Nord–Süd'), s: [tx('spre Nord', 'nach Norden'), tx('spre Sud', 'nach Süden')] },
+    EV: { a: 90, n: tx('Est–Vest', 'Ost–West'), s: [tx('spre Est', 'nach Osten'), tx('spre Vest', 'nach Westen')] },
+    NESV: { a: 45, n: tx('Nord-Est–Sud-Vest', 'Nordost–Südwest'), s: [tx('spre Nord-Est', 'nach Nordosten'), tx('spre Sud-Vest', 'nach Südwesten')] },
+    NVSE: { a: 315, n: tx('Nord-Vest–Sud-Est', 'Nordwest–Südost'), s: [tx('spre Nord-Vest', 'nach Nordwesten'), tx('spre Sud-Est', 'nach Südosten')] }
+  };
+  var CX = 320, CY = 190, R = 150, K = 26;
+  function draw() {
+    var D = DIRS[dir], m = +mg.value, ang = (D.a + (sense ? 180 : 0)) * Math.PI / 180, ux = Math.sin(ang), uy = -Math.cos(ang), i;
+    $('#magv').textContent = m;
+    svg.innerHTML = '';
+    el('circle', { cx: CX, cy: CY, r: R + 6, fill: '#f6fbff', stroke: '#9aa3b2', 'stroke-width': 2 }, svg);
+    for (i = 1; i <= 5; i++) el('circle', { cx: CX, cy: CY, r: i * K, fill: 'none', stroke: '#e2e0d6', 'stroke-width': 1 }, svg);
+    el('line', { x1: CX, y1: CY - R, x2: CX, y2: CY + R, stroke: '#cdd3dc', 'stroke-width': 1.5 }, svg);
+    el('line', { x1: CX - R, y1: CY, x2: CX + R, y2: CY, stroke: '#cdd3dc', 'stroke-width': 1.5 }, svg);
+    [['N', 0, -R - 16], ['S', 0, R + 28], [tx('E', 'O'), R + 16, 6], [tx('V', 'W'), -R - 16, 6]].forEach(function (l) { el('text', { x: CX + l[1], y: CY + l[2], 'text-anchor': 'middle', style: 'font:800 20px var(--display)' }, svg, l[0]); });
+    el('line', { x1: CX - ux * R, y1: CY - uy * R, x2: CX + ux * R, y2: CY + uy * R, stroke: '#2f6fd6', 'stroke-width': 2, 'stroke-dasharray': '8 6' }, svg);
+    var len = m / 10 * K;
+    for (i = 1; i <= m / 10; i++) el('circle', { cx: CX + ux * i * K, cy: CY + uy * i * K, r: 3, fill: '#fff', stroke: '#8a5a00', 'stroke-width': 1.5 }, svg);
+    arrow(svg, CX, CY, CX + ux * len, CY + uy * len, '#d2452f', 6);
+    el('circle', { cx: CX, cy: CY, r: 8, fill: '#1f2530' }, svg);
+    svg.setAttribute('aria-label', tx('Viteza: ', 'Geschwindigkeit: ') + D.n + ', ' + D.s[sense] + ', ' + m + ' km/h');
+    out.innerHTML = '<span class="eq">' + tx('Direcția', 'Richtung') + ': ' + D.n + '</span><span class="eq">' + tx('Sensul', 'Richtungssinn') + ': ' + D.s[sense] + '</span><span class="eq">' + tx('Mărimea', 'Betrag') + ': ' + m + ' km/h (' + (m / 10) + tx(' segmente', ' Abschnitte') + ')</span>' +
+      '<span class="rule">' + tx('● punct de aplicație · - - direcție · ➜ sens și mărime (1 segment = 10 km/h)', '● Angriffspunkt · - - Richtung · ➜ Richtungssinn und Betrag (1 Abschnitt = 10 km/h)') + '</span><span class="rule">' + tx('Aceeași direcție are încă un sens: apasă pe celălalt buton și vezi.', 'Dieselbe Richtung hat noch einen zweiten Richtungssinn: Drücke den anderen Knopf und sieh nach.') + '</span>';
+  }
+  function buildSense() { senseHost.innerHTML = ''; sc = chips(senseHost, [[0, DIRS[dir].s[0]], [1, DIRS[dir].s[1]]], sense, function (k) { sense = +k; draw(); }); }
+  chips($('#dir-chips'), Object.keys(DIRS).map(function (k) { return [k, DIRS[k].n]; }), 'NS', function (k) { dir = k; buildSense(); draw(); });
+  mg.addEventListener('input', draw); buildSense(); draw();
+})();
+Classify($('#cls-ds'), [{ ro: 'direcție', de: 'Richtung' }, { ro: 'sens', de: 'Richtungssinn' }], [
+  { t: { ro: 'Verticală', de: 'Senkrecht' }, a: 0, why: { ro: 'Verticala este o dreaptă: spune pe ce linie are loc mișcarea.', de: 'Die Senkrechte ist eine Gerade: Sie sagt, auf welcher Linie die Bewegung stattfindet.' }, hint: { ro: 'Este o dreaptă întreagă sau una din cele două orientări ale ei?', de: 'Ist es eine ganze Gerade oder eine ihrer beiden Orientierungen?' } },
+  { t: { ro: 'În sus', de: 'Nach oben' }, a: 1, why: { ro: '„În sus” alege una dintre cele două extremități ale verticalei: este un sens.', de: '„Nach oben“ wählt eines der beiden Enden der Senkrechten: Das ist ein Richtungssinn.' }, hint: { ro: 'Pe verticală se poate merge și în jos. Ce alegi tu aici?', de: 'Senkrecht kann man auch nach unten gehen. Was wählst du hier?' } },
+  { t: { ro: 'Est–Vest', de: 'Ost–West' }, a: 0, why: { ro: 'Numește dreapta, fără să spună încotro.', de: 'Es nennt die Gerade, ohne zu sagen, wohin.' }, hint: { ro: 'Sunt numite ambele capete ale dreptei.', de: 'Beide Enden der Geraden sind genannt.' } },
+  { t: { ro: 'Spre Constanța', de: 'Nach Konstanza' }, a: 1, why: { ro: 'Pe autostradă ai două sensuri: spre Constanța sau spre București.', de: 'Auf der Autobahn gibt es zwei Richtungssinne: nach Konstanza oder nach Bukarest.' }, hint: { ro: 'Se alege un capăt al drumului.', de: 'Es wird ein Ende der Straße gewählt.' } },
+  { t: { ro: 'Pe Autostrada Soarelui', de: 'Auf der Autobahn A2' }, a: 0, why: { ro: 'Indică drumul, adică dreapta pe care se circulă.', de: 'Es nennt die Straße, also die Gerade, auf der man fährt.' }, hint: { ro: 'Nu spune încotro se merge.', de: 'Es sagt nicht, wohin gefahren wird.' } },
+  { t: { ro: 'Spre sud', de: 'Nach Süden' }, a: 1, why: { ro: 'Sudul este unul dintre cele două capete ale dreptei Nord–Sud.', de: 'Süden ist eines der beiden Enden der Nord–Süd-Geraden.' }, hint: { ro: 'Nordul ar fi celălalt sens pe aceeași dreaptă.', de: 'Norden wäre der andere Richtungssinn auf derselben Geraden.' } }
+]);
+Check($('#c4'), [
+  { q: { ro: 'Două mașini merg cu 90 km/h pe Autostrada Soarelui, una spre București, cealaltă spre Constanța. Ce au la fel?', de: 'Zwei Autos fahren mit 90 km/h auf der A2, eines nach Bukarest, das andere nach Konstanza. Was haben sie gemeinsam?' },
+    o: [{ ro: 'mărimea și direcția, dar nu sensul', de: 'Betrag und Richtung, aber nicht den Richtungssinn' }, { ro: 'toate trei', de: 'alle drei' }, { ro: 'doar mărimea', de: 'nur den Betrag' }], a: 0,
+    why: { ro: 'Au aceeași mărime (90 km/h) și aceeași direcție (autostrada), dar sensuri opuse, deci vitezele lor nu sunt egale.', de: 'Sie haben denselben Betrag (90 km/h) und dieselbe Richtung (die Autobahn), aber entgegengesetzte Richtungssinne, ihre Geschwindigkeiten sind also nicht gleich.' },
+    hint: { ro: 'Drumul e același, dar încotro merg?', de: 'Die Straße ist dieselbe, aber wohin fahren sie?' } },
+  { q: { ro: 'Câte sensuri are o direcție?', de: 'Wie viele Richtungssinne hat eine Richtung?' },
+    o: [{ ro: 'unul', de: 'einen' }, { ro: 'două', de: 'zwei' }, { ro: 'trei', de: 'drei' }], a: 1,
+    why: { ro: 'Pe o dreaptă poți merge spre unul sau spre celălalt capăt.', de: 'Auf einer Geraden kann man zum einen oder zum anderen Ende gehen.' },
+    hint: { ro: 'Gândește-te la „în sus” și „în jos”.', de: 'Denk an „nach oben“ und „nach unten“.' } }
+]);
+
+/* ================= 5. Săgeata vitezei ================= */
+(function () {
+  var svg = $('#cars-svg'), out = $('#cars-out'), sa = $('#va'), sb = $('#vb'), same_ = true, K = 1.8;
+  function car(parent, cx, by, flip) {
+    var g = el('g', { transform: 'translate(' + cx + ',' + (by - 30) + ') scale(' + (flip ? -1 : 1) + ',1)' }, parent);
+    el('rect', { x: -32, y: 8, width: 64, height: 16, rx: 5, fill: '#2f6fd6' }, g);
+    el('polygon', { points: '-18,8 -10,-4 14,-4 24,8', fill: '#2f6fd6' }, g);
+    el('polygon', { points: '-12,7 -8,-1 3,-1 3,7', fill: '#cfe3fb' }, g);
+    el('polygon', { points: '7,7 7,-1 13,-1 19,7', fill: '#cfe3fb' }, g);
+    el('circle', { cx: -18, cy: 24, r: 6, fill: '#1f2530' }, g); el('circle', { cx: 18, cy: 24, r: 6, fill: '#1f2530' }, g);
+    return g;
+  }
+  function draw() {
+    var a = +sa.value, b = +sb.value;
+    $('#vav').textContent = a; $('#vbv').textContent = b;
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 40, width: 640, height: 130, fill: '#6b7280' }, svg);
+    el('line', { x1: 0, y1: 105, x2: 640, y2: 105, stroke: '#fff', 'stroke-width': 3, 'stroke-dasharray': '16 12' }, svg);
+    var ya = 84, yb = same_ ? 84 : 150, xa = 50, xb = same_ ? 330 : 590;
+    car(svg, xa, ya + 20, false); el('text', { x: xa, y: ya - 28, 'text-anchor': 'middle', class: 'lbl', fill: '#fff', style: 'stroke:#1f2530' }, svg, 'A');
+    car(svg, xb, yb + 20, !same_); el('text', { x: xb, y: yb - 28, 'text-anchor': 'middle', class: 'lbl', fill: '#fff', style: 'stroke:#1f2530' }, svg, 'B');
+    arrow(svg, xa, ya + 8, xa + a * K, ya + 8, '#d2452f', 5); el('text', { x: xa + a * K / 2, y: ya + 36, 'text-anchor': 'middle', class: 'lbl sm', fill: '#d2452f' }, svg, 'vA');
+    var dirB = same_ ? 1 : -1;
+    arrow(svg, xb, yb + 8, xb + dirB * b * K, yb + 8, '#f2c744', 5); el('text', { x: xb + dirB * b * K / 2, y: yb + 36, 'text-anchor': 'middle', class: 'lbl sm', fill: '#8a6a00' }, svg, 'vB');
+    var txt = same_ ? (a > b ? tx('Aceeași direcție și același sens. Săgeata lui A e mai lungă: <span class="vec">v</span><sub>A</sub> > <span class="vec">v</span><sub>B</sub>, A este mai rapidă.', 'Gleiche Richtung und gleicher Richtungssinn. Der Pfeil von A ist länger: A ist schneller.') : a < b ? tx('Aceeași direcție și același sens. Săgeata lui B e mai lungă: B este mai rapidă.', 'Gleiche Richtung und gleicher Richtungssinn. Der Pfeil von B ist länger: B ist schneller.') : tx('Mărime, direcție și sens egale: <span class="vec">v</span><sub>A</sub> = <span class="vec">v</span><sub>B</sub>, vitezele sunt egale.', 'Betrag, Richtung und Richtungssinn sind gleich: <span class="vec">v</span><sub>A</sub> = <span class="vec">v</span><sub>B</sub>, die Geschwindigkeiten sind gleich.'))
+      : (a === b ? tx('Aceeași mărime și aceeași direcție, dar sensuri opuse: vitezele sunt diferite!', 'Gleicher Betrag und gleiche Richtung, aber entgegengesetzte Richtungssinne: Die Geschwindigkeiten sind verschieden!') : tx('Aceeași direcție, sensuri opuse și mărimi diferite.', 'Gleiche Richtung, entgegengesetzte Richtungssinne und verschiedene Beträge.'));
+    out.innerHTML = '<span class="rule">' + tx('Lungimea săgeții este proporțională cu mărimea vitezei.', 'Die Länge des Pfeils ist proportional zum Betrag der Geschwindigkeit.') + '</span><span class="eq">' + txt + '</span>';
+    svg.setAttribute('aria-label', tx('Mașina A: ', 'Auto A: ') + a + ' km/h, ' + tx('mașina B: ', 'Auto B: ') + b + ' km/h');
+  }
+  chips($('#vb-sense'), [[1, tx('B merge în același sens', 'B fährt in dieselbe Richtung')], [0, tx('B merge în sens opus', 'B fährt entgegengesetzt')]], 1, function (k) { same_ = +k === 1; draw(); });
+  sa.addEventListener('input', draw); sb.addEventListener('input', draw); draw();
+})();
+(function () {
+  var svg = $('#vec-svg'), out = $('#vec-out'), sl = $('#vec-s'), kind = 'line';
+  var F = {
+    line: function (s) { return { p: [70 + 500 * s, 250 - 180 * s], d: [500, -180] }; },
+    parab: function (s) { return { p: [70 + 500 * s, 250 - 600 * s * (1 - s)], d: [500, -600 * (1 - 2 * s)] }; },
+    circle: function (s) { var a = 2 * Math.PI * s; return { p: [320 + 105 * Math.sin(a), 160 + 105 * Math.cos(a)], d: [105 * Math.cos(a), -105 * Math.sin(a)] }; }
+  };
+  function draw() {
+    var s = +sl.value / 1000, f = F[kind](s), i, pts = [];
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: 640, height: 300, fill: '#f6fbff' }, svg);
+    for (i = 0; i <= 100; i++) pts.push(F[kind](i / 100).p.map(function (n) { return n.toFixed(1); }).join(','));
+    el('polyline', { points: pts.join(' '), fill: 'none', stroke: '#9aa3b2', 'stroke-width': 3, 'stroke-dasharray': '2 7', 'stroke-linecap': 'round' }, svg);
+    var L0 = Math.sqrt(f.d[0] * f.d[0] + f.d[1] * f.d[1]), ux = f.d[0] / L0, uy = f.d[1] / L0, x = f.p[0], y = f.p[1];
+    el('line', { x1: x - ux * 130, y1: y - uy * 130, x2: x + ux * 130, y2: y + uy * 130, stroke: '#2f6fd6', 'stroke-width': 1.5, 'stroke-dasharray': '6 5' }, svg);
+    arrow(svg, x, y, x + ux * 80, y + uy * 80, '#d2452f', 5);
+    el('circle', { cx: x, cy: y, r: 10, fill: '#1f2530', stroke: '#fff', 'stroke-width': 2 }, svg);
+    el('text', { x: x + ux * 90 + (ux >= 0 ? 6 : -6), y: y + uy * 90 + 5, 'text-anchor': ux >= 0 ? 'start' : 'end', class: 'lbl', fill: '#d2452f' }, svg, 'v');
+    var ang = Math.round(Math.atan2(-f.d[1], f.d[0]) * 180 / Math.PI);
+    var note = kind === 'line' ? tx('Direcția rămâne aceeași în toate punctele.', 'Die Richtung bleibt in allen Punkten gleich.') : kind === 'parab' ? tx('Direcția se schimbă: urcă, la vârf e orizontală, apoi coboară.', 'Die Richtung ändert sich: erst aufwärts, am Gipfel waagerecht, dann abwärts.') : tx('Direcția se schimbă continuu, deși mărimea rămâne aceeași.', 'Die Richtung ändert sich ständig, obwohl der Betrag gleich bleibt.');
+    out.innerHTML = '<span class="eq">' + tx('Direcția vitezei', 'Richtung der Geschwindigkeit') + ': ' + ang + '° ' + tx('față de orizontală', 'gegenüber der Waagerechten') + '</span><span class="rule">' + note + '</span><span class="rule">' + tx('Săgeata este mereu tangentă la traiectorie (linia albastră întreruptă).', 'Der Pfeil ist immer tangential zur Bahn (gestrichelte blaue Linie).') + '</span>';
+    svg.setAttribute('aria-label', tx('Viteza tangentă la traiectorie, ', 'Geschwindigkeit tangential zur Bahn, ') + ang + '°');
+  }
+  playBtn($('#vec-play'), sl, 170, draw);
+  chips($('#path-chips'), [['line', tx('rectilinie', 'geradlinig')], ['parab', tx('curbilinie (săritură)', 'krummlinig (Sprung)')], ['circle', tx('circulară', 'kreisförmig')]], 'line', function (k) { kind = k; draw(); });
+  sl.addEventListener('input', draw); draw();
+})();
+Check($('#c5'), [
+  { q: { ro: 'Un mobil parcurge o curbă păstrând aceeași mărime a vitezei. Viteza lui este constantă?', de: 'Ein Körper durchläuft eine Kurve mit gleichbleibendem Betrag der Geschwindigkeit. Ist seine Geschwindigkeit konstant?' },
+    o: [{ ro: 'Da, mărimea e aceeași', de: 'Ja, der Betrag ist gleich' }, { ro: 'Nu, direcția se schimbă, deci viteza se schimbă', de: 'Nein, die Richtung ändert sich, also ändert sich die Geschwindigkeit' }], a: 1,
+    why: { ro: 'Viteza are mărime și orientare. Dacă direcția se schimbă, viteza nu mai este aceeași, chiar dacă mărimea rămâne.', de: 'Die Geschwindigkeit hat Betrag und Ausrichtung. Ändert sich die Richtung, ist die Geschwindigkeit nicht mehr dieselbe, auch wenn der Betrag bleibt.' },
+    hint: { ro: 'Uită-te la săgeată pe cercul de mai sus: arată mereu în același loc?', de: 'Sieh dir den Pfeil auf dem Kreis oben an: Zeigt er immer in dieselbe Richtung?' } },
+  { q: { ro: 'Cum este orientată viteza față de traiectorie?', de: 'Wie ist die Geschwindigkeit zur Bahn ausgerichtet?' },
+    o: [{ ro: 'tangentă la traiectorie', de: 'tangential zur Bahn' }, { ro: 'perpendiculară pe traiectorie', de: 'senkrecht zur Bahn' }, { ro: 'în sens opus mișcării', de: 'entgegen der Bewegung' }], a: 0,
+    why: { ro: 'Viteza arată direcția în care se mișcă mobilul în acel punct, adică tangenta la traiectorie.', de: 'Die Geschwindigkeit zeigt die Richtung, in die sich der Körper in diesem Punkt bewegt, also die Tangente an die Bahn.' },
+    hint: { ro: 'Mingea ar zbura în direcția în care se mișca exact în acel punct.', de: 'Der Ball würde genau in die Richtung fliegen, in die er sich in diesem Punkt bewegte.' } }
+]);
+
+/* ================= 6. Fixare ================= */
+(function () {
+  var host = $('#conv-table'), R = [['v₁', '5 m/s', tx('spre A', 'nach A'), 5], ['v₂', '18 km/h', tx('spre B', 'nach B'), 5], ['v₃', '54 km/h', tx('spre A', 'nach A'), 15], ['v₄', '20 m/s', tx('spre A', 'nach A'), 20], ['v₅', '72 km/h', tx('spre B', 'nach B'), 20]];
+  var okc = 0, done = h('div', 'result good'); done.hidden = true; done.setAttribute('aria-live', 'polite');
+  R.forEach(function (r) {
+    var row = h('div', 'cvrow'), ia = h('input', 'vin'), was = false;
+    ia.type = 'text'; ia.inputMode = 'decimal'; ia.setAttribute('aria-label', r[0] + ' m/s');
+    row.appendChild(h('span', 'what', r[0] + ' = ' + r[1] + ', ' + r[2])); row.appendChild(h('span', '', '= ')); row.appendChild(ia); row.appendChild(h('span', '', 'm/s'));
+    function chk() {
+      if (ia.value.trim() === '') { ia.className = 'vin'; return; }
+      var ok = same(num(ia.value), r[3]);
+      ia.className = 'vin ' + (ok ? 'ok' : 'bad');
+      if (ok && !was) { was = true; okc++; } else if (!ok && was) { was = false; okc--; }
+      if (okc === R.length) { done.hidden = false; done.innerHTML = tx('🎉 Toate corecte! Observă: v₁ și v₂ au aceeași mărime (5 m/s), dar sensuri opuse, deci vitezele lor sunt diferite. La fel v₄ și v₅ (20 m/s).', '🎉 Alles richtig! Beachte: v₁ und v₂ haben denselben Betrag (5 m/s), aber entgegengesetzte Richtungssinne, ihre Geschwindigkeiten sind also verschieden. Ebenso v₄ und v₅ (20 m/s).'); } else done.hidden = true;
+    }
+    ia.addEventListener('input', chk); host.appendChild(row);
+  });
+  host.appendChild(h('p', 'hint', tx('Indiciu: din km/h în m/s se împarte la 3,6.', 'Tipp: Von km/h in m/s wird durch 3,6 geteilt.')));
+  host.appendChild(done);
+})();
+(function () {
+  var svg = $('#rd-svg'), form = $('#rd-form'), cur;
+  var CX = 320, CY = 165, R = 130, K = 26;
+  var S = [[tx('Nord', 'Norden'), 0, -1], [tx('Sud', 'Süden'), 0, 1], [tx('Est', 'Osten'), 1, 0], [tx('Vest', 'Westen'), -1, 0]];
+  function newVec() { cur = { s: rint(0, 3), m: rint(1, 5) * 10 }; render(); }
+  function render() {
+    var v = S[cur.s], len = cur.m / 10 * K, i;
+    svg.innerHTML = '';
+    el('circle', { cx: CX, cy: CY, r: R + 6, fill: '#f6fbff', stroke: '#9aa3b2', 'stroke-width': 2 }, svg);
+    el('line', { x1: CX, y1: CY - R, x2: CX, y2: CY + R, stroke: '#cdd3dc', 'stroke-width': 1.5 }, svg);
+    el('line', { x1: CX - R, y1: CY, x2: CX + R, y2: CY, stroke: '#cdd3dc', 'stroke-width': 1.5 }, svg);
+    for (i = 1; i <= 5; i++) el('circle', { cx: CX, cy: CY, r: i * K, fill: 'none', stroke: '#e8e6dc', 'stroke-width': 1 }, svg);
+    [['N', 0, -R - 14], ['S', 0, R + 26], [tx('E', 'O'), R + 16, 6], [tx('V', 'W'), -R - 16, 6]].forEach(function (l) { el('text', { x: CX + l[1], y: CY + l[2], 'text-anchor': 'middle', style: 'font:800 19px var(--display)' }, svg, l[0]); });
+    for (i = 1; i <= cur.m / 10; i++) el('circle', { cx: CX + v[1] * i * K, cy: CY + v[2] * i * K, r: 3, fill: '#fff', stroke: '#8a5a00', 'stroke-width': 1.5 }, svg);
+    arrow(svg, CX, CY, CX + v[1] * len, CY + v[2] * len, '#d2452f', 6);
+    el('circle', { cx: CX, cy: CY, r: 8, fill: '#1f2530' }, svg);
+    el('text', { x: 20, y: 326, class: 'lbl sm' }, svg, tx('1 segment = 10 km/h', '1 Abschnitt = 10 km/h'));
+    form.innerHTML = '';
+    var box = h('div', 'rdf'), l1 = h('label', '', tx('Direcția', 'Richtung')), s1 = h('select'), l2 = h('label', '', tx('Sensul', 'Richtungssinn')), s2 = h('select'), l3 = h('label', '', tx('Mărimea (km/h)', 'Betrag (km/h)')), ia = h('input', 'vin');
+    [['…', ''], [tx('Nord–Sud', 'Nord–Süd'), 'v'], [tx('Est–Vest', 'Ost–West'), 'h']].forEach(function (o) { var op = h('option', '', o[0]); op.value = o[1]; s1.appendChild(op); });
+    [['…', '']].concat(S.map(function (x, k) { return [tx('spre ', 'nach ') + x[0], String(k)]; })).forEach(function (o) { var op = h('option', '', o[0]); op.value = o[1]; s2.appendChild(op); });
+    ia.type = 'text'; ia.inputMode = 'numeric';
+    l1.appendChild(s1); l2.appendChild(s2); l3.appendChild(ia);
+    var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
+    var act = h('div', 'actions'), c = h('button', 'btn', tx('Verifică', 'Prüfen')), nx = h('button', 'btn ghost', tx('Altă săgeată', 'Neuer Pfeil') + ' →'); c.type = nx.type = 'button';
+    act.appendChild(c); act.appendChild(nx);
+    box.appendChild(l1); box.appendChild(l2); box.appendChild(l3); box.appendChild(act); box.appendChild(res); form.appendChild(box);
+    c.onclick = function () {
+      var d1 = s1.value === (v[1] === 0 ? 'v' : 'h'), d2 = s2.value === String(cur.s), d3 = same(num(ia.value), cur.m);
+      s1.className = d1 ? 'ok' : 'bad'; s2.className = d2 ? 'ok' : 'bad'; ia.className = 'vin ' + (d3 ? 'ok' : 'bad');
+      res.hidden = false;
+      if (d1 && d2 && d3) { res.className = 'result good'; res.textContent = '🎉 ' + tx('Corect: direcția ', 'Richtig: Richtung ') + (v[1] === 0 ? tx('Nord–Sud', 'Nord–Süd') : tx('Est–Vest', 'Ost–West')) + ', ' + tx('sensul spre ', 'Richtungssinn nach ') + v[0] + ', ' + cur.m + ' km/h.'; }
+      else { res.className = 'result try'; res.textContent = tx('Aproape! Verifică: ', 'Fast! Prüfe: ') + (d1 ? '' : tx('direcția (pe ce dreaptă este săgeata?) ', 'die Richtung (auf welcher Geraden liegt der Pfeil?) ')) + (d2 ? '' : tx('sensul (încotro arată vârful?) ', 'den Richtungssinn (wohin zeigt die Spitze?) ')) + (d3 ? '' : tx('mărimea (numără segmentele și înmulțește cu 10).', 'den Betrag (zähle die Abschnitte und multipliziere mit 10).')); }
+    };
+    nx.onclick = newVec;
+  }
+  newVec();
+})();
+Drill($('#drill'), {
+  medie: function () { var t = rint(2, 6), v = rint(4, 24) * 5, d = v * t; return { q: tx('O mașină parcurge ' + d + ' km în ' + t + ' h. Care este viteza medie, în km/h?', 'Ein Auto legt ' + d + ' km in ' + t + ' h zurück. Wie groß ist die mittlere Geschwindigkeit in km/h?'), a: v, u: 'km/h', s: 'v = d : Δt = ' + d + ' : ' + t + ' = ' + v + ' km/h', hint: tx('v = d : Δt', 'v = d : Δt') }; },
+  dist: function () { var v = rint(2, 9), t = rint(5, 60); return { q: tx('Un biciclist merge cu ' + v + ' m/s timp de ' + t + ' s. Ce distanță parcurge, în metri?', 'Ein Radfahrer fährt ' + t + ' s lang mit ' + v + ' m/s. Welche Strecke legt er zurück, in Metern?'), a: v * t, u: 'm', s: 'd = v · Δt = ' + v + ' · ' + t + ' = ' + v * t + ' m', hint: tx('d = v · Δt', 'd = v · Δt') }; },
+  durata: function () { var v = [60, 90, 120][rint(0, 2)], tm = rint(2, 9) * 10, d = v * tm / 60; return { q: tx('Un tren cu viteza medie de ' + v + ' km/h parcurge ' + d + ' km. Cât durează drumul, în minute?', 'Ein Zug mit einer mittleren Geschwindigkeit von ' + v + ' km/h legt ' + d + ' km zurück. Wie lange dauert die Fahrt, in Minuten?'), a: tm, u: 'min', s: 'Δt = d : v = ' + d + ' : ' + v + ' = ' + r2(tm / 60) + ' h = ' + tm + ' min', hint: tx('Δt = d : v; apoi transformă orele în minute (înmulțești cu 60).', 'Δt = d : v; rechne dann Stunden in Minuten um (mal 60).') }; },
+  kmh: function () { var k = rint(1, 8) * 18; return { q: tx('Transformă ' + k + ' km/h în m/s.', 'Rechne ' + k + ' km/h in m/s um.'), a: k / 3.6, u: 'm/s', s: k + ' : 3,6 = ' + k / 3.6 + ' m/s', hint: tx('Din km/h în m/s se împarte la 3,6.', 'Von km/h in m/s wird durch 3,6 geteilt.') }; },
+  ms: function () { var m = rint(1, 7) * 5; return { q: tx('Transformă ' + m + ' m/s în km/h.', 'Rechne ' + m + ' m/s in km/h um.'), a: m * 3.6, u: 'km/h', s: m + ' · 3,6 = ' + r2(m * 3.6) + ' km/h', hint: tx('Din m/s în km/h se înmulțește cu 3,6.', 'Von m/s in km/h wird mit 3,6 multipliziert.') }; }
+});
+
+Gloss($('#gloss'), [
+  ['viteză', 'Geschwindigkeit'], ['viteza medie', 'mittlere Geschwindigkeit'], ['viteza momentană', 'Momentangeschwindigkeit'], ['vitezometru', 'Tachometer'],
+  ['metru pe secundă', 'Meter pro Sekunde'], ['kilometru pe oră', 'Kilometer pro Stunde'], ['nod (unitate)', 'Knoten (Einheit)'], ['direcție', 'Richtung'],
+  ['sens', 'Richtungssinn'], ['mărime (valoare)', 'Betrag'], ['punct de aplicație', 'Angriffspunkt'], ['tangentă', 'Tangente'], ['scară', 'Maßstab'], ['raport', 'Verhältnis'], ['durată', 'Dauer']
+]);
+
+})();
+</script>
+</body>
+</html>
