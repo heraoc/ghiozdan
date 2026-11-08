@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sistemul digestiv la om</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Das Verdauungssystem des Menschen';
+})();
+</script>
+<style>
+:root{
+  --paper:#f5f7f0; --card:#ffffff; --ink:#1c2a22; --muted:#56655b; --rule:#dde4d6; --sheet:#eef3e6;
+  --accent:#27a36f; --accent-soft:#e3f5ec;
+  --good:#27a36f; --good-soft:#e6f6ee; --bad:#d64545; --bad-soft:#fdeaea;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+button:focus-visible,.part:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.term{font-style:italic;color:var(--muted);font-weight:400}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.sub-h{font-size:22px;margin:28px 0 6px}
+.hint{font-size:14.5px;color:var(--muted)}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.score{font-weight:700}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:10px}
+.fig svg{display:block;width:100%;height:auto}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:20px;align-items:start}
+.desc{border-left:4px solid var(--c,var(--rule));background:var(--sheet);border-radius:8px;padding:12px 16px;min-height:96px}
+.desc h3{font-size:21px}
+.desc p{margin-top:4px}
+.tag{display:inline-block;font:700 12px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;border-radius:99px;padding:4px 9px;background:var(--card);border:1px solid var(--rule);color:var(--muted);margin-left:6px;vertical-align:3px}
+.tag.gl{background:#fff3d1;border-color:#ecd08a;color:#7a5a00}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #b9c7ad;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .opts button{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px;text-align:left}
+.cq .opts button:hover:not(:disabled){border-color:var(--muted)}
+.cq .opts button.right{border-color:var(--good);background:var(--good);color:#fff}
+.cq .opts button.wrong{border-color:var(--bad);color:#b02e2e;background:var(--bad-soft)}
+.cq .why{font-size:15px;color:var(--muted)}
+.cq.done .q::before{content:"✓ ";color:var(--good)}
+
+/* desene interactive */
+.part{cursor:pointer;transition:opacity .25s}
+svg.sel .part:not(.hi){opacity:.2}
+.part:hover{filter:brightness(1.06)}
+.legend{display:grid;gap:3px;margin-bottom:12px}
+.legend button{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:center;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:8px;padding:5px 8px;cursor:pointer}
+.legend button:hover{background:var(--sheet)}
+.legend button[aria-pressed="true"]{border-color:var(--ink);background:var(--sheet)}
+.legend i{width:16px;height:16px;border-radius:5px;background:var(--c)}
+.legend .name{font-weight:700;line-height:1.2}
+.legend .name .term{display:block;font-size:14px}
+.mode{display:inline-flex;border:1.5px solid var(--rule);border-radius:99px;overflow:hidden;margin-bottom:10px}
+.mode button{border:0;background:transparent;padding:6px 14px;cursor:pointer;font-weight:700;font-size:15px}
+.mode button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.find{display:grid;gap:8px}
+.find .ask{font-size:20px;font-family:var(--display);font-weight:800}
+.tick{color:var(--good)} .cross{color:var(--bad)}
+.pgs{display:flex;flex-wrap:wrap;gap:6px}
+.pgs i{width:22px;height:8px;border-radius:4px;background:var(--rule)}
+.pgs i.on{background:var(--ink)}
+.bolus{transition:transform .9s ease-in-out}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{border:1.5px solid var(--ink);background:#fff;border-radius:99px;padding:5px 14px;cursor:pointer;font-weight:700;font-size:15.5px}
+.pill[aria-pressed="true"]{background:var(--ink);color:#fff}
+.pill.placed{border-color:var(--good);background:var(--good-soft);cursor:default;font-weight:500}
+.lbl{font:700 15px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+
+/* sortări */
+.sorter{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:10px;margin-top:12px}
+.org{background:var(--card);border:1.5px solid var(--rule);border-radius:10px;padding:12px 14px;display:grid;gap:8px;align-content:start}
+.org .top{display:flex;gap:10px;align-items:center}
+.org .emo{font-size:30px;line-height:1;width:40px;text-align:center}
+.org h4{margin:0;font:700 16.5px/1.25 var(--body)}
+.org .opts{display:flex;gap:6px;flex-wrap:wrap}
+.org .why{font-size:14.5px;color:var(--muted)}
+.org.done{border-color:var(--good)}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#b02e2e;background:var(--bad-soft)}
+
+/* nutrimente */
+.puzzle{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.puzzle button{border:2px solid var(--c);background:var(--card);border-radius:12px;padding:10px 8px;cursor:pointer;font:800 17px var(--display);color:var(--c);display:grid;gap:2px;justify-items:center}
+.puzzle button[aria-pressed="true"]{background:var(--c);color:#fff}
+.puzzle .e{font-size:26px;line-height:1.1}
+
+/* dinți / vilozități */
+.toggle{border:1.5px solid var(--ink);background:transparent;border-radius:99px;padding:6px 14px;cursor:pointer;font-weight:700}
+.toggle[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.bar{height:16px;border-radius:8px;background:var(--sheet);overflow:hidden;border:1px solid var(--rule)}
+.bar > i{display:block;height:100%;background:var(--accent);transition:width .5s}
+.bar-row{display:grid;gap:4px;margin-top:10px}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Biologie · Clasa a 6-a · Hrănirea în lumea vie</span><span class="de">Biologie · Klasse 6 · Ernährung in der lebenden Welt</span></p>
+  <h1><span class="ro">Sistemul digestiv la om</span><span class="de">Das Verdauungssystem des Menschen</span></h1>
+  <p class="lead">
+    <span class="ro">Care este drumul hranei prin corpul nostru și ce i se întâmplă pe parcurs? Mergi pas cu pas de la gură până la anus, află ce sunt nutrimentele și cum ajung ele în sânge.</span>
+    <span class="de">Welchen Weg nimmt die Nahrung durch unseren Körper und was geschieht unterwegs mit ihr? Geh Schritt für Schritt vom Mund bis zum After, erfahre, was Nährstoffe sind und wie sie ins Blut gelangen.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">De ce trebuie mâncarea „digerată”? Nu ar putea ajunge întreagă în sânge?</span><span class="de">Warum muss das Essen „verdaut“ werden? Könnte es nicht ganz ins Blut gelangen?</span></li>
+        <li><span class="ro">De ce ne dor uneori stomacul și burta după ce mâncăm prea repede?</span><span class="de">Warum tun uns manchmal Magen und Bauch weh, wenn wir zu schnell essen?</span></li>
+        <li><span class="ro">Ce face pâinea să aibă gust dulce dacă o ții mult în gură?</span><span class="de">Warum schmeckt Brot süß, wenn man es lange im Mund behält?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Organele</span><span class="de">Die Organe</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Drumul hranei</span><span class="de">Der Weg der Nahrung</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Dinții</span><span class="de">Die Zähne</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Nutrimentele</span><span class="de">Die Nährstoffe</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Digestia</span><span class="de">Die Verdauung</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Absorbția</span><span class="de">Die Aufnahme</span></a>
+    <a href="#s7"><b>7</b><span class="ro">Fixare</span><span class="de">Festigen</span></a>
+  </nav>
+</header>
+
+<!-- 1. Organele -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Tubul digestiv și glandele anexe</span><span class="de">Verdauungskanal und Anhangsdrüsen</span></h2>
+  <p class="section-sub"><span class="ro">Sistemul digestiv are două părți: <b>tubul digestiv</b>, prin care trece hrana, și <b>glandele anexe</b>, prin care hrana nu trece, dar care îi trimit sucuri digestive. Apasă pe un organ din desen sau din listă.</span><span class="de">Das Verdauungssystem hat zwei Teile: den <b>Verdauungskanal</b>, durch den die Nahrung geht, und die <b>Anhangsdrüsen</b>, durch die sie nicht geht, die ihr aber Verdauungssäfte liefern. Tippe auf ein Organ im Bild oder in der Liste.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="body1" viewBox="0 0 440 560" role="img" aria-label="Sistemul digestiv al omului: gura, faringele, esofagul, stomacul, intestinele, ficatul și pancreasul"></svg></div>
+    <div>
+      <div class="mode" role="group" aria-label="Mod">
+        <button type="button" id="m-explore" aria-pressed="true"><span class="ro">Explorează</span><span class="de">Erkunden</span></button>
+        <button type="button" id="m-find" aria-pressed="false"><span class="ro">Găsește pe desen</span><span class="de">Finde es im Bild</span></button>
+      </div>
+      <div id="explore">
+        <div class="legend" id="legend1"></div>
+        <div class="desc" id="desc1" aria-live="polite"></div>
+      </div>
+      <div id="findbox" class="find" hidden>
+        <p class="ask" id="ask1"></p>
+        <p class="score" id="find-msg" aria-live="polite"></p>
+        <div class="actions"><button type="button" class="btn ghost" id="find-skip"><span class="ro">Alt organ</span><span class="de">Anderes Organ</span></button></div>
+      </div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro">Tubul digestiv e <b>deschis spre exterior</b> prin două orificii: gura și anusul.</span><span class="de">Der Verdauungskanal ist durch zwei Öffnungen <b>nach außen offen</b>: Mund und After.</span></li>
+      <li><span class="ro">Glande anexe: <b>glandele salivare, ficatul și pancreasul</b>. Hrana nu trece prin ele.</span><span class="de">Anhangsdrüsen: <b>Speicheldrüsen, Leber und Bauchspeicheldrüse</b>. Die Nahrung geht nicht durch sie hindurch.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c1"></div>
+</section>
+
+<!-- 2. Drumul hranei -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Drumul hranei prin tubul digestiv</span><span class="de">Der Weg der Nahrung durch den Verdauungskanal</span></h2>
+  <p class="section-sub"><span class="ro">Urmărește un „bol alimentar” (un dumicat) de la gură la anus. Apasă „Pasul următor” și vezi ce i se întâmplă în fiecare organ.</span><span class="de">Verfolge einen „Speisebrei“ (einen Bissen) vom Mund bis zum After. Tippe auf „Nächster Schritt“ und sieh, was in jedem Organ mit ihm geschieht.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="body2" viewBox="0 0 440 560" role="img" aria-label="Drumul unui dumicat prin tubul digestiv"></svg></div>
+    <div>
+      <div class="desc" id="desc2" aria-live="polite"></div>
+      <div class="actions">
+        <button type="button" class="btn ghost" id="st-prev"><span class="ro">Înapoi</span><span class="de">Zurück</span></button>
+        <button type="button" class="btn" id="st-next"><span class="ro">Pasul următor</span><span class="de">Nächster Schritt</span></button>
+        <button type="button" class="btn ghost" id="st-reset"><span class="ro">De la început</span><span class="de">Von vorn</span></button>
+      </div>
+      <div class="pgs" id="pgs" style="margin-top:12px" aria-hidden="true"></div>
+    </div>
+  </div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Dinții -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Dinții: patru tipuri, patru roluri</span><span class="de">Die Zähne: vier Typen, vier Aufgaben</span></h2>
+  <p class="section-sub"><span class="ro">Prima transformare a hranei are loc în gură, cu dinții. Apasă pe un tip de dinte în desen sau în listă și află ce face.</span><span class="de">Die erste Verarbeitung der Nahrung geschieht im Mund, mit den Zähnen. Tippe im Bild oder in der Liste auf einen Zahntyp und erfahre, was er tut.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="teeth" viewBox="0 0 440 330" role="img" aria-label="Arcada dentară cu cele patru tipuri de dinți"></svg></div>
+    <div>
+      <div class="legend" id="legend3"></div>
+      <div class="desc" id="desc3" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Nutrimentele -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Ce ne dau alimentele: substanțele hrănitoare</span><span class="de">Was uns die Nahrung gibt: die Nährstoffe</span></h2>
+  <p class="section-sub"><span class="ro">Corpul are nevoie de șase tipuri de substanțe hrănitoare, ca piesele unui puzzle. Apasă pe fiecare și vezi la ce folosește.</span><span class="de">Der Körper braucht sechs Arten von Nährstoffen, wie die Teile eines Puzzles. Tippe auf jeden und sieh, wozu er dient.</span></p>
+  <div class="puzzle" id="puzzle"></div>
+  <div class="desc" id="desc4" style="margin-top:12px" aria-live="polite"></div>
+  <h3 class="sub-h"><span class="ro">Ce conține predominant?</span><span class="de">Was enthält es überwiegend?</span></h3>
+  <p class="hint"><span class="ro">Cele mai multe alimente conțin mai multe substanțe. Alege-o pe cea care predomină.</span><span class="de">Die meisten Lebensmittel enthalten mehrere Stoffe. Wähle den, der überwiegt.</span></p>
+  <div class="sorter" id="foods"></div>
+  <p class="score" id="foods-score" style="margin-top:10px" aria-live="polite"></p>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro"><b>Proteinele</b> sunt substanțe „de construcție”: din ele sunt făcute celulele. <b>Glucidele</b> (zaharurile) sunt prima sursă de energie. <b>Lipidele</b> (grăsimile) dau tot energie, iar corpul le depozitează în țesutul adipos.</span><span class="de"><b>Eiweiße</b> sind „Baustoffe“: Aus ihnen bestehen die Zellen. <b>Kohlenhydrate</b> (Zucker) sind die erste Energiequelle. <b>Fette</b> liefern ebenfalls Energie, der Körper speichert sie im Fettgewebe.</span></li>
+      <li><span class="ro">Corpul nostru conține 50–60% apă.</span><span class="de">Unser Körper enthält 50–60 % Wasser.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 5. Digestia -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Digestia: transformări fizice și chimice</span><span class="de">Die Verdauung: physikalische und chemische Vorgänge</span></h2>
+  <p class="section-sub"><span class="ro">Hrana conține substanțe prea mari pentru a trece în sânge. Digestia le transformă în <b>nutrimente</b> simple. Sunt două feluri de transformări: <b>fizice</b> (hrana își schimbă doar forma sau aspectul) și <b>chimice</b> (substanțele se descompun, cu ajutorul <b>enzimelor</b>).</span><span class="de">Die Nahrung enthält Stoffe, die zu groß sind, um ins Blut zu gelangen. Die Verdauung zerlegt sie in einfache <b>Nährstoffe</b>. Es gibt zwei Arten von Vorgängen: <b>physikalische</b> (die Nahrung ändert nur Form oder Aussehen) und <b>chemische</b> (Stoffe werden mithilfe von <b>Enzymen</b> zerlegt).</span></p>
+  <h3 class="sub-h"><span class="ro">a) Fizică sau chimică?</span><span class="de">a) Physikalisch oder chemisch?</span></h3>
+  <div class="sorter" id="fc"></div>
+  <p class="score" id="fc-score" style="margin-top:10px" aria-live="polite"></p>
+  <h3 class="sub-h"><span class="ro">b) Din ce rezultă ce?</span><span class="de">b) Woraus wird was?</span></h3>
+  <div class="check" id="c5"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro">Transformări <b>fizice</b>: zdrobire, mărunțire, amestecare, dizolvare. Transformări <b>chimice</b>: descompunerea hranei în nutrimente simple, cu ajutorul enzimelor.</span><span class="de"><b>Physikalische</b> Vorgänge: Zerkleinern, Zerreiben, Vermischen, Auflösen. <b>Chemische</b> Vorgänge: Zerlegung der Nahrung in einfache Nährstoffe mithilfe von Enzymen.</span></li>
+      <li><span class="ro">Proteine → <b>aminoacizi</b>. Lipide → <b>acizi grași și glicerol</b>. Glucide → <b>glucoză</b>.</span><span class="de">Eiweiße → <b>Aminosäuren</b>. Fette → <b>Fettsäuren und Glycerin</b>. Kohlenhydrate → <b>Traubenzucker (Glukose)</b>.</span></li>
+      <li><span class="ro">Apa, vitaminele și mineralele nu se digeră: sunt gata de absorbție.</span><span class="de">Wasser, Vitamine und Mineralstoffe werden nicht verdaut: Sie sind sofort aufnahmebereit.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 6. Absorbția -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Absorbția: nutrimentele intră în sânge</span><span class="de">Die Aufnahme: Nährstoffe gelangen ins Blut</span></h2>
+  <p class="section-sub"><span class="ro">Preluarea nutrimentelor în sânge se numește <b>absorbție</b> și are loc în intestinul subțire. Apasă „Mărește suprafața” și vezi cum o rezolvă peretele intestinului.</span><span class="de">Die Aufnahme der Nährstoffe ins Blut heißt <b>Absorption</b> und findet im Dünndarm statt. Tippe auf „Fläche vergrößern“ und sieh, wie die Darmwand das löst.</span></p>
+  <div class="split">
+    <div>
+      <div class="fig"><svg id="villus" viewBox="0 0 440 330" role="img" aria-label="Peretele intestinului subțire cu vilozități"></svg></div>
+      <div class="actions"><button type="button" class="toggle" id="vil-toggle" aria-pressed="false"><span class="ro">Mărește suprafața</span><span class="de">Fläche vergrößern</span></button></div>
+      <div class="bar-row">
+        <span class="hint"><span class="ro">Suprafața de absorbție</span><span class="de">Aufnahmefläche</span></span>
+        <div class="bar"><i id="vil-bar" style="width:3%"></i></div>
+        <span class="score" id="vil-txt" aria-live="polite"></span>
+      </div>
+    </div>
+    <div>
+      <div class="legend" id="legend6"></div>
+      <div class="desc" id="desc6" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro">Intestinul subțire are pereți cu <b>vilozități intestinale</b>. Ele măresc suprafața de absorbție de aproximativ 600 de ori. Prin capilarele sanguine și vasele limfatice, nutrimentele intră în circulație.</span><span class="de">Der Dünndarm hat Wände mit <b>Darmzotten</b>. Sie vergrößern die Aufnahmefläche etwa um das 600-Fache. Über Blutkapillaren und Lymphgefäße gelangen die Nährstoffe in den Kreislauf.</span></li>
+      <li><span class="ro">În <b>intestinul gros</b> se absoarbe cea mai mare parte din apă. Produsele nedigerate sunt degradate de bacterii (fermentație și putrefacție), apoi rezultă <b>materiile fecale</b>, eliminate prin <b>defecație</b>.</span><span class="de">Im <b>Dickdarm</b> wird der größte Teil des Wassers aufgenommen. Unverdaute Reste werden von Bakterien abgebaut (Gärung und Fäulnis), dabei entsteht der <b>Stuhl (Kot)</b>, der durch die <b>Darmentleerung</b> ausgeschieden wird.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c6"></div>
+</section>
+
+<!-- 7. Fixare -->
+<section class="block" id="s7" aria-labelledby="t7">
+  <h2 class="section-title" id="t7"><span class="step">7</span><span class="ro">Fixare: pune în ordine și potrivește</span><span class="de">Festigen: Ordne und ordne zu</span></h2>
+  <p class="section-sub"><span class="ro">Apasă organele în ordinea în care trece hrana prin ele, de la început la sfârșit.</span><span class="de">Tippe die Organe in der Reihenfolge an, in der die Nahrung durch sie hindurchgeht, vom Anfang bis zum Ende.</span></p>
+  <div class="chiprow" id="order-bank" aria-label="Organe"></div>
+  <p class="score" id="order-msg" style="margin-top:10px" aria-live="polite"></p>
+  <div class="chiprow" id="order-done" aria-label="Ordinea ta"></div>
+  <div class="check" id="c7"></div>
+</section>
+
+<section class="block" aria-labelledby="t9">
+  <h2 class="section-title" id="t9"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <div class="gloss-head" style="margin-top:14px"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După manualul de Biologie, clasa a 6-a, lecțiile „Sistemul digestiv la om” și „Digestia la om”. Termenii germani sunt cei uzuali; verifică-i cu cei din caiet. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Biologiebuch der 6. Klasse, den Lektionen „Sistemul digestiv la om“ und „Digestia la om“. Die deutschen Begriffe sind die gängigen; vergleiche sie mit denen im Heft. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+
+/** Întrebări scurte cu răspuns imediat. items: [{q, o:[..], a, why, hint?}] */
+function Check(host, items, title) {
+  host.appendChild(h('h3', '', title || tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); box.classList.add('done'); why.textContent = T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = it.hint ? T(it.hint) : tx('Nu chiar. Mai încearcă.', 'Nicht ganz. Versuch es nochmal.'); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/** Sortare: fiecare card cu 2–4 variante. items: [emoji, nume, cheie, explicație]; options: [[cheie, text]] */
+function Sorter(host, scoreEl, items, options, wrongMsg) {
+  var right = 0, done = 0;
+  items.forEach(function (o) {
+    var card = h('div', 'org'), top = h('div', 'top'), opts = h('div', 'opts'), why = h('p', 'why');
+    why.setAttribute('aria-live', 'polite');
+    top.appendChild(h('span', 'emo', o[0])); top.lastChild.setAttribute('aria-hidden', 'true');
+    top.appendChild(h('h4', '', T(o[1]))); card.appendChild(top);
+    var first = true;
+    var bs = options.map(function (c) {
+      var b = btn('pick', T(c[1]));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (c[0] === o[2]) {
+          b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; });
+          card.classList.add('done'); why.textContent = T(o[3]); done++; if (first) right++;
+          scoreEl.textContent = done === items.length
+            ? tx('Gata! Corect din prima: ' + right + ' din ' + items.length + '.', 'Fertig! Beim ersten Versuch richtig: ' + right + ' von ' + items.length + '.')
+            : tx('Ai sortat ' + done + ' din ' + items.length + '.', 'Du hast ' + done + ' von ' + items.length + ' zugeordnet.');
+        } else { b.classList.add('wrong'); first = false; why.textContent = T(wrongMsg); }
+      };
+      opts.appendChild(b); return b;
+    });
+    card.appendChild(opts); card.appendChild(why); host.appendChild(card);
+  });
+}
+
+/* ============ organele: date comune ============ */
+var PARTS = [
+  { k: 'mouth', c: '#e07a7a', gl: false, n: { ro: 'Cavitatea bucală', de: 'Mundhöhle' },
+    d: { ro: 'Aici sunt dinții și limba, organe importante pentru masticație (mestecare) și deglutiție (înghițire). Primește saliva de la glandele salivare.', de: 'Hier liegen Zähne und Zunge, wichtige Organe fürs Kauen (Mastikation) und Schlucken (Deglutition). Sie bekommt den Speichel von den Speicheldrüsen.' } },
+  { k: 'sal', c: '#e8a23a', gl: true, n: { ro: 'Glandele salivare', de: 'Speicheldrüsen' },
+    d: { ro: 'Eliberează saliva în cavitatea bucală, prin canale. Glandă anexă: hrana nu trece prin ea.', de: 'Sie geben den Speichel über Kanäle in die Mundhöhle ab. Anhangsdrüse: Die Nahrung geht nicht durch sie hindurch.' } },
+  { k: 'phar', c: '#d98a8a', gl: false, n: { ro: 'Faringele', de: 'Rachen' },
+    d: { ro: 'Este locul de înghițire și intersecția căilor digestive cu cele respiratorii.', de: 'Hier wird geschluckt, und hier kreuzen sich Speise- und Atemwege.' } },
+  { k: 'eso', c: '#c96f7a', gl: false, n: { ro: 'Esofagul', de: 'Speiseröhre' },
+    d: { ro: 'Un tub cu pereți musculoși. Mișcările lui împing conținutul spre stomac.', de: 'Ein Schlauch mit Muskelwänden. Seine Bewegungen schieben den Inhalt zum Magen.' } },
+  { k: 'sto', c: '#d9534f', gl: false, n: { ro: 'Stomacul', de: 'Magen' },
+    d: { ro: 'Stă în partea stângă a cavității abdominale. E un săculeț cu trei straturi de mușchi, iar glandele din el produc sucul gastric. Hrana intră prin orificiul cardia și iese prin orificiul pilor; ambele au sfinctere (mușchi circulari).', de: 'Er liegt in der linken Bauchhöhle. Er ist ein Säckchen mit drei Muskelschichten, und seine Drüsen bilden den Magensaft. Die Nahrung tritt durch den Mageneingang (Kardia) ein und durch den Magenpförtner (Pylorus) aus; beide haben Schließmuskeln.' } },
+  { k: 'liv', c: '#a0522d', gl: true, n: { ro: 'Ficatul', de: 'Leber' },
+    d: { ro: 'Glandă anexă mare. Secretă bila, care ajută la digestia grăsimilor.', de: 'Eine große Anhangsdrüse. Sie bildet die Galle, die bei der Verdauung der Fette hilft.' } },
+  { k: 'gall', c: '#3f9e6b', gl: true, n: { ro: 'Vezica biliară', de: 'Gallenblase' },
+    d: { ro: 'Un săculeț în care se depozitează bila făcută de ficat.', de: 'Ein Säckchen, in dem die von der Leber gebildete Galle gespeichert wird.' } },
+  { k: 'pan', c: '#f2cf4b', gl: true, n: { ro: 'Pancreasul', de: 'Bauchspeicheldrüse (Pankreas)' },
+    d: { ro: 'Glandă anexă. Secretă sucul pancreatic, care se varsă în duoden (începutul intestinului subțire).', de: 'Eine Anhangsdrüse. Sie bildet den Bauchspeichel, der in den Zwölffingerdarm (Anfang des Dünndarms) fließt.' } },
+  { k: 'si', c: '#e58fb0', gl: false, n: { ro: 'Intestinul subțire', de: 'Dünndarm' },
+    d: { ro: 'Lung de 6 m la adult, pliat în cavitatea abdominală. Pereții lui sunt musculoși, iar stratul intern produce suc intestinal. În primul segment, duodenul, se varsă bila și sucul pancreatic.', de: 'Beim Erwachsenen 6 m lang, in der Bauchhöhle gefaltet. Seine Wände sind muskulös, und die Innenschicht bildet den Darmsaft. Im ersten Abschnitt, dem Zwölffingerdarm (Duodenum), münden Galle und Bauchspeichel.' } },
+  { k: 'li', c: '#d98a3d', gl: false, n: { ro: 'Intestinul gros', de: 'Dickdarm' },
+    d: { ro: 'Are circa 1,5 m și patru regiuni: cecum, apendice, colon și rect. Se deschide la exterior prin orificiul anal, prevăzut cu două sfinctere.', de: 'Etwa 1,5 m lang, mit vier Abschnitten: Blinddarm (Zäkum), Wurmfortsatz (Appendix), Grimmdarm (Kolon) und Mastdarm (Rektum). Er öffnet sich nach außen durch den After mit zwei Schließmuskeln.' } },
+  { k: 'anus', c: '#8d4b2f', gl: false, n: { ro: 'Orificiul anal (anusul)', de: 'After (Anus)' },
+    d: { ro: 'Al doilea orificiu al tubului digestiv. Prin el se elimină materiile fecale.', de: 'Die zweite Öffnung des Verdauungskanals. Durch sie wird der Stuhl ausgeschieden.' } }
+];
+var PBY = {}; PARTS.forEach(function (p) { PBY[p.k] = p; });
+
+/** Desenează corpul; întoarce {k: <g>} */
+function drawBody(svg, onPick) {
+  var root = el('g', { transform: 'translate(-40 0)' }, svg);
+  el('path', { d: 'M150 140 Q260 118 370 140 L384 300 L372 535 L148 535 L136 300 Z', fill: '#f4efe6', stroke: '#d9cdb8', 'stroke-width': 2 }, root);
+  el('circle', { cx: 260, cy: 66, r: 52, fill: '#fbeede', stroke: '#d9cdb8', 'stroke-width': 2 }, root);
+  var parts = {};
+  function G(k) {
+    var p = PBY[k];
+    var g = el('g', { class: 'part', 'data-k': k, tabindex: 0, role: 'button', 'aria-label': T(p.n) }, root);
+    parts[k] = g;
+    g.addEventListener('click', function () { onPick(k); });
+    g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPick(k); } });
+    return g;
+  }
+  var S = { stroke: '#fff', 'stroke-width': 1.5, 'stroke-linejoin': 'round' };
+  function path(g, d, fill, extra) {
+    var a = { d: d, fill: fill }; for (var k in S) a[k] = S[k]; for (var j in (extra || {})) a[j] = extra[j];
+    return el('path', a, g);
+  }
+  function line(g, d, color, w) { return el('path', { d: d, fill: 'none', stroke: color, 'stroke-width': w, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, g); }
+  var g;
+  g = G('liv'); path(g, 'M150 262 C180 228 250 236 268 262 C262 294 215 308 170 298 C148 292 140 276 150 262 Z', PBY.liv.c);
+  g = G('gall'); el('ellipse', { cx: 236, cy: 304, rx: 9, ry: 13, fill: PBY.gall.c, stroke: '#fff', 'stroke-width': 1.5 }, g);
+  g = G('pan'); path(g, 'M214 334 C250 320 300 324 338 342 C300 352 250 350 214 342 Z', PBY.pan.c);
+  g = G('sal'); el('ellipse', { cx: 222, cy: 92, rx: 11, ry: 15, fill: PBY.sal.c, stroke: '#fff', 'stroke-width': 1.5 }, g); el('ellipse', { cx: 298, cy: 92, rx: 11, ry: 15, fill: PBY.sal.c, stroke: '#fff', 'stroke-width': 1.5 }, g);
+  g = G('mouth'); el('ellipse', { cx: 260, cy: 90, rx: 27, ry: 14, fill: PBY.mouth.c, stroke: '#fff', 'stroke-width': 1.5 }, g); el('ellipse', { cx: 260, cy: 94, rx: 15, ry: 6, fill: '#f4a0a0' }, g);
+  g = G('phar'); path(g, 'M250 106 h20 v30 h-20 Z', PBY.phar.c);
+  g = G('eso'); line(g, 'M260 136 L260 230', PBY.eso.c, 14);
+  g = G('sto'); path(g, 'M262 228 C300 214 352 230 352 272 C352 308 308 320 288 302 C276 291 288 282 278 272 C270 264 258 248 262 228 Z', PBY.sto.c);
+  g = G('si');
+  line(g, 'M292 306 L292 364 L222 368 Q206 376 222 386 L322 392 Q338 400 322 410 L222 414 Q206 422 222 432 L322 436 Q338 444 322 454 L222 458 Q206 466 222 474 Q214 482 214 490', PBY.si.c, 13);
+  g = G('li');
+  line(g, 'M214 490 L184 490 L184 366 Q184 352 200 352 L344 352 Q360 352 360 366 L360 480 Q360 500 340 502 L290 508 L262 518', PBY.li.c, 17);
+  el('ellipse', { cx: 196, cy: 498, rx: 12, ry: 9, fill: PBY.li.c, stroke: '#fff', 'stroke-width': 1.5 }, g);
+  line(g, 'M192 506 Q190 520 200 524', PBY.li.c, 5);
+  g = G('anus'); el('circle', { cx: 262, cy: 526, r: 7, fill: PBY.anus.c, stroke: '#fff', 'stroke-width': 1.5 }, g);
+  return { parts: parts, root: root };
+}
+
+/* ================= 1. Organele ================= */
+(function () {
+  var svg = $('#body1'), desc = $('#desc1'), legend = $('#legend1');
+  var mode = 'explore', sel = null, find = null, order = [], score = 0, asked = 0;
+  var B = drawBody(svg, function (k) { mode === 'explore' ? show(k) : guess(k); });
+  var btns = {};
+  PARTS.forEach(function (p) {
+    var b = btn('', '<i></i><span class="name">' + T(p.n) + (p.gl ? ' <span class="tag gl">' + tx('glandă anexă', 'Anhangsdrüse') + '</span>' : '') + '</span>');
+    b.style.setProperty('--c', p.c); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { show(p.k); };
+    btns[p.k] = b; legend.appendChild(b);
+  });
+  function show(k) {
+    sel = k; var p = PBY[k];
+    svg.classList.add('sel');
+    Object.keys(B.parts).forEach(function (x) { B.parts[x].classList.toggle('hi', x === k); btns[x].setAttribute('aria-pressed', x === k ? 'true' : 'false'); });
+    desc.style.setProperty('--c', p.c);
+    desc.innerHTML = '<h3>' + T(p.n) + '<span class="tag' + (p.gl ? ' gl' : '') + '">' + (p.gl ? tx('glandă anexă', 'Anhangsdrüse') : tx('tub digestiv', 'Verdauungskanal')) + '</span></h3><p>' + T(p.d) + '</p>';
+  }
+  function reset() {
+    sel = null; svg.classList.remove('sel');
+    Object.keys(B.parts).forEach(function (x) { B.parts[x].classList.remove('hi'); btns[x].setAttribute('aria-pressed', 'false'); });
+    desc.style.removeProperty('--c');
+    desc.innerHTML = '<p class="muted">' + tx('Apasă pe un organ ca să afli ce face.', 'Tippe auf ein Organ, um zu erfahren, was es tut.') + '</p>';
+  }
+  function next() {
+    if (!order.length) order = PARTS.map(function (p) { return p.k; }).sort(function () { return Math.random() - 0.5; });
+    find = order.pop();
+    $('#ask1').textContent = tx('Apasă pe: ', 'Tippe auf: ') + T(PBY[find].n);
+  }
+  function guess(k) {
+    var msg = $('#find-msg');
+    if (k === find) { asked++; score++; msg.innerHTML = '<span class="tick">✓</span> ' + tx('Corect! ', 'Richtig! ') + T(PBY[k].n) + ' · ' + score + '/' + asked; next(); }
+    else { asked++; msg.innerHTML = '<span class="cross">✗</span> ' + tx('Nu, aia e ', 'Nein, das ist ') + T(PBY[k].n) + tx('. Mai încearcă.', '. Versuch es nochmal.'); }
+  }
+  function setMode(m) {
+    mode = m;
+    $('#m-explore').setAttribute('aria-pressed', m === 'explore');
+    $('#m-find').setAttribute('aria-pressed', m === 'find');
+    $('#explore').hidden = m !== 'explore'; $('#findbox').hidden = m !== 'find';
+    if (m === 'find') { svg.classList.remove('sel'); Object.keys(B.parts).forEach(function (x) { B.parts[x].classList.remove('hi'); }); score = 0; asked = 0; order = []; $('#find-msg').textContent = ''; next(); }
+    else if (sel) show(sel); else reset();
+  }
+  $('#m-explore').onclick = function () { setMode('explore'); };
+  $('#m-find').onclick = function () { setMode('find'); };
+  $('#find-skip').onclick = next;
+  reset();
+
+  Check($('#c1'), [
+    { q: { ro: 'Prin care dintre acestea NU trece hrana?', de: 'Durch welches dieser Organe geht die Nahrung NICHT?' },
+      o: [{ ro: 'esofag', de: 'Speiseröhre' }, { ro: 'ficat', de: 'Leber' }, { ro: 'stomac', de: 'Magen' }], a: 1,
+      why: { ro: 'Ficatul e glandă anexă: produce bila, dar hrana nu trece prin el.', de: 'Die Leber ist eine Anhangsdrüse: Sie bildet die Galle, aber die Nahrung geht nicht hindurch.' },
+      hint: { ro: 'Care dintre ele nu face parte din tubul digestiv, ci îl ajută cu un suc?', de: 'Welches gehört nicht zum Verdauungskanal, sondern hilft ihm mit einem Saft?' } },
+    { q: { ro: 'Câte orificii are tubul digestiv spre exterior?', de: 'Wie viele Öffnungen nach außen hat der Verdauungskanal?' },
+      o: [{ ro: 'una', de: 'eine' }, { ro: 'două: gura și anusul', de: 'zwei: Mund und After' }, { ro: 'trei', de: 'drei' }], a: 1,
+      why: { ro: 'Hrana intră pe gură și resturile ies prin anus.', de: 'Die Nahrung geht durch den Mund hinein, und die Reste kommen durch den After heraus.' } }
+  ]);
+})();
+
+/* ================= 2. Drumul hranei ================= */
+(function () {
+  var svg = $('#body2'), desc = $('#desc2'), prev = $('#st-prev'), next = $('#st-next'), pgs = $('#pgs');
+  var B = drawBody(svg, function () {});
+  Object.keys(B.parts).forEach(function (k) { B.parts[k].removeAttribute('tabindex'); B.parts[k].setAttribute('role', 'img'); B.parts[k].style.cursor = 'default'; });
+  var bolus = el('g', { class: 'bolus' }, B.root);
+  el('circle', { r: 9, cx: 0, cy: 0, fill: '#7a4a1e', stroke: '#fff', 'stroke-width': 2.5 }, bolus);
+  var STEPS = [
+    { at: [260, 90], hi: ['mouth', 'sal'], c: PBY.mouth.c,
+      t: { ro: 'Cavitatea bucală', de: 'Mundhöhle' },
+      p: { ro: '<b>Fizic:</b> masticația (dinții mărunțesc hrana), amestecarea cu limba și dizolvarea unor substanțe în salivă. <b>Chimic:</b> enzimele din salivă încep să transforme amidonul (un glucid). Din hrană se formează bolul alimentar.', de: '<b>Physikalisch:</b> Kauen (die Zähne zerkleinern die Nahrung), Vermischen mit der Zunge und Auflösen mancher Stoffe im Speichel. <b>Chemisch:</b> Enzyme im Speichel beginnen, die Stärke (ein Kohlenhydrat) umzuwandeln. Aus der Nahrung wird der Speisebrei.' } },
+    { at: [260, 122], hi: ['phar'], c: PBY.phar.c,
+      t: { ro: 'Faringele: deglutiția', de: 'Rachen: Schlucken' },
+      p: { ro: 'Bolul alimentar e înghițit. Epiglota închide căile respiratorii, ca hrana să nu se ducă pe „calea greșită”. Aici se încrucișează căile digestive cu cele respiratorii.', de: 'Der Speisebrei wird geschluckt. Der Kehldeckel (Epiglottis) verschließt die Atemwege, damit die Nahrung nicht in den „falschen Hals“ gerät. Hier kreuzen sich Speise- und Atemwege.' } },
+    { at: [260, 184], hi: ['eso'], c: PBY.eso.c,
+      t: { ro: 'Esofagul', de: 'Speiseröhre' },
+      p: { ro: 'Pereții musculoși se contractă pe rând și împing bolul spre stomac. Aici nu se digeră nimic: e doar un drum.', de: 'Die Muskelwände ziehen sich nacheinander zusammen und schieben den Speisebrei zum Magen. Hier wird nichts verdaut: Es ist nur ein Weg.' } },
+    { at: [312, 268], hi: ['sto'], c: PBY.sto.c,
+      t: { ro: 'Stomacul', de: 'Magen' },
+      p: { ro: '<b>Fizic:</b> mușchii stomacului frământă și amestecă hrana. <b>Chimic:</b> enzimele din sucul gastric descompun proteinele în lanțuri scurte de aminoacizi. Hrana intră prin cardia și iese prin pilor.', de: '<b>Physikalisch:</b> Die Magenmuskeln kneten und mischen die Nahrung. <b>Chemisch:</b> Enzyme im Magensaft zerlegen die Eiweiße in kurze Ketten aus Aminosäuren. Die Nahrung tritt durch die Kardia ein und durch den Pylorus aus.' } },
+    { at: [292, 340], hi: ['si', 'liv', 'gall', 'pan'], c: PBY.si.c,
+      t: { ro: 'Intestinul subțire: duodenul', de: 'Dünndarm: Zwölffingerdarm' },
+      p: { ro: 'Se varsă <b>bila</b> (de la ficat și vezica biliară), <b>sucul pancreatic</b> și <b>sucul intestinal</b>. <b>Fizic:</b> bila mărunțește grăsimile. <b>Chimic:</b> enzimele descompun proteinele, glucidele și lipidele în substanțe simple.', de: '<b>Galle</b> (von Leber und Gallenblase), <b>Bauchspeichel</b> und <b>Darmsaft</b> fließen hinein. <b>Physikalisch:</b> Die Galle zerteilt die Fette. <b>Chemisch:</b> Enzyme zerlegen Eiweiße, Kohlenhydrate und Fette in einfache Stoffe.' } },
+    { at: [270, 424], hi: ['si'], c: PBY.si.c,
+      t: { ro: 'Intestinul subțire: absorbția', de: 'Dünndarm: Aufnahme' },
+      p: { ro: 'Nutrimentele sunt gata: aminoacizi, acizi grași, glicerol, glucoză, plus apă, vitamine și minerale. Ele trec prin peretele intestinului în sânge. Aici se absoarbe cea mai mare parte din hrană.', de: 'Die Nährstoffe sind fertig: Aminosäuren, Fettsäuren, Glycerin, Traubenzucker sowie Wasser, Vitamine und Mineralstoffe. Sie gehen durch die Darmwand ins Blut. Hier wird der größte Teil der Nahrung aufgenommen.' } },
+    { at: [272, 352], hi: ['li'], c: PBY.li.c,
+      t: { ro: 'Intestinul gros', de: 'Dickdarm' },
+      p: { ro: 'Se absoarbe cea mai mare parte a apei. Produsele nedigerate sunt descompuse de bacteriile intestinale (fermentație și putrefacție). Rezultă materiile fecale.', de: 'Der größte Teil des Wassers wird aufgenommen. Unverdaute Reste werden von Darmbakterien abgebaut (Gärung und Fäulnis). Es entsteht der Stuhl.' } },
+    { at: [262, 520], hi: ['li', 'anus'], c: PBY.anus.c,
+      t: { ro: 'Rectul și anusul: defecația', de: 'Mastdarm und After: Darmentleerung' },
+      p: { ro: 'Materiile fecale ies din corp prin orificiul anal, prevăzut cu două sfinctere. Drumul hranei s-a încheiat.', de: 'Der Stuhl verlässt den Körper durch den After mit zwei Schließmuskeln. Der Weg der Nahrung ist zu Ende.' } }
+  ];
+  STEPS.forEach(function () { pgs.appendChild(h('i')); });
+  var cur = 0;
+  function draw() {
+    var s = STEPS[cur];
+    svg.classList.add('sel');
+    Object.keys(B.parts).forEach(function (k) { B.parts[k].classList.toggle('hi', s.hi.indexOf(k) >= 0); });
+    bolus.style.transform = 'translate(' + s.at[0] + 'px,' + s.at[1] + 'px)';
+    desc.style.setProperty('--c', s.c);
+    desc.innerHTML = '<h3>' + (cur + 1) + '. ' + T(s.t) + '</h3><p>' + T(s.p) + '</p>';
+    prev.disabled = cur === 0; next.disabled = cur === STEPS.length - 1;
+    Array.prototype.forEach.call(pgs.children, function (d, i) { d.className = i <= cur ? 'on' : ''; });
+  }
+  prev.onclick = function () { if (cur > 0) { cur--; draw(); } };
+  next.onclick = function () { if (cur < STEPS.length - 1) { cur++; draw(); } };
+  $('#st-reset').onclick = function () { cur = 0; draw(); };
+  draw();
+
+  Check($('#c2'), [
+    { q: { ro: 'Unde încep transformările chimice ale amidonului?', de: 'Wo beginnen die chemischen Vorgänge bei der Stärke?' },
+      o: [{ ro: 'în stomac', de: 'im Magen' }, { ro: 'în cavitatea bucală, cu enzimele din salivă', de: 'in der Mundhöhle, mit den Enzymen im Speichel' }, { ro: 'în intestinul gros', de: 'im Dickdarm' }], a: 1,
+      why: { ro: 'Saliva conține enzime care încep să descompună amidonul, de aceea pâinea ținută mult în gură devine dulce.', de: 'Der Speichel enthält Enzyme, die die Stärke anzuspalten beginnen, darum wird Brot süß, wenn man es lange im Mund behält.' },
+      hint: { ro: 'Gândește-te la pâinea care devine dulce în gură.', de: 'Denk an das Brot, das im Mund süß wird.' } },
+    { q: { ro: 'Ce împiedică hrana să intre în căile respiratorii?', de: 'Was verhindert, dass die Nahrung in die Atemwege gelangt?' },
+      o: [{ ro: 'limba', de: 'die Zunge' }, { ro: 'esofagul', de: 'die Speiseröhre' }, { ro: 'epiglota', de: 'der Kehldeckel' }], a: 2,
+      why: { ro: 'Epiglota închide căile respiratorii în timpul înghițirii.', de: 'Der Kehldeckel verschließt beim Schlucken die Atemwege.' },
+      hint: { ro: 'Care „capac” închide calea respiratorie?', de: 'Welcher „Deckel“ verschließt den Atemweg?' } }
+  ]);
+})();
+
+/* ================= 3. Dinții ================= */
+(function () {
+  var svg = $('#teeth'), legend = $('#legend3'), desc = $('#desc3');
+  var TY = [
+    { k: 'inc', c: '#4aa3d9', e: '🦷', n: { ro: 'Incisivi', de: 'Schneidezähne (Incisivi)' }, d: { ro: 'Sunt în față, tăioși, ca un dalt. Taie hrana: mușcă dintr-un măr sau dintr-o felie de pâine.', de: 'Sie stehen vorn und sind scharfkantig wie ein Meißel. Sie schneiden die Nahrung ab: Man beißt damit in einen Apfel oder ein Stück Brot.' } },
+    { k: 'can', c: '#d9534f', e: '🦷', n: { ro: 'Canini', de: 'Eckzähne (Canini)' }, d: { ro: 'Sunt ascuțiți, ca niște vârfuri. Sfâșie hrana tare sau fibroasă, de exemplu carnea.', de: 'Sie sind spitz wie Dornen. Sie zerreißen feste oder faserige Nahrung, zum Beispiel Fleisch.' } },
+    { k: 'pre', c: '#e0a100', e: '🦷', n: { ro: 'Premolari', de: 'Vordere Backenzähne (Prämolaren)' }, d: { ro: 'Au suprafața de mestecat lățită, cu mici vârfuri. Zdrobesc și încep să macine hrana.', de: 'Sie haben eine breite Kaufläche mit kleinen Höckern. Sie zerquetschen die Nahrung und beginnen, sie zu mahlen.' } },
+    { k: 'mol', c: '#27a36f', e: '🦷', n: { ro: 'Molari', de: 'Hintere Backenzähne (Molaren)' }, d: { ro: 'Sunt cei mai mari și mai puternici, cu suprafață largă. Macină bine hrana, de exemplu cerealele.', de: 'Sie sind die größten und kräftigsten, mit breiter Fläche. Sie mahlen die Nahrung fein, zum Beispiel Getreide.' } }
+  ];
+  var BY = {}; TY.forEach(function (t) { BY[t.k] = t; });
+  // de la stânga la dreapta: 3 molari, 2 premolari, canin, 2 incisivi | 2 incisivi, canin, 2 premolari, 3 molari
+  var seq = ['mol', 'mol', 'mol', 'pre', 'pre', 'can', 'inc', 'inc', 'inc', 'inc', 'can', 'pre', 'pre', 'mol', 'mol', 'mol'];
+  var SZ = { inc: [10, 15], can: [9, 17], pre: [13, 13], mol: [17, 16] };
+  el('path', { d: 'M40 70 Q40 240 220 262 Q400 240 400 70', fill: 'none', stroke: '#f2b7b7', 'stroke-width': 26, 'stroke-linecap': 'round', opacity: 0.55 }, svg);
+  var parts = {}, btns = {};
+  TY.forEach(function (t) { parts[t.k] = []; });
+  seq.forEach(function (k, i) {
+    var phi = Math.PI * (i + 0.5) / seq.length;
+    var x = 220 + 168 * Math.cos(phi), y = 72 + 176 * Math.sin(phi);
+    var rot = (phi * 180 / Math.PI) - 90;
+    var g = el('g', { class: 'part', 'data-k': k, tabindex: 0, role: 'button', 'aria-label': T(BY[k].n), transform: 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + rot.toFixed(1) + ')' }, svg);
+    if (k === 'can') el('path', { d: 'M-10 -16 L0 20 L10 -16 Z', fill: BY[k].c, stroke: '#fff', 'stroke-width': 2, 'stroke-linejoin': 'round' }, g);
+    else if (k === 'inc') el('rect', { x: -SZ[k][0], y: -SZ[k][1], width: SZ[k][0] * 2, height: SZ[k][1] * 2, rx: 4, fill: BY[k].c, stroke: '#fff', 'stroke-width': 2 }, g);
+    else el('rect', { x: -SZ[k][0], y: -SZ[k][1], width: SZ[k][0] * 2, height: SZ[k][1] * 2, rx: 6, fill: BY[k].c, stroke: '#fff', 'stroke-width': 2 }, g);
+    parts[k].push(g);
+    g.addEventListener('click', function () { show(k); });
+    g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(k); } });
+  });
+  TY.forEach(function (t) {
+    var b = btn('', '<i></i><span class="name">' + T(t.n) + '</span>');
+    b.style.setProperty('--c', t.c); b.setAttribute('aria-pressed', 'false'); b.onclick = function () { show(t.k); };
+    btns[t.k] = b; legend.appendChild(b);
+  });
+  function show(k) {
+    svg.classList.add('sel');
+    TY.forEach(function (t) { parts[t.k].forEach(function (g) { g.classList.toggle('hi', t.k === k); }); btns[t.k].setAttribute('aria-pressed', t.k === k ? 'true' : 'false'); });
+    desc.style.setProperty('--c', BY[k].c);
+    desc.innerHTML = '<h3>' + T(BY[k].n) + '</h3><p>' + T(BY[k].d) + '</p>';
+  }
+  desc.innerHTML = '<p class="muted">' + tx('Apasă pe un tip de dinte.', 'Tippe auf einen Zahntyp.') + '</p>';
+
+  Check($('#c3'), [
+    { q: { ro: 'Cu ce dinți sfâșii o bucată de carne?', de: 'Mit welchen Zähnen zerreißt du ein Stück Fleisch?' },
+      o: [{ ro: 'incisivi', de: 'Schneidezähne' }, { ro: 'canini', de: 'Eckzähne' }, { ro: 'molari', de: 'Backenzähne' }], a: 1,
+      why: { ro: 'Caninii sunt ascuțiți și sfâșie hrana.', de: 'Die Eckzähne sind spitz und zerreißen die Nahrung.' },
+      hint: { ro: 'Care dinți sunt ascuțiți ca niște vârfuri?', de: 'Welche Zähne sind spitz wie Dornen?' } },
+    { q: { ro: 'Ce dinți macină cerealele?', de: 'Welche Zähne mahlen Getreide?' },
+      o: [{ ro: 'molarii', de: 'die Backenzähne' }, { ro: 'incisivii', de: 'die Schneidezähne' }, { ro: 'caninii', de: 'die Eckzähne' }], a: 0,
+      why: { ro: 'Molarii sunt largi și puternici, buni de măcinat.', de: 'Die Backenzähne sind breit und kräftig und gut zum Mahlen.' },
+      hint: { ro: 'Pentru măcinat ai nevoie de o suprafață lată, nu de un tăiș.', de: 'Zum Mahlen braucht man eine breite Fläche, keine Schneide.' } }
+  ]);
+})();
+
+/* ================= 4. Nutrimentele ================= */
+(function () {
+  var N = [
+    { k: 'pro', c: '#3aa76d', e: '🥚', n: { ro: 'Proteine', de: 'Eiweiße (Proteine)' }, d: { ro: 'Substanțe „de construcție”: fac parte din structura celulelor și sunt folosite pentru creștere și refacere. Le găsim în ouă, carne, lapte, unele legume și semințe.', de: '„Baustoffe“: Sie sind Teil der Zellstruktur und dienen Wachstum und Erneuerung. Wir finden sie in Eiern, Fleisch, Milch, manchen Hülsenfrüchten und Samen.' } },
+    { k: 'glu', c: '#8cb81f', e: '🍞', n: { ro: 'Glucide', de: 'Kohlenhydrate (Glucide)' }, d: { ro: 'Zaharurile (carbohidrații) sunt prima sursă de energie a celulelor. Pâinea, cerealele și fructele ne dau glucide.', de: 'Zucker (Kohlenhydrate) sind die erste Energiequelle der Zellen. Brot, Getreide und Obst liefern uns Kohlenhydrate.' } },
+    { k: 'lip', c: '#e0701f', e: '🫒', n: { ro: 'Lipide', de: 'Fette (Lipide)' }, d: { ro: 'Grăsimile sunt o sursă de energie. Corpul le depozitează în țesutul adipos și le folosește după ce glucidele din sânge și din ficat s-au consumat. Alimente bogate în lipide: untul, untura, ouăle, uleiul.', de: 'Fette sind eine Energiequelle. Der Körper speichert sie im Fettgewebe und nutzt sie erst, wenn die Kohlenhydrate in Blut und Leber verbraucht sind. Fettreich sind Butter, Schmalz, Eier, Öl.' } },
+    { k: 'vit', c: '#6f8ea0', e: '🍊', n: { ro: 'Vitamine', de: 'Vitamine' }, d: { ro: 'Organismul are nevoie de ele în cantități mici, dar le are nevoie în fiecare zi. Se găsesc, de exemplu, în fructe și legume (vitaminele A și C).', de: 'Der Körper braucht sie nur in kleinen Mengen, aber jeden Tag. Man findet sie zum Beispiel in Obst und Gemüse (Vitamine A und C).' } },
+    { k: 'min', c: '#c05fb0', e: '🧂', n: { ro: 'Minerale', de: 'Mineralstoffe' }, d: { ro: 'Substanțe de care corpul are nevoie în cantități mici, de exemplu calciul din lapte și produse lactate.', de: 'Stoffe, die der Körper in kleinen Mengen braucht, zum Beispiel Kalzium aus Milch und Milchprodukten.' } },
+    { k: 'apa', c: '#2f80ed', e: '💧', n: { ro: 'Apă', de: 'Wasser' }, d: { ro: 'Substanță de importanță vitală. Corpul nostru conține 50–60% apă.', de: 'Ein lebenswichtiger Stoff. Unser Körper besteht zu 50–60 % aus Wasser.' } }
+  ];
+  var host = $('#puzzle'), desc = $('#desc4'), bs = {};
+  N.forEach(function (n) {
+    var b = btn('', '<span class="e" aria-hidden="true">' + n.e + '</span><span>' + T(n.n) + '</span>');
+    b.style.setProperty('--c', n.c); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () {
+      N.forEach(function (m) { bs[m.k].setAttribute('aria-pressed', m.k === n.k ? 'true' : 'false'); });
+      desc.style.setProperty('--c', n.c); desc.innerHTML = '<h3>' + T(n.n) + '</h3><p>' + T(n.d) + '</p>';
+    };
+    bs[n.k] = b; host.appendChild(b);
+  });
+  desc.innerHTML = '<p class="muted">' + tx('Apasă pe o piesă de puzzle.', 'Tippe auf ein Puzzleteil.') + '</p>';
+
+  Sorter($('#foods'), $('#foods-score'), [
+    ['🍞', { ro: 'Pâinea', de: 'Das Brot' }, 'glu', { ro: 'Pâinea conține mult amidon, un glucid.', de: 'Brot enthält viel Stärke, ein Kohlenhydrat.' }],
+    ['🫒', { ro: 'Uleiul', de: 'Das Öl' }, 'lip', { ro: 'Uleiul este aproape numai grăsime.', de: 'Öl besteht fast nur aus Fett.' }],
+    ['🥚', { ro: 'Oul', de: 'Das Ei' }, 'pro', { ro: 'Oul este bogat în proteine (are și lipide).', de: 'Das Ei ist reich an Eiweiß (es hat auch Fett).' }],
+    ['🍊', { ro: 'Portocala', de: 'Die Orange' }, 'vit', { ro: 'Portocala e plină de vitamina C.', de: 'Die Orange ist voller Vitamin C.' }],
+    ['🫘', { ro: 'Fasolea', de: 'Die Bohnen' }, 'pro', { ro: 'Leguminoasele (fasole, mazăre, linte) sunt o sursă bună de proteine.', de: 'Hülsenfrüchte (Bohnen, Erbsen, Linsen) sind eine gute Eiweißquelle.' }],
+    ['🥔', { ro: 'Cartoful', de: 'Die Kartoffel' }, 'glu', { ro: 'Cartoful conține mult amidon, adică glucide.', de: 'Die Kartoffel enthält viel Stärke, also Kohlenhydrate.' }],
+    ['🧈', { ro: 'Untul', de: 'Die Butter' }, 'lip', { ro: 'Untul este bogat în lipide.', de: 'Butter ist reich an Fetten.' }]
+  ], [['pro', { ro: 'proteine', de: 'Eiweiß' }], ['glu', { ro: 'glucide', de: 'Kohlenhydrate' }], ['lip', { ro: 'lipide', de: 'Fette' }], ['vit', { ro: 'vitamine', de: 'Vitamine' }]],
+  { ro: 'Gândește-te la ce rol are alimentul: construiește, dă energie sau ajută cu cantități mici?', de: 'Überleg, welche Rolle das Lebensmittel hat: Baut es auf, liefert es Energie oder hilft es in kleinen Mengen?' });
+})();
+
+/* ================= 5. Digestia ================= */
+(function () {
+  Sorter($('#fc'), $('#fc-score'), [
+    ['🦷', { ro: 'Masticația (mestecarea) cu dinții', de: 'Das Kauen mit den Zähnen' }, 'f', { ro: 'Hrana e doar mărunțită, substanțele rămân aceleași: fizic.', de: 'Die Nahrung wird nur zerkleinert, die Stoffe bleiben dieselben: physikalisch.' }],
+    ['💧', { ro: 'Dizolvarea unor substanțe în salivă', de: 'Das Auflösen mancher Stoffe im Speichel' }, 'f', { ro: 'Dizolvarea e o transformare fizică.', de: 'Auflösen ist ein physikalischer Vorgang.' }],
+    ['🧪', { ro: 'Enzimele din salivă transformă amidonul', de: 'Enzyme im Speichel wandeln Stärke um' }, 'c', { ro: 'Substanța se transformă în alta, cu ajutorul enzimelor: chimic.', de: 'Der Stoff wird mithilfe von Enzymen in einen anderen umgewandelt: chemisch.' }],
+    ['🌀', { ro: 'Mușchii stomacului amestecă hrana', de: 'Die Magenmuskeln vermischen die Nahrung' }, 'f', { ro: 'Amestecarea nu schimbă substanțele: fizic.', de: 'Vermischen verändert die Stoffe nicht: physikalisch.' }],
+    ['🧪', { ro: 'Sucul gastric descompune proteinele', de: 'Der Magensaft zerlegt Eiweiße' }, 'c', { ro: 'Proteinele se descompun în lanțuri scurte de aminoacizi: chimic.', de: 'Eiweiße werden in kurze Aminosäureketten zerlegt: chemisch.' }],
+    ['🟢', { ro: 'Bila mărunțește grăsimile', de: 'Die Galle zerteilt die Fette' }, 'f', { ro: 'Bila doar mărunțește grăsimile, fără să le descompună: fizic.', de: 'Die Galle zerteilt die Fette nur, ohne sie zu zerlegen: physikalisch.' }],
+    ['🧪', { ro: 'Sucurile pancreatic și intestinal descompun proteinele, glucidele și lipidele', de: 'Bauchspeichel und Darmsaft zerlegen Eiweiße, Kohlenhydrate und Fette' }, 'c', { ro: 'Se obțin substanțe simple, cu ajutorul enzimelor: chimic.', de: 'Es entstehen einfache Stoffe mithilfe von Enzymen: chemisch.' }]
+  ], [['f', { ro: 'fizică', de: 'physikalisch' }], ['c', { ro: 'chimică', de: 'chemisch' }]],
+  { ro: 'Se schimbă doar forma hranei, sau se formează alte substanțe?', de: 'Ändert sich nur die Form der Nahrung oder entstehen andere Stoffe?' });
+
+  Check($('#c5'), [
+    { q: { ro: 'Din proteine rezultă…', de: 'Aus Eiweißen werden …' },
+      o: [{ ro: 'aminoacizi', de: 'Aminosäuren' }, { ro: 'acizi grași și glicerol', de: 'Fettsäuren und Glycerin' }, { ro: 'glucoză', de: 'Traubenzucker' }], a: 0,
+      why: { ro: 'Proteinele se descompun în aminoacizi.', de: 'Eiweiße werden in Aminosäuren zerlegt.' } },
+    { q: { ro: 'Din lipide rezultă…', de: 'Aus Fetten werden …' },
+      o: [{ ro: 'aminoacizi', de: 'Aminosäuren' }, { ro: 'acizi grași și glicerol', de: 'Fettsäuren und Glycerin' }, { ro: 'glucoză', de: 'Traubenzucker' }], a: 1,
+      why: { ro: 'Lipidele se descompun în acizi grași și glicerol.', de: 'Fette werden in Fettsäuren und Glycerin zerlegt.' } },
+    { q: { ro: 'Din glucide (amidon) rezultă…', de: 'Aus Kohlenhydraten (Stärke) wird …' },
+      o: [{ ro: 'aminoacizi', de: 'Aminosäuren' }, { ro: 'acizi grași', de: 'Fettsäuren' }, { ro: 'glucoză', de: 'Traubenzucker' }], a: 2,
+      why: { ro: 'Glucidele se descompun până la glucoză.', de: 'Kohlenhydrate werden bis zum Traubenzucker zerlegt.' } },
+    { q: { ro: 'Care substanțe nu trebuie digerate, pentru că sunt gata de absorbție?', de: 'Welche Stoffe müssen nicht verdaut werden, weil sie schon aufnahmebereit sind?' },
+      o: [{ ro: 'apa, vitaminele și mineralele', de: 'Wasser, Vitamine und Mineralstoffe' }, { ro: 'proteinele', de: 'Eiweiße' }, { ro: 'lipidele și glucidele', de: 'Fette und Kohlenhydrate' }], a: 0,
+      why: { ro: 'Apa, vitaminele și mineralele trec direct în sânge. Proteinele, lipidele și glucidele sunt prea mari și se descompun întâi.', de: 'Wasser, Vitamine und Mineralstoffe gehen direkt ins Blut. Eiweiße, Fette und Kohlenhydrate sind zu groß und werden erst zerlegt.' },
+      hint: { ro: 'Care sunt substanțele mici, care nu sunt „construite” din bucăți mari?', de: 'Welche Stoffe sind klein und nicht aus großen Bausteinen „gebaut“?' } }
+  ], tx('Verifică-te', 'Prüfe dich'));
+})();
+
+/* ================= 6. Absorbția ================= */
+(function () {
+  var svg = $('#villus'), legend = $('#legend6'), desc = $('#desc6'), tog = $('#vil-toggle'), big = false;
+  var V = [
+    { k: 'lum', c: '#e0a100', n: { ro: 'Interiorul intestinului', de: 'Darminneres' }, d: { ro: 'Aici ajunge hrana digerată. Nutrimentele (aminoacizi, acizi grași, glicerol, glucoză) sunt gata să fie absorbite.', de: 'Hier kommt die verdaute Nahrung an. Die Nährstoffe (Aminosäuren, Fettsäuren, Glycerin, Traubenzucker) sind bereit zur Aufnahme.' } },
+    { k: 'cell', c: '#e58fb0', n: { ro: 'Celule intestinale cu prelungiri', de: 'Darmzellen mit Fortsätzen' }, d: { ro: 'Stratul de celule care căptușește vilozitatea. Prelungirile celulare mai măresc încă o dată suprafața prin care trec nutrimentele.', de: 'Die Zellschicht, die die Darmzotte auskleidet. Die Zellfortsätze vergrößern die Fläche, durch die die Nährstoffe gehen, noch einmal.' } },
+    { k: 'cap', c: '#d64545', n: { ro: 'Capilar sanguin', de: 'Blutkapillare' }, d: { ro: 'Un vas de sânge foarte fin, în mijlocul vilozității. Preia nutrimentele în sânge.', de: 'Ein sehr feines Blutgefäß in der Mitte der Zotte. Es nimmt die Nährstoffe ins Blut auf.' } },
+    { k: 'lym', c: '#3f9e6b', n: { ro: 'Vas limfatic', de: 'Lymphgefäß' }, d: { ro: 'Un alt tip de vas fin din vilozitate. Prin el trec în special lipidele absorbite.', de: 'Eine andere Art feines Gefäß in der Zotte. Durch es gelangen vor allem die aufgenommenen Fette.' } }
+  ];
+  var BY = {}; V.forEach(function (v) { BY[v.k] = v; });
+  var parts = {}, btns = {};
+  function render() {
+    svg.innerHTML = ''; parts = {};
+    svg.classList.remove('sel');
+    el('rect', { x: 0, y: 0, width: 440, height: 330, rx: 10, fill: '#fbf1d6' }, svg);
+    var vil = big ? [60, 140, 220, 300, 380] : [220];
+    var wide = big ? 50 : 100;
+    function G(k) { var g = el('g', { class: 'part', 'data-k': k, tabindex: 0, role: 'button', 'aria-label': T(BY[k].n) }, svg); parts[k] = g; g.addEventListener('click', function () { show(k); }); g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(k); } }); return g; }
+    G('lum');
+    el('rect', { x: 0, y: 0, width: 440, height: 40, fill: '#f6d98a', opacity: 0.001 }, parts.lum);
+    // puncte de nutrimente în lumen
+    for (var i = 0; i < 14; i++) el('circle', { cx: 20 + (i * 31) % 420, cy: 20 + (i % 3) * 12, r: 5, fill: ['#e0a100', '#d9701f', '#8cb81f'][i % 3] }, parts.lum);
+    var gc = G('cell'), gcp = G('cap'), gl = G('lym');
+    // baza peretelui
+    el('rect', { x: 0, y: 262, width: 440, height: 68, fill: '#e58fb0', opacity: 0.55 }, gc);
+    vil.forEach(function (cx) {
+      var w = wide / 2;
+      el('path', { d: 'M' + (cx - w) + ' 262 L' + (cx - w) + ' 88 Q' + cx + ' 50 ' + (cx + w) + ' 88 L' + (cx + w) + ' 262 Z', fill: '#f7b9cf', stroke: '#e58fb0', 'stroke-width': 3 }, gc);
+      var n = Math.max(2, Math.round((big ? 7 : 12)));
+      for (var j = 0; j < n; j++) { var y = 80 + j * (170 / n); if (y > 250) break; el('line', { x1: cx - w, y1: y, x2: cx - w - 6, y2: y, stroke: '#e58fb0', 'stroke-width': 2 }, gc); el('line', { x1: cx + w, y1: y, x2: cx + w + 6, y2: y, stroke: '#e58fb0', 'stroke-width': 2 }, gc); }
+      var o = big ? 8 : 18;
+      el('path', { d: 'M' + (cx - o) + ' 262 L' + (cx - o) + ' 110 Q' + (cx - o) + ' 96 ' + cx + ' 96 Q' + (cx + o * 0.2) + ' 96 ' + (cx + o * 0.2) + ' 110 L' + (cx + o * 0.2) + ' 262', fill: 'none', stroke: '#d64545', 'stroke-width': big ? 5 : 9, 'stroke-linecap': 'round' }, gcp);
+      el('path', { d: 'M' + (cx + o) + ' 262 L' + (cx + o) + ' 118 Q' + (cx + o) + ' 104 ' + (cx + o * 0.4) + ' 104', fill: 'none', stroke: '#3f9e6b', 'stroke-width': big ? 4 : 8, 'stroke-linecap': 'round' }, gl);
+    });
+    el('line', { x1: 0, y1: 262, x2: 440, y2: 262, stroke: '#c46d92', 'stroke-width': 2 }, svg);
+    var bar = $('#vil-bar'), txt = $('#vil-txt');
+    bar.style.width = big ? '100%' : '3%';
+    txt.textContent = big ? tx('Cu vilozități: de aproximativ 600 de ori mai mare', 'Mit Zotten: etwa 600-mal größer') : tx('Perete neted: suprafață mică', 'Glatte Wand: kleine Fläche');
+    tog.setAttribute('aria-pressed', big ? 'true' : 'false');
+    if (cur) show(cur);
+  }
+  var cur = null;
+  function show(k) {
+    cur = k; svg.classList.add('sel');
+    V.forEach(function (v) { if (parts[v.k]) parts[v.k].classList.toggle('hi', v.k === k); btns[v.k].setAttribute('aria-pressed', v.k === k ? 'true' : 'false'); });
+    desc.style.setProperty('--c', BY[k].c); desc.innerHTML = '<h3>' + T(BY[k].n) + '</h3><p>' + T(BY[k].d) + '</p>';
+  }
+  V.forEach(function (v) {
+    var b = btn('', '<i></i><span class="name">' + T(v.n) + '</span>'); b.style.setProperty('--c', v.c); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { show(v.k); }; btns[v.k] = b; legend.appendChild(b);
+  });
+  desc.innerHTML = '<p class="muted">' + tx('Apasă pe o parte din desen sau din listă.', 'Tippe auf einen Teil im Bild oder in der Liste.') + '</p>';
+  tog.onclick = function () { big = !big; render(); };
+  render();
+
+  Check($('#c6'), [
+    { q: { ro: 'Unde are loc absorbția nutrimentelor în sânge?', de: 'Wo werden die Nährstoffe ins Blut aufgenommen?' },
+      o: [{ ro: 'în stomac', de: 'im Magen' }, { ro: 'în intestinul subțire', de: 'im Dünndarm' }, { ro: 'în esofag', de: 'in der Speiseröhre' }], a: 1,
+      why: { ro: 'Intestinul subțire are pereți cu vilozități, adaptați special pentru absorbție.', de: 'Der Dünndarm hat Wände mit Zotten, die speziell für die Aufnahme angepasst sind.' },
+      hint: { ro: 'Ce organ are vilozități, ca să-și mărească suprafața?', de: 'Welches Organ hat Zotten, um seine Fläche zu vergrößern?' } },
+    { q: { ro: 'De ce sunt utile vilozitățile intestinale?', de: 'Wozu dienen die Darmzotten?' },
+      o: [{ ro: 'mărunțesc hrana', de: 'Sie zerkleinern die Nahrung' }, { ro: 'măresc suprafața de absorbție', de: 'Sie vergrößern die Aufnahmefläche' }, { ro: 'produc bila', de: 'Sie bilden die Galle' }], a: 1,
+      why: { ro: 'Cu cât suprafața e mai mare, cu atât trec mai multe nutrimente în sânge.', de: 'Je größer die Fläche, desto mehr Nährstoffe gehen ins Blut.' },
+      hint: { ro: 'Compară cele două desene: ce se schimbă când apar vilozitățile?', de: 'Vergleiche die beiden Bilder: Was ändert sich, wenn die Zotten erscheinen?' } },
+    { q: { ro: 'Ce se absoarbe în principal în intestinul gros?', de: 'Was wird im Dickdarm hauptsächlich aufgenommen?' },
+      o: [{ ro: 'apa', de: 'Wasser' }, { ro: 'proteinele', de: 'Eiweiße' }, { ro: 'bila', de: 'Galle' }], a: 0,
+      why: { ro: 'În intestinul gros se absoarbe cea mai mare parte a apei, iar ce rămâne devine materii fecale.', de: 'Im Dickdarm wird der größte Teil des Wassers aufgenommen, und der Rest wird zu Stuhl.' },
+      hint: { ro: 'Nutrimentele sunt deja absorbite din intestinul subțire. Ce rămâne de „stors” din resturi?', de: 'Die Nährstoffe wurden schon im Dünndarm aufgenommen. Was bleibt aus den Resten zu „pressen“?' } }
+  ], tx('Verifică-te', 'Prüfe dich'));
+})();
+
+/* ================= 7. Fixare ================= */
+(function () {
+  var ORDER = [
+    { k: 'mouth', n: PBY.mouth.n }, { k: 'phar', n: PBY.phar.n }, { k: 'eso', n: PBY.eso.n }, { k: 'sto', n: PBY.sto.n },
+    { k: 'si', n: PBY.si.n }, { k: 'li', n: PBY.li.n }, { k: 'anus', n: { ro: 'Orificiul anal', de: 'After' } }
+  ];
+  var bank = $('#order-bank'), done = $('#order-done'), msg = $('#order-msg'), idx = 0, chips = {};
+  [4, 0, 6, 2, 5, 1, 3].forEach(function (i) {
+    var o = ORDER[i], b = btn('pill', T(o.n));
+    b.onclick = function () {
+      if (o.k === ORDER[idx].k) {
+        b.classList.add('placed'); b.disabled = true; done.appendChild(h('span', 'pill placed', (idx + 1) + '. ' + T(o.n))); b.remove(); idx++;
+        msg.textContent = idx === ORDER.length ? tx('Perfect! Drumul hranei, de la gură la anus.', 'Perfekt! Der Weg der Nahrung, vom Mund bis zum After.') : tx('Corect. Mai departe!', 'Richtig. Weiter!');
+      } else { msg.textContent = tx('Nu încă. Ce organ vine după „', 'Noch nicht. Welches Organ kommt nach „') + T(ORDER[Math.max(0, idx - 1)].n) + tx('”? Gândește-te la drum.', '“? Denk an den Weg.'); if (idx === 0) msg.textContent = tx('Unde intră hrana în corp?', 'Wo tritt die Nahrung in den Körper ein?'); }
+    };
+    chips[o.k] = b; bank.appendChild(b);
+  });
+
+  Check($('#c7'), [
+    { q: { ro: 'Ce secretă glandele salivare?', de: 'Was bilden die Speicheldrüsen?' },
+      o: [{ ro: 'saliva', de: 'den Speichel' }, { ro: 'bila', de: 'die Galle' }, { ro: 'sucul gastric', de: 'den Magensaft' }], a: 0,
+      why: { ro: 'Saliva, cu enzime care încep digestia amidonului.', de: 'Den Speichel, mit Enzymen, die die Verdauung der Stärke beginnen.' } },
+    { q: { ro: 'Ce produce ficatul și unde se depozitează?', de: 'Was bildet die Leber und wo wird es gespeichert?' },
+      o: [{ ro: 'bila, în vezica biliară', de: 'die Galle, in der Gallenblase' }, { ro: 'saliva, în gură', de: 'den Speichel, im Mund' }, { ro: 'sucul pancreatic, în pancreas', de: 'den Bauchspeichel, in der Bauchspeicheldrüse' }], a: 0,
+      why: { ro: 'Ficatul face bila, iar vezica biliară o păstrează până la digestia grăsimilor.', de: 'Die Leber bildet die Galle, und die Gallenblase bewahrt sie bis zur Fettverdauung auf.' } },
+    { q: { ro: 'Care glandă anexă produce sucul pancreatic?', de: 'Welche Anhangsdrüse bildet den Bauchspeichel?' },
+      o: [{ ro: 'ficatul', de: 'die Leber' }, { ro: 'glandele salivare', de: 'die Speicheldrüsen' }, { ro: 'pancreasul', de: 'die Bauchspeicheldrüse' }], a: 2,
+      why: { ro: 'Pancreasul produce sucul pancreatic, care se varsă în duoden.', de: 'Die Bauchspeicheldrüse bildet den Bauchspeichel, der in den Zwölffingerdarm fließt.' } }
+  ], tx('Glandă și secreție', 'Drüse und Saft'));
+})();
+
+/* ================= Dicționar ================= */
+(function () {
+  var G = [
+    ['sistem digestiv', 'das Verdauungssystem'], ['tub digestiv', 'der Verdauungskanal'], ['glande anexe', 'die Anhangsdrüsen'],
+    ['cavitate bucală', 'die Mundhöhle'], ['faringe', 'der Rachen'], ['esofag', 'die Speiseröhre'], ['stomac', 'der Magen'],
+    ['intestin subțire', 'der Dünndarm'], ['intestin gros', 'der Dickdarm'], ['duoden', 'der Zwölffingerdarm'],
+    ['ficat', 'die Leber'], ['vezică biliară', 'die Gallenblase'], ['pancreas', 'die Bauchspeicheldrüse (das Pankreas)'],
+    ['glande salivare', 'die Speicheldrüsen'], ['salivă', 'der Speichel'], ['bilă', 'die Galle'], ['suc gastric', 'der Magensaft'],
+    ['suc pancreatic', 'der Bauchspeichel'], ['suc intestinal', 'der Darmsaft'], ['enzime', 'die Enzyme'],
+    ['masticație', 'das Kauen (die Mastikation)'], ['deglutiție (înghițire)', 'das Schlucken'], ['epiglotă', 'der Kehldeckel'],
+    ['sfincter', 'der Schließmuskel'], ['incisivi, canini', 'Schneidezähne, Eckzähne'], ['premolari, molari', 'vordere und hintere Backenzähne'],
+    ['proteine', 'die Eiweiße (Proteine)'], ['glucide', 'die Kohlenhydrate'], ['lipide', 'die Fette (Lipide)'], ['vitamine, minerale', 'Vitamine, Mineralstoffe'],
+    ['nutrimente', 'die Nährstoffe'], ['aminoacizi', 'die Aminosäuren'], ['acizi grași, glicerol', 'Fettsäuren, Glycerin'],
+    ['digestie', 'die Verdauung'], ['absorbție', 'die Aufnahme (Absorption)'], ['vilozități intestinale', 'die Darmzotten'],
+    ['materii fecale', 'der Stuhl (Kot)'], ['defecație', 'die Darmentleerung (Defäkation)']
+  ];
+  var d = $('#gloss');
+  G.forEach(function (g) { var r = h('div'); r.appendChild(h('dt', '', g[0])); r.appendChild(h('dd', '', g[1])); d.appendChild(r); });
+})();
+})();
+</script>
+</body>
+</html>

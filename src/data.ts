@@ -12,6 +12,7 @@ import { organismulOmuluiTest } from './content/organismul-omului-test';
 import { nutritiaTest } from './content/nutritia-test';
 import { frunzaTest } from './content/frunza-test';
 import { fotosintezaTest } from './content/fotosinteza-test';
+import { sistemulDigestivTest } from './content/sistemul-digestiv-test';
 import { descoperireaLumiiTest } from './content/descoperirea-lumii-test';
 import { vikingiiTest } from './content/vikingii-test';
 import { poliiSiOceaneleTest } from './content/polii-si-oceanele-test';
@@ -239,6 +240,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         src: 'lectii/clasa-6/biologie/fotosinteza.html',
         done: true,
         test: { questions: fotosintezaTest, minutes: 8 },
+      },
+      {
+        slug: 'sistemul-digestiv',
+        title: {
+          ro: 'Sistemul digestiv la om',
+          de: 'Das Verdauungssystem des Menschen',
+        },
+        summary: {
+          ro: 'Tubul digestiv și glandele anexe, drumul hranei, dinții, substanțele hrănitoare, digestia fizică și chimică și absorbția nutrimentelor.',
+          de: 'Verdauungskanal und Anhangsdrüsen, der Weg der Nahrung, die Zähne, die Nährstoffe, physikalische und chemische Verdauung und die Aufnahme der Nährstoffe.',
+        },
+        src: 'lectii/clasa-6/biologie/sistemul-digestiv.html',
+        test: { questions: sistemulDigestivTest, minutes: 10 },
       },
     ],
     alg: [
