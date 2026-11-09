@@ -93,24 +93,24 @@ export const sistemulDigestivTest: Question[] = [
       de: 'Was macht die Galle bei der Verdauung?',
     },
     options: [
-      { ro: 'descompune proteinele în aminoacizi', de: 'Sie zerlegt Eiweiße in Aminosäuren' },
+      { ro: 'descompune proteinele în aminoacizi', de: 'Sie zersetzt Eiweiße in Aminosäuren' },
       { ro: 'mărunțește grăsimile (transformare fizică)', de: 'Sie zerteilt Fette (physikalischer Vorgang)' },
       { ro: 'absoarbe apa', de: 'Sie nimmt Wasser auf' },
-      { ro: 'transformă amidonul în glucoză', de: 'Sie wandelt Stärke in Traubenzucker um' },
+      { ro: 'transformă amidonul în glucoză', de: 'Sie wandelt Stärke in Glukose um' },
     ],
     correct: 1,
     explain: {
       ro: 'Bila, făcută de ficat, mărunțește grăsimile sub formă de picături mici: e o transformare fizică.',
-      de: 'Die von der Leber gebildete Galle zerteilt die Fette in kleine Tröpfchen: Das ist ein physikalischer Vorgang.',
+      de: 'Die von der Leber gebildete Galle zerteilt die Fette in kleine Fetttröpfchen: Das ist ein physikalischer Vorgang.',
     },
   },
   {
     q: {
       ro: 'Ce rezultă din descompunerea proteinelor?',
-      de: 'Was entsteht beim Zerlegen der Eiweiße?',
+      de: 'Was entsteht beim Zersetzen der Eiweiße?',
     },
     options: [
-      { ro: 'glucoză', de: 'Traubenzucker' },
+      { ro: 'glucoză', de: 'Glukose' },
       { ro: 'acizi grași și glicerol', de: 'Fettsäuren und Glycerin' },
       { ro: 'vitamine', de: 'Vitamine' },
       { ro: 'aminoacizi', de: 'Aminosäuren' },
@@ -118,7 +118,7 @@ export const sistemulDigestivTest: Question[] = [
     correct: 3,
     explain: {
       ro: 'Proteine → aminoacizi. Lipide → acizi grași și glicerol. Glucide → glucoză.',
-      de: 'Eiweiße → Aminosäuren. Fette → Fettsäuren und Glycerin. Kohlenhydrate → Traubenzucker.',
+      de: 'Eiweiße → Aminosäuren. Fette → Fettsäuren und Glycerin. Kohlenhydrate → Glukose.',
     },
   },
   {
@@ -135,7 +135,7 @@ export const sistemulDigestivTest: Question[] = [
     correct: 1,
     explain: {
       ro: 'Apa, vitaminele și mineralele sunt gata de absorbție. Proteinele, lipidele și glucidele se descompun întâi.',
-      de: 'Wasser, Vitamine und Mineralstoffe sind aufnahmebereit. Eiweiße, Fette und Kohlenhydrate werden zuerst zerlegt.',
+      de: 'Wasser, Vitamine und Mineralien sind bereit zur Absorption. Eiweiße, Fette und Kohlenhydrate werden zuerst zersetzt.',
     },
   },
   {
@@ -146,13 +146,13 @@ export const sistemulDigestivTest: Question[] = [
     options: [
       { ro: 'ca să mărunțească hrana', de: 'um die Nahrung zu zerkleinern' },
       { ro: 'ca să producă bilă', de: 'um Galle zu bilden' },
-      { ro: 'ca să mărească suprafața de absorbție', de: 'um die Aufnahmefläche zu vergrößern' },
+      { ro: 'ca să mărească suprafața de absorbție', de: 'um die Absorptionsfläche zu vergrößern' },
       { ro: 'ca să oprească hrana', de: 'um die Nahrung aufzuhalten' },
     ],
     correct: 2,
     explain: {
       ro: 'Vilozitățile măresc suprafața de absorbție de circa 600 de ori, deci trec mai multe nutrimente în sânge.',
-      de: 'Die Zotten vergrößern die Aufnahmefläche etwa um das 600-Fache, sodass mehr Nährstoffe ins Blut gelangen.',
+      de: 'Die Zotten vergrößern die Absorptionsfläche etwa um das 600-Fache, sodass mehr Nährstoffe ins Blut gelangen.',
     },
   },
   {
@@ -170,6 +170,57 @@ export const sistemulDigestivTest: Question[] = [
     explain: {
       ro: 'Aici se absoarbe apa, iar bacteriile intestinale degradează resturile; rezultă materiile fecale, eliminate prin anus.',
       de: 'Hier wird Wasser aufgenommen, und Darmbakterien bauen die Reste ab; es entsteht der Stuhl, der durch den After ausgeschieden wird.',
+    },
+  },
+  {
+    q: {
+      ro: 'Care dintre sucurile din intestinul subțire nu conține enzime?',
+      de: 'Welcher Verdauungssaft im Dünndarm enthält keine Enzyme?',
+    },
+    options: [
+      { ro: 'sucul intestinal', de: 'der Dünndarmsaft' },
+      { ro: 'sucul pancreatic', de: 'der Bauchspeichelsaft' },
+      { ro: 'bila', de: 'der Gallensaft' },
+      { ro: 'sucul gastric', de: 'der Magensaft' },
+    ],
+    correct: 2,
+    explain: {
+      ro: 'Bila (Gallensaft) nu are enzime; ea emulsionează grăsimile. Sucul pancreatic și cel intestinal conțin enzime.',
+      de: 'Der Gallensaft hat keine Enzyme; er emulgiert die Fette. Bauchspeichelsaft und Dünndarmsaft enthalten Enzyme.',
+    },
+  },
+  {
+    q: {
+      ro: 'De ce sunt numite enzimele „foarfeci biologice”?',
+      de: 'Warum nennt man Enzyme „biologische Scheren“?',
+    },
+    options: [
+      { ro: 'pentru că taie hrana în bucăți cu dinții', de: 'weil sie die Nahrung mit den Zähnen zerschneiden' },
+      { ro: 'pentru că descompun substanțele în bucăți mai mici', de: 'weil sie die Stoffe in kleinere Stücke zersetzen' },
+      { ro: 'pentru că se consumă când lucrează', de: 'weil sie beim Arbeiten verbraucht werden' },
+      { ro: 'pentru că sunt făcute din metal', de: 'weil sie aus Metall sind' },
+    ],
+    correct: 1,
+    explain: {
+      ro: 'Enzimele descompun substanțele complexe în substanțe mai simple, dar rămân neschimbate.',
+      de: 'Enzyme zersetzen komplexe Stoffe in einfachere Stoffe, bleiben aber selbst unverändert.',
+    },
+  },
+  {
+    q: {
+      ro: 'Ce conține sucul gastric?',
+      de: 'Was enthält der Magensaft?',
+    },
+    options: [
+      { ro: 'doar enzime pentru amidon', de: 'nur Enzyme für Stärke' },
+      { ro: 'apă, minerale, acid clorhidric și enzime', de: 'Wasser, Mineralien, Salzsäure und Enzyme' },
+      { ro: 'bilă și lipază pancreatică', de: 'Galle und Bauchspeichel-Lipase' },
+      { ro: 'doar apă', de: 'nur Wasser' },
+    ],
+    correct: 1,
+    explain: {
+      ro: 'Sucul gastric are enzime care descompun proteinele și lipaza gastrică, care descompune grăsimile.',
+      de: 'Der Magensaft enthält proteinspaltende Enzyme und die Magenlipase, die die Fette zersetzt.',
     },
   },
 ];

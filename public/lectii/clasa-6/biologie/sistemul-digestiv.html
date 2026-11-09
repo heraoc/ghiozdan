@@ -107,7 +107,7 @@ svg.sel .part:not(.hi){opacity:.2}
 .pgs{display:flex;flex-wrap:wrap;gap:6px}
 .pgs i{width:22px;height:8px;border-radius:4px;background:var(--rule)}
 .pgs i.on{background:var(--ink)}
-.bolus{transition:transform .9s ease-in-out}
+.bolus,.piece{transition:transform .9s ease-in-out}.mv{transition:opacity .6s}
 .chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .pill{border:1.5px solid var(--ink);background:#fff;border-radius:99px;padding:5px 14px;cursor:pointer;font-weight:700;font-size:15.5px}
 .pill[aria-pressed="true"]{background:var(--ink);color:#fff}
@@ -189,7 +189,7 @@ html.embed .head{padding-bottom:0;border-bottom:0}
     <a href="#s3"><b>3</b><span class="ro">Dinții</span><span class="de">Die Zähne</span></a>
     <a href="#s4"><b>4</b><span class="ro">Nutrimentele</span><span class="de">Die Nährstoffe</span></a>
     <a href="#s5"><b>5</b><span class="ro">Digestia</span><span class="de">Die Verdauung</span></a>
-    <a href="#s6"><b>6</b><span class="ro">Absorbția</span><span class="de">Die Aufnahme</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Absorbția</span><span class="de">Die Absorption</span></a>
     <a href="#s7"><b>7</b><span class="ro">Fixare</span><span class="de">Festigen</span></a>
   </nav>
 </header>
@@ -220,7 +220,7 @@ html.embed .head{padding-bottom:0;border-bottom:0}
     <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
     <ul>
       <li><span class="ro">Tubul digestiv e <b>deschis spre exterior</b> prin două orificii: gura și anusul.</span><span class="de">Der Verdauungskanal ist durch zwei Öffnungen <b>nach außen offen</b>: Mund und After.</span></li>
-      <li><span class="ro">Glande anexe: <b>glandele salivare, ficatul și pancreasul</b>. Hrana nu trece prin ele.</span><span class="de">Anhangsdrüsen: <b>Speicheldrüsen, Leber und Bauchspeicheldrüse</b>. Die Nahrung geht nicht durch sie hindurch.</span></li>
+      <li><span class="ro">Glande anexe: <b>glandele salivare</b> (3 perechi) → <b>salivă</b>; <b>ficatul</b> → <b>bilă</b> (suc biliar); <b>pancreasul</b> → <b>suc pancreatic</b>. Hrana nu trece prin ele.</span><span class="de">Anhangsdrüsen: <b>Speicheldrüsen</b> (3 Paare) → <b>Speichel</b>; <b>Leber</b> → <b>Galle</b> (Gallensaft); <b>Bauchspeicheldrüse (Pankreas)</b> → <b>Bauchspeichelsaft</b>. Die Nahrung geht nicht durch sie hindurch.</span></li>
     </ul>
   </div>
   <div class="check" id="c1"></div>
@@ -229,7 +229,7 @@ html.embed .head{padding-bottom:0;border-bottom:0}
 <!-- 2. Drumul hranei -->
 <section class="block" id="s2" aria-labelledby="t2">
   <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Drumul hranei prin tubul digestiv</span><span class="de">Der Weg der Nahrung durch den Verdauungskanal</span></h2>
-  <p class="section-sub"><span class="ro">Urmărește un „bol alimentar” (un dumicat) de la gură la anus. Apasă „Pasul următor” și vezi ce i se întâmplă în fiecare organ.</span><span class="de">Verfolge einen „Speisebrei“ (einen Bissen) vom Mund bis zum After. Tippe auf „Nächster Schritt“ und sieh, was in jedem Organ mit ihm geschieht.</span></p>
+  <p class="section-sub"><span class="ro">Urmărește un „bol alimentar” (un dumicat) de la gură la anus. Apasă „Pasul următor” și vezi ce i se întâmplă în fiecare organ.</span><span class="de">Verfolge einen „Nahrungsbissen“ (einen Bissen) vom Mund bis zum After. Tippe auf „Nächster Schritt“ und sieh, was in jedem Organ mit ihm geschieht.</span></p>
   <div class="split">
     <div class="fig"><svg id="body2" viewBox="0 0 440 560" role="img" aria-label="Drumul unui dumicat prin tubul digestiv"></svg></div>
     <div>
@@ -280,33 +280,43 @@ html.embed .head{padding-bottom:0;border-bottom:0}
 
 <!-- 5. Digestia -->
 <section class="block" id="s5" aria-labelledby="t5">
-  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Digestia: transformări fizice și chimice</span><span class="de">Die Verdauung: physikalische und chemische Vorgänge</span></h2>
-  <p class="section-sub"><span class="ro">Hrana conține substanțe prea mari pentru a trece în sânge. Digestia le transformă în <b>nutrimente</b> simple. Sunt două feluri de transformări: <b>fizice</b> (hrana își schimbă doar forma sau aspectul) și <b>chimice</b> (substanțele se descompun, cu ajutorul <b>enzimelor</b>).</span><span class="de">Die Nahrung enthält Stoffe, die zu groß sind, um ins Blut zu gelangen. Die Verdauung zerlegt sie in einfache <b>Nährstoffe</b>. Es gibt zwei Arten von Vorgängen: <b>physikalische</b> (die Nahrung ändert nur Form oder Aussehen) und <b>chemische</b> (Stoffe werden mithilfe von <b>Enzymen</b> zerlegt).</span></p>
-  <h3 class="sub-h"><span class="ro">a) Fizică sau chimică?</span><span class="de">a) Physikalisch oder chemisch?</span></h3>
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Digestia: procese mecanice, fizice și chimice</span><span class="de">Die Verdauung: mechanische, physikalische und chemische Prozesse</span></h2>
+  <p class="section-sub"><span class="ro"><b>Digestia</b> este transformarea substanțelor complexe până la substanțe mai simple, pe care le folosesc celulele corpului (nutrimentele). Sunt trei feluri de procese: <b>mecanice</b> (hrana e mărunțită și amestecată), <b>fizice</b> (hrana se dizolvă sau se înmoaie) și <b>chimice</b> (substanțele se descompun, cu ajutorul <b>enzimelor</b>).</span><span class="de">Die <b>Verdauung</b> ist die Umwandlung der komplexen Stoffe bis zu den einfacheren Stoffen, die von den Körperzellen verwendet werden. Es gibt drei Arten von Prozessen: <b>mechanische</b> (die Nahrung wird zerkleinert und durchmischt), <b>physikalische</b> (die Nahrung löst sich auf oder weicht auf) und <b>chemische</b> (Stoffe werden mithilfe von <b>Enzymen</b> zersetzt).</span></p>
+  <h3 class="sub-h"><span class="ro">a) Mecanic, fizic sau chimic?</span><span class="de">a) Mechanisch, physikalisch oder chemisch?</span></h3>
   <div class="sorter" id="fc"></div>
   <p class="score" id="fc-score" style="margin-top:10px" aria-live="polite"></p>
-  <h3 class="sub-h"><span class="ro">b) Din ce rezultă ce?</span><span class="de">b) Woraus wird was?</span></h3>
+  <h3 class="sub-h"><span class="ro">b) Enzimele: „foarfeci biologice”</span><span class="de">b) Enzyme: „biologische Scheren“</span></h3>
+  <p class="hint"><span class="ro">Enzimele descompun substanțele: taie lanțurile lungi în bucăți mai mici. Apasă pe buton și urmărește.</span><span class="de">Enzyme zersetzen die Stoffe: Sie schneiden lange Ketten in kleinere Stücke. Tippe auf den Knopf und sieh zu.</span></p>
+  <div class="fig" style="margin-top:8px;max-width:640px"><svg id="chain" viewBox="0 0 520 150" role="img" aria-label="Un lanț lung de unități este tăiat de o enzimă în trei bucăți mai mici"></svg></div>
+  <div class="actions">
+    <button type="button" class="toggle" id="chain-toggle" aria-pressed="false"><span class="ro">Enzima acționează</span><span class="de">Das Enzym wirkt</span></button>
+    <span class="score" id="chain-txt" aria-live="polite"></span>
+  </div>
+  <h3 class="sub-h"><span class="ro">c) Din ce rezultă ce?</span><span class="de">c) Woraus wird was?</span></h3>
   <div class="check" id="c5"></div>
+  <h3 class="sub-h"><span class="ro">d) Cele trei sucuri din intestinul subțire</span><span class="de">d) Die drei Verdauungssäfte im Dünndarm</span></h3>
+  <div class="check" id="c5b"></div>
   <div class="remember">
     <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
     <ul>
-      <li><span class="ro">Transformări <b>fizice</b>: zdrobire, mărunțire, amestecare, dizolvare. Transformări <b>chimice</b>: descompunerea hranei în nutrimente simple, cu ajutorul enzimelor.</span><span class="de"><b>Physikalische</b> Vorgänge: Zerkleinern, Zerreiben, Vermischen, Auflösen. <b>Chemische</b> Vorgänge: Zerlegung der Nahrung in einfache Nährstoffe mithilfe von Enzymen.</span></li>
-      <li><span class="ro">Proteine → <b>aminoacizi</b>. Lipide → <b>acizi grași și glicerol</b>. Glucide → <b>glucoză</b>.</span><span class="de">Eiweiße → <b>Aminosäuren</b>. Fette → <b>Fettsäuren und Glycerin</b>. Kohlenhydrate → <b>Traubenzucker (Glukose)</b>.</span></li>
-      <li><span class="ro">Apa, vitaminele și mineralele nu se digeră: sunt gata de absorbție.</span><span class="de">Wasser, Vitamine und Mineralstoffe werden nicht verdaut: Sie sind sofort aufnahmebereit.</span></li>
+      <li><span class="ro"><b>Mecanice</b>: masticația (dinții), amestecarea (mușchii). <b>Fizice</b>: dizolvarea, înmuierea. <b>Chimice</b>: cu enzime. Enzimele sunt „foarfeci biologice” care descompun substanțele.</span><span class="de"><b>Mechanische</b> Prozesse: Kauen (Zähne), Durchmischung (Muskeln). <b>Physikalische</b>: Auflösen, Aufweichen. <b>Chemische</b>: mit Enzymen. Enzyme sind „biologische Scheren“, die die Stoffe zersetzen.</span></li>
+      <li><span class="ro">Proteine → <b>aminoacizi</b>. Glucide → <b>glucoză</b>. Lipide → <b>acizi grași</b> (și glicerol). Apa și vitaminele rămân neschimbate.</span><span class="de">Eiweiße (Proteine) → <b>Aminosäuren</b>. Kohlenhydrate → <b>Glukose</b>. Fette (Lipide) → <b>Fettsäuren</b> (und Glycerin). Wasser und Vitamine bleiben unverändert.</span></li>
+      <li><span class="ro">În gură: amilaza descompune amidonul gătit. În stomac: sucul gastric (apă, minerale, acid clorhidric, enzime) cu enzime pentru proteine și lipaza gastrică pentru grăsimi. În intestinul subțire: <b>bila</b> (fără enzime, emulsionează grăsimile), <b>sucul pancreatic</b> (amilază, enzime pentru proteine, lipaze) și <b>sucul intestinal</b> (enzime pentru glucide, proteine, lipide).</span><span class="de">Im Mund: Amylase zersetzt die gekochte Stärke. Im Magen: Magensaft (Wasser, Mineralien, Salzsäure, Enzyme) mit proteinspaltenden Enzymen und Magenlipase für Fette. Im Dünndarm: <b>Gallensaft</b> (ohne Enzyme, emulgiert die Fette), <b>Bauchspeichelsaft</b> (Amylase, proteinspaltende Enzyme, Lipasen) und <b>Dünndarmsaft</b> (kohlenhydrat-, proteinspaltende Enzyme, Lipasen).</span></li>
+      <li><span class="ro">Apa, vitaminele și mineralele nu se digeră: sunt gata de absorbție.</span><span class="de">Wasser, Vitamine und Mineralien werden nicht verdaut: Sie sind bereit zur Absorption.</span></li>
     </ul>
   </div>
 </section>
 
 <!-- 6. Absorbția -->
 <section class="block" id="s6" aria-labelledby="t6">
-  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Absorbția: nutrimentele intră în sânge</span><span class="de">Die Aufnahme: Nährstoffe gelangen ins Blut</span></h2>
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Absorbția: nutrimentele intră în sânge</span><span class="de">Die Absorption: Nährstoffe gelangen ins Blut</span></h2>
   <p class="section-sub"><span class="ro">Preluarea nutrimentelor în sânge se numește <b>absorbție</b> și are loc în intestinul subțire. Apasă „Mărește suprafața” și vezi cum o rezolvă peretele intestinului.</span><span class="de">Die Aufnahme der Nährstoffe ins Blut heißt <b>Absorption</b> und findet im Dünndarm statt. Tippe auf „Fläche vergrößern“ und sieh, wie die Darmwand das löst.</span></p>
   <div class="split">
     <div>
       <div class="fig"><svg id="villus" viewBox="0 0 440 330" role="img" aria-label="Peretele intestinului subțire cu vilozități"></svg></div>
       <div class="actions"><button type="button" class="toggle" id="vil-toggle" aria-pressed="false"><span class="ro">Mărește suprafața</span><span class="de">Fläche vergrößern</span></button></div>
       <div class="bar-row">
-        <span class="hint"><span class="ro">Suprafața de absorbție</span><span class="de">Aufnahmefläche</span></span>
+        <span class="hint"><span class="ro">Suprafața de absorbție</span><span class="de">Absorptionsfläche</span></span>
         <div class="bar"><i id="vil-bar" style="width:3%"></i></div>
         <span class="score" id="vil-txt" aria-live="polite"></span>
       </div>
@@ -319,7 +329,7 @@ html.embed .head{padding-bottom:0;border-bottom:0}
   <div class="remember">
     <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
     <ul>
-      <li><span class="ro">Intestinul subțire are pereți cu <b>vilozități intestinale</b>. Ele măresc suprafața de absorbție de aproximativ 600 de ori. Prin capilarele sanguine și vasele limfatice, nutrimentele intră în circulație.</span><span class="de">Der Dünndarm hat Wände mit <b>Darmzotten</b>. Sie vergrößern die Aufnahmefläche etwa um das 600-Fache. Über Blutkapillaren und Lymphgefäße gelangen die Nährstoffe in den Kreislauf.</span></li>
+      <li><span class="ro">Intestinul subțire are pereți cu <b>vilozități intestinale</b>. Ele măresc suprafața de absorbție de aproximativ 600 de ori. Prin capilarele sanguine și vasele limfatice, nutrimentele intră în circulație.</span><span class="de">Der Dünndarm hat Wände mit <b>Darmzotten</b>. Sie vergrößern die Absorptionsfläche etwa um das 600-Fache. Über Blutkapillaren und Lymphgefäße gelangen die Nährstoffe in den Kreislauf.</span></li>
       <li><span class="ro">În <b>intestinul gros</b> se absoarbe cea mai mare parte din apă. Produsele nedigerate sunt degradate de bacterii (fermentație și putrefacție), apoi rezultă <b>materiile fecale</b>, eliminate prin <b>defecație</b>.</span><span class="de">Im <b>Dickdarm</b> wird der größte Teil des Wassers aufgenommen. Unverdaute Reste werden von Bakterien abgebaut (Gärung und Fäulnis), dabei entsteht der <b>Stuhl (Kot)</b>, der durch die <b>Darmentleerung</b> ausgeschieden wird.</span></li>
     </ul>
   </div>
@@ -342,7 +352,7 @@ html.embed .head{padding-bottom:0;border-bottom:0}
   <dl class="gloss" id="gloss"></dl>
 </section>
 
-<p class="foot"><span class="ro">După manualul de Biologie, clasa a 6-a, lecțiile „Sistemul digestiv la om” și „Digestia la om”. Termenii germani sunt cei uzuali; verifică-i cu cei din caiet. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Biologiebuch der 6. Klasse, den Lektionen „Sistemul digestiv la om“ und „Digestia la om“. Die deutschen Begriffe sind die gängigen; vergleiche sie mit denen im Heft. Der Test unten prüft, was du gelernt hast.</span></p>
+<p class="foot"><span class="ro">După manualul de Biologie, clasa a 6-a, lecțiile „Sistemul digestiv la om” și „Digestia la om”, și după notițele din caiet (9.11.2026), de unde sunt și termenii germani. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Biologiebuch der 6. Klasse, den Lektionen „Sistemul digestiv la om“ und „Digestia la om“, und nach den Notizen im Heft (9.11.2026), aus denen auch die deutschen Begriffe stammen. Der Test unten prüft, was du gelernt hast.</span></p>
 </div>
 
 <script>
@@ -415,7 +425,7 @@ var PARTS = [
   { k: 'mouth', c: '#e07a7a', gl: false, n: { ro: 'Cavitatea bucală', de: 'Mundhöhle' },
     d: { ro: 'Aici sunt dinții și limba, organe importante pentru masticație (mestecare) și deglutiție (înghițire). Primește saliva de la glandele salivare.', de: 'Hier liegen Zähne und Zunge, wichtige Organe fürs Kauen (Mastikation) und Schlucken (Deglutition). Sie bekommt den Speichel von den Speicheldrüsen.' } },
   { k: 'sal', c: '#e8a23a', gl: true, n: { ro: 'Glandele salivare', de: 'Speicheldrüsen' },
-    d: { ro: 'Eliberează saliva în cavitatea bucală, prin canale. Glandă anexă: hrana nu trece prin ea.', de: 'Sie geben den Speichel über Kanäle in die Mundhöhle ab. Anhangsdrüse: Die Nahrung geht nicht durch sie hindurch.' } },
+    d: { ro: 'Sunt 3 perechi de glande salivare. Ele eliberează saliva în cavitatea bucală, prin canale. Glande anexe: hrana nu trece prin ele.', de: 'Es gibt 3 Paare Speicheldrüsen. Sie geben den Speichel über Kanäle in die Mundhöhle ab. Anhangsdrüsen: Die Nahrung geht nicht durch sie hindurch.' } },
   { k: 'phar', c: '#d98a8a', gl: false, n: { ro: 'Faringele', de: 'Rachen' },
     d: { ro: 'Este locul de înghițire și intersecția căilor digestive cu cele respiratorii.', de: 'Hier wird geschluckt, und hier kreuzen sich Speise- und Atemwege.' } },
   { k: 'eso', c: '#c96f7a', gl: false, n: { ro: 'Esofagul', de: 'Speiseröhre' },
@@ -423,13 +433,13 @@ var PARTS = [
   { k: 'sto', c: '#d9534f', gl: false, n: { ro: 'Stomacul', de: 'Magen' },
     d: { ro: 'Stă în partea stângă a cavității abdominale. E un săculeț cu trei straturi de mușchi, iar glandele din el produc sucul gastric. Hrana intră prin orificiul cardia și iese prin orificiul pilor; ambele au sfinctere (mușchi circulari).', de: 'Er liegt in der linken Bauchhöhle. Er ist ein Säckchen mit drei Muskelschichten, und seine Drüsen bilden den Magensaft. Die Nahrung tritt durch den Mageneingang (Kardia) ein und durch den Magenpförtner (Pylorus) aus; beide haben Schließmuskeln.' } },
   { k: 'liv', c: '#a0522d', gl: true, n: { ro: 'Ficatul', de: 'Leber' },
-    d: { ro: 'Glandă anexă mare. Secretă bila, care ajută la digestia grăsimilor.', de: 'Eine große Anhangsdrüse. Sie bildet die Galle, die bei der Verdauung der Fette hilft.' } },
+    d: { ro: 'Glandă anexă mare. Secretă bila (sucul biliar), care ajută la digestia grăsimilor.', de: 'Eine große Anhangsdrüse. Sie bildet die Galle (Gallensaft), die bei der Fettverdauung hilft.' } },
   { k: 'gall', c: '#3f9e6b', gl: true, n: { ro: 'Vezica biliară', de: 'Gallenblase' },
     d: { ro: 'Un săculeț în care se depozitează bila făcută de ficat.', de: 'Ein Säckchen, in dem die von der Leber gebildete Galle gespeichert wird.' } },
   { k: 'pan', c: '#f2cf4b', gl: true, n: { ro: 'Pancreasul', de: 'Bauchspeicheldrüse (Pankreas)' },
-    d: { ro: 'Glandă anexă. Secretă sucul pancreatic, care se varsă în duoden (începutul intestinului subțire).', de: 'Eine Anhangsdrüse. Sie bildet den Bauchspeichel, der in den Zwölffingerdarm (Anfang des Dünndarms) fließt.' } },
+    d: { ro: 'Glandă anexă. Secretă sucul pancreatic, care se varsă în duoden (începutul intestinului subțire).', de: 'Eine Anhangsdrüse. Sie bildet den Bauchspeichelsaft, der in den Zwölffingerdarm (Anfang des Dünndarms) fließt.' } },
   { k: 'si', c: '#e58fb0', gl: false, n: { ro: 'Intestinul subțire', de: 'Dünndarm' },
-    d: { ro: 'Lung de 6 m la adult, pliat în cavitatea abdominală. Pereții lui sunt musculoși, iar stratul intern produce suc intestinal. În primul segment, duodenul, se varsă bila și sucul pancreatic.', de: 'Beim Erwachsenen 6 m lang, in der Bauchhöhle gefaltet. Seine Wände sind muskulös, und die Innenschicht bildet den Darmsaft. Im ersten Abschnitt, dem Zwölffingerdarm (Duodenum), münden Galle und Bauchspeichel.' } },
+    d: { ro: 'Lung de 6 m la adult, pliat în cavitatea abdominală. Pereții lui sunt musculoși, iar stratul intern produce suc intestinal. În primul segment, duodenul, se varsă bila și sucul pancreatic.', de: 'Beim Erwachsenen 6 m lang, in der Bauchhöhle gefaltet. Seine Wände sind muskulös, und die Innenschicht bildet den Dünndarmsaft. Im ersten Abschnitt, dem Zwölffingerdarm (Duodenum), münden Galle und Bauchspeichelsaft.' } },
   { k: 'li', c: '#d98a3d', gl: false, n: { ro: 'Intestinul gros', de: 'Dickdarm' },
     d: { ro: 'Are circa 1,5 m și patru regiuni: cecum, apendice, colon și rect. Se deschide la exterior prin orificiul anal, prevăzut cu două sfinctere.', de: 'Etwa 1,5 m lang, mit vier Abschnitten: Blinddarm (Zäkum), Wurmfortsatz (Appendix), Grimmdarm (Kolon) und Mastdarm (Rektum). Er öffnet sich nach außen durch den After mit zwei Schließmuskeln.' } },
   { k: 'anus', c: '#8d4b2f', gl: false, n: { ro: 'Orificiul anal (anusul)', de: 'After (Anus)' },
@@ -545,22 +555,22 @@ function drawBody(svg, onPick) {
   var STEPS = [
     { at: [260, 90], hi: ['mouth', 'sal'], c: PBY.mouth.c,
       t: { ro: 'Cavitatea bucală', de: 'Mundhöhle' },
-      p: { ro: '<b>Fizic:</b> masticația (dinții mărunțesc hrana), amestecarea cu limba și dizolvarea unor substanțe în salivă. <b>Chimic:</b> enzimele din salivă încep să transforme amidonul (un glucid). Din hrană se formează bolul alimentar.', de: '<b>Physikalisch:</b> Kauen (die Zähne zerkleinern die Nahrung), Vermischen mit der Zunge und Auflösen mancher Stoffe im Speichel. <b>Chemisch:</b> Enzyme im Speichel beginnen, die Stärke (ein Kohlenhydrat) umzuwandeln. Aus der Nahrung wird der Speisebrei.' } },
+      p: { ro: '<b>Mecanic:</b> masticația (dinții mărunțesc hrana) și amestecarea cu limba. <b>Fizic:</b> dizolvarea și înmuierea hranei în salivă. <b>Chimic:</b> saliva conține o enzimă, amilaza, care descompune amidonul gătit (un glucid). Din hrană se formează bolul alimentar.', de: '<b>Mechanisch:</b> Kauen (die Zähne zerkleinern die Nahrung) und Durchmischung mit der Zunge. <b>Physikalisch:</b> Auflösen und Aufweichen der Nahrung im Speichel. <b>Chemisch:</b> Der Speichel enthält ein Enzym, die Amylase, die die gekochte Stärke (ein Kohlenhydrat) zersetzt. Aus der Nahrung wird der Nahrungsbissen.' } },
     { at: [260, 122], hi: ['phar'], c: PBY.phar.c,
       t: { ro: 'Faringele: deglutiția', de: 'Rachen: Schlucken' },
-      p: { ro: 'Bolul alimentar e înghițit. Epiglota închide căile respiratorii, ca hrana să nu se ducă pe „calea greșită”. Aici se încrucișează căile digestive cu cele respiratorii.', de: 'Der Speisebrei wird geschluckt. Der Kehldeckel (Epiglottis) verschließt die Atemwege, damit die Nahrung nicht in den „falschen Hals“ gerät. Hier kreuzen sich Speise- und Atemwege.' } },
+      p: { ro: 'Bolul alimentar e înghițit. Epiglota închide căile respiratorii, ca hrana să nu se ducă pe „calea greșită”. Aici se încrucișează căile digestive cu cele respiratorii.', de: 'Der Nahrungsbissen wird geschluckt. Der Kehldeckel (Epiglottis) verschließt die Atemwege, damit die Nahrung nicht in den „falschen Hals“ gerät. Hier kreuzen sich Speise- und Atemwege.' } },
     { at: [260, 184], hi: ['eso'], c: PBY.eso.c,
       t: { ro: 'Esofagul', de: 'Speiseröhre' },
-      p: { ro: 'Pereții musculoși se contractă pe rând și împing bolul spre stomac. Aici nu se digeră nimic: e doar un drum.', de: 'Die Muskelwände ziehen sich nacheinander zusammen und schieben den Speisebrei zum Magen. Hier wird nichts verdaut: Es ist nur ein Weg.' } },
+      p: { ro: 'Pereții musculoși se contractă pe rând și împing bolul spre stomac. Aici nu se digeră nimic: e doar un drum.', de: 'Die Muskelwände ziehen sich nacheinander zusammen und schieben den Nahrungsbissen zum Magen. Hier wird nichts verdaut: Es ist nur ein Weg.' } },
     { at: [312, 268], hi: ['sto'], c: PBY.sto.c,
       t: { ro: 'Stomacul', de: 'Magen' },
-      p: { ro: '<b>Fizic:</b> mușchii stomacului frământă și amestecă hrana. <b>Chimic:</b> enzimele din sucul gastric descompun proteinele în lanțuri scurte de aminoacizi. Hrana intră prin cardia și iese prin pilor.', de: '<b>Physikalisch:</b> Die Magenmuskeln kneten und mischen die Nahrung. <b>Chemisch:</b> Enzyme im Magensaft zerlegen die Eiweiße in kurze Ketten aus Aminosäuren. Die Nahrung tritt durch die Kardia ein und durch den Pylorus aus.' } },
+      p: { ro: '<b>Mecanic:</b> mușchii stomacului amestecă hrana. <b>Chimic:</b> sucul gastric (apă, minerale, acid clorhidric și enzime) are enzime care descompun proteinele (în lanțuri scurte de aminoacizi) și lipaza gastrică, care descompune grăsimile. Hrana intră prin cardia și iese prin pilor.', de: '<b>Mechanisch:</b> Die Magenmuskeln durchmischen die Nahrung. <b>Chemisch:</b> Der Magensaft (Wasser, Mineralien, Salzsäure und Enzyme) enthält proteinspaltende Enzyme, die die Proteine zersetzen, und die Magenlipase, die die Fette zersetzt. Die Nahrung tritt durch die Kardia ein und durch den Pylorus aus.' } },
     { at: [292, 340], hi: ['si', 'liv', 'gall', 'pan'], c: PBY.si.c,
-      t: { ro: 'Intestinul subțire: duodenul', de: 'Dünndarm: Zwölffingerdarm' },
-      p: { ro: 'Se varsă <b>bila</b> (de la ficat și vezica biliară), <b>sucul pancreatic</b> și <b>sucul intestinal</b>. <b>Fizic:</b> bila mărunțește grăsimile. <b>Chimic:</b> enzimele descompun proteinele, glucidele și lipidele în substanțe simple.', de: '<b>Galle</b> (von Leber und Gallenblase), <b>Bauchspeichel</b> und <b>Darmsaft</b> fließen hinein. <b>Physikalisch:</b> Die Galle zerteilt die Fette. <b>Chemisch:</b> Enzyme zerlegen Eiweiße, Kohlenhydrate und Fette in einfache Stoffe.' } },
+      t: { ro: 'Intestinul subțire: cele trei sucuri', de: 'Dünndarm: die drei Verdauungssäfte' },
+      p: { ro: '<b>1. Bila</b> (nu are enzime) emulsionează grăsimile: moleculele mari de grăsime devin picături foarte mici. <b>2. Sucul pancreatic</b> are amilază (amidon), enzime care descompun proteinele și lipaze (grăsimi). <b>3. Sucul intestinal</b> are enzime care descompun glucidele, proteinele și lipidele.', de: '<b>1. Gallensaft</b> (hat keine Enzyme) emulgiert die Fette: Große Fettmoleküle werden zu Fetttröpfchen. <b>2. Bauchspeichelsaft</b> enthält Amylase (Stärke), proteinspaltende Enzyme und Lipasen (Fette). <b>3. Dünndarmsaft</b> enthält kohlenhydratspaltende und proteinspaltende Enzyme sowie Lipasen (fettspaltende Enzyme).' } },
     { at: [270, 424], hi: ['si'], c: PBY.si.c,
-      t: { ro: 'Intestinul subțire: absorbția', de: 'Dünndarm: Aufnahme' },
-      p: { ro: 'Nutrimentele sunt gata: aminoacizi, acizi grași, glicerol, glucoză, plus apă, vitamine și minerale. Ele trec prin peretele intestinului în sânge. Aici se absoarbe cea mai mare parte din hrană.', de: 'Die Nährstoffe sind fertig: Aminosäuren, Fettsäuren, Glycerin, Traubenzucker sowie Wasser, Vitamine und Mineralstoffe. Sie gehen durch die Darmwand ins Blut. Hier wird der größte Teil der Nahrung aufgenommen.' } },
+      t: { ro: 'Intestinul subțire: absorbția', de: 'Dünndarm: Absorption' },
+      p: { ro: 'Produsele finale sunt gata: aminoacizi, glucoză, acizi grași și glicerol, plus apă, vitamine și minerale. Ele sunt absorbite în sânge prin vilozitățile intestinale. Aici se absoarbe cea mai mare parte din hrană.', de: 'Die Endprodukte sind fertig: Aminosäuren, Glukose, Fettsäuren und Glycerin, dazu Wasser, Vitamine und Mineralien. Sie werden durch die Darmzotten ins Blut aufgenommen (Absorption). Hier wird der größte Teil der Nahrung aufgenommen.' } },
     { at: [272, 352], hi: ['li'], c: PBY.li.c,
       t: { ro: 'Intestinul gros', de: 'Dickdarm' },
       p: { ro: 'Se absoarbe cea mai mare parte a apei. Produsele nedigerate sunt descompuse de bacteriile intestinale (fermentație și putrefacție). Rezultă materiile fecale.', de: 'Der größte Teil des Wassers wird aufgenommen. Unverdaute Reste werden von Darmbakterien abgebaut (Gärung und Fäulnis). Es entsteht der Stuhl.' } },
@@ -657,7 +667,7 @@ function drawBody(svg, onPick) {
     { k: 'glu', c: '#8cb81f', e: '🍞', n: { ro: 'Glucide', de: 'Kohlenhydrate (Glucide)' }, d: { ro: 'Zaharurile (carbohidrații) sunt prima sursă de energie a celulelor. Pâinea, cerealele și fructele ne dau glucide.', de: 'Zucker (Kohlenhydrate) sind die erste Energiequelle der Zellen. Brot, Getreide und Obst liefern uns Kohlenhydrate.' } },
     { k: 'lip', c: '#e0701f', e: '🫒', n: { ro: 'Lipide', de: 'Fette (Lipide)' }, d: { ro: 'Grăsimile sunt o sursă de energie. Corpul le depozitează în țesutul adipos și le folosește după ce glucidele din sânge și din ficat s-au consumat. Alimente bogate în lipide: untul, untura, ouăle, uleiul.', de: 'Fette sind eine Energiequelle. Der Körper speichert sie im Fettgewebe und nutzt sie erst, wenn die Kohlenhydrate in Blut und Leber verbraucht sind. Fettreich sind Butter, Schmalz, Eier, Öl.' } },
     { k: 'vit', c: '#6f8ea0', e: '🍊', n: { ro: 'Vitamine', de: 'Vitamine' }, d: { ro: 'Organismul are nevoie de ele în cantități mici, dar le are nevoie în fiecare zi. Se găsesc, de exemplu, în fructe și legume (vitaminele A și C).', de: 'Der Körper braucht sie nur in kleinen Mengen, aber jeden Tag. Man findet sie zum Beispiel in Obst und Gemüse (Vitamine A und C).' } },
-    { k: 'min', c: '#c05fb0', e: '🧂', n: { ro: 'Minerale', de: 'Mineralstoffe' }, d: { ro: 'Substanțe de care corpul are nevoie în cantități mici, de exemplu calciul din lapte și produse lactate.', de: 'Stoffe, die der Körper in kleinen Mengen braucht, zum Beispiel Kalzium aus Milch und Milchprodukten.' } },
+    { k: 'min', c: '#c05fb0', e: '🧂', n: { ro: 'Minerale', de: 'Mineralien' }, d: { ro: 'Substanțe de care corpul are nevoie în cantități mici, de exemplu calciul din lapte și produse lactate.', de: 'Stoffe, die der Körper in kleinen Mengen braucht, zum Beispiel Kalzium aus Milch und Milchprodukten.' } },
     { k: 'apa', c: '#2f80ed', e: '💧', n: { ro: 'Apă', de: 'Wasser' }, d: { ro: 'Substanță de importanță vitală. Corpul nostru conține 50–60% apă.', de: 'Ein lebenswichtiger Stoff. Unser Körper besteht zu 50–60 % aus Wasser.' } }
   ];
   var host = $('#puzzle'), desc = $('#desc4'), bs = {};
@@ -679,7 +689,11 @@ function drawBody(svg, onPick) {
     ['🍊', { ro: 'Portocala', de: 'Die Orange' }, 'vit', { ro: 'Portocala e plină de vitamina C.', de: 'Die Orange ist voller Vitamin C.' }],
     ['🫘', { ro: 'Fasolea', de: 'Die Bohnen' }, 'pro', { ro: 'Leguminoasele (fasole, mazăre, linte) sunt o sursă bună de proteine.', de: 'Hülsenfrüchte (Bohnen, Erbsen, Linsen) sind eine gute Eiweißquelle.' }],
     ['🥔', { ro: 'Cartoful', de: 'Die Kartoffel' }, 'glu', { ro: 'Cartoful conține mult amidon, adică glucide.', de: 'Die Kartoffel enthält viel Stärke, also Kohlenhydrate.' }],
-    ['🧈', { ro: 'Untul', de: 'Die Butter' }, 'lip', { ro: 'Untul este bogat în lipide.', de: 'Butter ist reich an Fetten.' }]
+    ['🧈', { ro: 'Untul', de: 'Die Butter' }, 'lip', { ro: 'Untul este bogat în lipide.', de: 'Butter ist reich an Fetten.' }],
+    ['🥩', { ro: 'Carnea', de: 'Das Fleisch' }, 'pro', { ro: 'Carnea este bogată în proteine.', de: 'Fleisch ist reich an Eiweiß.' }],
+    ['🧀', { ro: 'Brânza', de: 'Der Käse' }, 'pro', { ro: 'Brânza are multe proteine (din lapte).', de: 'Käse hat viel Eiweiß (aus der Milch).' }],
+    ['🍚', { ro: 'Orezul', de: 'Der Reis' }, 'glu', { ro: 'Orezul (ca și pastele și pâinea) dă mai ales glucide.', de: 'Reis (wie Pasta und Brot) liefert vor allem Kohlenhydrate.' }],
+    ['🥑', { ro: 'Avocado', de: 'Die Avocado' }, 'lip', { ro: 'Avocado conține multe lipide (grăsimi sănătoase).', de: 'Avocado enthält viele Fette (gesunde Fette).' }]
   ], [['pro', { ro: 'proteine', de: 'Eiweiß' }], ['glu', { ro: 'glucide', de: 'Kohlenhydrate' }], ['lip', { ro: 'lipide', de: 'Fette' }], ['vit', { ro: 'vitamine', de: 'Vitamine' }]],
   { ro: 'Gândește-te la ce rol are alimentul: construiește, dă energie sau ajută cu cantități mici?', de: 'Überleg, welche Rolle das Lebensmittel hat: Baut es auf, liefert es Energie oder hilft es in kleinen Mengen?' });
 })();
@@ -687,30 +701,72 @@ function drawBody(svg, onPick) {
 /* ================= 5. Digestia ================= */
 (function () {
   Sorter($('#fc'), $('#fc-score'), [
-    ['🦷', { ro: 'Masticația (mestecarea) cu dinții', de: 'Das Kauen mit den Zähnen' }, 'f', { ro: 'Hrana e doar mărunțită, substanțele rămân aceleași: fizic.', de: 'Die Nahrung wird nur zerkleinert, die Stoffe bleiben dieselben: physikalisch.' }],
-    ['💧', { ro: 'Dizolvarea unor substanțe în salivă', de: 'Das Auflösen mancher Stoffe im Speichel' }, 'f', { ro: 'Dizolvarea e o transformare fizică.', de: 'Auflösen ist ein physikalischer Vorgang.' }],
-    ['🧪', { ro: 'Enzimele din salivă transformă amidonul', de: 'Enzyme im Speichel wandeln Stärke um' }, 'c', { ro: 'Substanța se transformă în alta, cu ajutorul enzimelor: chimic.', de: 'Der Stoff wird mithilfe von Enzymen in einen anderen umgewandelt: chemisch.' }],
-    ['🌀', { ro: 'Mușchii stomacului amestecă hrana', de: 'Die Magenmuskeln vermischen die Nahrung' }, 'f', { ro: 'Amestecarea nu schimbă substanțele: fizic.', de: 'Vermischen verändert die Stoffe nicht: physikalisch.' }],
-    ['🧪', { ro: 'Sucul gastric descompune proteinele', de: 'Der Magensaft zerlegt Eiweiße' }, 'c', { ro: 'Proteinele se descompun în lanțuri scurte de aminoacizi: chimic.', de: 'Eiweiße werden in kurze Aminosäureketten zerlegt: chemisch.' }],
-    ['🟢', { ro: 'Bila mărunțește grăsimile', de: 'Die Galle zerteilt die Fette' }, 'f', { ro: 'Bila doar mărunțește grăsimile, fără să le descompună: fizic.', de: 'Die Galle zerteilt die Fette nur, ohne sie zu zerlegen: physikalisch.' }],
-    ['🧪', { ro: 'Sucurile pancreatic și intestinal descompun proteinele, glucidele și lipidele', de: 'Bauchspeichel und Darmsaft zerlegen Eiweiße, Kohlenhydrate und Fette' }, 'c', { ro: 'Se obțin substanțe simple, cu ajutorul enzimelor: chimic.', de: 'Es entstehen einfache Stoffe mithilfe von Enzymen: chemisch.' }]
-  ], [['f', { ro: 'fizică', de: 'physikalisch' }], ['c', { ro: 'chimică', de: 'chemisch' }]],
-  { ro: 'Se schimbă doar forma hranei, sau se formează alte substanțe?', de: 'Ändert sich nur die Form der Nahrung oder entstehen andere Stoffe?' });
+    ['🦷', { ro: 'Masticația (mestecarea) cu dinții', de: 'Das Kauen mit den Zähnen' }, 'm', { ro: 'Hrana e mărunțită cu dinții: proces mecanic.', de: 'Die Nahrung wird mit den Zähnen zerkleinert: mechanischer Prozess.' }],
+    ['🌀', { ro: 'Mușchii stomacului amestecă hrana', de: 'Die Magenmuskeln durchmischen die Nahrung' }, 'm', { ro: 'Amestecarea o fac mușchii: proces mecanic (Durchmischung).', de: 'Das Durchmischen besorgen die Muskeln: mechanischer Prozess.' }],
+    ['💧', { ro: 'Dizolvarea hranei în salivă', de: 'Das Auflösen der Nahrung im Speichel' }, 'f', { ro: 'Dizolvarea (Auflösen) este un proces fizic.', de: 'Das Auflösen ist ein physikalischer Prozess.' }],
+    ['🧽', { ro: 'Înmuierea hranei în salivă', de: 'Das Aufweichen der Nahrung im Speichel' }, 'f', { ro: 'Înmuierea (Aufweichen) este un proces fizic.', de: 'Das Aufweichen ist ein physikalischer Prozess.' }],
+    ['🟢', { ro: 'Bila emulsionează grăsimile (picături mici)', de: 'Der Gallensaft emulgiert die Fette (Fetttröpfchen)' }, 'f', { ro: 'Bila doar desface grăsimea în picături, fără să o descompună: proces fizic.', de: 'Der Gallensaft zerteilt das Fett nur in Tröpfchen, ohne es zu zersetzen: physikalischer Prozess.' }],
+    ['🧪', { ro: 'Amilaza din salivă descompune amidonul gătit', de: 'Die Amylase im Speichel zersetzt die gekochte Stärke' }, 'c', { ro: 'O enzimă descompune substanța: proces chimic.', de: 'Ein Enzym zersetzt den Stoff: chemischer Prozess.' }],
+    ['🧪', { ro: 'Sucul gastric descompune proteinele (și lipaza gastrică, grăsimile)', de: 'Der Magensaft zersetzt die Proteine (die Magenlipase die Fette)' }, 'c', { ro: 'Enzimele din sucul gastric descompun substanțele: proces chimic.', de: 'Die Enzyme im Magensaft zersetzen die Stoffe: chemischer Prozess.' }],
+    ['🧪', { ro: 'Sucurile pancreatic și intestinal descompun proteinele, glucidele și lipidele', de: 'Bauchspeichelsaft und Dünndarmsaft zersetzen Proteine, Kohlenhydrate und Fette' }, 'c', { ro: 'Se obțin substanțe simple, cu ajutorul enzimelor: proces chimic.', de: 'Es entstehen einfache Stoffe mithilfe von Enzymen: chemischer Prozess.' }]
+  ], [['m', { ro: 'mecanic', de: 'mechanisch' }], ['f', { ro: 'fizic', de: 'physikalisch' }], ['c', { ro: 'chimic', de: 'chemisch' }]],
+  { ro: 'Se schimbă doar forma (mecanic), hrana se dizolvă/se înmoaie (fizic) sau o enzimă descompune substanța (chimic)?', de: 'Ändert sich nur die Form (mechanisch), löst sich die Nahrung auf bzw. weicht sie auf (physikalisch), oder zersetzt ein Enzym den Stoff (chemisch)?' });
+
+  /* foarfeci biologice: lanț tăiat de enzimă */
+  (function () {
+    var svg = $('#chain'), tog = $('#chain-toggle'), txt = $('#chain-txt'), cut = false;
+    el('rect', { x: 0, y: 0, width: 520, height: 150, rx: 10, fill: '#eef3e6' }, svg);
+    var N = 9, X = function (i) { return 44 + i * 54; };
+    var pieces = [[0, 1, 2], [3, 4, 5], [6, 7, 8]], cols = ['#e58fb0', '#f0a85a', '#8cb81f'], gs = [];
+    pieces.forEach(function (pc, k) {
+      var g = el('g', { class: 'mv piece' }, svg);
+      for (var j = 0; j < pc.length - 1; j++) el('line', { x1: X(pc[j]), y1: 80, x2: X(pc[j + 1]), y2: 80, stroke: '#7a8a7f', 'stroke-width': 4 }, g);
+      pc.forEach(function (i) { el('circle', { cx: X(i), cy: 80, r: 14, fill: cols[k], stroke: '#fff', 'stroke-width': 2.5 }, g); });
+      gs.push(g);
+    });
+    // linii de legătură între bucăți (dispar la tăiere)
+    var links = [[2, 3], [5, 6]].map(function (l) { return el('line', { x1: X(l[0]), y1: 80, x2: X(l[1]), y2: 80, stroke: '#7a8a7f', 'stroke-width': 4 }, svg); });
+    var sc = [2.5, 5.5].map(function (i) { return el('text', { x: 44 + i * 54, y: 44, 'text-anchor': 'middle', style: 'font-size:26px', opacity: 0 }, svg, '✂'); });
+    var lab = el('text', { x: 260, y: 134, class: 'lbl', 'text-anchor': 'middle' }, svg, '');
+    function draw() {
+      gs.forEach(function (g, k) { g.style.transform = cut ? 'translate(' + ((k - 1) * 26) + 'px,' + (k === 1 ? -10 : 8) + 'px)' : 'translate(0,0)'; });
+      links.forEach(function (l) { l.setAttribute('opacity', cut ? 0 : 1); });
+      sc.forEach(function (t) { t.setAttribute('opacity', cut ? 1 : 0); });
+      lab.textContent = cut ? tx('substanțe mai simple', 'einfachere Stoffe') : tx('substanță complexă', 'komplexer Stoff');
+      tog.setAttribute('aria-pressed', cut ? 'true' : 'false');
+      txt.textContent = cut ? tx('Enzima a „tăiat” lanțul în 3 bucăți. Ea rămâne neschimbată.', 'Das Enzym hat die Kette in 3 Stücke „geschnitten“. Es bleibt unverändert.') : '';
+    }
+    tog.onclick = function () { cut = !cut; draw(); };
+    draw();
+  })();
 
   Check($('#c5'), [
     { q: { ro: 'Din proteine rezultă…', de: 'Aus Eiweißen werden …' },
-      o: [{ ro: 'aminoacizi', de: 'Aminosäuren' }, { ro: 'acizi grași și glicerol', de: 'Fettsäuren und Glycerin' }, { ro: 'glucoză', de: 'Traubenzucker' }], a: 0,
-      why: { ro: 'Proteinele se descompun în aminoacizi.', de: 'Eiweiße werden in Aminosäuren zerlegt.' } },
+      o: [{ ro: 'aminoacizi', de: 'Aminosäuren' }, { ro: 'acizi grași și glicerol', de: 'Fettsäuren und Glycerin' }, { ro: 'glucoză', de: 'Glukose' }], a: 0,
+      why: { ro: 'Proteinele se descompun în aminoacizi.', de: 'Eiweiße werden in Aminosäuren zersetzt.' } },
     { q: { ro: 'Din lipide rezultă…', de: 'Aus Fetten werden …' },
-      o: [{ ro: 'aminoacizi', de: 'Aminosäuren' }, { ro: 'acizi grași și glicerol', de: 'Fettsäuren und Glycerin' }, { ro: 'glucoză', de: 'Traubenzucker' }], a: 1,
-      why: { ro: 'Lipidele se descompun în acizi grași și glicerol.', de: 'Fette werden in Fettsäuren und Glycerin zerlegt.' } },
+      o: [{ ro: 'aminoacizi', de: 'Aminosäuren' }, { ro: 'acizi grași și glicerol', de: 'Fettsäuren und Glycerin' }, { ro: 'glucoză', de: 'Glukose' }], a: 1,
+      why: { ro: 'Lipidele se descompun în acizi grași și glicerol.', de: 'Fette werden in Fettsäuren und Glycerin zersetzt.' } },
     { q: { ro: 'Din glucide (amidon) rezultă…', de: 'Aus Kohlenhydraten (Stärke) wird …' },
-      o: [{ ro: 'aminoacizi', de: 'Aminosäuren' }, { ro: 'acizi grași', de: 'Fettsäuren' }, { ro: 'glucoză', de: 'Traubenzucker' }], a: 2,
-      why: { ro: 'Glucidele se descompun până la glucoză.', de: 'Kohlenhydrate werden bis zum Traubenzucker zerlegt.' } },
-    { q: { ro: 'Care substanțe nu trebuie digerate, pentru că sunt gata de absorbție?', de: 'Welche Stoffe müssen nicht verdaut werden, weil sie schon aufnahmebereit sind?' },
-      o: [{ ro: 'apa, vitaminele și mineralele', de: 'Wasser, Vitamine und Mineralstoffe' }, { ro: 'proteinele', de: 'Eiweiße' }, { ro: 'lipidele și glucidele', de: 'Fette und Kohlenhydrate' }], a: 0,
-      why: { ro: 'Apa, vitaminele și mineralele trec direct în sânge. Proteinele, lipidele și glucidele sunt prea mari și se descompun întâi.', de: 'Wasser, Vitamine und Mineralstoffe gehen direkt ins Blut. Eiweiße, Fette und Kohlenhydrate sind zu groß und werden erst zerlegt.' },
+      o: [{ ro: 'aminoacizi', de: 'Aminosäuren' }, { ro: 'acizi grași', de: 'Fettsäuren' }, { ro: 'glucoză', de: 'Glukose' }], a: 2,
+      why: { ro: 'Glucidele se descompun până la glucoză.', de: 'Kohlenhydrate werden bis zum Glukose zersetzt.' } },
+    { q: { ro: 'Care substanțe nu trebuie digerate, pentru că sunt gata de absorbție?', de: 'Welche Stoffe müssen nicht verdaut werden, weil sie schon bereit zur Absorption sind?' },
+      o: [{ ro: 'apa, vitaminele și mineralele', de: 'Wasser, Vitamine und Mineralien' }, { ro: 'proteinele', de: 'Eiweiße' }, { ro: 'lipidele și glucidele', de: 'Fette und Kohlenhydrate' }], a: 0,
+      why: { ro: 'Apa, vitaminele și mineralele trec direct în sânge. Proteinele, lipidele și glucidele sunt prea mari și se descompun întâi.', de: 'Wasser, Vitamine und Mineralien gehen direkt ins Blut. Eiweiße, Fette und Kohlenhydrate sind zu groß und werden erst zersetzt.' },
       hint: { ro: 'Care sunt substanțele mici, care nu sunt „construite” din bucăți mari?', de: 'Welche Stoffe sind klein und nicht aus großen Bausteinen „gebaut“?' } }
+  ], tx('Verifică-te', 'Prüfe dich'));
+
+  Check($('#c5b'), [
+    { q: { ro: 'Care dintre cele trei sucuri din intestinul subțire NU conține enzime?', de: 'Welcher der drei Verdauungssäfte im Dünndarm enthält KEINE Enzyme?' },
+      o: [{ ro: 'bila', de: 'der Gallensaft' }, { ro: 'sucul pancreatic', de: 'der Bauchspeichelsaft' }, { ro: 'sucul intestinal', de: 'der Dünndarmsaft' }], a: 0,
+      why: { ro: 'Bila nu are enzime: ea emulsionează grăsimile, adică le desface în picături mici.', de: 'Der Gallensaft hat keine Enzyme: Er emulgiert die Fette, zerteilt sie also in Fetttröpfchen.' },
+      hint: { ro: 'Unul dintre ele doar pregătește grăsimile, fără să le descompună chimic.', de: 'Einer von ihnen bereitet die Fette nur vor, ohne sie chemisch zu zersetzen.' } },
+    { q: { ro: 'Care suc conține amilază, enzime pentru proteine și lipaze?', de: 'Welcher Saft enthält Amylase, proteinspaltende Enzyme und Lipasen?' },
+      o: [{ ro: 'bila', de: 'der Gallensaft' }, { ro: 'sucul gastric', de: 'der Magensaft' }, { ro: 'sucul pancreatic', de: 'der Bauchspeichelsaft' }], a: 2,
+      why: { ro: 'Sucul pancreatic (Bauchspeichelsaft) are enzime pentru toate cele trei grupe: amidon, proteine și grăsimi.', de: 'Der Bauchspeichelsaft hat Enzyme für alle drei Gruppen: Stärke, Proteine und Fette.' } },
+    { q: { ro: 'Ce conține sucul gastric?', de: 'Was enthält der Magensaft?' },
+      o: [{ ro: 'doar apă', de: 'nur Wasser' }, { ro: 'apă, minerale, acid clorhidric și enzime', de: 'Wasser, Mineralien, Salzsäure und Enzyme' }, { ro: 'bilă și amilază', de: 'Galle und Amylase' }], a: 1,
+      why: { ro: 'Enzimele din sucul gastric descompun proteinele, iar lipaza gastrică descompune grăsimile.', de: 'Die Enzyme im Magensaft zersetzen die Proteine, und die Magenlipase zersetzt die Fette.' } }
   ], tx('Verifică-te', 'Prüfe dich'));
 })();
 
@@ -718,7 +774,7 @@ function drawBody(svg, onPick) {
 (function () {
   var svg = $('#villus'), legend = $('#legend6'), desc = $('#desc6'), tog = $('#vil-toggle'), big = false;
   var V = [
-    { k: 'lum', c: '#e0a100', n: { ro: 'Interiorul intestinului', de: 'Darminneres' }, d: { ro: 'Aici ajunge hrana digerată. Nutrimentele (aminoacizi, acizi grași, glicerol, glucoză) sunt gata să fie absorbite.', de: 'Hier kommt die verdaute Nahrung an. Die Nährstoffe (Aminosäuren, Fettsäuren, Glycerin, Traubenzucker) sind bereit zur Aufnahme.' } },
+    { k: 'lum', c: '#e0a100', n: { ro: 'Interiorul intestinului', de: 'Darminneres' }, d: { ro: 'Aici ajunge hrana digerată. Nutrimentele (aminoacizi, acizi grași, glicerol, glucoză) sunt gata să fie absorbite.', de: 'Hier kommt die verdaute Nahrung an. Die Nährstoffe (Aminosäuren, Fettsäuren, Glycerin, Glukose) sind bereit zur Absorption.' } },
     { k: 'cell', c: '#e58fb0', n: { ro: 'Celule intestinale cu prelungiri', de: 'Darmzellen mit Fortsätzen' }, d: { ro: 'Stratul de celule care căptușește vilozitatea. Prelungirile celulare mai măresc încă o dată suprafața prin care trec nutrimentele.', de: 'Die Zellschicht, die die Darmzotte auskleidet. Die Zellfortsätze vergrößern die Fläche, durch die die Nährstoffe gehen, noch einmal.' } },
     { k: 'cap', c: '#d64545', n: { ro: 'Capilar sanguin', de: 'Blutkapillare' }, d: { ro: 'Un vas de sânge foarte fin, în mijlocul vilozității. Preia nutrimentele în sânge.', de: 'Ein sehr feines Blutgefäß in der Mitte der Zotte. Es nimmt die Nährstoffe ins Blut auf.' } },
     { k: 'lym', c: '#3f9e6b', n: { ro: 'Vas limfatic', de: 'Lymphgefäß' }, d: { ro: 'Un alt tip de vas fin din vilozitate. Prin el trec în special lipidele absorbite.', de: 'Eine andere Art feines Gefäß in der Zotte. Durch es gelangen vor allem die aufgenommenen Fette.' } }
@@ -772,10 +828,10 @@ function drawBody(svg, onPick) {
   Check($('#c6'), [
     { q: { ro: 'Unde are loc absorbția nutrimentelor în sânge?', de: 'Wo werden die Nährstoffe ins Blut aufgenommen?' },
       o: [{ ro: 'în stomac', de: 'im Magen' }, { ro: 'în intestinul subțire', de: 'im Dünndarm' }, { ro: 'în esofag', de: 'in der Speiseröhre' }], a: 1,
-      why: { ro: 'Intestinul subțire are pereți cu vilozități, adaptați special pentru absorbție.', de: 'Der Dünndarm hat Wände mit Zotten, die speziell für die Aufnahme angepasst sind.' },
+      why: { ro: 'Intestinul subțire are pereți cu vilozități, adaptați special pentru absorbție.', de: 'Der Dünndarm hat Wände mit Zotten, die speziell für die Absorption angepasst sind.' },
       hint: { ro: 'Ce organ are vilozități, ca să-și mărească suprafața?', de: 'Welches Organ hat Zotten, um seine Fläche zu vergrößern?' } },
     { q: { ro: 'De ce sunt utile vilozitățile intestinale?', de: 'Wozu dienen die Darmzotten?' },
-      o: [{ ro: 'mărunțesc hrana', de: 'Sie zerkleinern die Nahrung' }, { ro: 'măresc suprafața de absorbție', de: 'Sie vergrößern die Aufnahmefläche' }, { ro: 'produc bila', de: 'Sie bilden die Galle' }], a: 1,
+      o: [{ ro: 'mărunțesc hrana', de: 'Sie zerkleinern die Nahrung' }, { ro: 'măresc suprafața de absorbție', de: 'Sie vergrößern die Absorptionsfläche' }, { ro: 'produc bila', de: 'Sie bilden die Galle' }], a: 1,
       why: { ro: 'Cu cât suprafața e mai mare, cu atât trec mai multe nutrimente în sânge.', de: 'Je größer die Fläche, desto mehr Nährstoffe gehen ins Blut.' },
       hint: { ro: 'Compară cele două desene: ce se schimbă când apar vilozitățile?', de: 'Vergleiche die beiden Bilder: Was ändert sich, wenn die Zotten erscheinen?' } },
     { q: { ro: 'Ce se absoarbe în principal în intestinul gros?', de: 'Was wird im Dickdarm hauptsächlich aufgenommen?' },
@@ -808,11 +864,11 @@ function drawBody(svg, onPick) {
       o: [{ ro: 'saliva', de: 'den Speichel' }, { ro: 'bila', de: 'die Galle' }, { ro: 'sucul gastric', de: 'den Magensaft' }], a: 0,
       why: { ro: 'Saliva, cu enzime care încep digestia amidonului.', de: 'Den Speichel, mit Enzymen, die die Verdauung der Stärke beginnen.' } },
     { q: { ro: 'Ce produce ficatul și unde se depozitează?', de: 'Was bildet die Leber und wo wird es gespeichert?' },
-      o: [{ ro: 'bila, în vezica biliară', de: 'die Galle, in der Gallenblase' }, { ro: 'saliva, în gură', de: 'den Speichel, im Mund' }, { ro: 'sucul pancreatic, în pancreas', de: 'den Bauchspeichel, in der Bauchspeicheldrüse' }], a: 0,
+      o: [{ ro: 'bila, în vezica biliară', de: 'die Galle, in der Gallenblase' }, { ro: 'saliva, în gură', de: 'den Speichel, im Mund' }, { ro: 'sucul pancreatic, în pancreas', de: 'den Bauchspeichelsaft, in der Bauchspeicheldrüse' }], a: 0,
       why: { ro: 'Ficatul face bila, iar vezica biliară o păstrează până la digestia grăsimilor.', de: 'Die Leber bildet die Galle, und die Gallenblase bewahrt sie bis zur Fettverdauung auf.' } },
-    { q: { ro: 'Care glandă anexă produce sucul pancreatic?', de: 'Welche Anhangsdrüse bildet den Bauchspeichel?' },
+    { q: { ro: 'Care glandă anexă produce sucul pancreatic?', de: 'Welche Anhangsdrüse bildet den Bauchspeichelsaft?' },
       o: [{ ro: 'ficatul', de: 'die Leber' }, { ro: 'glandele salivare', de: 'die Speicheldrüsen' }, { ro: 'pancreasul', de: 'die Bauchspeicheldrüse' }], a: 2,
-      why: { ro: 'Pancreasul produce sucul pancreatic, care se varsă în duoden.', de: 'Die Bauchspeicheldrüse bildet den Bauchspeichel, der in den Zwölffingerdarm fließt.' } }
+      why: { ro: 'Pancreasul produce sucul pancreatic, care se varsă în duoden.', de: 'Die Bauchspeicheldrüse bildet den Bauchspeichelsaft, der in den Zwölffingerdarm fließt.' } }
   ], tx('Glandă și secreție', 'Drüse und Saft'));
 })();
 
@@ -823,14 +879,20 @@ function drawBody(svg, onPick) {
     ['cavitate bucală', 'die Mundhöhle'], ['faringe', 'der Rachen'], ['esofag', 'die Speiseröhre'], ['stomac', 'der Magen'],
     ['intestin subțire', 'der Dünndarm'], ['intestin gros', 'der Dickdarm'], ['duoden', 'der Zwölffingerdarm'],
     ['ficat', 'die Leber'], ['vezică biliară', 'die Gallenblase'], ['pancreas', 'die Bauchspeicheldrüse (das Pankreas)'],
-    ['glande salivare', 'die Speicheldrüsen'], ['salivă', 'der Speichel'], ['bilă', 'die Galle'], ['suc gastric', 'der Magensaft'],
-    ['suc pancreatic', 'der Bauchspeichel'], ['suc intestinal', 'der Darmsaft'], ['enzime', 'die Enzyme'],
+    ['glande salivare', 'die Speicheldrüsen'], ['salivă', 'der Speichel'], ['bilă', 'die Galle'], ['suc gastric', 'der Magensaft'], ['enzime', 'die Enzyme'],
     ['masticație', 'das Kauen (die Mastikation)'], ['deglutiție (înghițire)', 'das Schlucken'], ['epiglotă', 'der Kehldeckel'],
     ['sfincter', 'der Schließmuskel'], ['incisivi, canini', 'Schneidezähne, Eckzähne'], ['premolari, molari', 'vordere und hintere Backenzähne'],
-    ['proteine', 'die Eiweiße (Proteine)'], ['glucide', 'die Kohlenhydrate'], ['lipide', 'die Fette (Lipide)'], ['vitamine, minerale', 'Vitamine, Mineralstoffe'],
+    ['proteine', 'die Eiweiße (Proteine)'], ['glucide', 'die Kohlenhydrate'], ['lipide', 'die Fette (Lipide)'], ['vitamine, minerale', 'Vitamine, Mineralien'],
     ['nutrimente', 'die Nährstoffe'], ['aminoacizi', 'die Aminosäuren'], ['acizi grași, glicerol', 'Fettsäuren, Glycerin'],
-    ['digestie', 'die Verdauung'], ['absorbție', 'die Aufnahme (Absorption)'], ['vilozități intestinale', 'die Darmzotten'],
-    ['materii fecale', 'der Stuhl (Kot)'], ['defecație', 'die Darmentleerung (Defäkation)']
+    ['digestie', 'die Verdauung (Digestia)'], ['absorbție', 'die Absorption'], ['vilozități intestinale', 'die Darmzotten'],
+    ['materii fecale', 'der Stuhl (Kot)'], ['defecație', 'die Darmentleerung (Defäkation)'],
+    ['bol alimentar', 'der Nahrungsbissen'], ['proces mecanic', 'der mechanische Prozess'], ['proces fizic', 'der physikalische Prozess'], ['proces chimic', 'der chemische Prozess'],
+    ['mestecare', 'das Kauen'], ['amestecare (cu mușchii)', 'die Durchmischung (mit den Muskeln)'], ['dizolvare', 'das Auflösen'], ['înmuiere', 'das Aufweichen'],
+    ['enzime = foarfeci biologice', 'Enzyme = biologische Scheren'], ['amilază', 'die Amylase'], ['lipază', 'die Lipase'], ['lipază gastrică', 'die Magenlipase'],
+    ['enzime care descompun proteinele', 'proteinspaltende Enzyme'], ['enzime care descompun glucidele', 'kohlenhydratspaltende Enzyme'], ['enzime care descompun grăsimile', 'fettspaltende Enzyme'],
+    ['a descompune', 'zersetzen'], ['amidon gătit', 'die gekochte Stärke'], ['acid clorhidric', 'die Salzsäure'],
+    ['suc biliar (bilă)', 'der Gallensaft (die Galle)'], ['suc pancreatic', 'der Bauchspeichelsaft'], ['suc intestinal', 'der Dünndarmsaft'],
+    ['emulsionare', 'die Emulgierung'], ['picături de grăsime', 'die Fetttröpfchen'], ['produse finale', 'die Endprodukte']
   ];
   var d = $('#gloss');
   G.forEach(function (g) { var r = h('div'); r.appendChild(h('dt', '', g[0])); r.appendChild(h('dd', '', g[1])); d.appendChild(r); });

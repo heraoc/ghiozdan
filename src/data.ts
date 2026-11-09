@@ -249,11 +249,11 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
           de: 'Das Verdauungssystem des Menschen',
         },
         summary: {
-          ro: 'Tubul digestiv și glandele anexe, drumul hranei, dinții, substanțele hrănitoare, digestia fizică și chimică și absorbția nutrimentelor.',
-          de: 'Verdauungskanal und Anhangsdrüsen, der Weg der Nahrung, die Zähne, die Nährstoffe, physikalische und chemische Verdauung und die Aufnahme der Nährstoffe.',
+          ro: 'Tubul digestiv și glandele anexe, drumul hranei, dinții, substanțele hrănitoare, digestia mecanică, fizică și chimică (enzimele, sucurile digestive) și absorbția nutrimentelor.',
+          de: 'Verdauungskanal und Anhangsdrüsen, der Weg der Nahrung, die Zähne, die Nährstoffe, mechanische, physikalische und chemische Verdauung (Enzyme, Verdauungssäfte) und die Absorption der Nährstoffe.',
         },
         src: 'lectii/clasa-6/biologie/sistemul-digestiv.html',
-        test: { questions: sistemulDigestivTest, minutes: 10 },
+        test: { questions: sistemulDigestivTest, minutes: 12 },
       },
       {
         slug: 'investigatii-digestie',

@@ -10,13 +10,13 @@ export const investigatiiDigestieTest: Question[] = [
     options: [
       { ro: 'apa', de: 'das Wasser' },
       { ro: 'amidonul', de: 'die Stärke' },
-      { ro: 'glucoza', de: 'der Traubenzucker' },
-      { ro: 'sărurile minerale', de: 'die Mineralstoffe' },
+      { ro: 'glucoza', de: 'der Glukose' },
+      { ro: 'sărurile minerale', de: 'die Mineralien' },
     ],
     correct: 1,
     explain: {
       ro: 'Amidonul este format din mii de unități de glucoză. Apa și mineralele sunt substanțe simple.',
-      de: 'Stärke besteht aus Tausenden Glukose-Einheiten. Wasser und Mineralstoffe sind einfache Stoffe.',
+      de: 'Stärke besteht aus Tausenden Glukose-Einheiten. Wasser und Mineralien sind einfache Stoffe.',
     },
   },
   {
@@ -39,18 +39,18 @@ export const investigatiiDigestieTest: Question[] = [
   {
     q: {
       ro: 'Unde începe descompunerea amidonului din pâine?',
-      de: 'Wo beginnt die Zerlegung der Stärke aus dem Brot?',
+      de: 'Wo beginnt die Zersetzung der Stärke aus dem Brot?',
     },
     options: [
       { ro: 'în stomac', de: 'im Magen' },
-      { ro: 'în gură, cu amilaza salivară', de: 'im Mund, mit der Speichelamylase' },
+      { ro: 'în gură, cu amilaza salivară', de: 'im Mund, mit der Amylase' },
       { ro: 'în intestinul gros', de: 'im Dickdarm' },
       { ro: 'în ficat', de: 'in der Leber' },
     ],
     correct: 1,
     explain: {
       ro: 'Saliva conține amilază salivară, o enzimă care descompune amidonul.',
-      de: 'Der Speichel enthält Speichelamylase, ein Enzym, das Stärke zerlegt.',
+      de: 'Der Speichel enthält Amylase, ein Enzym, das Stärke zersetzt.',
     },
   },
   {
@@ -59,21 +59,21 @@ export const investigatiiDigestieTest: Question[] = [
       de: 'Im Experiment färbt sich das Glas mit Speichel nach dem Jod gelb. Was zeigt das?',
     },
     options: [
-      { ro: 'amidonul a fost descompus', de: 'Die Stärke wurde zerlegt' },
+      { ro: 'amidonul a fost descompus', de: 'Die Stärke wurde zersetzt' },
       { ro: 'amidonul s-a înmulțit', de: 'Die Stärke hat sich vermehrt' },
-      { ro: 'iodul s-a descompus', de: 'Das Jod wurde zerlegt' },
+      { ro: 'iodul s-a descompus', de: 'Das Jod wurde zersetzt' },
       { ro: 'nu s-a întâmplat nimic', de: 'Es ist nichts geschehen' },
     ],
     correct: 0,
     explain: {
       ro: 'Fără amidon, iodul nu mai dă albastru: enzima din salivă l-a descompus.',
-      de: 'Ohne Stärke gibt Jod kein Blau mehr: Das Enzym im Speichel hat sie zerlegt.',
+      de: 'Ohne Stärke gibt Jod kein Blau mehr: Das Enzym im Speichel hat sie zersetzt.',
     },
   },
   {
     q: {
       ro: 'Ce se întâmplă cu o enzimă după ce descompune o substanță?',
-      de: 'Was geschieht mit einem Enzym, nachdem es einen Stoff zerlegt hat?',
+      de: 'Was geschieht mit einem Enzym, nachdem es einen Stoff zersetzt hat?',
     },
     options: [
       { ro: 'dispare', de: 'Es verschwindet' },
@@ -84,7 +84,7 @@ export const investigatiiDigestieTest: Question[] = [
     correct: 2,
     explain: {
       ro: 'Enzima rămâne neschimbată și poate descompune alte substanțe.',
-      de: 'Das Enzym bleibt unverändert und kann weitere Stoffe zerlegen.',
+      de: 'Das Enzym bleibt unverändert und kann weitere Stoffe zersetzen.',
     },
   },
   {
@@ -107,35 +107,35 @@ export const investigatiiDigestieTest: Question[] = [
   {
     q: {
       ro: 'Ce înseamnă emulsionarea lipidelor?',
-      de: 'Was bedeutet das Emulgieren der Fette?',
+      de: 'Was bedeutet die Emulgierung der Fette?',
     },
     options: [
-      { ro: 'descompunerea în acizi grași', de: 'die Zerlegung in Fettsäuren' },
-      { ro: 'desfacerea în picături foarte mici, o transformare fizică', de: 'das Zerteilen in sehr kleine Tröpfchen, ein physikalischer Vorgang' },
-      { ro: 'absorbția în sânge', de: 'die Aufnahme ins Blut' },
+      { ro: 'descompunerea în acizi grași', de: 'die Zersetzung in Fettsäuren' },
+      { ro: 'desfacerea în picături foarte mici, o transformare fizică', de: 'das Zerteilen in sehr kleine Fetttröpfchen, ein physikalischer Vorgang' },
+      { ro: 'absorbția în sânge', de: 'die Absorption ins Blut' },
       { ro: 'dizolvarea în apă', de: 'das Lösen in Wasser' },
     ],
     correct: 1,
     explain: {
       ro: 'Emulsionarea face din grăsime picături mici, ca lipaza să aibă o suprafață de contact mai mare.',
-      de: 'Beim Emulgieren wird Fett zu kleinen Tröpfchen, damit die Lipase eine größere Kontaktfläche hat.',
+      de: 'Bei der Emulgierung wird Fett zu kleinen Fetttröpfchen, damit die Lipase eine größere Kontaktfläche hat.',
     },
   },
   {
     q: {
       ro: 'Ce enzimă din sucul pancreatic continuă digestia lipidelor?',
-      de: 'Welches Enzym im Bauchspeichel setzt die Verdauung der Fette fort?',
+      de: 'Welches Enzym im Bauchspeichelsaft setzt die Verdauung der Fette fort?',
     },
     options: [
       { ro: 'lipaza', de: 'die Lipase' },
-      { ro: 'amilaza salivară', de: 'die Speichelamylase' },
+      { ro: 'amilaza salivară', de: 'die Amylase' },
       { ro: 'bila', de: 'die Galle' },
       { ro: 'gluteina', de: 'das Gluten' },
     ],
     correct: 0,
     explain: {
       ro: 'Lipaza descompune lipidele în acizi grași și glicerol.',
-      de: 'Die Lipase zerlegt Fette in Fettsäuren und Glycerin.',
+      de: 'Die Lipase zersetzt Fette in Fettsäuren und Glycerin.',
     },
   },
   {
