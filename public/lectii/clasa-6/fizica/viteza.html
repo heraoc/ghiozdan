@@ -548,20 +548,20 @@ function arrow(parent, x1, y1, x2, y2, color, w) {
   el('polygon', { points: x2 + ',' + y2 + ' ' + (x2 - ux * hs - uy * hs * 0.55) + ',' + (y2 - uy * hs + ux * hs * 0.55) + ' ' + (x2 - ux * hs + uy * hs * 0.55) + ',' + (y2 - uy * hs - ux * hs * 0.55), fill: color }, parent);
 }
 function playBtn(btn, slider, speed, redraw) {
-  var playing = false, raf = 0, last = 0;
+  var playing = false, raf = 0, last = 0, pos = 0;
   function label() { btn.textContent = playing ? '⏸ ' + tx('Pauză', 'Pause') : '▶ ' + tx('Pornește', 'Start'); }
   function step(now) {
     if (!playing) return;
     var dt = Math.min(0.05, (now - last) / 1000); last = now;
-    var v = +slider.value + dt * speed, mx = +slider.max;
-    if (v >= mx) { v = mx; playing = false; label(); }
+    pos += dt * speed; var v = pos, mx = +slider.max;
+    if (v >= mx) { v = mx; pos = mx; playing = false; label(); }
     slider.value = v; redraw();
     if (playing) raf = requestAnimationFrame(step);
   }
   btn.onclick = function () {
     if (playing) { playing = false; cancelAnimationFrame(raf); label(); return; }
     if (+slider.value >= +slider.max) slider.value = slider.min;
-    playing = true; label(); last = performance.now(); raf = requestAnimationFrame(step);
+    pos = +slider.value; playing = true; label(); last = performance.now(); raf = requestAnimationFrame(step);
   };
   slider.addEventListener('input', function () { playing = false; cancelAnimationFrame(raf); label(); });
   label();
