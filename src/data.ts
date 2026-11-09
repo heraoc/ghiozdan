@@ -13,6 +13,7 @@ import { nutritiaTest } from './content/nutritia-test';
 import { frunzaTest } from './content/frunza-test';
 import { fotosintezaTest } from './content/fotosinteza-test';
 import { sistemulDigestivTest } from './content/sistemul-digestiv-test';
+import { investigatiiDigestieTest } from './content/investigatii-digestie-test';
 import { descoperireaLumiiTest } from './content/descoperirea-lumii-test';
 import { vikingiiTest } from './content/vikingii-test';
 import { poliiSiOceaneleTest } from './content/polii-si-oceanele-test';
@@ -253,6 +254,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/biologie/sistemul-digestiv.html',
         test: { questions: sistemulDigestivTest, minutes: 10 },
+      },
+      {
+        slug: 'investigatii-digestie',
+        title: {
+          ro: 'Investigații despre digestie: enzime, bilă, calorii',
+          de: 'Untersuchungen zur Verdauung: Enzyme, Galle, Kalorien',
+        },
+        summary: {
+          ro: '„Cazul” pâinii cu unt: cum lucrează o enzimă, amidonul și saliva, bila și emulsionarea grăsimilor, caloriile unei mese și apendicele.',
+          de: 'Der „Fall“ des Butterbrots: wie ein Enzym arbeitet, Stärke und Speichel, Galle und das Emulgieren der Fette, die Kalorien einer Mahlzeit und der Wurmfortsatz.',
+        },
+        src: 'lectii/clasa-6/biologie/investigatii-digestie.html',
+        test: { questions: investigatiiDigestieTest, minutes: 10 },
       },
     ],
     alg: [
