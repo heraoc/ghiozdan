@@ -193,7 +193,7 @@ html.embed .head{padding-bottom:0;border-bottom:0}
 <!-- 1. Punctul material -->
 <section class="block" id="s1" aria-labelledby="t1">
   <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Corp mare sau simplu punct?</span><span class="de">Großer Körper oder einfacher Punkt?</span></h2>
-  <p class="section-sub"><span class="ro">Un corp ale cărui dimensiuni sunt neglijabile față de deplasarea lui poate fi înlocuit cu un punct, numit <strong>punct material</strong>. Un punct material aflat în mișcare se numește <strong>mobil</strong>. Alege situația și urmărește cum se micșorează mașina de 4 m pe măsură ce drumul devine mai lung.</span><span class="de">Ein Körper, dessen Ausdehnung gegenüber seiner Verschiebung vernachlässigbar ist, kann durch einen Punkt ersetzt werden, den <strong>Massenpunkt</strong>. Ein Massenpunkt in Bewegung heißt <strong>bewegter Körper</strong> (Mobil). Wähle die Situation und beobachte, wie das 4 m lange Auto schrumpft, je länger die Strecke wird.</span></p>
+  <p class="section-sub"><span class="ro">Un corp ale cărui dimensiuni sunt neglijabile față de deplasarea lui poate fi înlocuit cu un punct, numit <strong>punct material</strong>. Un punct material aflat în mișcare se numește <strong>mobil</strong>. Alege situația și urmărește cum se micșorează mașina de 4 m pe măsură ce drumul devine mai lung.</span><span class="de">Ein Körper, dessen Ausdehnung gegenüber seiner Verschiebung vernachlässigbar ist, kann durch einen Punkt ersetzt werden, den <strong>Massenpunkt</strong>. Ein Massenpunkt in Bewegung heißt <strong>Mobil</strong> (bewegter Körper). Wähle die Situation und beobachte, wie das 4 m lange Auto schrumpft, je länger die Strecke wird.</span></p>
   <div class="split">
     <div class="fig"><svg id="zoom-svg" viewBox="0 0 640 210" role="img" aria-label="O mașină pe un drum de lungime variabilă"></svg></div>
     <div class="panel">
@@ -262,7 +262,7 @@ html.embed .head{padding-bottom:0;border-bottom:0}
 <!-- 4. Traiectoria -->
 <section class="block" id="s4" aria-labelledby="t4">
   <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Traiectoria: drumul lăsat de mobil</span><span class="de">Die Bahn: der Weg des bewegten Körpers</span></h2>
-  <p class="section-sub"><span class="ro"><strong>Traiectoria</strong> este curba descrisă de un mobil în mișcare, față de un sistem de referință. Pe roata unei biciclete e prinsă o lampă roșie. Trage de cursor (sau apasă „Pornește”) și vezi ce traiectorie are lampa, privită din două repere diferite.</span><span class="de">Die <strong>Bahn</strong> (Trajektorie) ist die Kurve, die ein bewegter Körper in Bezug auf ein Bezugssystem beschreibt. Am Rad eines Fahrrads ist eine rote Lampe befestigt. Zieh am Regler (oder drücke „Start“) und sieh, welche Bahn die Lampe hat, von zwei verschiedenen Bezugskörpern aus betrachtet.</span></p>
+  <p class="section-sub"><span class="ro"><strong>Traiectoria</strong> este curba descrisă de un mobil în mișcare, față de un sistem de referință. Pe roata unei biciclete e prinsă o lampă roșie. Trage de cursor (sau apasă „Pornește”) și vezi ce traiectorie are lampa, privită din două repere diferite.</span><span class="de">Die <strong>Bahn</strong> (Trajektorie) ist die Kurve, die ein Mobil in Bezug auf ein Bezugssystem beschreibt. Am Rad eines Fahrrads ist eine rote Lampe befestigt. Zieh am Regler (oder drücke „Start“) und sieh, welche Bahn die Lampe hat, von zwei verschiedenen Bezugskörpern aus betrachtet.</span></p>
   <div class="split">
     <div class="fig"><svg id="wheel-svg" viewBox="0 0 640 230" role="img" aria-label="Roată care se rostogolește și traiectoria unui punct de pe margine"></svg></div>
     <div class="panel">
@@ -654,19 +654,19 @@ Check($('#c4'), [
 ]);
 
 /* ================= 5. Fixare ================= */
-var BANK = [{ ro: 'reperul', de: 'der Bezugskörper' }, { ro: 'punct material', de: 'Massenpunkt' }, { ro: 'repaus', de: 'Ruhe' }, { ro: 'mișcare', de: 'Bewegung' }, { ro: 'traiectorie', de: 'Bahn' }, { ro: 'mobil', de: 'bewegter Körper' }];
+var BANK = [{ ro: 'reperul', de: 'der Bezugskörper' }, { ro: 'punct material', de: 'Massenpunkt' }, { ro: 'repaus', de: 'Ruhe' }, { ro: 'mișcare', de: 'Bewegung' }, { ro: 'traiectorie', de: 'Bahn' }, { ro: 'mobil', de: 'Mobil' }];
 Fill($('#fill'), BANK, [
   { t: { ro: 'Mișcarea unui corp nu poate fi studiată fără a stabili ___.', de: 'Die Bewegung kann man nur untersuchen, wenn ___ festgelegt ist.' }, a: 0 },
   { t: { ro: 'Un vapor acostat în port nu poate fi considerat un ___.', de: 'Ein im Hafen liegendes Schiff darf nicht als ___ betrachtet werden.' }, a: 1 },
   { t: { ro: 'Dacă un corp A nu își schimbă poziția față de un corp B, spunem că A este în ___ față de B.', de: 'Ändert Körper A seine Lage gegenüber Körper B nicht, so ist A in ___ gegenüber B.' }, a: 2 },
   { t: { ro: 'Un copac de pe Pământ este în ___ față de Soare.', de: 'Ein Baum auf der Erde ist gegenüber der Sonne in ___.' }, a: 3 },
   { t: { ro: 'Un punct material aflat în mișcare se numește ___.', de: 'Ein Massenpunkt in Bewegung heißt ___.' }, a: 5 },
-  { t: { ro: 'Curba descrisă de un mobil față de un sistem de referință se numește ___.', de: 'Die Kurve, die ein bewegter Körper in Bezug auf ein Bezugssystem beschreibt, heißt ___.' }, a: 4 }
+  { t: { ro: 'Curba descrisă de un mobil față de un sistem de referință se numește ___.', de: 'Die Kurve, die ein Mobil in Bezug auf ein Bezugssystem beschreibt, heißt ___.' }, a: 4 }
 ]);
 
 Gloss($('#gloss'), [
   ['corp', 'Körper'],
-  ['punct material', 'Massenpunkt'], ['mobil', 'bewegter Körper'], ['reper (corp de referință)', 'Bezugskörper'], ['sistem de referință', 'Bezugssystem'],
+  ['punct material', 'Massenpunkt'], ['mobil', 'Mobil (bewegter Körper)'], ['reper (corp de referință)', 'Bezugskörper'], ['sistem de referință', 'Bezugssystem'],
   ['mișcare', 'Bewegung'], ['repaus', 'Ruhe'], ['relativ', 'relativ'], ['poziție', 'Lage, Position'],
   ['traiectorie', 'Bahn (Trajektorie)'], ['rectilinie', 'geradlinig'], ['curbilinie', 'krummlinig'], ['circulară', 'kreisförmig'], ['cicloidă', 'Zykloide']
 ]);
