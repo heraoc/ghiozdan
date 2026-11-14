@@ -4,8 +4,8 @@ import type { Question } from '../data';
 export const vitezaProblemeTest: Question[] = [
   {
     q: {
-      ro: 'Problema 1. Un mobil trece prin A la 10 h 20 min 10 s și prin B (la 20 km de A) la 10 h 36 min 50 s. Care este viteza lui, presupusă constantă?',
-      de: 'Aufgabe 1. Ein Mobil fährt um 10 h 20 min 10 s an A vorbei und um 10 h 36 min 50 s an B (20 km von A entfernt). Wie groß ist seine Geschwindigkeit, wenn sie als konstant angenommen wird?',
+      ro: 'Problema 1. Un automobil trece prin A la 10 h 20 min 10 s și prin B (la 20 km de A) la 10 h 36 min 50 s. Care este viteza lui, presupusă constantă?',
+      de: 'Aufgabe 1. Ein Auto fährt um 10 h 20 min 10 s an A vorbei und um 10 h 36 min 50 s an B (20 km von A entfernt). Wie groß ist seine Geschwindigkeit, wenn sie als konstant angenommen wird?',
     },
     options: [
       { ro: '2 m/s', de: '2 m/s' },
@@ -38,8 +38,8 @@ export const vitezaProblemeTest: Question[] = [
   },
   {
     q: {
-      ro: 'Problema 1 (final). La ce oră trece mobilul prin C?',
-      de: 'Aufgabe 1 (Schluss). Um wie viel Uhr fährt das Mobil an C vorbei?',
+      ro: 'Problema 1 (final). La ce oră trece automobilul prin C?',
+      de: 'Aufgabe 1 (Schluss). Um wie viel Uhr fährt das Auto an C vorbei?',
     },
     options: [
       { ro: '12 h 00 min 10 s', de: '12 h 00 min 10 s' },
