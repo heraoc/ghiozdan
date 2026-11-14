@@ -192,6 +192,16 @@ html.embed .head{padding-bottom:0;border-bottom:0}
 .sol .eqn{font:800 20px/1.35 var(--display);overflow-wrap:anywhere}
 .sol .note{font-size:15px;color:var(--muted)}
 
+
+.alg{display:grid;gap:10px;counter-reset:a;margin:0;padding:0;list-style:none}
+.alg>li{position:relative;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 14px 10px 50px;counter-increment:a}
+.alg>li::before{content:counter(a,lower-alpha) ")";position:absolute;left:14px;top:9px;font:800 20px var(--display);color:var(--accent)}
+.alg ul{margin:4px 0 0;padding-left:1.2em}
+.sc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.mv-steps{display:grid;gap:6px}
+.mv-steps .st{background:#fff;border:1px solid var(--rule);border-left:5px solid var(--blue);border-radius:8px;padding:6px 10px}
+.mv-steps .st b{font-size:14px;color:var(--muted);display:block}
+.mv-steps .st span{font:800 18px/1.3 var(--display)}
 </style>
 </head>
 <body>
@@ -200,8 +210,8 @@ html.embed .head{padding-bottom:0;border-bottom:0}
   <p class="eyebrow"><span class="ro">Fizică · Clasa a 6-a · Fenomene mecanice</span><span class="de">Physik · Klasse 6 · Mechanische Erscheinungen</span></p>
   <h1><span class="ro">Probleme cu viteza: test special</span><span class="de">Aufgaben zur Geschwindigkeit: Spezialtest</span></h1>
   <p class="lead">
-    <span class="ro">Cinci probleme de mișcare uniformă, mai grele decât cele de la lecție: ore și secunde, viteze în unități diferite, două mobile care se întâlnesc și viteza medie pe trei porțiuni de drum. Citește rezolvarea pas cu pas, apoi dă testul de la final.</span>
-    <span class="de">Fünf Aufgaben zur gleichförmigen Bewegung, schwieriger als die in der Lektion: Stunden und Sekunden, Geschwindigkeiten in verschiedenen Einheiten, zwei Mobile, die sich treffen, und die mittlere Geschwindigkeit auf drei Wegabschnitten. Lies die Lösung Schritt für Schritt und mache dann den Test am Ende.</span>
+    <span class="ro">Cinci probleme de mișcare uniformă, mai grele decât cele de la lecție: ore și secunde, viteze în unități diferite, două mobile care se întâlnesc și viteza medie pe trei porțiuni de drum. Mai întâi algoritmul de rezolvare, cu grafice pe care le poți mișca; apoi citește rezolvarea pas cu pas și dă testul de la final.</span>
+    <span class="de">Fünf Aufgaben zur gleichförmigen Bewegung, schwieriger als die in der Lektion: Stunden und Sekunden, Geschwindigkeiten in verschiedenen Einheiten, zwei Mobile, die sich treffen, und die mittlere Geschwindigkeit auf drei Wegabschnitten. Zuerst der Lösungsalgorithmus mit Diagrammen zum Bewegen; dann lies die Lösung Schritt für Schritt und mache den Test am Ende.</span>
   </p>
   <div class="think">
     <span class="q">?</span>
@@ -216,6 +226,45 @@ html.embed .head{padding-bottom:0;border-bottom:0}
     </div>
   </div>
 </header>
+
+<section class="block" aria-labelledby="t-alg">
+  <h2 class="section-title" id="t-alg"><span class="ro">Algoritmul de rezolvare a problemelor de mișcare</span><span class="de">Der Lösungsalgorithmus für Bewegungsaufgaben</span></h2>
+  <p class="section-sub"><span class="ro">Toate problemele cu două mobile se rezolvă în patru pași. Îi poți aplica la fel de fiecare dată.</span><span class="de">Alle Aufgaben mit zwei Mobilen löst man in vier Schritten. Du kannst sie jedes Mal gleich anwenden.</span></p>
+  <ol class="alg">
+    <li><span class="ro"><strong>Identifică modul de mișcare</strong>, cunoscând locul și momentul plecării:</span><span class="de"><strong>Bestimme die Bewegungsart</strong>, wenn Ort und Zeitpunkt des Starts bekannt sind:</span>
+      <ul>
+        <li><span class="ro">mobilele se mișcă în același sens sau în sens contrar;</span><span class="de">die Mobile bewegen sich in derselben oder in entgegengesetzter Richtung;</span></li>
+        <li><span class="ro">pornesc simultan sau pornesc după un interval de timp, unul după altul.</span><span class="de">sie starten gleichzeitig oder nacheinander nach einem Zeitintervall.</span></li>
+      </ul></li>
+    <li><span class="ro"><strong>Reprezintă pe o semidreaptă</strong> pozițiile mobilelor la diferite momente și corelează-le.</span><span class="de"><strong>Stelle auf einem Strahl</strong> die Lagen der Mobile zu verschiedenen Zeitpunkten dar und setze sie in Beziehung.</span></li>
+    <li><span class="ro"><strong>Stabilește expresiile și legăturile</strong> dintre spațiile (distanțele) străbătute și timpii corespunzători.</span><span class="de"><strong>Stelle die Ausdrücke und Zusammenhänge</strong> zwischen den zurückgelegten Strecken und den zugehörigen Zeiten auf.</span></li>
+    <li><span class="ro"><strong>Rezolvă</strong> matematic sau grafic.</span><span class="de"><strong>Löse</strong> rechnerisch oder grafisch.</span></li>
+  </ol>
+
+  <h3 style="margin:30px 0 6px;font-size:24px"><span class="ro">Cele trei situații de întâlnire</span><span class="de">Die drei Begegnungssituationen</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Alege situația și mută cursorul pe timp (sau apasă „Pornește”). Schimbă vitezele și distanța: vezi cum se schimbă momentul și locul întâlnirii. Dedesubt apar cei patru pași, cu numerele tale.</span><span class="de">Wähle die Situation und verschiebe den Zeitregler (oder drücke „Start“). Ändere Geschwindigkeiten und Entfernung: Du siehst, wie sich Zeitpunkt und Ort der Begegnung ändern. Darunter stehen die vier Schritte mit deinen Zahlen.</span></p>
+  <div class="chips" id="sc-chips" role="group" aria-label="Situația"></div>
+  <div class="fig"><svg id="mv-svg" viewBox="0 0 640 250" role="img" aria-label="Două mobile pe o dreaptă"></svg></div>
+  <div class="split" style="margin-top:12px">
+    <div class="panel">
+      <div class="slider"><label for="mv-t"><span class="ro">Timpul de la plecarea primului mobil</span><span class="de">Zeit seit dem Start des ersten Mobils</span> t = <span id="mv-tv" class="num"></span> s</label><input type="range" id="mv-t" min="0" max="60" step="0.5" value="0"></div>
+      <div class="actions" style="margin-top:0"><button class="btn ghost" type="button" id="mv-play"></button></div>
+      <div class="slider" id="row-D"><label for="mv-D"><span class="ro">Distanța dintre localități</span><span class="de">Entfernung der Orte</span> D = <span id="mv-Dv" class="num"></span> m</label><input type="range" id="mv-D" min="100" max="1000" step="50" value="400"></div>
+      <div class="slider"><label for="mv-v1">v₁ = <span id="mv-v1v" class="num"></span> m/s</label><input type="range" id="mv-v1" min="2" max="20" step="1" value="10"></div>
+      <div class="slider"><label for="mv-v2">v₂ = <span id="mv-v2v" class="num"></span> m/s</label><input type="range" id="mv-v2" min="2" max="30" step="1" value="15"></div>
+      <div class="slider" id="row-dt"><label for="mv-dt"><span id="mv-dtl"></span> = <span id="mv-dtv" class="num"></span> s</label><input type="range" id="mv-dt" min="0" max="30" step="1" value="10"></div>
+    </div>
+    <div class="mv-steps" id="mv-steps" aria-live="polite"></div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține!</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro">Mobilul care pornește mai târziu a mers cu <strong>(t − Δt)</strong> secunde, nu cu t.</span><span class="de">Das später startende Mobil ist nur <strong>(t − Δt)</strong> Sekunden gefahren, nicht t.</span></li>
+      <li><span class="ro">În sensuri contrare, distanțele se <strong>adună</strong> (d₁ + d₂ = D). În același sens, mobilul din urmă ajunge când <strong>d₁ = d₂</strong>.</span><span class="de">Bei entgegengesetzten Richtungen <strong>addieren</strong> sich die Strecken (d₁ + d₂ = D). Bei gleicher Richtung holt das hintere Mobil ein, wenn <strong>d₁ = d₂</strong> gilt.</span></li>
+    </ul>
+  </div>
+  <div id="c-alg"></div>
+</section>
 
 <section class="block" aria-labelledby="t-probs">
   <h2 class="section-title" id="t-probs"><span class="ro">Cele cinci probleme</span><span class="de">Die fünf Aufgaben</span></h2>
@@ -422,6 +471,116 @@ var P = [
       [tx('Viteza medie', 'Mittlere Geschwindigkeit'), 'v<sub>m</sub> = d : Δt = 150/41 m/s ≈ 3,66 m/s ≈ 13,2 km/h', tx('Atenție: media aritmetică (5 + 2 + 40) : 3 ≈ 15,7 m/s ar fi greșită, fiindcă mobilul stă cel mai mult timp cu viteza mică.', 'Achtung: Das arithmetische Mittel (5 + 2 + 40) : 3 ≈ 15,7 m/s wäre falsch, weil das Mobil am längsten mit der kleinen Geschwindigkeit unterwegs ist.')]
     ] }
 ];
+
+/* ===== Algoritmul: trei situații de întâlnire ===== */
+(function () {
+  var svg = $('#mv-svg'), tr = $('#mv-t'), sD = $('#mv-D'), s1 = $('#mv-v1'), s2 = $('#mv-v2'), sdt = $('#mv-dt'), sc = 1;
+  var steps = $('#mv-steps'), pos = 0, playing = false, raf = 0, last = 0, btn = $('#mv-play');
+  function arrow(parent, x1, y1, x2, y2, color) {
+    var dx = x2 - x1, dy = y2 - y1, L0 = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / L0, uy = dy / L0, hs = 11;
+    el('line', { x1: x1, y1: y1, x2: x2 - ux * 8, y2: y2 - uy * 8, stroke: color, 'stroke-width': 3.5, 'stroke-linecap': 'round' }, parent);
+    el('polygon', { points: x2 + ',' + y2 + ' ' + (x2 - ux * hs - uy * 5) + ',' + (y2 - uy * hs + ux * 5) + ' ' + (x2 - ux * hs + uy * 5) + ',' + (y2 - uy * hs - ux * 5), fill: color }, parent);
+  }
+  function model() {
+    var D = +sD.value, v1 = +s1.value, v2 = +s2.value, dt = +sdt.value, m = { sc: sc, D: D, v1: v1, v2: v2 };
+    if (sc === 3 && v2 <= v1) { v2 = v1 + 1; s2.value = v2; m.v2 = v2; }
+    if (sc === 2 && v1 * dt >= D * 0.8) { dt = Math.floor(D * 0.8 / v1); sdt.value = dt; }
+    if (sc === 1) dt = 0;
+    m.dt = dt;
+    if (sc === 3) { m.tm = v2 * dt / (v2 - v1); m.xm = v1 * m.tm; }
+    else { m.tm = (D + v2 * dt) / (v1 + v2); m.xm = v1 * m.tm; }
+    return m;
+  }
+  function draw() {
+    var m = model(), t = +tr.value, i, tmax = Math.ceil(m.tm * 1.25);
+    tr.max = tmax; if (t > tmax) { t = tmax; tr.value = t; }
+    $('#mv-tv').textContent = fmt(t); $('#mv-Dv').textContent = m.D; $('#mv-v1v').textContent = m.v1; $('#mv-v2v').textContent = m.v2; $('#mv-dtv').textContent = m.dt;
+    $('#row-D').hidden = sc === 3; $('#row-dt').hidden = sc === 1;
+    $('#mv-dtl').textContent = sc === 2 ? tx('Întârzierea mobilului 2, Δt', 'Verspätung von Mobil 2, Δt') : tx('Intervalul t₀ dintre plecări', 'Zeitintervall t₀ zwischen den Starts');
+    var met = t >= m.tm - 1e-9, te = Math.min(t, m.tm);
+    var x1 = m.v1 * te, d2run = Math.max(0, te - m.dt), x2m = m.v2 * d2run;
+    var L = sc === 3 ? m.xm * 1.25 : m.D, X0 = 50, W = 540;
+    function X(mm) { return X0 + mm / L * W; }
+    svg.innerHTML = '';
+    var y1 = sc === 3 ? 100 : 120, y2 = sc === 3 ? 150 : 120;
+    el('rect', { x: 0, y: 0, width: 640, height: 250, fill: '#f6fbff' }, svg);
+    if (sc === 3) {
+      el('line', { x1: X0, y1: y1, x2: X0 + W, y2: y1, stroke: '#9aa3b2', 'stroke-width': 2 }, svg); el('line', { x1: X0, y1: y2, x2: X0 + W, y2: y2, stroke: '#9aa3b2', 'stroke-width': 2 }, svg);
+      el('text', { x: X0 - 8, y: y1 + 5, 'text-anchor': 'end', class: 'lbl big' }, svg, 'O');
+    } else {
+      el('line', { x1: X0, y1: y1, x2: X0 + W, y2: y1, stroke: '#1f2530', 'stroke-width': 3 }, svg);
+      el('text', { x: X0, y: y1 + 34, 'text-anchor': 'middle', class: 'lbl big' }, svg, 'A'); el('text', { x: X0 + W, y: y1 + 34, 'text-anchor': 'middle', class: 'lbl big' }, svg, 'B');
+      el('line', { x1: X0, y1: y1 - 7, x2: X0, y2: y1 + 7, stroke: '#1f2530', 'stroke-width': 3 }, svg); el('line', { x1: X0 + W, y1: y1 - 7, x2: X0 + W, y2: y1 + 7, stroke: '#1f2530', 'stroke-width': 3 }, svg);
+    }
+    // săgețile vitezelor
+    arrow(svg, X0 + 6, y1 - 34, X0 + 6 + m.v1 * 5, y1 - 34, '#2f6fd6'); el('text', { x: X0 + 6, y: y1 - 42, class: 'lbl sm', fill: '#2f6fd6' }, svg, 'v₁ = ' + m.v1 + ' m/s');
+    if (sc === 3) { arrow(svg, X0 + 6, y2 + 38, X0 + 6 + m.v2 * 5, y2 + 38, '#d2452f'); el('text', { x: X0 + 6, y: y2 + 54, class: 'lbl sm', fill: '#d2452f' }, svg, 'v₂ = ' + m.v2 + ' m/s'); }
+    else { arrow(svg, X0 + W - 6, y1 - 34, X0 + W - 6 - m.v2 * 5, y1 - 34, '#d2452f'); el('text', { x: X0 + W - 6, y: y1 - 42, 'text-anchor': 'end', class: 'lbl sm', fill: '#d2452f' }, svg, 'v₂ = ' + m.v2 + ' m/s'); }
+    // distanțele parcurse d1, d2
+    var yd1 = sc === 3 ? y2 + 80 : y1 + 62, yd2 = yd1 + 24;
+    var p1 = X(x1), p2 = sc === 3 ? X(x2m) : X(m.D - x2m);
+    if (x1 > 0) { el('path', { d: 'M' + X0 + ' ' + yd1 + ' H' + p1, stroke: '#2f6fd6', 'stroke-width': 4, fill: 'none' }, svg); el('text', { x: (X0 + p1) / 2, y: yd1 - 6, 'text-anchor': 'middle', class: 'lbl sm', fill: '#2f6fd6' }, svg, 'd₁ = ' + fmt(+x1.toFixed(1)) + ' m'); }
+    if (x2m > 0) { var a = sc === 3 ? X0 : p2, b = sc === 3 ? p2 : X0 + W; el('path', { d: 'M' + a + ' ' + yd2 + ' H' + b, stroke: '#d2452f', 'stroke-width': 4, fill: 'none' }, svg); el('text', { x: (a + b) / 2, y: yd2 + 16, 'text-anchor': 'middle', class: 'lbl sm', fill: '#d2452f' }, svg, 'd₂ = ' + fmt(+x2m.toFixed(1)) + ' m'); }
+    // întâlnirea
+    if (met) {
+      var xe = X(m.xm);
+      el('line', { x1: xe, y1: 40, x2: xe, y2: (sc === 3 ? y2 : y1) + 20, stroke: '#1f8a5b', 'stroke-width': 2, 'stroke-dasharray': '6 5' }, svg);
+      el('text', { x: xe, y: 32, 'text-anchor': 'middle', class: 'lbl', fill: '#1f8a5b' }, svg, '✔ ' + tx('întâlnire', 'Begegnung'));
+    }
+    // mobilele
+    el('circle', { cx: p1, cy: y1, r: 11, fill: '#2f6fd6', stroke: '#fff', 'stroke-width': 2 }, svg); el('text', { x: p1, y: y1 + 5, 'text-anchor': 'middle', style: 'font:800 14px var(--body);fill:#fff' }, svg, '1');
+    var wait = t < m.dt;
+    el('circle', { cx: p2, cy: y2, r: 11, fill: wait ? '#c9ccd3' : '#d2452f', stroke: '#fff', 'stroke-width': 2 }, svg); el('text', { x: p2, y: y2 + 5, 'text-anchor': 'middle', style: 'font:800 14px var(--body);fill:#fff' }, svg, '2');
+    svg.setAttribute('aria-label', tx('La t = ', 'Bei t = ') + fmt(t) + ' s: d₁ = ' + fmt(+x1.toFixed(1)) + ' m, d₂ = ' + fmt(+x2m.toFixed(1)) + ' m');
+    // pașii
+    var f = function (n) { return fmt(+n.toFixed(2)); };
+    var S = [], A, C, Dd;
+    if (sc === 1) {
+      A = tx('Mobilele merg în sens contrar și pornesc simultan din A și B.', 'Die Mobile fahren entgegengesetzt und starten gleichzeitig in A und B.');
+      C = 'd₁ = v₁ · t; d₂ = v₂ · t; ' + tx('la întâlnire', 'bei der Begegnung') + ' d₁ + d₂ = D';
+      Dd = 'v₁t + v₂t = D ⇒ t = D : (v₁ + v₂) = ' + m.D + ' : ' + (m.v1 + m.v2) + ' = ' + f(m.tm) + ' s';
+    } else if (sc === 2) {
+      A = tx('Mobilele merg în sens contrar; mobilul 2 pleacă cu întârziere Δt = ', 'Die Mobile fahren entgegengesetzt; Mobil 2 startet mit Verspätung Δt = ') + m.dt + ' s.';
+      C = 'd₁ = v₁ · t; d₂ = v₂ · (t − Δt); ' + tx('la întâlnire', 'bei der Begegnung') + ' d₁ + d₂ = D';
+      Dd = 'v₁t + v₂(t − Δt) = D ⇒ t = (D + v₂Δt) : (v₁ + v₂) = ' + f(m.D + m.v2 * m.dt) + ' : ' + (m.v1 + m.v2) + ' = ' + f(m.tm) + ' s';
+    } else {
+      A = tx('Mobilele merg în același sens, din același loc; mobilul 2 (mai rapid) pornește după t₀ = ', 'Die Mobile fahren in dieselbe Richtung vom selben Ort; das schnellere Mobil 2 startet nach t₀ = ') + m.dt + ' s.';
+      C = 'd₁ = v₁ · t; d₂ = v₂ · (t − t₀); ' + tx('la întâlnire', 'bei der Begegnung') + ' d₁ = d₂';
+      Dd = 'v₁t = v₂(t − t₀) ⇒ t = v₂t₀ : (v₂ − v₁) = ' + f(m.v2 * m.dt) + ' : ' + (m.v2 - m.v1) + ' = ' + f(m.tm) + ' s';
+    }
+    var B = tx('La t = ', 'Bei t = ') + fmt(t) + ' s: x₁ = ' + f(m.v1 * t) + ' m' + (sc === 3 ? ', x₂ = ' + f(m.v2 * Math.max(0, t - m.dt)) + ' m' : ', x₂ = D − ' + f(m.v2 * Math.max(0, t - m.dt)) + ' = ' + f(m.D - m.v2 * Math.max(0, t - m.dt)) + ' m');
+    var place = tx('Locul întâlnirii: d₁ = v₁ · t = ', 'Ort der Begegnung: d₁ = v₁ · t = ') + f(m.v1) + ' · ' + f(m.tm) + ' = ' + f(m.xm) + ' m ' + (sc === 3 ? tx('de la O.', 'von O.') : tx('de la A.', 'von A.'));
+    [[tx('a) Modul de mișcare', 'a) Bewegungsart'), A], [tx('b) Pozițiile', 'b) Die Lagen'), B], [tx('c) Expresiile', 'c) Die Ausdrücke'), C], [tx('d) Rezolvarea', 'd) Die Lösung'), Dd + '; ' + place]].forEach(function (r, k) { S.push('<div class="st"><b>' + r[0] + '</b><span>' + r[1] + '</span></div>'); });
+    steps.innerHTML = S.join('');
+  }
+  function label() { btn.textContent = playing ? '⏸ ' + tx('Pauză', 'Pause') : '▶ ' + tx('Pornește', 'Start'); }
+  function step(now) {
+    if (!playing) return;
+    var dt = Math.min(0.05, (now - last) / 1000); last = now; pos += dt * Math.max(1, +tr.max / 12);
+    if (pos >= +tr.max) { pos = +tr.max; playing = false; label(); }
+    tr.value = pos; draw();
+    if (playing) raf = requestAnimationFrame(step);
+  }
+  btn.onclick = function () { if (playing) { playing = false; cancelAnimationFrame(raf); label(); return; } if (+tr.value >= +tr.max) tr.value = 0; pos = +tr.value; playing = true; label(); last = performance.now(); raf = requestAnimationFrame(step); };
+  [tr].forEach(function (e) { e.addEventListener('input', function () { playing = false; cancelAnimationFrame(raf); label(); draw(); }); });
+  [sD, s1, s2, sdt].forEach(function (e) { e.addEventListener('input', draw); });
+  chips($('#sc-chips'), [[1, tx('1° Pornesc simultan, unul spre celălalt', '1° Gleichzeitig, aufeinander zu')], [2, tx('2° Unul spre celălalt, cu întârziere', '2° Aufeinander zu, mit Verspätung')], [3, tx('3° Același loc, același sens', '3° Selber Ort, selbe Richtung')]], 1, function (k) { sc = +k; tr.value = 0; if (sc === 3) { s1.value = 5; s2.value = 10; sdt.value = 10; } else if (sc === 2) { s1.value = 10; s2.value = 15; sdt.value = 10; } draw(); });
+  label(); draw();
+})();
+Check($('#c-alg'), [
+  { q: { ro: 'Două mobile pornesc simultan din A și B, unul spre celălalt. Care relație leagă distanțele parcurse până la întâlnire?', de: 'Zwei Mobile starten gleichzeitig in A und B aufeinander zu. Welche Beziehung verbindet die bis zur Begegnung zurückgelegten Strecken?' },
+    o: [{ ro: 'd₁ = d₂', de: 'd₁ = d₂' }, { ro: 'd₁ + d₂ = D', de: 'd₁ + d₂ = D' }, { ro: 'd₁ − d₂ = D', de: 'd₁ − d₂ = D' }], a: 1,
+    why: { ro: 'Împreună parcurg exact distanța dintre localități.', de: 'Zusammen legen sie genau die Entfernung zwischen den Orten zurück.' },
+    hint: { ro: 'Mobilele merg unul spre celălalt: ce fac distanțele lor?', de: 'Die Mobile fahren aufeinander zu: Was tun ihre Strecken?' } },
+  { q: { ro: 'Mobilul 2 pornește cu 10 s după mobilul 1. La momentul t (de la plecarea mobilului 1), cât timp a mers mobilul 2?', de: 'Mobil 2 startet 10 s nach Mobil 1. Wie lange ist Mobil 2 zum Zeitpunkt t (ab dem Start von Mobil 1) gefahren?' },
+    o: [{ ro: 't', de: 't' }, { ro: 't + 10', de: 't + 10' }, { ro: 't − 10', de: 't − 10' }], a: 2,
+    why: { ro: 'A pornit mai târziu, deci a mers cu 10 s mai puțin: d₂ = v₂ · (t − 10).', de: 'Es ist später gestartet, also 10 s weniger gefahren: d₂ = v₂ · (t − 10).' },
+    hint: { ro: 'Cine a mers mai puțin timp, mobilul care a pornit mai târziu sau cel care a pornit primul?', de: 'Wer ist kürzer gefahren, das später gestartete oder das zuerst gestartete Mobil?' } },
+  { q: { ro: 'Același loc, același sens, mobilul 2 (mai rapid) pornește mai târziu. Când îl ajunge din urmă pe mobilul 1?', de: 'Selber Ort, selbe Richtung, das schnellere Mobil 2 startet später. Wann holt es Mobil 1 ein?' },
+    o: [{ ro: 'când d₁ + d₂ = D', de: 'wenn d₁ + d₂ = D' }, { ro: 'când d₁ = d₂', de: 'wenn d₁ = d₂' }, { ro: 'când v₁ = v₂', de: 'wenn v₁ = v₂' }], a: 1,
+    why: { ro: 'Se întâlnesc când au parcurs aceeași distanță de la locul de plecare.', de: 'Sie treffen sich, wenn sie vom Startort aus dieselbe Strecke zurückgelegt haben.' },
+    hint: { ro: 'Pornesc din același loc: unde sunt amândoi la întâlnire?', de: 'Sie starten am selben Ort: Wo sind beide bei der Begegnung?' } }
+]);
 (function () {
   var host = $('#probs');
   P.forEach(function (p, i) {
