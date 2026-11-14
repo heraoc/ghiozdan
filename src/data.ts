@@ -30,6 +30,7 @@ import { reformaSiContrareformaTest } from './content/reforma-si-contrareforma-t
 import { miscareSiRepausTest } from './content/miscare-si-repaus-test';
 import { distantaSiDurataTest } from './content/distanta-si-durata-test';
 import { vitezaTest } from './content/viteza-test';
+import { vitezaProblemeTest } from './content/viteza-probleme-test';
 import type { Text } from './i18n';
 
 export type Grade = 3 | 6;
@@ -422,6 +423,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/fizica/viteza.html',
         test: { questions: vitezaTest, minutes: 10 },
+      },
+      {
+        slug: 'viteza-probleme',
+        title: {
+          ro: 'Probleme cu viteza: test special',
+          de: 'Aufgaben zur Geschwindigkeit: Spezialtest',
+        },
+        summary: {
+          ro: 'Cinci probleme de mișcare uniformă rezolvate pas cu pas (ore și secunde, două mobile care se întâlnesc, viteza medie pe trei porțiuni), urmate de un test cu 13 întrebări.',
+          de: 'Fünf Aufgaben zur gleichförmigen Bewegung, Schritt für Schritt gelöst (Stunden und Sekunden, zwei sich treffende Mobile, mittlere Geschwindigkeit auf drei Abschnitten), danach ein Test mit 13 Fragen.',
+        },
+        src: 'lectii/clasa-6/fizica/viteza-probleme.html',
+        test: { questions: vitezaProblemeTest, minutes: 25 },
       },
     ],
     geo: [
