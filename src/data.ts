@@ -24,6 +24,7 @@ import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import { operatiiCuMultimiTest } from './content/operatii-cu-multimi-test';
 import { numerePrimeTest } from './content/numere-prime-test';
 import { cmmdcTest } from './content/cmmdc-test';
+import { cmmmcTest } from './content/cmmmc-test';
 import { renastereaTest } from './content/renasterea-test';
 import { mariOameniAiRenasteriiTest } from './content/mari-oameni-ai-renasterii-test';
 import { reformaSiContrareformaTest } from './content/reforma-si-contrareforma-test';
@@ -311,6 +312,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/algebra/cmmdc.html',
         test: { questions: cmmdcTest, minutes: 15 },
+      },
+      {
+        slug: 'cmmmc',
+        title: {
+          ro: 'Cel mai mic multiplu comun',
+          de: 'Das kleinste gemeinsame Vielfache',
+        },
+        summary: {
+          ro: 'Multipli comuni pe axă, c.m.m.m.c. cu factorii primi (exponenții cei mai mari), cazuri speciale, legătura cu c.m.m.d.c. și probleme cu clopote care sună împreună și pătrate din cărămizi.',
+          de: 'Gemeinsame Vielfache auf der Zahlengeraden, kgV mit Primfaktoren (größte Exponenten), Sonderfälle, Zusammenhang mit dem ggT und Aufgaben mit gemeinsam läutenden Glocken und Quadraten aus Backsteinen.',
+        },
+        src: 'lectii/clasa-6/algebra/cmmmc.html',
+        test: { questions: cmmmcTest, minutes: 12 },
       },
     ],
     gmt: [
