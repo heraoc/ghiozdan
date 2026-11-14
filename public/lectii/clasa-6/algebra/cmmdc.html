@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cel mai mare divizor comun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Der größte gemeinsame Teiler';
+})();
+</script>
+<style>
+:root{
+  --paper:#f7f6f2; --card:#ffffff; --ink:#1f2430; --muted:#5a6170; --rule:#e2e0d8; --sheet:#f1efe8;
+  --accent:#2f6fd6; --accent-soft:#dfe9fb;
+  --good:#1f8a5b; --good-soft:#e3f5ec; --bad:#c23b3b; --bad-soft:#fbe4e4;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)} .hint{font-size:14.5px;color:var(--muted)}
+sup{font-size:.68em;line-height:0}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(32px,5.2vw,54px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.sub-title{margin:30px 0 8px;font-size:22px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.remember{margin-top:16px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.fx{font:800 20px/1.3 var(--display)}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.fig svg{display:block;width:100%;height:auto}
+.split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
+.panel{display:grid;gap:10px}
+.readout{background:var(--sheet);border-radius:10px;padding:10px 14px;display:grid;gap:6px}
+.readout .eq{font:800 21px/1.3 var(--display)}
+.readout .rule{font-size:15.5px;color:var(--muted)}
+.readout .lbl{font:700 12px/1.2 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{border:1.5px solid var(--rule);background:#fff;border-radius:99px;padding:5px 14px;cursor:pointer;font-weight:700;min-height:38px}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#a12f2f;background:var(--bad-soft)}
+.plbl{font:800 19px var(--display);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.vel{font:800 19px var(--display);fill:var(--ink);text-anchor:middle;pointer-events:none}
+@media (max-width:520px){ .plbl{font-size:26px} }
+.slider{display:grid;gap:2px}
+.slider label{font-weight:700}
+.slider input{width:100%;accent-color:var(--accent)}
+.c1{color:var(--accent)} .c2{color:#d6457a} .c3{color:var(--good)}
+.ok-t{color:var(--good);font-weight:700} .no-t{color:var(--bad);font-weight:700}
+
+/* tabele */
+.tbl{width:100%;border-collapse:collapse;font-size:16px;background:#fff;border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.tbl th,.tbl td{padding:7px 12px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+.tbl th{background:var(--sheet);font:700 12px/1.2 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .num-c{text-align:center;font:800 18px var(--display)}
+.tbl tr.tot td{background:#fff9d6;font-weight:700}
+
+/* grila 1–100 */
+.pgrid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;max-width:540px}
+.pc{min-height:36px;padding:0;border:1.5px solid var(--rule);background:#fff;border-radius:8px;font:800 16px var(--display);cursor:pointer}
+.pc.kept{border-color:var(--good);background:var(--good-soft)}
+.pc.cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.pc.new{background:#fde3a6;border-color:#e0a100}
+.pc.x{background:#eceae3;border-color:#eceae3;color:#a3a7ae;text-decoration:line-through}
+.pc.pr{background:var(--good);border-color:var(--good);color:#fff}
+.pc.one{background:#eceae3;color:#5a6170}
+.pc.sel{outline:3px solid var(--ink);outline-offset:1px}
+@media (max-width:520px){ .pc{min-height:32px;font-size:14px} .pgrid{gap:3px} }
+
+/* bara verticală */
+.bar{display:inline-grid;grid-template-columns:auto auto;font:800 25px/1.45 var(--display);background:#fff;border:1px solid var(--rule);border-radius:10px;padding:10px 18px;min-width:210px}
+.bar .l{text-align:right;padding-right:14px;border-right:3px solid var(--ink)}
+.bar .r{padding-left:14px;color:var(--accent)}
+.bar .now{background:#fff4b8;border-radius:6px}
+.res-line{font:800 23px/1.4 var(--display)}
+.res-line b{color:var(--good)}
+
+/* termeni grupați */
+.terms{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+.grp{border:2px solid var(--accent);background:var(--accent-soft);border-radius:10px;padding:6px 8px;display:grid;gap:4px;text-align:center;align-content:space-between}
+.grp.left{border-color:var(--bad);border-style:dashed;background:var(--bad-soft)}
+.grp.free{border-color:var(--rule);background:#fff}
+.grp .inner{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;align-items:center}
+.tm{font:800 18px var(--display);padding:2px 7px;background:#fff;border-radius:6px}
+.grp .cap{font:700 15px var(--display)}
+.mode{display:inline-flex;border:1.5px solid var(--rule);border-radius:99px;overflow:hidden;flex-wrap:wrap}
+.mode button{border:0;background:transparent;padding:6px 14px;cursor:pointer;font-weight:700;font-size:15px}
+.mode button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* exerciții */
+.ex{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:12px}
+.story{background:#fff9e6;border:1px solid #f1e2b0;border-radius:10px;padding:10px 14px;font:800 21px/1.4 var(--display)}
+.num{min-width:44px;min-height:44px;border-radius:12px;border:2px solid var(--rule);background:#fff;font:800 19px var(--display);cursor:pointer;padding:0 6px}
+.num:hover:not(:disabled){border-color:var(--muted)}
+.num:disabled{opacity:.4;cursor:default}
+.pool{display:flex;flex-wrap:wrap;gap:6px}
+.task{display:grid;gap:6px;padding:8px 10px;border-radius:10px;border:2px solid transparent;background:var(--paper)}
+.task.ok{border-color:var(--good);background:var(--good-soft)}
+.task.bad{border-color:var(--bad);background:var(--bad-soft)}
+.task .tl{font:800 21px var(--display)}
+.task .tw{font-size:15px;color:var(--muted);min-height:1.2em}
+.exps{display:flex;flex-wrap:wrap;gap:16px 14px;padding-top:6px}
+.exps label{display:inline-flex;align-items:flex-start;gap:2px;font:800 22px/1 var(--display)}
+.exps input{width:48px;text-align:center;border:2px solid var(--rule);border-radius:8px;padding:5px 2px;font:800 18px var(--display);margin-top:-8px;background:#fff}
+.exps input.ok{border-color:var(--good);background:var(--good-soft)}
+.exps input.bad{border-color:var(--bad);background:var(--bad-soft)}
+.result{border-radius:10px;padding:10px 14px;font-weight:700}
+.result.good{background:var(--good-soft);color:#17744d}
+.result.try{background:#fdf0d5;color:#8a5a00}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #a9bfe6;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted)}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+[hidden]{display:none!important}
+/* c.m.m.d.c. */
+.num-in{width:84px;text-align:center;border:2px solid var(--rule);border-radius:8px;padding:6px;font:800 19px var(--display);background:#fff}
+.num.right{border-color:var(--good);background:var(--good);color:#fff;opacity:1}
+.num.wrong{border-color:var(--bad);background:var(--bad-soft);color:#a12f2f;opacity:1}
+.tbl th.good{background:var(--good-soft);color:var(--good)}
+.tbl th.dim,.tbl td.dim{color:#a3a7ae;background:#f6f5f1}
+.tbl td.min{background:#fff4b8;color:var(--ink)}
+.tbl td:first-child{white-space:normal}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Algebră · Clasa a 6-a · Divizibilitatea în ℕ</span><span class="de">Algebra · Klasse 6 · Teilbarkeit in ℕ</span></p>
+  <h1><span class="ro">Cel mai mare divizor comun</span><span class="de">Der größte gemeinsame Teiler</span></h1>
+  <p class="lead">
+    <span class="ro">Aflăm ce divizori au în comun două numere, care dintre ei este cel mai mare (c.m.m.d.c.) și cum îl găsim repede cu descompunerea în factori primi. Apoi vedem când două numere sunt prime între ele și rezolvăm probleme cu panglici tăiate și dale așezate.</span>
+    <span class="de">Wir finden heraus, welche Teiler zwei Zahlen gemeinsam haben, welcher davon der größte ist (ggT) und wie wir ihn schnell mit der Primfaktorzerlegung bestimmen. Dann sehen wir, wann zwei Zahlen teilerfremd sind, und lösen Aufgaben mit zerschnittenen Bändern und gelegten Fliesen.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Ce numere divid și 8, și 12? Care este cel mai mare dintre ele?</span><span class="de">Welche Zahlen teilen sowohl 8 als auch 12? Welche ist die größte?</span></li>
+        <li><span class="ro">Ai două panglici, de 12 cm și de 18 cm. Cât de lungi pot fi bucățile egale în care le tai, fără să rămână resturi?</span><span class="de">Du hast zwei Bänder, 12 cm und 18 cm lang. Wie lang können gleich lange Stücke sein, in die du sie schneidest, ohne dass ein Rest bleibt?</span></li>
+        <li><span class="ro">Au numerele 8 și 9 vreun divizor comun în afară de 1?</span><span class="de">Haben die Zahlen 8 und 9 einen gemeinsamen Teiler außer 1?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Divizori comuni</span><span class="de">Gemeinsame Teiler</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Metoda factorilor primi</span><span class="de">Methode der Primfaktoren</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Cazuri speciale, prime între ele</span><span class="de">Sonderfälle, teilerfremd</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Probleme</span><span class="de">Aufgaben</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Exersează</span><span class="de">Üben</span></a>
+  </nav>
+</header>
+
+<!-- 1. Divizori comuni -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Divizori comuni</span><span class="de">Gemeinsame Teiler</span></h2>
+  <p class="section-sub"><span class="ro">Un număr d este <b>divizor comun</b> al lui a și b dacă d | a și d | b. Alege a și b: în desen, divizorii lui a sunt în cercul albastru, ai lui b în cel roz, iar <b>divizorii comuni</b> stau în zona de intersecție. Cel mai mare dintre ei este încercuit.</span><span class="de">Eine Zahl d ist ein <b>gemeinsamer Teiler</b> von a und b, wenn d | a und d | b. Wähle a und b: Im Bild stehen die Teiler von a im blauen Kreis, die von b im rosa Kreis, und die <b>gemeinsamen Teiler</b> in der Schnittmenge. Der größte von ihnen ist eingekreist.</span></p>
+  <div class="chips" id="c-pre" role="group"></div>
+  <div class="split">
+    <div class="fig"><svg id="c-svg" viewBox="0 0 520 300" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="c-a">a = <span id="c-av"></span></label><input type="range" id="c-a" min="1" max="60" value="14"></div>
+      <div class="slider"><label for="c-b">b = <span id="c-bv"></span></label><input type="range" id="c-b" min="1" max="60" value="21"></div>
+      <div class="readout" id="c-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Mulțimea divizorilor comuni ai lui a și b este intersecția <span class="fx">D<sub>a</sub> ∩ D<sub>b</sub></span>. De exemplu D<sub>14</sub> ∩ D<sub>21</sub> = {1, 2, 7, 14} ∩ {1, 3, 7, 21} = {1, 7}.</span><span class="de">Die Menge der gemeinsamen Teiler von a und b ist der Durchschnitt <span class="fx">D<sub>a</sub> ∩ D<sub>b</sub></span>. Zum Beispiel D<sub>14</sub> ∩ D<sub>21</sub> = {1, 2, 7, 14} ∩ {1, 3, 7, 21} = {1, 7}.</span></li>
+      <li><span class="ro">Numărul 1 este divizor comun al oricăror numere naturale. Dacă d este divizor comun al numerelor nenule a și b, atunci <span class="fx">d ≤ a</span> și <span class="fx">d ≤ b</span> (din a = d · x, cu x ≥ 1).</span><span class="de">Die Zahl 1 ist gemeinsamer Teiler von je zwei natürlichen Zahlen. Ist d ein gemeinsamer Teiler der Zahlen a und b ≠ 0, dann gilt <span class="fx">d ≤ a</span> und <span class="fx">d ≤ b</span> (aus a = d · x mit x ≥ 1).</span></li>
+      <li><span class="ro">Numărul d care este divizor comun al lui a și b și care este multiplu al tuturor celorlalți divizori comuni se numește <b>cel mai mare divizor comun</b> al lor: <span class="fx">c.m.m.d.c.(a, b) = d</span> sau <span class="fx">(a, b) = d</span>. Exemplu: (8, 12) = 4, pentru că divizorii comuni sunt 1, 2, 4.</span><span class="de">Die Zahl d, die gemeinsamer Teiler von a und b ist und ein Vielfaches aller anderen gemeinsamen Teiler, heißt <b>größter gemeinsamer Teiler</b>: <span class="fx">ggT(a, b) = d</span> oder <span class="fx">(a, b) = d</span>. Beispiel: (8, 12) = 4, denn die gemeinsamen Teiler sind 1, 2, 4.</span></li>
+      <li><span class="ro">Mai multe numere: c.m.m.d.c. este cel mai mare număr care le divide pe toate. Exemplu: (6, 12, 51) = 3, pentru că singurii divizori comuni sunt 1 și 3.</span><span class="de">Mehrere Zahlen: Der ggT ist die größte Zahl, die alle teilt. Beispiel: (6, 12, 51) = 3, denn die einzigen gemeinsamen Teiler sind 1 und 3.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c1"></div>
+</section>
+
+<!-- 2. Metoda factorilor primi -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Metoda factorilor primi</span><span class="de">Die Methode der Primfaktoren</span></h2>
+  <p class="section-sub"><span class="ro">Pentru numere mari, a scrie toți divizorii e greoi. Descompunem numerele în factori primi, apoi luăm <b>o singură dată factorii primi comuni, cu exponenții cei mai mici</b> cu care apar, și îi înmulțim. Alege numerele și apasă „Pasul următor”.</span><span class="de">Bei großen Zahlen ist es mühsam, alle Teiler aufzuschreiben. Wir zerlegen die Zahlen in Primfaktoren und nehmen dann <b>die gemeinsamen Primfaktoren je einmal mit dem kleinsten Exponenten</b>, mit dem sie vorkommen, und multiplizieren sie. Wähle die Zahlen und drücke „Nächster Schritt“.</span></p>
+  <div class="chips" id="m-pre" role="group"></div>
+  <div style="overflow-x:auto"><table class="tbl" id="m-tbl"></table></div>
+  <div class="actions">
+    <button type="button" class="btn ghost" id="m-back">← <span class="ro">Înapoi</span><span class="de">Zurück</span></button>
+    <button type="button" class="btn" id="m-next"><span class="ro">Pasul următor</span><span class="de">Nächster Schritt</span> →</button>
+  </div>
+  <div class="readout" id="m-msg" style="margin-top:10px" aria-live="polite"></div>
+  <div class="res-line" id="m-res" style="margin-top:10px" aria-live="polite"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro"><b>Pasul 1.</b> Scriem numerele ca produse de puteri de numere prime (cu bara verticală din lecția anterioară).</span><span class="de"><b>Schritt 1.</b> Wir schreiben die Zahlen als Produkte von Primzahlpotenzen (mit dem senkrechten Strich aus der letzten Lektion).</span></li>
+      <li><span class="ro"><b>Pasul 2.</b> Alegem factorii primi care apar în <b>toate</b> descompunerile și, pentru fiecare, <b>exponentul cel mai mic</b>. Îi înmulțim.</span><span class="de"><b>Schritt 2.</b> Wir wählen die Primfaktoren, die in <b>allen</b> Zerlegungen vorkommen, und für jeden den <b>kleinsten Exponenten</b>. Wir multiplizieren sie.</span></li>
+      <li><span class="ro">Exemplu din manual: 264 = 2<sup>3</sup> · 3 · 11 și 252 = 2<sup>2</sup> · 3<sup>2</sup> · 7, deci (264, 252) = 2<sup>2</sup> · 3 = 12.</span><span class="de">Beispiel aus dem Buch: 264 = 2<sup>3</sup> · 3 · 11 und 252 = 2<sup>2</sup> · 3<sup>2</sup> · 7, also (264, 252) = 2<sup>2</sup> · 3 = 12.</span></li>
+      <li><span class="ro">Cel mai mare divizor comun este divizibil cu orice divizor comun al numerelor. Dacă d = (a, b), atunci <span class="fx">D<sub>a</sub> ∩ D<sub>b</sub> = D<sub>d</sub></span>: divizorii comuni sunt exact divizorii lui d.</span><span class="de">Der größte gemeinsame Teiler ist durch jeden gemeinsamen Teiler teilbar. Ist d = (a, b), dann gilt <span class="fx">D<sub>a</sub> ∩ D<sub>b</sub> = D<sub>d</sub></span>: Die gemeinsamen Teiler sind genau die Teiler von d.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Cazuri speciale -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Cazuri speciale și numere prime între ele</span><span class="de">Sonderfälle und teilerfremde Zahlen</span></h2>
+  <p class="section-sub"><span class="ro">Uneori nu trebuie să calculezi nimic: o regulă îți dă rezultatul pe loc. Pentru fiecare pereche alege c.m.m.d.c., apoi citește ce regulă ai folosit.</span><span class="de">Manchmal musst du nichts rechnen: Eine Regel gibt dir das Ergebnis sofort. Wähle für jedes Paar den ggT und lies dann, welche Regel du benutzt hast.</span></p>
+  <div class="ex" id="r-ex"></div>
+  <div style="overflow-x:auto;margin-top:16px">
+    <table class="tbl">
+      <thead><tr><th><span class="ro">Regula</span><span class="de">Regel</span></th><th><span class="ro">Cum scriem</span><span class="de">Schreibweise</span></th><th><span class="ro">Exemple</span><span class="de">Beispiele</span></th></tr></thead>
+      <tbody>
+        <tr><td><span class="ro">Dacă n ≠ 0, cel mai mare divizor comun al lui 0 și n este n.</span><span class="de">Ist n ≠ 0, ist der ggT von 0 und n gleich n.</span></td><td class="fx">(0, n) = n</td><td>(0, 5) = 5; (7, 0) = 7; (0, 12) = 12</td></tr>
+        <tr><td><span class="ro">Dacă a, b ≠ 0 și a | b, atunci c.m.m.d.c. este a.</span><span class="de">Ist a, b ≠ 0 und a | b, dann ist der ggT gleich a.</span></td><td class="fx">a | b ⇒ (a, b) = a</td><td>(2, 4) = 2; (9, 27) = 9; (8, 4) = 4</td></tr>
+        <tr><td><span class="ro">Pentru orice n ≠ 0, c.m.m.d.c. al lui 1 și n este 1.</span><span class="de">Für jedes n ≠ 0 ist der ggT von 1 und n gleich 1.</span></td><td class="fx">(1, n) = 1</td><td>(1, 8) = 1; (11, 1) = 1; (1, 6) = 1</td></tr>
+        <tr><td><span class="ro">Orice două numere prime diferite sunt prime între ele.</span><span class="de">Zwei verschiedene Primzahlen sind immer teilerfremd.</span></td><td class="fx">(p<sub>1</sub>, p<sub>2</sub>) = 1</td><td>(2, 3) = 1; (5, 11) = 1; (7, 13) = 1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub-title"><span class="ro">Numere prime între ele</span><span class="de">Teilerfremde Zahlen</span></h3>
+  <p class="section-sub" style="margin-bottom:10px"><span class="ro">Dacă (a, b) = 1, numerele a și b se numesc <b>prime între ele</b>. Nu trebuie să fie ele însele prime: 8 și 9 nu sunt prime, dar sunt prime între ele. Scrie două numere sau alege o pereche.</span><span class="de">Ist (a, b) = 1, heißen a und b <b>teilerfremd</b> (prim zueinander). Sie müssen nicht selbst Primzahlen sein: 8 und 9 sind keine Primzahlen, aber teilerfremd. Schreibe zwei Zahlen oder wähle ein Paar.</span></p>
+  <div class="chips" id="q-pre" role="group"></div>
+  <div class="actions" style="margin:0 0 10px">
+    <label for="q-a" style="font-weight:700">a =</label><input id="q-a" class="num-in" type="text" inputmode="numeric" maxlength="4" value="8">
+    <label for="q-b" style="font-weight:700">b =</label><input id="q-b" class="num-in" type="text" inputmode="numeric" maxlength="4" value="9">
+    <button type="button" class="btn" id="q-go"><span class="ro">Verifică</span><span class="de">Prüfen</span></button>
+  </div>
+  <div class="readout" id="q-out" aria-live="polite"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Dacă <span class="fx">(a, b) = 1</span>, a și b sunt <b>prime între ele</b>: singurul lor divizor comun este 1. Exemple: (7, 11) = 1; (3, 16) = 1; (6, 35) = 1; (21, 10) = 1.</span><span class="de">Ist <span class="fx">(a, b) = 1</span>, sind a und b <b>teilerfremd</b>: Ihr einziger gemeinsamer Teiler ist 1. Beispiele: (7, 11) = 1; (3, 16) = 1; (6, 35) = 1; (21, 10) = 1.</span></li>
+      <li><span class="ro">Două numere prime între ele nu au niciun factor prim în comun în descompunere.</span><span class="de">Zwei teilerfremde Zahlen haben in ihrer Zerlegung keinen gemeinsamen Primfaktor.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Probleme -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Probleme: unde ne ajută c.m.m.d.c.</span><span class="de">Aufgaben: Wozu der ggT nützt</span></h2>
+  <h3 class="sub-title" style="margin-top:12px"><span class="ro">Problema 1: panglicile</span><span class="de">Aufgabe 1: die Bänder</span></h3>
+  <p class="section-sub"><span class="ro">Două panglici trebuie tăiate în bucăți egale, <b>cât mai lungi</b>, fără să rămână resturi. Alege lungimile și mută glisorul pentru lungimea bucății: bucățile roșii sunt resturile.</span><span class="de">Zwei Bänder sollen in gleich lange Stücke geschnitten werden, <b>so lang wie möglich</b>, ohne Rest. Wähle die Längen und bewege den Regler für die Stücklänge: Die roten Stücke sind Reste.</span></p>
+  <div class="chips" id="b-pre" role="group"></div>
+  <div class="fig"><svg id="b-svg" viewBox="0 0 520 170" role="img"></svg></div>
+  <div class="split" style="margin-top:10px">
+    <div class="slider"><label for="b-d"><span class="ro">Lungimea bucății</span><span class="de">Länge eines Stücks</span> d = <span id="b-dv"></span> cm</label><input type="range" id="b-d" min="1" max="60" value="4"></div>
+    <div class="readout" id="b-out" aria-live="polite"></div>
+  </div>
+  <div class="actions"><button type="button" class="btn ghost" id="b-best"><span class="ro">Arată cea mai lungă bucată</span><span class="de">Längstes Stück zeigen</span></button></div>
+
+  <h3 class="sub-title"><span class="ro">Problema 2: dalele pătrate</span><span class="de">Aufgabe 2: die quadratischen Fliesen</span></h3>
+  <p class="section-sub"><span class="ro">Un dreptunghi se acoperă cu dale pătrate egale, <b>cât mai mari</b>, fără să rămână spații. Latura dalei trebuie să dividă și lățimea, și lungimea: ce număr este ea pentru dreptunghi?</span><span class="de">Ein Rechteck wird mit gleich großen quadratischen Fliesen belegt, <b>so groß wie möglich</b>, ohne Lücken. Die Seitenlänge muss Breite und Länge teilen: Welche Zahl ist sie für das Rechteck?</span></p>
+  <div class="chips" id="t-pre" role="group"></div>
+  <div class="split">
+    <div class="fig"><svg id="t-svg" viewBox="0 0 520 300" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="t-s"><span class="ro">Latura dalei</span><span class="de">Fliesenseite</span> s = <span id="t-sv"></span> cm</label><input type="range" id="t-s" min="1" max="36" value="4"></div>
+      <div class="readout" id="t-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Când cerem „cea mai mare lungime / latură / număr de părți egale, fără rest” pentru două sau mai multe mărimi, calculăm <b>c.m.m.d.c.</b> al lor.</span><span class="de">Wenn für zwei oder mehr Größen „die größte Länge / Seite / Zahl gleicher Teile ohne Rest“ gesucht ist, berechnen wir ihren <b>ggT</b>.</span></li>
+      <li><span class="ro">Panglici de 264 cm și 252 cm: (264, 252) = 12, deci bucăți de 12 cm: 264 : 12 = 22 de bucăți și 252 : 12 = 21 de bucăți.</span><span class="de">Bänder von 264 cm und 252 cm: (264, 252) = 12, also Stücke zu 12 cm: 264 : 12 = 22 Stücke und 252 : 12 = 21 Stücke.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Exersează -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Exersează: află c.m.m.d.c.</span><span class="de">Üben: bestimme den ggT</span></h2>
+  <p class="section-sub"><span class="ro">Scrie c.m.m.d.c. pentru fiecare cerință și apasă „Verifică”. Dacă te blochezi, apasă „Arată metoda”: vezi descompunerile și exponenții cei mai mici.</span><span class="de">Schreibe den ggT für jede Aufgabe und drücke „Prüfen“. Wenn du nicht weiterkommst, drücke „Methode zeigen“: Du siehst die Zerlegungen und die kleinsten Exponenten.</span></p>
+  <div class="ex" id="px"></div>
+</section>
+
+<section class="block" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <div class="gloss-head" style="margin-top:14px"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După manualul de Matematică, clasa a VI-a: „Determinarea celui mai mare divizor comun. Numere prime între ele”. Testul de mai jos verifică ce ai învățat; pentru calcule poți folosi ciorna.</span><span class="de">Nach dem Mathematikbuch der 6. Klasse: „Bestimmung des größten gemeinsamen Teilers. Teilerfremde Zahlen“. Der Test unten prüft, was du gelernt hast; für Rechnungen kannst du den Notizblock benutzen.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+function rint(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function shuffle(a) { return a.slice().sort(function () { return Math.random() - .5; }); }
+
+/* ---------- ajutoare matematice ---------- */
+function divisors(n) { var d = []; for (var i = 1; i <= n; i++) if (n % i === 0) d.push(i); return d; }
+function gcd(a, b) { while (b) { var t = a % b; a = b; b = t; } return a; }
+function gcdAll(l) { return l.reduce(gcd); }
+function smallestPrime(n) { for (var p = 2; p * p <= n; p++) if (n % p === 0) return p; return n; }
+function fact(n) { var o = {}; while (n > 1) { var p = smallestPrime(n); o[p] = (o[p] || 0) + 1; n /= p; } return o; }
+function sup(p, e) { return e === 1 ? '' + p : p + '<sup>' + e + '</sup>'; }
+function setStr(a) { return a.length ? '{' + a.join(', ') + '}' : '∅'; }
+function keys(f) { return Object.keys(f).map(Number).sort(function (a, b) { return a - b; }); }
+function prodStr(f) { var k = keys(f); return k.length ? k.map(function (p) { return sup(p, f[p]); }).join(' · ') : '1'; }
+function has(s, x) { return s.indexOf(x) >= 0; }
+
+/** Întrebări scurte de verificare. */
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.innerHTML = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.innerHTML = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/** Așază elementele într-un grup centrat în (cx, cy); ultimul rând e centrat. */
+function grid(items, cx, cy, dx, dy, cols) {
+  var n = items.length, out = [];
+  var rows = Math.ceil(n / cols);
+  for (var i = 0; i < n; i++) {
+    var r = Math.floor(i / cols), inRow = Math.min(cols, n - r * cols);
+    out.push([items[i], cx + (i - r * cols - (inRow - 1) / 2) * dx, cy + (r - (rows - 1) / 2) * dy]);
+  }
+  return out;
+}
+
+/* ================= 1. Divizori comuni ================= */
+(function () {
+  var a = 14, b = 21, svg = $('#c-svg'), out = $('#c-out'), sa = $('#c-a'), sb = $('#c-b');
+  [[14, 21], [8, 12], [18, 24], [12, 36], [7, 11], [30, 45]].forEach(function (p) {
+    var c = btn('chip', '(' + p[0] + ', ' + p[1] + ')');
+    c.onclick = function () { a = p[0]; b = p[1]; sa.value = a; sb.value = b; render(); };
+    $('#c-pre').appendChild(c);
+  });
+  sa.oninput = function () { a = +sa.value; render(); };
+  sb.oninput = function () { b = +sb.value; render(); };
+  function draw(A, B, d) {
+    svg.innerHTML = '';
+    var both = A.filter(function (x) { return has(B, x); }), onlyA = A.filter(function (x) { return !has(B, x); }), onlyB = B.filter(function (x) { return !has(A, x); });
+    el('ellipse', { cx: 190, cy: 150, rx: 135, ry: 112, fill: '#dfe9fb', opacity: .7 }, svg);
+    el('ellipse', { cx: 330, cy: 150, rx: 135, ry: 112, fill: '#fbe3ec', opacity: .7 }, svg);
+    el('ellipse', { cx: 190, cy: 150, rx: 135, ry: 112, fill: 'none', stroke: '#2f6fd6', 'stroke-width': 3 }, svg);
+    el('ellipse', { cx: 330, cy: 150, rx: 135, ry: 112, fill: 'none', stroke: '#d6457a', 'stroke-width': 3 }, svg);
+    el('text', { x: 100, y: 30, 'text-anchor': 'middle', class: 'plbl', fill: '#2f6fd6' }, svg, 'D' + a);
+    el('text', { x: 420, y: 30, 'text-anchor': 'middle', class: 'plbl', fill: '#d6457a' }, svg, 'D' + b);
+    function put(list, cx, dx) {
+      var cols = list.length > 9 ? 3 : list.length > 4 ? 2 : 1;
+      grid(list, cx, 156, dx, 30, cols).forEach(function (c) {
+        if (c[0] === d) el('circle', { cx: c[1], cy: c[2] - 6, r: 18, fill: '#fff4b8', stroke: '#e0a100', 'stroke-width': 3 }, svg);
+        el('text', { x: c[1], y: c[2], class: 'vel' }, svg, String(c[0]));
+      });
+    }
+    put(onlyA, 118, 36); put(both, 260, 36); put(onlyB, 402, 36);
+    svg.setAttribute('aria-label', 'D' + a + ' ∩ D' + b + ' = ' + setStr(both));
+  }
+  function render() {
+    $('#c-av').textContent = a; $('#c-bv').textContent = b;
+    var A = divisors(a), B = divisors(b), both = A.filter(function (x) { return has(B, x); }), d = gcd(a, b);
+    draw(A, B, d);
+    out.innerHTML = '<div class="rule">D<sub>' + a + '</sub> = ' + setStr(A) + '</div><div class="rule">D<sub>' + b + '</sub> = ' + setStr(B) + '</div>' +
+      '<div class="eq">D<sub>' + a + '</sub> ∩ D<sub>' + b + '</sub> = ' + setStr(both) + '</div>' +
+      '<div class="eq ok-t">(' + a + ', ' + b + ') = ' + d + '</div>' +
+      '<div class="rule">' + tx('Divizorii comuni sunt exact divizorii lui ' + d + ': D', 'Die gemeinsamen Teiler sind genau die Teiler von ' + d + ': D') + '<sub>' + d + '</sub> = ' + setStr(divisors(d)) + '.</div>';
+  }
+  render();
+})();
+Check($('#c1'), [
+  { q: { ro: 'Care este mulțimea divizorilor comuni ai lui 18 și 24?', de: 'Was ist die Menge der gemeinsamen Teiler von 18 und 24?' },
+    o: [{ ro: '{1, 2, 3, 6}', de: '{1, 2, 3, 6}' }, { ro: '{1, 2, 3, 6, 9}', de: '{1, 2, 3, 6, 9}' }, { ro: '{2, 3, 6}', de: '{2, 3, 6}' }, { ro: '{1, 6}', de: '{1, 6}' }], a: 0,
+    why: { ro: 'D₁₈ = {1, 2, 3, 6, 9, 18}, D₂₄ = {1, 2, 3, 4, 6, 8, 12, 24}. Intersecția: {1, 2, 3, 6}. Cel mai mare este 6, deci (18, 24) = 6.', de: 'D₁₈ = {1, 2, 3, 6, 9, 18}, D₂₄ = {1, 2, 3, 4, 6, 8, 12, 24}. Durchschnitt: {1, 2, 3, 6}. Der größte ist 6, also (18, 24) = 6.' },
+    hint: { ro: 'Scrie D₁₈ și D₂₄, apoi păstrează doar numerele care apar în ambele. 1 apare mereu.', de: 'Schreibe D₁₈ und D₂₄ und behalte nur die Zahlen, die in beiden vorkommen. 1 ist immer dabei.' } },
+  { q: { ro: 'Dacă d este divizor comun al numerelor nenule a și b, atunci …', de: 'Wenn d ein gemeinsamer Teiler der Zahlen a und b ≠ 0 ist, dann …' },
+    o: [{ ro: 'd ≤ a și d ≤ b', de: 'd ≤ a und d ≤ b' }, { ro: 'd ≥ a și d ≥ b', de: 'd ≥ a und d ≥ b' }, { ro: 'd = a + b', de: 'd = a + b' }], a: 0,
+    why: { ro: 'Din a = d · x cu x ≥ 1 rezultă d ≤ a, la fel d ≤ b. Un divizor nu poate depăși numărul pe care îl divide.', de: 'Aus a = d · x mit x ≥ 1 folgt d ≤ a, ebenso d ≤ b. Ein Teiler kann nicht größer sein als die Zahl, die er teilt.' },
+    hint: { ro: 'Gândește-te la 6 și 12: divizorii lui 6 nu pot fi mai mari decât 6.', de: 'Denke an 6 und 12: Die Teiler von 6 können nicht größer als 6 sein.' } }
+]);
+
+/* ================= 2. Metoda factorilor primi ================= */
+(function () {
+  var PRE = [[264, 252], [36, 48], [180, 150], [60, 84, 90], [72, 120, 168]];
+  var cur = 0, st = 0, tbl = $('#m-tbl'), msg = $('#m-msg'), res = $('#m-res');
+  PRE.forEach(function (p, i) {
+    var c = btn('chip', '(' + p.join(', ') + ')'); c.onclick = function () { cur = i; st = 0; render(); }; $('#m-pre').appendChild(c);
+  });
+  $('#m-back').onclick = function () { st = Math.max(0, st - 1); render(); };
+  $('#m-next').onclick = function () { st = Math.min(4, st + 1); render(); };
+  function render() {
+    Array.prototype.forEach.call($('#m-pre').children, function (c, i) { c.setAttribute('aria-pressed', i === cur ? 'true' : 'false'); });
+    var N = PRE[cur], F = N.map(fact), all = {};
+    F.forEach(function (f) { keys(f).forEach(function (p) { all[p] = true; }); });
+    var ps = keys(all), common = ps.filter(function (p) { return F.every(function (f) { return f[p]; }); });
+    var mins = {}; common.forEach(function (p) { mins[p] = Math.min.apply(null, F.map(function (f) { return f[p]; })); });
+    var html = '<thead><tr><th>' + tx('Numărul', 'Die Zahl') + '</th><th>' + tx('Descompunerea', 'Zerlegung') + '</th>' + ps.map(function (p) {
+      var cls = st >= 2 ? (has(common, p) ? ' class="num-c good"' : ' class="num-c dim"') : ' class="num-c"';
+      return '<th' + cls + '>' + p + '</th>';
+    }).join('') + '</tr></thead><tbody>';
+    N.forEach(function (n, i) {
+      html += '<tr><td class="fx">' + n + '</td><td>' + (st >= 1 ? prodStr(F[i]) : '?') + '</td>' + ps.map(function (p) {
+        var v = F[i][p] || '';
+        var hl = st >= 3 && has(common, p) && F[i][p] === mins[p] ? ' min' : '';
+        return '<td class="num-c' + (st >= 2 && !has(common, p) ? ' dim' : '') + hl + '">' + (st >= 1 ? v : '') + '</td>';
+      }).join('') + '</tr>';
+    });
+    html += '<tr class="tot"><td colspan="2">' + tx('Exponentul cel mai mic', 'Kleinster Exponent') + '</td>' + ps.map(function (p) {
+      return '<td class="num-c">' + (st >= 3 ? (has(common, p) ? mins[p] : '–') : '') + '</td>';
+    }).join('') + '</tr></tbody>';
+    tbl.innerHTML = html;
+    var d = gcdAll(N);
+    var m = [
+      tx('Descompunem fiecare număr în factori primi. Exponentul din coloana unui număr prim arată de câte ori apare el.', 'Wir zerlegen jede Zahl in Primfaktoren. Der Eintrag in der Spalte einer Primzahl zeigt, wie oft sie vorkommt.'),
+      tx('Scriem descompunerile și exponenții pe coloane, câte o coloană pentru fiecare număr prim.', 'Wir schreiben die Zerlegungen und die Exponenten spaltenweise, eine Spalte pro Primzahl.'),
+      tx('Ne trebuie doar factorii primi care apar <b>în toate</b> numerele (coloane verzi). Cei care lipsesc undeva (gri) nu pot divide toate numerele.', 'Wir brauchen nur die Primfaktoren, die in <b>allen</b> Zahlen vorkommen (grüne Spalten). Die grauen fehlen irgendwo und können nicht alle Zahlen teilen.'),
+      tx('Pentru fiecare factor comun luăm <b>exponentul cel mai mic</b> (cel mai mic număr din coloană): mai mult nu mai divide toate numerele.', 'Für jeden gemeinsamen Faktor nehmen wir den <b>kleinsten Exponenten</b> (die kleinste Zahl der Spalte): Mehr teilt nicht mehr alle Zahlen.'),
+      tx('Înmulțim factorii comuni cu exponenții cei mai mici.', 'Wir multiplizieren die gemeinsamen Faktoren mit den kleinsten Exponenten.')
+    ];
+    msg.innerHTML = '<span class="lbl">' + tx('Pasul ', 'Schritt ') + st + '</span><div>' + m[st] + '</div>';
+    var rr = {}; common.forEach(function (p) { rr[p] = mins[p]; });
+    res.innerHTML = st === 4 ? '(' + N.join(', ') + ') = <b>' + (common.length ? prodStr(rr) + ' = ' + d : '1') + '</b>' : '';
+    $('#m-back').disabled = st === 0; $('#m-next').disabled = st === 4;
+  }
+  render();
+})();
+Check($('#c2'), [
+  { q: { ro: 'Pentru 120 = 2³ · 3 · 5 și 84 = 2² · 3 · 7, cât este (120, 84)?', de: 'Für 120 = 2³ · 3 · 5 und 84 = 2² · 3 · 7: Was ist (120, 84)?' },
+    o: [{ ro: '2³ · 3 · 5 · 7 = 840', de: '2³ · 3 · 5 · 7 = 840' }, { ro: '2² · 3 = 12', de: '2² · 3 = 12' }, { ro: '2³ · 3 = 24', de: '2³ · 3 = 24' }, { ro: '2 · 3 = 6', de: '2 · 3 = 6' }], a: 1,
+    why: { ro: 'Factorii comuni sunt 2 și 3 (5 și 7 apar doar la câte un număr). Exponenții cei mai mici: 2² și 3¹. Deci (120, 84) = 2² · 3 = 12.', de: 'Die gemeinsamen Faktoren sind 2 und 3 (5 und 7 kommen nur bei je einer Zahl vor). Kleinste Exponenten: 2² und 3¹. Also (120, 84) = 2² · 3 = 12.' },
+    hint: { ro: 'Păstrează doar factorii care apar în ambele descompuneri și ia exponentul cel MAI MIC.', de: 'Behalte nur die Faktoren, die in beiden Zerlegungen vorkommen, und nimm den KLEINSTEN Exponenten.' } },
+  { q: { ro: 'De ce luăm exponentul cel mai mic, nu cel mai mare?', de: 'Warum nehmen wir den kleinsten und nicht den größten Exponenten?' },
+    o: [{ ro: 'Pentru că rezultatul trebuie să dividă toate numerele, iar o putere mai mare nu mai divide numărul cu exponent mic', de: 'Weil das Ergebnis alle Zahlen teilen muss und eine größere Potenz die Zahl mit dem kleinen Exponenten nicht mehr teilt' }, { ro: 'Pentru că așa se calculează reuniunea', de: 'Weil so die Vereinigung berechnet wird' }, { ro: 'Pentru că exponentul mic e mai ușor de scris', de: 'Weil der kleine Exponent einfacher zu schreiben ist' }], a: 0,
+    why: { ro: 'De exemplu 2³ nu divide 2² · 3²: rezultatul comun poate conține 2 de cel mult atâtea ori de câte ori apare în fiecare număr.', de: 'Zum Beispiel teilt 2³ die Zahl 2² · 3² nicht: Das gemeinsame Ergebnis darf den Faktor 2 höchstens so oft enthalten, wie er in jeder Zahl vorkommt.' },
+    hint: { ro: 'Un divizor comun trebuie să dividă și numărul în care factorul apare de mai puține ori.', de: 'Ein gemeinsamer Teiler muss auch die Zahl teilen, in der der Faktor seltener vorkommt.' } }
+]);
+
+/* ================= 3. Cazuri speciale ================= */
+(function () {
+  var host = $('#r-ex');
+  var KINDS = ['zero', 'div', 'one', 'primes', 'gen'];
+  var PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23];
+  var RULE = {
+    zero: { ro: 'Regula (0, n) = n: cel mai mare divizor comun al lui 0 și al lui n ≠ 0 este chiar n.', de: 'Regel (0, n) = n: Der ggT von 0 und n ≠ 0 ist n selbst.' },
+    div: { ro: 'Regula „a | b ⇒ (a, b) = a”: unul dintre numere îl divide pe celălalt, deci c.m.m.d.c. este numărul mai mic.', de: 'Regel „a | b ⇒ (a, b) = a“: Eine Zahl teilt die andere, also ist der ggT die kleinere Zahl.' },
+    one: { ro: 'Regula (1, n) = 1: singurul divizor al lui 1 este 1.', de: 'Regel (1, n) = 1: Der einzige Teiler von 1 ist 1.' },
+    primes: { ro: 'Două numere prime diferite sunt prime între ele: (p₁, p₂) = 1.', de: 'Zwei verschiedene Primzahlen sind teilerfremd: (p₁, p₂) = 1.' },
+    gen: { ro: 'Nicio regulă specială: descompunem în factori primi și luăm factorii comuni cu exponenții cei mai mici.', de: 'Keine Sonderregel: Wir zerlegen in Primfaktoren und nehmen die gemeinsamen Faktoren mit den kleinsten Exponenten.' }
+  };
+  var last = '';
+  function gen() {
+    var k; do { k = KINDS[rint(0, KINDS.length - 1)]; } while (k === last); last = k;
+    var a, b, n, p;
+    if (k === 'zero') { n = rint(2, 20); a = 0; b = n; }
+    else if (k === 'div') { a = rint(2, 9); b = a * rint(2, 7); }
+    else if (k === 'one') { a = 1; b = rint(2, 30); }
+    else if (k === 'primes') { p = shuffle(PRIMES); a = p[0]; b = p[1]; }
+    else { var d = [2, 3, 4, 6, 5][rint(0, 4)], x, y; do { x = rint(2, 9); y = rint(2, 9); } while (gcd(x, y) !== 1 || x === y || x % y === 0 || y % x === 0); a = d * x; b = d * y; }
+    if (rint(0, 1)) { var t = a; a = b; b = t; }
+    return { k: k, a: a, b: b, d: gcd(a, b) };
+  }
+  function render() {
+    var q = gen(); host.innerHTML = '';
+    host.appendChild(h('div', 'story', '(' + q.a + ', ' + q.b + ') = ?'));
+    var pool = h('div', 'pool'), why = h('p', 'tw'); why.setAttribute('aria-live', 'polite'); why.style.cssText = 'font-size:16px;color:var(--ink)';
+    var cand = [q.d], extra = [1, Math.min(q.a, q.b) || q.b, Math.max(q.a, q.b), q.d * 2, q.d + 1, Math.max(q.a, q.b) - 1, 2];
+    shuffle(extra).forEach(function (v) { if (cand.length < 4 && cand.indexOf(v) < 0 && v >= 0) cand.push(v); });
+    var bs = shuffle(cand).map(function (v) {
+      var b = btn('num', String(v)); b.onclick = function () {
+        bs.forEach(function (x) { x.disabled = true; });
+        b.classList.add(v === q.d ? 'right' : 'wrong');
+        bs.forEach(function (x) { if (+x.textContent === q.d) x.classList.add('right'); });
+        why.innerHTML = (v === q.d ? '✓ ' : '✗ ') + '(' + q.a + ', ' + q.b + ') = ' + q.d + '. ' + T(RULE[q.k]);
+      };
+      pool.appendChild(b); return b;
+    });
+    var nx = btn('btn ghost', tx('Altă pereche', 'Anderes Paar') + ' →'); nx.onclick = render;
+    host.appendChild(pool); host.appendChild(why); var act = h('div', 'actions'); act.appendChild(nx); host.appendChild(act);
+  }
+  render();
+})();
+(function () {
+  var ia = $('#q-a'), ib = $('#q-b'), out = $('#q-out');
+  [[8, 9], [6, 35], [21, 10], [14, 21], [7, 11], [12, 18]].forEach(function (p) {
+    var c = btn('chip', '(' + p[0] + ', ' + p[1] + ')'); c.onclick = function () { ia.value = p[0]; ib.value = p[1]; go(); }; $('#q-pre').appendChild(c);
+  });
+  $('#q-go').onclick = go; ia.onkeydown = ib.onkeydown = function (e) { if (e.key === 'Enter') go(); };
+  function go() {
+    var a = parseInt(ia.value, 10), b = parseInt(ib.value, 10);
+    if (!(a >= 1 && b >= 1)) { out.innerHTML = '<div class="rule">' + tx('Scrie două numere naturale nenule.', 'Schreibe zwei natürliche Zahlen ungleich 0.') + '</div>'; return; }
+    var d = gcd(a, b), fa = fact(a), fb = fact(b);
+    var line = function (n, f) { return '<div class="rule">' + n + ' = ' + (n === 1 ? '1' : prodStr(f)) + '</div>'; };
+    out.innerHTML = line(a, fa) + line(b, fb) + '<div class="eq ' + (d === 1 ? 'ok-t' : '') + '">(' + a + ', ' + b + ') = ' + d + '</div>' +
+      '<div class="rule">' + (d === 1 ? '<span class="ok-t">' + tx('Prime între ele: nu au niciun factor prim în comun.', 'Teilerfremd: Sie haben keinen gemeinsamen Primfaktor.') + '</span>' : '<span class="no-t">' + tx('Nu sunt prime între ele: au divizorul comun ' + d + '.', 'Nicht teilerfremd: Sie haben den gemeinsamen Teiler ' + d + '.') + '</span>') + '</div>';
+  }
+  go();
+})();
+Check($('#c3'), [
+  { q: { ro: 'Care dintre perechi este formată din numere prime între ele?', de: 'Welches Paar besteht aus teilerfremden Zahlen?' },
+    o: [{ ro: '8 și 12', de: '8 und 12' }, { ro: '9 și 15', de: '9 und 15' }, { ro: '8 și 9', de: '8 und 9' }, { ro: '14 și 21', de: '14 und 21' }], a: 2,
+    why: { ro: '8 = 2³ și 9 = 3² nu au niciun factor prim comun, deci (8, 9) = 1. Celelalte au divizori comuni: 4, 3, respectiv 7.', de: '8 = 2³ und 9 = 3² haben keinen gemeinsamen Primfaktor, also (8, 9) = 1. Die anderen haben gemeinsame Teiler: 4, 3 bzw. 7.' },
+    hint: { ro: 'Caută perechea fără niciun divizor comun în afară de 1.', de: 'Suche das Paar ohne gemeinsamen Teiler außer 1.' } },
+  { q: { ro: 'Cât este (0, 15)?', de: 'Was ist (0, 15)?' },
+    o: [{ ro: '0', de: '0' }, { ro: '1', de: '1' }, { ro: '15', de: '15' }], a: 2,
+    why: { ro: 'Orice număr nenul divide pe 0, iar cel mai mare divizor al lui 15 este 15. Regula: (0, n) = n.', de: 'Jede Zahl ≠ 0 teilt 0, und der größte Teiler von 15 ist 15. Regel: (0, n) = n.' },
+    hint: { ro: 'Divizorii comuni ai lui 0 și 15 sunt divizorii lui 15.', de: 'Die gemeinsamen Teiler von 0 und 15 sind die Teiler von 15.' } }
+]);
+
+/* ================= 4. Probleme ================= */
+(function () {
+  var PRE = [[264, 252], [72, 108], [60, 45]], cur = 0, d = 4, svg = $('#b-svg'), out = $('#b-out'), sl = $('#b-d');
+  PRE.forEach(function (p, i) { var c = btn('chip', p[0] + ' cm, ' + p[1] + ' cm'); c.onclick = function () { cur = i; d = Math.min(d, 60); sl.value = d; render(); }; $('#b-pre').appendChild(c); });
+  sl.oninput = function () { d = +sl.value; render(); };
+  $('#b-best').onclick = function () { d = gcd(PRE[cur][0], PRE[cur][1]); sl.value = d; render(); };
+  function bar(len, y, scale, color) {
+    var q = Math.floor(len / d), full = q * d, i;
+    el('rect', { x: 10, y: y, width: full * scale, height: 36, fill: color, rx: 4 }, svg);
+    if (len > full) el('rect', { x: 10 + full * scale, y: y, width: (len - full) * scale, height: 36, fill: '#e7a4a4', stroke: '#c23b3b', 'stroke-width': 2, rx: 4 }, svg);
+    for (i = 1; i <= q; i++) if (d * scale >= 1.6 || i % Math.ceil(2 / (d * scale)) === 0) el('line', { x1: 10 + i * d * scale, y1: y, x2: 10 + i * d * scale, y2: y + 36, stroke: '#fff', 'stroke-width': Math.min(2, d * scale / 2) }, svg);
+    el('text', { x: 10, y: y - 6, class: 'plbl', 'font-size': 16, style: 'font-size:16px', fill: '#1f2430' }, svg, len + ' cm');
+  }
+  function render() {
+    var A = PRE[cur][0], B = PRE[cur][1], sc = 500 / Math.max(A, B), g = gcd(A, B);
+    Array.prototype.forEach.call($('#b-pre').children, function (c, i) { c.setAttribute('aria-pressed', i === cur ? 'true' : 'false'); });
+    $('#b-dv').textContent = d; svg.innerHTML = '';
+    bar(A, 34, sc, '#2f6fd6'); bar(B, 106, sc, '#d6457a');
+    var ra = A % d, rb = B % d, ok = !ra && !rb;
+    out.innerHTML = '<div class="rule">' + A + ' : ' + d + ' = ' + Math.floor(A / d) + ' ' + tx('rest', 'Rest') + ' ' + ra + '</div><div class="rule">' + B + ' : ' + d + ' = ' + Math.floor(B / d) + ' ' + tx('rest', 'Rest') + ' ' + rb + '</div>' +
+      (ok ? '<div class="eq ok-t">' + tx('Fără resturi!', 'Ohne Reste!') + '</div><div class="rule">' + (d === g ? tx('Aceasta este cea mai lungă bucată posibilă: ' + d + ' = (' + A + ', ' + B + ').', 'Das ist das längste mögliche Stück: ' + d + ' = (' + A + ', ' + B + ').') : tx('Merge, dar mai există o bucată mai lungă care merge. Încearcă să o găsești.', 'Das geht, aber es gibt ein längeres Stück, das auch geht. Versuche es zu finden.')) + '</div>'
+        : '<div class="eq no-t">' + tx('Rămân resturi (roșu)', 'Es bleiben Reste (rot)') + '</div><div class="rule">' + tx('Lungimea bucății trebuie să dividă și ' + A + ', și ' + B + '.', 'Die Stücklänge muss sowohl ' + A + ' als auch ' + B + ' teilen.') + '</div>');
+    svg.setAttribute('aria-label', A + ' cm, ' + B + ' cm, d = ' + d);
+  }
+  render();
+})();
+(function () {
+  var PRE = [[36, 60], [24, 40], [18, 45]], cur = 0, s = 4, svg = $('#t-svg'), out = $('#t-out'), sl = $('#t-s');
+  PRE.forEach(function (p, i) { var c = btn('chip', p[0] + ' × ' + p[1] + ' cm'); c.onclick = function () { cur = i; render(); }; $('#t-pre').appendChild(c); });
+  sl.oninput = function () { s = +sl.value; render(); };
+  function render() {
+    Array.prototype.forEach.call($('#t-pre').children, function (c, i) { c.setAttribute('aria-pressed', i === cur ? 'true' : 'false'); });
+    var w = PRE[cur][0], hh = PRE[cur][1], sc = Math.min(440 / hh, 236 / w), X = 66, Y = 12, g = gcd(w, hh), i;
+    $('#t-sv').textContent = s; svg.innerHTML = '';
+    var cw = Math.floor(hh / s), ch = Math.floor(w / s), fw = cw * s, fh = ch * s;
+    el('rect', { x: X, y: Y, width: hh * sc, height: w * sc, fill: '#e7a4a4', stroke: '#c23b3b', 'stroke-width': 2 }, svg);
+    if (cw && ch) el('rect', { x: X, y: Y, width: fw * sc, height: fh * sc, fill: '#cfe0fa' }, svg);
+    for (i = 0; i <= cw; i++) el('line', { x1: X + i * s * sc, y1: Y, x2: X + i * s * sc, y2: Y + fh * sc, stroke: '#2f6fd6', 'stroke-width': 1.2 }, svg);
+    for (i = 0; i <= ch; i++) el('line', { x1: X, y1: Y + i * s * sc, x2: X + fw * sc, y2: Y + i * s * sc, stroke: '#2f6fd6', 'stroke-width': 1.2 }, svg);
+    el('rect', { x: X, y: Y, width: hh * sc, height: w * sc, fill: 'none', stroke: '#1f2430', 'stroke-width': 2.5 }, svg);
+    el('text', { x: X + hh * sc / 2, y: Y + w * sc + 22, 'text-anchor': 'middle', class: 'plbl', fill: '#1f2430', style: 'font-size:16px' }, svg, hh + ' cm');
+    el('text', { x: X - 4, y: Y + w * sc / 2, 'text-anchor': 'end', class: 'plbl', fill: '#1f2430', style: 'font-size:16px' }, svg, w + ' cm');
+    var ok = !(w % s) && !(hh % s);
+    out.innerHTML = '<div class="rule">' + w + ' : ' + s + ' → ' + tx('rest', 'Rest') + ' ' + (w % s) + '; ' + hh + ' : ' + s + ' → ' + tx('rest', 'Rest') + ' ' + (hh % s) + '</div>' +
+      (ok ? '<div class="eq ok-t">' + (w / s) + ' × ' + (hh / s) + ' = ' + (w / s) * (hh / s) + ' ' + tx('dale, fără spații', 'Fliesen, ohne Lücken') + '</div><div class="rule">' + (s === g ? tx('Cea mai mare latură posibilă: ' + s + ' = (' + w + ', ' + hh + ').', 'Die größte mögliche Seite: ' + s + ' = (' + w + ', ' + hh + ').') : tx('Merge, dar se pot folosi dale mai mari.', 'Das geht, aber es gehen auch größere Fliesen.')) + '</div>'
+        : '<div class="eq no-t">' + tx('Rămân spații (roșu)', 'Es bleiben Lücken (rot)') + '</div><div class="rule">' + tx('Latura trebuie să dividă și ' + w + ', și ' + hh + '.', 'Die Seite muss sowohl ' + w + ' als auch ' + hh + ' teilen.') + '</div>');
+    svg.setAttribute('aria-label', w + ' × ' + hh + ', s = ' + s);
+  }
+  render();
+})();
+Check($('#c4'), [
+  { q: { ro: 'Două panglici, de 72 cm și 108 cm, se taie în bucăți egale, cât mai lungi, fără resturi. Cât are o bucată?', de: 'Zwei Bänder, 72 cm und 108 cm lang, werden in gleich lange, möglichst lange Stücke ohne Rest geschnitten. Wie lang ist ein Stück?' },
+    o: [{ ro: '12 cm', de: '12 cm' }, { ro: '18 cm', de: '18 cm' }, { ro: '36 cm', de: '36 cm' }, { ro: '216 cm', de: '216 cm' }], a: 2,
+    why: { ro: '72 = 2³ · 3² și 108 = 2² · 3³, deci (72, 108) = 2² · 3² = 36. Primul rând dă 2 bucăți, al doilea 3 bucăți.', de: '72 = 2³ · 3² und 108 = 2² · 3³, also (72, 108) = 2² · 3² = 36. Das erste Band ergibt 2 Stücke, das zweite 3.' },
+    hint: { ro: 'Cea mai lungă bucată este c.m.m.d.c. al lungimilor. Descompune 72 și 108.', de: 'Das längste Stück ist der ggT der Längen. Zerlege 72 und 108.' } },
+  { q: { ro: 'Un dreptunghi de 36 cm × 60 cm se acoperă cu dale pătrate egale, cât mai mari, fără spații. Câte dale sunt?', de: 'Ein Rechteck von 36 cm × 60 cm wird mit gleich großen, möglichst großen quadratischen Fliesen ohne Lücken belegt. Wie viele Fliesen sind es?' },
+    o: [{ ro: '15', de: '15' }, { ro: '12', de: '12' }, { ro: '60', de: '60' }, { ro: '8', de: '8' }], a: 0,
+    why: { ro: '(36, 60) = 12, deci latura dalei este 12 cm. Pe lățime 36 : 12 = 3 dale, pe lungime 60 : 12 = 5 dale: 3 · 5 = 15.', de: '(36, 60) = 12, also ist die Fliesenseite 12 cm. In der Breite 36 : 12 = 3 Fliesen, in der Länge 60 : 12 = 5 Fliesen: 3 · 5 = 15.' },
+    hint: { ro: 'Mai întâi latura dalei, adică c.m.m.d.c.; apoi numără câte dale încap pe fiecare latură.', de: 'Zuerst die Fliesenseite, also der ggT; dann zähle, wie viele Fliesen auf jede Seite passen.' } }
+]);
+
+/* ================= 5. Exerciții ================= */
+(function () {
+  var host = $('#px');
+  function rnd2() {
+    var d = [2, 3, 4, 5, 6, 7, 12, 15][rint(0, 7)], x, y;
+    do { x = rint(2, 12); y = rint(2, 12); } while (gcd(x, y) !== 1 || x === y);
+    return [d * x, d * y];
+  }
+  function rnd3() {
+    var d = [2, 3, 6, 4][rint(0, 3)], l, g;
+    do { l = [rint(2, 9), rint(2, 9), rint(2, 9)]; g = gcdAll(l); } while (g !== 1 || l[0] === l[1] || l[1] === l[2] || l[0] === l[2]);
+    return l.map(function (v) { return v * d; });
+  }
+  function render() {
+    var tasks = [rnd2(), rnd3()];
+    host.innerHTML = '';
+    var rows = tasks.map(function (N, ti) {
+      var box = h('div', 'task'), why = h('p', 'tw'), line = h('div', 'actions'), inp = h('input', 'num-in');
+      inp.type = 'text'; inp.inputMode = 'numeric'; inp.maxLength = 5; inp.autocomplete = 'off'; inp.setAttribute('aria-label', 'c.m.m.d.c.');
+      why.setAttribute('aria-live', 'polite'); line.style.margin = 0;
+      var d = gcdAll(N);
+      box.appendChild(h('span', 'tl', ['a) ', 'b) '][ti] + '(' + N.join(', ') + ') ='));
+      inp.oninput = function () { box.className = 'task'; why.textContent = ''; };
+      line.appendChild(inp);
+      var det = h('div', 'rule'); det.style.cssText = 'font-size:15.5px;color:var(--muted)'; det.hidden = true;
+      box.appendChild(line); box.appendChild(why); box.appendChild(det); host.appendChild(box);
+      function method() {
+        var F = N.map(fact), all = {}; F.forEach(function (f) { keys(f).forEach(function (p) { all[p] = 1; }); });
+        var common = keys(all).filter(function (p) { return F.every(function (f) { return f[p]; }); }), r = {};
+        common.forEach(function (p) { r[p] = Math.min.apply(null, F.map(function (f) { return f[p]; })); });
+        return N.map(function (n, i) { return n + ' = ' + prodStr(F[i]); }).join('<br>') + '<br><b>(' + N.join(', ') + ') = ' + (common.length ? prodStr(r) + ' = ' + d : '1') + '</b>';
+      }
+      return {
+        check: function () {
+          var v = parseInt(inp.value, 10), ok = v === d;
+          box.className = 'task ' + (ok ? 'ok' : 'bad');
+          if (ok) why.textContent = '✓ (' + N.join(', ') + ') = ' + d;
+          else if (isNaN(v)) why.textContent = tx('Scrie un număr.', 'Schreibe eine Zahl.');
+          else if (v <= 0 || N.some(function (n) { return n % v; })) why.textContent = tx('Numărul ' + v + ' nu divide toate numerele. Un divizor comun trebuie să dividă fiecare număr.', 'Die Zahl ' + v + ' teilt nicht alle Zahlen. Ein gemeinsamer Teiler muss jede Zahl teilen.');
+          else why.textContent = tx(v + ' este divizor comun, dar mai există unul mai mare. Ia exponentul cel mai mic al fiecărui factor comun.', v + ' ist ein gemeinsamer Teiler, aber es gibt einen größeren. Nimm den kleinsten Exponenten jedes gemeinsamen Faktors.');
+          return ok;
+        },
+        show: function () { inp.value = d; det.hidden = false; det.innerHTML = method(); }
+      };
+    });
+    var res = h('div', 'result'); res.hidden = true; res.setAttribute('aria-live', 'polite');
+    var act = h('div', 'actions'), c = btn('btn', tx('Verifică', 'Prüfen')), s = btn('btn ghost', tx('Arată metoda', 'Methode zeigen')), nx = btn('btn ghost', tx('Altă problemă', 'Neue Aufgabe') + ' →');
+    [c, s, nx].forEach(function (b) { act.appendChild(b); });
+    host.appendChild(act); host.appendChild(res);
+    c.onclick = function () {
+      var good = rows.filter(function (r) { return r.check(); }).length; res.hidden = false;
+      if (good === rows.length) { res.className = 'result good'; res.textContent = '🎉 ' + tx('Ambele sunt corecte!', 'Beide sind richtig!'); }
+      else { res.className = 'result try'; res.textContent = good + ' / ' + rows.length + ' ' + tx('corecte. Citește indiciul de sub rândul roșu.', 'richtig. Lies den Hinweis unter der roten Zeile.'); }
+    };
+    s.onclick = function () { rows.forEach(function (r) { r.show(); }); c.onclick(); };
+    nx.onclick = render;
+  }
+  render();
+})();
+
+/* ================= Mic dicționar ================= */
+(function () {
+  var G = [
+    ['divizor comun', 'gemeinsamer Teiler'], ['cel mai mare divizor comun (c.m.m.d.c.)', 'größter gemeinsamer Teiler (ggT)'], ['numere prime între ele', 'teilerfremde Zahlen'], ['intersecție (D<sub>a</sub> ∩ D<sub>b</sub>)', 'der Durchschnitt (D<sub>a</sub> ∩ D<sub>b</sub>)'],
+    ['divizor', 'der Teiler'], ['multiplu', 'das Vielfache'], ['factor prim', 'der Primfaktor'], ['descompunere în factori primi', 'die Primfaktorzerlegung'],
+    ['exponent', 'der Exponent'], ['factor comun', 'gemeinsamer Faktor'], ['panglică', 'das Band'], ['dală pătrată', 'die quadratische Fliese'],
+    ['rest', 'der Rest'], ['fără rest', 'ohne Rest']
+  ];
+  var dl = $('#gloss');
+  G.forEach(function (g) { dl.appendChild(h('div', '', '<dt>' + g[0] + '</dt><dd>' + g[1] + '</dd>')); });
+})();
+})();
+</script>
+</body>
+</html>

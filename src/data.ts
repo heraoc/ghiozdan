@@ -23,6 +23,7 @@ import { organismulPlanteiTest } from './content/organismul-plantei-test';
 import { unitatiDeMasuraTest } from './content/unitati-de-masura-test';
 import { operatiiCuMultimiTest } from './content/operatii-cu-multimi-test';
 import { numerePrimeTest } from './content/numere-prime-test';
+import { cmmdcTest } from './content/cmmdc-test';
 import { renastereaTest } from './content/renasterea-test';
 import { mariOameniAiRenasteriiTest } from './content/mari-oameni-ai-renasterii-test';
 import { reformaSiContrareformaTest } from './content/reforma-si-contrareforma-test';
@@ -296,6 +297,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/algebra/numere-prime.html',
         test: { questions: numerePrimeTest, minutes: 20 },
+      },
+      {
+        slug: 'cmmdc',
+        title: {
+          ro: 'Cel mai mare divizor comun',
+          de: 'Der größte gemeinsame Teiler',
+        },
+        summary: {
+          ro: 'Divizori comuni, c.m.m.d.c. cu factorii primi (exponenții cei mai mici), cazuri speciale, numere prime între ele și probleme cu panglici tăiate și dale pătrate.',
+          de: 'Gemeinsame Teiler, ggT mit Primfaktoren (kleinste Exponenten), Sonderfälle, teilerfremde Zahlen und Aufgaben mit zerschnittenen Bändern und quadratischen Fliesen.',
+        },
+        src: 'lectii/clasa-6/algebra/cmmdc.html',
+        test: { questions: cmmdcTest, minutes: 15 },
       },
     ],
     gmt: [
