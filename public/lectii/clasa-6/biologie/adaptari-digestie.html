@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adaptări ale digestiei la vertebrate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Anpassungen der Verdauung bei Wirbeltieren';
+})();
+</script>
+<style>
+:root{
+  --paper:#f5f7f0; --card:#ffffff; --ink:#1c2a22; --muted:#56655b; --rule:#dde4d6; --sheet:#eef3e6;
+  --accent:#27a36f; --accent-soft:#e3f5ec;
+  --inc:#4aa3d9; --can:#e0607e; --pre:#3aa76d; --mol:#f0b429;
+  --good:#27a36f; --good-soft:#e6f6ee; --bad:#d64545; --bad-soft:#fdeaea;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+button:focus-visible,.part:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(32px,5.2vw,54px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.sub-h{font-size:22px;margin:26px 0 6px}
+.hint{font-size:14.5px;color:var(--muted)}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.score{font-weight:700}
+.remember{margin-top:18px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:16px 18px;display:grid;gap:8px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:10px}
+.fig svg{display:block;width:100%;height:auto}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start}
+.desc{border-left:4px solid var(--c,var(--rule));background:var(--sheet);border-radius:8px;padding:12px 16px;min-height:96px}
+.desc h3{font-size:21px}
+.desc p{margin-top:4px}
+.pgs{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.pgs i{width:22px;height:8px;border-radius:4px;background:var(--rule)}
+.pgs i.on{background:var(--ink)}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #b9c7ad;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .opts button{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px;text-align:left}
+.cq .opts button:hover:not(:disabled){border-color:var(--muted)}
+.cq .opts button.right{border-color:var(--good);background:var(--good);color:#fff}
+.cq .opts button.wrong{border-color:var(--bad);color:#b02e2e;background:var(--bad-soft)}
+.cq .why{font-size:15px;color:var(--muted)}
+.cq.done .q::before{content:"✓ ";color:var(--good)}
+
+/* sortări */
+.sorter{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:10px;margin-top:12px}
+.org{background:var(--card);border:1.5px solid var(--rule);border-radius:10px;padding:12px 14px;display:grid;gap:8px;align-content:start}
+.org .top{display:flex;gap:10px;align-items:center}
+.org .emo{font-size:30px;line-height:1;width:40px;text-align:center}
+.org h4{margin:0;font:700 16.5px/1.25 var(--body)}
+.org h4 .term{display:block;font:italic 400 13.5px var(--body);color:var(--muted)}
+.org .opts{display:flex;gap:6px;flex-wrap:wrap}
+.org .why{font-size:14.5px;color:var(--muted)}
+.org.done{border-color:var(--good)}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#b02e2e;background:var(--bad-soft)}
+
+/* desene */
+.lbl{font:700 15px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.mv{transition:transform .9s ease-in-out}
+.part{cursor:pointer;transition:opacity .25s}
+svg.sel .part:not(.hi){opacity:.22}
+.legend{display:grid;gap:3px;margin-bottom:12px}
+.legend button{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:center;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:8px;padding:5px 8px;cursor:pointer}
+.legend button:hover{background:var(--sheet)}
+.legend button[aria-pressed="true"]{border-color:var(--ink);background:var(--sheet)}
+.legend i{width:16px;height:16px;border-radius:5px;background:var(--c)}
+.legend .name{font-weight:700;line-height:1.2}
+.legend .name .term{display:block;font:italic 400 13.5px var(--body);color:var(--muted)}
+.mode{display:inline-flex;border:1.5px solid var(--rule);border-radius:20px;overflow:hidden;margin-bottom:10px;flex-wrap:wrap}
+.mode button{border:0;background:transparent;padding:6px 14px;cursor:pointer;font-weight:700;font-size:15px}
+.mode button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* lungimea intestinului */
+.gut{display:grid;gap:10px;margin-top:10px}
+.gut-row{display:grid;grid-template-columns:130px 1fr;gap:12px;align-items:center}
+.gut-row b{font-family:var(--display);font-size:18px}
+.gut-bar{height:22px;border-radius:11px;background:var(--sheet);border:1px solid var(--rule);overflow:hidden}
+.gut-bar i{display:block;height:100%;width:0;background:var(--c);border-radius:11px;transition:width .9s}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+  .gut-row{grid-template-columns:1fr}
+}
+@media (max-width:520px){ .lbl{font-size:22px} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Biologie · Clasa a 6-a · Hrănirea în lumea vie</span><span class="de">Biologie · Klasse 6 · Ernährung in der lebenden Welt</span></p>
+  <h1><span class="ro">Adaptări ale digestiei la vertebrate</span><span class="de">Anpassungen der Verdauung bei Wirbeltieren</span></h1>
+  <p class="lead">
+    <span class="ro">O capră, un lup și un urs nu mănâncă același lucru, deci nici dinții, stomacul și intestinele lor nu arată la fel. Descoperă cum se potrivește fiecare parte a tubului digestiv cu felul de hrană.</span>
+    <span class="de">Eine Ziege, ein Wolf und ein Bär fressen nicht dasselbe, deshalb sehen auch ihre Zähne, ihr Magen und ihr Darm nicht gleich aus. Entdecke, wie jeder Teil des Verdauungskanals zur Nahrung passt.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Ce ne spune dantura unui animal despre felul în care se hrănește?</span><span class="de">Was verrät uns das Gebiss eines Tieres darüber, wie es sich ernährt?</span></li>
+        <li><span class="ro">De ce vaca „mestecă” iarba de două ori?</span><span class="de">Warum „kaut“ die Kuh das Gras zweimal?</span></li>
+        <li><span class="ro">Cine ar avea intestinul mai lung: un leopard sau o capră?</span><span class="de">Wer hätte den längeren Darm: ein Leopard oder eine Ziege?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Cine ce mănâncă</span><span class="de">Wer frisst was</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Dantura</span><span class="de">Das Gebiss</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Stomacul rumegătoarei</span><span class="de">Der Wiederkäuermagen</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Rumegătoare sau nu?</span><span class="de">Wiederkäuer oder nicht?</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Intestinul subțire</span><span class="de">Der Dünndarm</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Recapitulare</span><span class="de">Wiederholung</span></a>
+  </nav>
+</header>
+
+<!-- 1. Cine ce mănâncă -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Erbivore, carnivore, omnivore</span><span class="de">Pflanzenfresser, Fleischfresser, Allesfresser</span></h2>
+  <p class="section-sub"><span class="ro">Vertebratele (amfibieni, reptile, pești, păsări și mamifere) s-au adaptat în timp la felul în care își procură hrana. Sortează animalele după regimul de hrană.</span><span class="de">Die Wirbeltiere (Amphibien, Reptilien, Fische, Vögel und Säugetiere) haben sich im Lauf der Zeit an die Art angepasst, wie sie ihre Nahrung beschaffen. Ordne die Tiere nach ihrer Ernährungsweise.</span></p>
+  <div class="sorter" id="diet"></div>
+  <p class="score" id="diet-score" style="margin-top:10px" aria-live="polite"></p>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro"><b>Erbivorele</b> sunt adaptate pentru a se hrăni cu plante. <b>Carnivorele</b> se hrănesc cu carne și adesea vânează activ. <b>Omnivorele</b> se hrănesc atât cu plante, cât și cu animale.</span><span class="de"><b>Pflanzenfresser</b> sind an Pflanzennahrung angepasst. <b>Fleischfresser</b> fressen Fleisch und jagen oft aktiv. <b>Allesfresser</b> fressen Pflanzen und Tiere.</span></li>
+      <li><span class="ro">Cuvântul <i>omnivor</i> vine din latinescul <i>omnis</i> (tot) și <i>vorare</i> (a mânca, a devora).</span><span class="de">Das Wort <i>Omnivor</i> kommt vom lateinischen <i>omnis</i> (alles) und <i>vorare</i> (fressen, verschlingen).</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 2. Dantura -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Dantura se potrivește cu hrana</span><span class="de">Das Gebiss passt zur Nahrung</span></h2>
+  <p class="section-sub"><span class="ro">Alege un regim de hrană și vezi cum arată dantura. Culorile sunt ca în manual: incisivi albaștri, canini roz, premolari verzi, molari galbeni. Apasă pe un tip de dinte din listă ca să-l evidențiezi.</span><span class="de">Wähle eine Ernährungsweise und sieh, wie das Gebiss aussieht. Die Farben sind wie im Buch: Schneidezähne blau, Eckzähne rosa, Prämolaren grün, Molaren gelb. Tippe in der Liste auf einen Zahntyp, um ihn hervorzuheben.</span></p>
+  <div class="mode" id="teeth-mode" role="group" aria-label="Regim"></div>
+  <div class="split">
+    <div class="fig"><svg id="jaw" viewBox="0 0 520 230" role="img" aria-label="Maxilarul și mandibula cu dinții, într-o vedere laterală"></svg></div>
+    <div>
+      <div class="legend" id="legend2"></div>
+      <div class="desc" id="desc2" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro"><b>Incisivii</b> (dinții din față): tăiat și mușcat; utili la omnivore și erbivore. <b>Caninii</b>: lungi și ascuțiți la carnivore (feline, lupi, câini); sfâșie prada. <b>Molarii și premolarii</b>: suprafețe crestate (cu „cocoașe”), mărunțesc bine hrana, carne sau plante cu multe fibre.</span><span class="de"><b>Schneidezähne</b> (Vorderzähne): schneiden und beißen; nützlich für Allesfresser und Pflanzenfresser. <b>Eckzähne</b>: lang und scharf bei Fleischfressern (Katzen, Wölfe, Hunde); sie zerreißen die Beute. <b>Molaren und Prämolaren</b>: haben Höcker und zermalen die Nahrung, Fleisch oder faserreiche Pflanzen.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Stomacul rumegătoarei -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Stomacul cu patru camere</span><span class="de">Der Magen mit vier Kammern</span></h2>
+  <p class="section-sub"><span class="ro">Vaca, oaia și capra sunt erbivore <b>rumegătoare</b> (<i>Wiederkäuer</i>). Urmărește drumul unui dumicat de iarbă prin cele patru compartimente.</span><span class="de">Kuh, Schaf und Ziege sind <b>Wiederkäuer</b> unter den Pflanzenfressern. Verfolge den Weg eines Grasbissens durch die vier Kammern.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="cow" viewBox="0 0 520 300" role="img" aria-label="Stomacul tetracameral al unei rumegătoare"></svg></div>
+    <div>
+      <div class="desc" id="cow-desc" aria-live="polite"></div>
+      <div class="actions">
+        <button type="button" class="btn ghost" id="cow-prev"><span class="ro">Înapoi</span><span class="de">Zurück</span></button>
+        <button type="button" class="btn" id="cow-next"><span class="ro">Pasul următor</span><span class="de">Nächster Schritt</span></button>
+        <button type="button" class="btn ghost" id="cow-reset"><span class="ro">De la început</span><span class="de">Von vorn</span></button>
+      </div>
+      <div class="pgs" id="cow-pgs" aria-hidden="true"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro">Plantele conțin <b>celuloză</b>, un glucid complex. Erbivorele nu au enzima care o descompune în glucoză, dar în primele două camere ale stomacului trăiesc <b>bacterii</b> care o transformă prin <b>fermentație</b>. Hrana ajunge pregătită în intestinul subțire.</span><span class="de">Pflanzen enthalten <b>Zellulose</b>, ein komplexes Kohlenhydrat. Pflanzenfresser haben kein Enzym, das sie in Glukose zersetzt, aber in den ersten beiden Magenkammern leben <b>Bakterien</b>, die sie durch <b>Gärung</b> umwandeln. Die Nahrung kommt vorbereitet im Dünndarm an.</span></li>
+      <li><span class="ro">Drumul: esofag → <b>ierbar</b> → <b>ciur</b> → <b>foios</b> → <b>cheag</b> → intestin.</span><span class="de">Der Weg: Speiseröhre → <b>Pansen</b> → <b>Netzmagen</b> → <b>Blättermagen</b> → <b>Labmagen</b> → Darm.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Rumegătoare sau nu -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Rumegătoare sau nerumegătoare?</span><span class="de">Wiederkäuer oder Nichtwiederkäuer?</span></h2>
+  <p class="section-sub"><span class="ro">Erbivorele se împart în două grupe. Cele <b>rumegătoare</b> au stomac tetracameral. Cele <b>nerumegătoare</b> (<i>Nichtwiederkäuer</i>) au un stomac cu o singură cameră, iar digestia hranei se încheie abia în intestinul gros. Sortează animalele.</span><span class="de">Pflanzenfresser teilen sich in zwei Gruppen. <b>Wiederkäuer</b> haben einen vierkammerigen Magen. <b>Nichtwiederkäuer</b> haben einen Magen mit nur einer Kammer, und die Verdauung der Nahrung endet erst im Dickdarm. Ordne die Tiere zu.</span></p>
+  <div class="sorter" id="rum"></div>
+  <p class="score" id="rum-score" style="margin-top:10px" aria-live="polite"></p>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Intestinul subțire -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Cât de lung este intestinul subțire?</span><span class="de">Wie lang ist der Dünndarm?</span></h2>
+  <p class="section-sub"><span class="ro">Și intestinul subțire se adaptează la hrană. Apasă pe un regim și compară lungimile (desen schematic, nu măsurători).</span><span class="de">Auch der Dünndarm passt sich der Nahrung an. Tippe auf eine Ernährungsweise und vergleiche die Längen (schematische Darstellung, keine Messwerte).</span></p>
+  <div class="mode" id="gut-mode" role="group" aria-label="Regim"></div>
+  <div class="gut" id="gut"></div>
+  <div class="desc" id="desc5" style="margin-top:12px" aria-live="polite"></div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir!</span></h3>
+    <ul>
+      <li><span class="ro">Intestinul subțire al <b>erbivorelor</b> este mult mai lung decât cel al <b>carnivorelor</b>. Hrana vegetală e mai greu de digerat, așa că rămâne mai mult timp în intestin.</span><span class="de">Der Dünndarm der <b>Pflanzenfresser</b> ist viel länger als der der <b>Fleischfresser</b>. Pflanzennahrung ist schwerer zu verdauen und bleibt deshalb länger im Darm.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c5"></div>
+</section>
+
+<!-- 6. Recapitulare -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Recapitulare: ce adaptare e a cui?</span><span class="de">Wiederholung: Welche Anpassung gehört zu wem?</span></h2>
+  <p class="section-sub"><span class="ro">Pentru fiecare adaptare, alege regimul de hrană căruia îi aparține.</span><span class="de">Wähle bei jeder Anpassung die Ernährungsweise, zu der sie gehört.</span></p>
+  <div class="sorter" id="trait"></div>
+  <p class="score" id="trait-score" style="margin-top:10px" aria-live="polite"></p>
+</section>
+
+<section class="block" aria-labelledby="t7">
+  <h2 class="section-title" id="t7"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <div class="gloss-head" style="margin-top:14px"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">După manualul de Biologie, clasa a 6-a, lecția „Adaptări ale digestiei și ale organelor digestive la vertebrate”, și după notițele din caiet (16.11.2026), de unde sunt și termenii germani. Denumirile germane ale celor patru compartimente (Pansen, Netzmagen, Blättermagen, Labmagen) sunt cele uzuale; verifică-le cu cele din caiet. Testul de mai jos verifică ce ai învățat.</span><span class="de">Nach dem Biologiebuch der 6. Klasse, Lektion „Adaptări ale digestiei și ale organelor digestive la vertebrate“, und nach den Notizen im Heft (16.11.2026), aus denen auch die deutschen Begriffe stammen. Die deutschen Namen der vier Kammern (Pansen, Netzmagen, Blättermagen, Labmagen) sind die gängigen; vergleiche sie mit denen im Heft. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+
+function Check(host, items, title) {
+  host.appendChild(h('h3', '', title || tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); box.classList.add('done'); why.textContent = T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = it.hint ? T(it.hint) : tx('Nu chiar. Mai încearcă.', 'Nicht ganz. Versuch es nochmal.'); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+/** items: [emoji, nume {ro,de}, cheie, explicație, termen-germană-opțional] */
+function Sorter(host, scoreEl, items, options, wrongMsg) {
+  var right = 0, done = 0;
+  items.forEach(function (o) {
+    var card = h('div', 'org'), top = h('div', 'top'), opts = h('div', 'opts'), why = h('p', 'why');
+    why.setAttribute('aria-live', 'polite');
+    top.appendChild(h('span', 'emo', o[0])); top.lastChild.setAttribute('aria-hidden', 'true');
+    top.appendChild(h('h4', '', T(o[1]) + (L === 'ro' && o[4] ? '<span class="term">' + o[4] + '</span>' : ''))); card.appendChild(top);
+    var first = true;
+    var bs = options.map(function (c) {
+      var b = btn('pick', T(c[1]));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (c[0] === o[2]) {
+          b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; });
+          card.classList.add('done'); why.textContent = T(o[3]); done++; if (first) right++;
+          scoreEl.textContent = done === items.length
+            ? tx('Gata! Corect din prima: ' + right + ' din ' + items.length + '.', 'Fertig! Beim ersten Versuch richtig: ' + right + ' von ' + items.length + '.')
+            : tx('Ai sortat ' + done + ' din ' + items.length + '.', 'Du hast ' + done + ' von ' + items.length + ' zugeordnet.');
+        } else { b.classList.add('wrong'); first = false; why.textContent = T(wrongMsg); }
+      };
+      opts.appendChild(b); return b;
+    });
+    card.appendChild(opts); card.appendChild(why); host.appendChild(card);
+  });
+}
+function Stepper(o) {
+  var cur = 0, pgs = $(o.pgs), desc = $(o.desc), prev = $(o.prev), next = $(o.next);
+  o.steps.forEach(function () { pgs.appendChild(h('i')); });
+  function go() {
+    var s = o.steps[cur];
+    desc.style.setProperty('--c', s.c || o.color);
+    desc.innerHTML = '<h3>' + (cur + 1) + '. ' + T(s.t) + '</h3><p>' + T(s.p) + '</p>';
+    prev.disabled = cur === 0; next.disabled = cur === o.steps.length - 1;
+    Array.prototype.forEach.call(pgs.children, function (d, i) { d.className = i <= cur ? 'on' : ''; });
+    o.draw(cur, s);
+  }
+  prev.onclick = function () { if (cur > 0) { cur--; go(); } };
+  next.onclick = function () { if (cur < o.steps.length - 1) { cur++; go(); } };
+  $(o.reset).onclick = function () { cur = 0; go(); };
+  go();
+}
+var DIETS = {
+  herb: { ro: 'erbivor', de: 'Pflanzenfresser' },
+  carn: { ro: 'carnivor', de: 'Fleischfresser' },
+  omn: { ro: 'omnivor', de: 'Allesfresser' }
+};
+var DIET_OPTS = [['herb', { ro: 'erbivor', de: 'Pflanzenfresser' }], ['carn', { ro: 'carnivor', de: 'Fleischfresser' }], ['omn', { ro: 'omnivor', de: 'Allesfresser' }]];
+
+/* ================= 1. Cine ce mănâncă ================= */
+(function () {
+  Sorter($('#diet'), $('#diet-score'), [
+    ['🐐', { ro: 'Capra', de: 'Die Ziege' }, 'herb', { ro: 'Mamifer. Pasc iarbă și frunze: erbivor.', de: 'Säugetier. Sie frisst Gras und Blätter: Pflanzenfresser.' }, 'Ziege'],
+    ['🐢', { ro: 'Broasca țestoasă', de: 'Die Schildkröte' }, 'herb', { ro: 'Reptilă. Se hrănește cu plante: erbivor.', de: 'Reptil. Sie ernährt sich von Pflanzen: Pflanzenfresser.' }, 'Schildkröte'],
+    ['🐆', { ro: 'Leopardul de zăpadă', de: 'Der Schneeleopard' }, 'carn', { ro: 'Mamifer, prădător. Vânează animale: carnivor.', de: 'Säugetier, Raubtier. Er jagt Tiere: Fleischfresser.' }, 'Schneeleopard'],
+    ['🐺', { ro: 'Lupul', de: 'Der Wolf' }, 'carn', { ro: 'Mamifer. Vânează prada: carnivor.', de: 'Säugetier. Er jagt Beute: Fleischfresser.' }, 'Wolf'],
+    ['🦅', { ro: 'Acvila', de: 'Der Adler' }, 'carn', { ro: 'Pasăre. Prinde animale mici: carnivor.', de: 'Vogel. Er fängt kleinere Tiere: Fleischfresser.' }, 'Adler'],
+    ['🦈', { ro: 'Rechinul', de: 'Der Hai' }, 'carn', { ro: 'Pește prădător, vânează activ: carnivor.', de: 'Raubfisch, jagt aktiv: Fleischfresser.' }, 'Hai'],
+    ['🐻', { ro: 'Ursul', de: 'Der Bär' }, 'omn', { ro: 'Mamifer. Mănâncă și fructe, și pește, și carne: omnivor.', de: 'Säugetier. Er frisst Früchte, Fisch und Fleisch: Allesfresser.' }, 'Bär'],
+    ['🐒', { ro: 'Maimuța', de: 'Der Affe' }, 'omn', { ro: 'Mamifer. Mănâncă fructe, frunze și insecte: omnivor.', de: 'Säugetier. Er frisst Früchte, Blätter und Insekten: Allesfresser.' }, 'Affe'],
+    ['🐿️', { ro: 'Marmota', de: 'Das Murmeltier' }, 'omn', { ro: 'Mamifer. Mănâncă plante și uneori insecte: omnivor (ca în manual).', de: 'Säugetier. Es frisst Pflanzen und manchmal Insekten: Allesfresser (wie im Buch).' }, 'Murmeltier'],
+    ['🍽️', { ro: 'Omul', de: 'Der Mensch' }, 'omn', { ro: 'Mamifer. Mâncăm și plante, și animale: omnivor.', de: 'Säugetier. Wir essen Pflanzen und Tiere: Allesfresser.' }, 'Mensch']
+  ], DIET_OPTS, { ro: 'Se hrănește doar cu plante, doar cu carne, sau cu ambele?', de: 'Frisst es nur Pflanzen, nur Fleisch oder beides?' });
+})();
+
+/* ================= 2. Dantura ================= */
+(function () {
+  var TY = [
+    { k: 'inc', c: '#4aa3d9', n: { ro: 'Incisivi', de: 'Schneidezähne' }, t: 'Incisivi' },
+    { k: 'can', c: '#e0607e', n: { ro: 'Canini', de: 'Eckzähne' }, t: 'Canini' },
+    { k: 'pre', c: '#3aa76d', n: { ro: 'Premolari', de: 'Prämolaren' }, t: 'Premolari' },
+    { k: 'mol', c: '#f0b429', n: { ro: 'Molari', de: 'Molaren' }, t: 'Molari' }
+  ];
+  // [tip, lățime, înălțime, formă]; de la față spre spate, pe o jumătate de maxilar
+  var D = {
+    omn: { n: { ro: 'omnivor (omul)', de: 'Allesfresser (Mensch)' },
+      row: [['inc', 15, 26, 'chisel'], ['inc', 15, 26, 'chisel'], ['can', 16, 30, 'point'], ['pre', 22, 22, 'cusp'], ['pre', 22, 22, 'cusp'], ['mol', 30, 24, 'cusp'], ['mol', 30, 24, 'cusp'], ['mol', 28, 22, 'cusp']],
+      d: { ro: 'Dantură variată: incisivi pentru tăiat, canini mici, premolari și molari cu „cocoașe” pentru mărunțit. Se potrivește cu hrana mixtă: plante și carne.', de: 'Vielseitiges Gebiss: Schneidezähne zum Schneiden, kleine Eckzähne, Prämolaren und Molaren mit Höckern zum Zermalen. Es passt zur gemischten Kost aus Pflanzen und Fleisch.' } },
+    carn: { n: { ro: 'carnivor (lup, felină)', de: 'Fleischfresser (Wolf, Katze)' },
+      row: [['inc', 9, 14, 'chisel'], ['inc', 9, 14, 'chisel'], ['inc', 9, 14, 'chisel'], ['can', 18, 52, 'point'], ['pre', 22, 28, 'blade'], ['pre', 24, 30, 'blade'], ['pre', 26, 32, 'blade'], ['mol', 22, 20, 'cusp']],
+      d: { ro: 'Caninii sunt foarte lungi și ascuțiți: sfâșie prada. Premolarii și molarii au creste ca niște lame, care taie și mărunțesc carnea. Incisivii sunt mici.', de: 'Die Eckzähne sind sehr lang und scharf: Sie zerreißen die Beute. Prämolaren und Molaren haben klingenartige Kanten, die das Fleisch schneiden und zerkleinern. Die Schneidezähne sind klein.' } },
+    herb: { n: { ro: 'erbivor (capră, cal)', de: 'Pflanzenfresser (Ziege, Pferd)' },
+      row: [['inc', 16, 30, 'chisel'], ['inc', 16, 30, 'chisel'], ['inc', 16, 30, 'chisel'], null, ['pre', 30, 22, 'flat'], ['pre', 30, 22, 'flat'], ['pre', 30, 22, 'flat'], ['mol', 34, 22, 'flat'], ['mol', 34, 22, 'flat'], ['mol', 32, 22, 'flat']],
+      d: { ro: 'Incisivii taie iarba, iar caninii lipsesc sau sunt foarte reduși (rămâne un gol). Premolarii și molarii sunt lați, cu suprafață crestată: macină plantele bogate în fibre.', de: 'Die Schneidezähne schneiden das Gras, die Eckzähne fehlen oder sind stark zurückgebildet (es bleibt eine Lücke). Prämolaren und Molaren sind breit mit gerillter Fläche: Sie mahlen faserreiche Pflanzen.' } }
+  };
+  var svg = $('#jaw'), legend = $('#legend2'), desc = $('#desc2'), modeBox = $('#teeth-mode');
+  var diet = 'omn', hl = null, btns = {}, mbs = {};
+  var COL = {}; TY.forEach(function (t) { COL[t.k] = t.c; });
+  function tooth(g, kind, x, base, up, w, hgt, shape) {
+    var dir = up ? -1 : 1, c = COL[kind], cx = x + w / 2, pts;
+    var att = { fill: c, stroke: '#fff', 'stroke-width': 2, 'stroke-linejoin': 'round' };
+    if (shape === 'point') pts = [[x, base], [x + w, base], [cx, base + dir * hgt]];
+    else if (shape === 'blade') pts = [[x, base], [x + w, base], [x + w * 0.8, base + dir * hgt * 0.5], [x + w * 0.5, base + dir * hgt], [x + w * 0.2, base + dir * hgt * 0.5]];
+    else if (shape === 'cusp') pts = [[x, base], [x + w, base], [x + w, base + dir * hgt * 0.8], [x + w * 0.75, base + dir * hgt], [x + w * 0.5, base + dir * hgt * 0.7], [x + w * 0.25, base + dir * hgt], [x, base + dir * hgt * 0.8]];
+    else if (shape === 'flat') pts = [[x, base], [x + w, base], [x + w, base + dir * hgt], [x + w * 0.66, base + dir * (hgt - 5)], [x + w * 0.33, base + dir * hgt], [x, base + dir * (hgt - 4)]];
+    else pts = [[x, base], [x + w, base], [x + w - 2, base + dir * hgt], [x + 2, base + dir * hgt]];
+    att.points = pts.map(function (p) { return p.join(','); }).join(' ');
+    el('polygon', att, g);
+  }
+  function draw() {
+    svg.innerHTML = ''; svg.classList.remove('sel');
+    el('rect', { x: 0, y: 0, width: 520, height: 230, rx: 10, fill: '#fbf1ec' }, svg);
+    el('rect', { x: 30, y: 44, width: 470, height: 18, rx: 9, fill: '#f2b7b7' }, svg);
+    el('rect', { x: 30, y: 168, width: 470, height: 18, rx: 9, fill: '#f2b7b7' }, svg);
+    el('text', { x: 30, y: 28, class: 'lbl' }, svg, tx('față', 'vorn'));
+    el('text', { x: 500, y: 28, class: 'lbl', 'text-anchor': 'end' }, svg, tx('spate', 'hinten'));
+    var seq = D[diet].row;
+    [[62, false], [168, true]].forEach(function (rw) {
+      var x = 40;
+      seq.forEach(function (t) {
+        if (!t) { x += 26; return; }
+        var g = el('g', { class: 'part', 'data-k': t[0] }, svg);
+        tooth(g, t[0], x, rw[0], rw[1], t[1], t[2], t[3]);
+        x += t[1] + 3;
+      });
+    });
+    if (hl) {
+      svg.classList.add('sel');
+      Array.prototype.forEach.call(svg.querySelectorAll('.part'), function (g) { g.classList.toggle('hi', g.getAttribute('data-k') === hl); });
+    }
+    desc.style.setProperty('--c', hl ? COL[hl] : '#27a36f');
+    var absent = hl && !seq.some(function (t) { return t && t[0] === hl; });
+    desc.innerHTML = '<h3>' + T(D[diet].n) + '</h3><p>' + T(D[diet].d) + '</p>' + (absent ? '<p class="score" style="margin-top:6px">' + tx('Acest tip de dinte lipsește la acest regim: de aceea nu se evidențiază nimic. Observă golul din față.', 'Dieser Zahntyp fehlt bei dieser Ernährungsweise: Deshalb wird nichts hervorgehoben. Beachte die Lücke vorn.') + '</p>' : '');
+    Object.keys(mbs).forEach(function (k) { mbs[k].setAttribute('aria-pressed', k === diet ? 'true' : 'false'); });
+    TY.forEach(function (t) { btns[t.k].setAttribute('aria-pressed', t.k === hl ? 'true' : 'false'); });
+  }
+  [['omn'], ['carn'], ['herb']].forEach(function (m) {
+    var b = btn('', T(D[m[0]].n)); b.setAttribute('aria-pressed', 'false'); b.onclick = function () { diet = m[0]; draw(); }; mbs[m[0]] = b; modeBox.appendChild(b);
+  });
+  TY.forEach(function (t) {
+    var b = btn('', '<i></i><span class="name">' + T(t.n) + (L === 'ro' ? '<span class="term">' + t.n.de + '</span>' : '') + '</span>');
+    b.style.setProperty('--c', t.c); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { hl = hl === t.k ? null : t.k; draw(); };
+    btns[t.k] = b; legend.appendChild(b);
+  });
+  draw();
+
+  Check($('#c2'), [
+    { q: { ro: 'Care dinți sunt foarte lungi și ascuțiți la carnivore?', de: 'Welche Zähne sind bei Fleischfressern sehr lang und scharf?' },
+      o: [{ ro: 'incisivii', de: 'die Schneidezähne' }, { ro: 'caninii', de: 'die Eckzähne' }, { ro: 'molarii', de: 'die Molaren' }], a: 1,
+      why: { ro: 'Caninii lungi și ascuțiți sfâșie prada.', de: 'Die langen, scharfen Eckzähne zerreißen die Beute.' },
+      hint: { ro: 'Uită-te la dantura carnivorului: ce dinte iese cel mai mult în evidență?', de: 'Sieh dir das Fleischfresser-Gebiss an: Welcher Zahn fällt am meisten auf?' } },
+    { q: { ro: 'Ce dinți lipsesc sau sunt foarte reduși la erbivore?', de: 'Welche Zähne fehlen oder sind bei Pflanzenfressern stark zurückgebildet?' },
+      o: [{ ro: 'caninii', de: 'die Eckzähne' }, { ro: 'molarii', de: 'die Molaren' }, { ro: 'premolarii', de: 'die Prämolaren' }], a: 0,
+      why: { ro: 'Erbivorele nu au nevoie să sfâșie prada: între incisivi și premolari rămâne un gol.', de: 'Pflanzenfresser müssen keine Beute zerreißen: Zwischen Schneide- und Backenzähnen bleibt eine Lücke.' },
+      hint: { ro: 'Care dinte e folosit la vânătoare? Erbivorele nu vânează.', de: 'Welcher Zahn dient der Jagd? Pflanzenfresser jagen nicht.' } },
+    { q: { ro: 'Care dinți macină plantele bogate în fibre?', de: 'Welche Zähne mahlen faserreiche Pflanzen?' },
+      o: [{ ro: 'incisivii', de: 'die Schneidezähne' }, { ro: 'caninii', de: 'die Eckzähne' }, { ro: 'premolarii și molarii', de: 'die Prämolaren und Molaren' }], a: 2,
+      why: { ro: 'Premolarii și molarii au suprafețe crestate și mărunțesc bine hrana.', de: 'Prämolaren und Molaren haben Höcker und zermalen die Nahrung gut.' } }
+  ]);
+})();
+
+/* ================= 3. Stomacul cu patru camere ================= */
+(function () {
+  var svg = $('#cow');
+  var C = { oes: '#c96f7a', rum: '#8cb81f', ret: '#e0a100', oma: '#d98a3d', abo: '#d9534f', int: '#e58fb0' };
+  el('rect', { x: 0, y: 0, width: 520, height: 300, rx: 10, fill: '#fdf6ef' }, svg);
+  var parts = {};
+  function P(k) { var g = el('g', { class: 'part', 'data-k': k }, svg); parts[k] = g; return g; }
+  // esofag
+  var g = P('oes'); el('path', { d: 'M70 50 C110 50 150 70 190 108', fill: 'none', stroke: C.oes, 'stroke-width': 14, 'stroke-linecap': 'round' }, g);
+  // ierbar (burduf)
+  g = P('rum'); el('ellipse', { cx: 235, cy: 168, rx: 92, ry: 66, fill: C.rum, stroke: '#fff', 'stroke-width': 3 }, g);
+  // ciur
+  g = P('ret'); el('circle', { cx: 150, cy: 242, r: 34, fill: C.ret, stroke: '#fff', 'stroke-width': 3 }, g);
+  // foios
+  g = P('oma'); el('circle', { cx: 330, cy: 244, r: 38, fill: C.oma, stroke: '#fff', 'stroke-width': 3 }, g);
+  for (var i = -2; i <= 2; i++) el('path', { d: 'M' + (330 + i * 12) + ' 220 L' + (330 + i * 12) + ' 268', stroke: '#fff', 'stroke-width': 2, opacity: 0.7 }, g);
+  // cheag
+  g = P('abo'); el('ellipse', { cx: 430, cy: 168, rx: 38, ry: 30, fill: C.abo, stroke: '#fff', 'stroke-width': 3 }, g);
+  // intestin
+  g = P('int'); el('path', { d: 'M440 140 C440 90 470 70 490 90 C510 110 470 120 480 100 C490 80 440 40 400 50', fill: 'none', stroke: C.int, 'stroke-width': 11, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, g);
+  // etichete
+  function lb(x, y, txt, a) { el('text', { x: x, y: y, class: 'lbl', 'text-anchor': a || 'middle' }, svg, txt); }
+  lb(40, 34, tx('gură', 'Maul'), 'middle');
+  lb(235, 172, tx('ierbar', 'Pansen')); lb(150, 288, tx('ciur', 'Netzmagen')); lb(330, 294, tx('foios', 'Blättermagen')); lb(430, 214, tx('cheag', 'Labmagen')); lb(450, 24, tx('intestin', 'Darm'));
+  lb(120, 70, tx('esofag', 'Speiseröhre'), 'end');
+  var bolus = el('g', { class: 'mv' }, svg);
+  el('circle', { r: 10, cx: 0, cy: 0, fill: '#2f7d32', stroke: '#fff', 'stroke-width': 3 }, bolus);
+  var STEPS = [
+    { c: C.rum, hi: ['oes', 'rum'], at: [235, 150], t: { ro: 'Iarba ajunge în ierbar (burduf)', de: 'Das Gras gelangt in den Pansen' }, p: { ro: 'Hrana înghițită trece prin esofag în prima cameră, <b>ierbarul</b> (burduful). Aici trăiesc bacterii care contribuie la transformarea celulozei prin fermentație.', de: 'Die geschluckte Nahrung geht durch die Speiseröhre in die erste Kammer, den <b>Pansen</b>. Hier leben Bakterien, die die Zellulose durch Gärung umwandeln.' } },
+    { c: C.ret, hi: ['rum', 'ret'], at: [150, 242], t: { ro: 'Ciurul', de: 'Der Netzmagen' }, p: { ro: 'A doua cameră, <b>ciurul</b>. Și aici bacteriile continuă fermentația celulozei. În primele două camere se pregătește hrana.', de: 'Die zweite Kammer, der <b>Netzmagen</b>. Auch hier setzen Bakterien die Gärung der Zellulose fort. In den ersten beiden Kammern wird die Nahrung vorbereitet.' } },
+    { c: '#2f7d32', hi: ['oes', 'rum', 'ret'], at: [60, 46], t: { ro: 'Rumegarea', de: 'Das Wiederkäuen' }, p: { ro: 'Hrana vegetală se întoarce din stomac în cavitatea bucală și e mestecată din nou, mai mărunt. De aici le spunem <b>rumegătoare</b>.', de: 'Die Pflanzennahrung kehrt aus dem Magen in die Mundhöhle zurück und wird erneut, feiner gekaut. Daher heißen sie <b>Wiederkäuer</b>.' } },
+    { c: C.oma, hi: ['oma'], at: [330, 244], t: { ro: 'Foiosul', de: 'Der Blättermagen' }, p: { ro: 'Hrana mestecată a doua oară ajunge în a treia cameră, <b>foiosul</b>, cu pereți cu multe cute, ca foile unei cărți.', de: 'Die zum zweiten Mal gekaute Nahrung gelangt in die dritte Kammer, den <b>Blättermagen</b>, dessen Wände viele Falten wie Buchseiten haben.' } },
+    { c: C.abo, hi: ['abo'], at: [430, 168], t: { ro: 'Cheagul', de: 'Der Labmagen' }, p: { ro: 'A patra cameră este <b>cheagul</b>, cea în care digestia continuă cu sucul gastric, ca la alte mamifere.', de: 'Die vierte Kammer ist der <b>Labmagen</b>, in dem die Verdauung mit Magensaft weitergeht, wie bei anderen Säugetieren.' } },
+    { c: C.int, hi: ['int'], at: [484, 92], t: { ro: 'Intestinul', de: 'Der Darm' }, p: { ro: 'Hrana, pregătită prin fermentație, trece în intestinul subțire, unde se absoarb nutrimentele.', de: 'Die durch Gärung vorbereitete Nahrung geht in den Dünndarm, wo die Nährstoffe aufgenommen werden.' } }
+  ];
+  Stepper({ steps: STEPS, color: C.rum, pgs: '#cow-pgs', desc: '#cow-desc', prev: '#cow-prev', next: '#cow-next', reset: '#cow-reset',
+    draw: function (i, s) {
+      svg.classList.add('sel');
+      Object.keys(parts).forEach(function (k) { parts[k].classList.toggle('hi', s.hi.indexOf(k) >= 0); });
+      bolus.style.transform = 'translate(' + s.at[0] + 'px,' + s.at[1] + 'px)';
+    } });
+
+  Check($('#c3'), [
+    { q: { ro: 'Ce fac bacteriile din primele două camere?', de: 'Was tun die Bakterien in den ersten beiden Kammern?' },
+      o: [{ ro: 'transformă celuloza prin fermentație', de: 'Sie wandeln Zellulose durch Gärung um' }, { ro: 'produc bila', de: 'Sie bilden die Galle' }, { ro: 'mărunțesc iarba', de: 'Sie zerkleinern das Gras' }], a: 0,
+      why: { ro: 'Erbivorele nu au enzima care descompune celuloza; bacteriile le ajută.', de: 'Pflanzenfresser haben kein Enzym, das Zellulose zersetzt; die Bakterien helfen ihnen.' },
+      hint: { ro: 'Gândește-te la celuloză, glucidul complex din plante.', de: 'Denk an die Zellulose, das komplexe Kohlenhydrat der Pflanzen.' } },
+    { q: { ro: 'Care e ordinea camerelor după esofag?', de: 'Wie ist die Reihenfolge der Kammern nach der Speiseröhre?' },
+      o: [{ ro: 'ierbar, ciur, foios, cheag', de: 'Pansen, Netzmagen, Blättermagen, Labmagen' }, { ro: 'cheag, foios, ciur, ierbar', de: 'Labmagen, Blättermagen, Netzmagen, Pansen' }, { ro: 'ciur, ierbar, cheag, foios', de: 'Netzmagen, Pansen, Labmagen, Blättermagen' }], a: 0,
+      why: { ro: 'Esofag → ierbar → ciur → foios → cheag → intestin.', de: 'Speiseröhre → Pansen → Netzmagen → Blättermagen → Labmagen → Darm.' },
+      hint: { ro: 'Reia pașii din desen, de la început.', de: 'Geh die Schritte im Bild noch einmal von vorn durch.' } },
+    { q: { ro: 'De ce se întoarce hrana vegetală în gură?', de: 'Warum kehrt die Pflanzennahrung in den Mund zurück?' },
+      o: [{ ro: 'ca să fie mestecată din nou, mai fin', de: 'damit sie erneut, feiner gekaut wird' }, { ro: 'pentru că animalul a mâncat prea mult', de: 'weil das Tier zu viel gefressen hat' }, { ro: 'ca să iasă din corp', de: 'damit sie den Körper verlässt' }], a: 0,
+      why: { ro: 'Hrana plantelor e greu de digerat: mestecată de două ori, se pregătește mai bine.', de: 'Pflanzennahrung ist schwer verdaulich: Zweimal gekaut wird sie besser vorbereitet.' } }
+  ]);
+})();
+
+/* ================= 4. Rumegătoare sau nu ================= */
+(function () {
+  Sorter($('#rum'), $('#rum-score'), [
+    ['🐄', { ro: 'Vaca', de: 'Die Kuh' }, 'r', { ro: 'Rumegătoare: stomac cu patru camere.', de: 'Wiederkäuer: Magen mit vier Kammern.' }, 'Kuh'],
+    ['🐑', { ro: 'Oaia', de: 'Das Schaf' }, 'r', { ro: 'Rumegătoare, ca vaca.', de: 'Wiederkäuer, wie die Kuh.' }, 'Schaf'],
+    ['🐐', { ro: 'Capra', de: 'Die Ziege' }, 'r', { ro: 'Rumegătoare: stomac tetracameral.', de: 'Wiederkäuer: vierkammeriger Magen.' }, 'Ziege'],
+    ['🐴', { ro: 'Calul', de: 'Das Pferd' }, 'n', { ro: 'Nerumegătoare: stomac cu o singură cameră.', de: 'Nichtwiederkäuer: Magen mit nur einer Kammer.' }, 'Pferd'],
+    ['🐇', { ro: 'Iepurele', de: 'Das Kaninchen' }, 'n', { ro: 'Nerumegătoare: stomac cu o cameră, digestia se încheie în intestinul gros.', de: 'Nichtwiederkäuer: Magen mit einer Kammer, die Verdauung endet im Dickdarm.' }, 'Kaninchen'],
+    ['🐨', { ro: 'Koala', de: 'Der Koala' }, 'n', { ro: 'Nerumegătoare: un singur compartiment la stomac.', de: 'Nichtwiederkäuer: nur eine Kammer im Magen.' }, 'Koala']
+  ], [['r', { ro: 'rumegătoare', de: 'Wiederkäuer' }], ['n', { ro: 'nerumegătoare', de: 'Nichtwiederkäuer' }]], { ro: 'Câte camere are stomacul: patru sau una?', de: 'Wie viele Kammern hat der Magen: vier oder eine?' });
+
+  Check($('#c4'), [
+    { q: { ro: 'Ce grup beneficiază de mai mulți nutrienți din hrana consumată: rumegătoarele sau nerumegătoarele?', de: 'Welche Gruppe nutzt mehr Nährstoffe aus der Nahrung: Wiederkäuer oder Nichtwiederkäuer?' },
+      o: [{ ro: 'rumegătoarele', de: 'die Wiederkäuer' }, { ro: 'nerumegătoarele', de: 'die Nichtwiederkäuer' }, { ro: 'la fel', de: 'gleich viel' }], a: 0,
+      why: { ro: 'La rumegătoare, celuloza e fermentată în stomac, înainte de intestinul subțire, unde nutrimentele se absorb masiv. La nerumegătoare, digestia se încheie abia în intestinul gros.', de: 'Bei Wiederkäuern wird die Zellulose schon im Magen vergoren, vor dem Dünndarm, wo die Nährstoffe massiv aufgenommen werden. Bei Nichtwiederkäuern endet die Verdauung erst im Dickdarm.' },
+      hint: { ro: 'Unde se absorb cei mai mulți nutrienți: în intestinul subțire sau în cel gros? Care grup pregătește hrana înainte de el?', de: 'Wo werden die meisten Nährstoffe aufgenommen: im Dünn- oder im Dickdarm? Welche Gruppe bereitet die Nahrung davor vor?' } },
+    { q: { ro: 'Unde se încheie digestia hranei la nerumegătoare?', de: 'Wo endet die Verdauung der Nahrung bei Nichtwiederkäuern?' },
+      o: [{ ro: 'în stomac', de: 'im Magen' }, { ro: 'în intestinul subțire', de: 'im Dünndarm' }, { ro: 'în intestinul gros', de: 'im Dickdarm' }], a: 2,
+      why: { ro: 'La nerumegătoare, cecumul și intestinul gros au rol important în digestie.', de: 'Bei Nichtwiederkäuern spielen Blinddarm und Dickdarm eine wichtige Rolle bei der Verdauung.' } }
+  ]);
+})();
+
+/* ================= 5. Intestinul subțire ================= */
+(function () {
+  var G = { carn: { v: 34, c: '#d9534f' }, omn: { v: 62, c: '#e0a100' }, herb: { v: 100, c: '#27a36f' } };
+  var T2 = {
+    carn: { ro: 'Carnivorele au intestinul subțire relativ scurt: carnea se digeră ușor și are multă energie.', de: 'Fleischfresser haben einen relativ kurzen Dünndarm: Fleisch wird leicht verdaut und enthält viel Energie.' },
+    omn: { ro: 'Omnivorele au un intestin de lungime mijlocie, potrivit pentru hrana mixtă.', de: 'Allesfresser haben einen Darm mittlerer Länge, passend zur gemischten Kost.' },
+    herb: { ro: 'Erbivorele au intestinul subțire mult mai lung decât carnivorele: hrana vegetală e greu de digerat, iar nutrimentele se absorb pe o suprafață mare, timp mai îndelungat.', de: 'Pflanzenfresser haben einen viel längeren Dünndarm als Fleischfresser: Pflanzennahrung ist schwer verdaulich, und die Nährstoffe werden auf einer großen Fläche über längere Zeit aufgenommen.' }
+  };
+  var box = $('#gut'), bars = {}, mb = {}, mode = $('#gut-mode'), desc = $('#desc5');
+  ['carn', 'omn', 'herb'].forEach(function (k) {
+    var row = h('div', 'gut-row'), bar = h('div', 'gut-bar'), i = h('i');
+    row.appendChild(h('b', '', T(DIETS[k]))); bar.appendChild(i); row.appendChild(bar); row.style.setProperty('--c', G[k].c); box.appendChild(row); bars[k] = i;
+    var b = btn('', T(DIETS[k])); b.setAttribute('aria-pressed', 'false'); b.onclick = function () { show(k); }; mb[k] = b; mode.appendChild(b);
+  });
+  function show(k) {
+    Object.keys(bars).forEach(function (x) { bars[x].style.width = (x === k ? G[x].v : Math.max(6, G[x].v * 0.35)) + '%'; bars[x].parentNode.style.opacity = x === k ? 1 : 0.55; mb[x].setAttribute('aria-pressed', x === k ? 'true' : 'false'); });
+    desc.style.setProperty('--c', G[k].c); desc.innerHTML = '<h3>' + T(DIETS[k]) + '</h3><p>' + T(T2[k]) + '</p>';
+  }
+  function showAll() {
+    Object.keys(bars).forEach(function (x) { bars[x].style.width = G[x].v + '%'; bars[x].parentNode.style.opacity = 1; });
+    desc.innerHTML = '<p class="muted">' + tx('Apasă pe un regim de hrană ca să afli de ce.', 'Tippe auf eine Ernährungsweise, um zu erfahren, warum.') + '</p>';
+  }
+  setTimeout(showAll, 50);
+
+  Check($('#c5'), [
+    { q: { ro: 'Care are intestinul subțire mult mai lung: carnivorul sau erbivorul?', de: 'Wer hat den viel längeren Dünndarm: der Fleischfresser oder der Pflanzenfresser?' },
+      o: [{ ro: 'carnivorul', de: 'der Fleischfresser' }, { ro: 'erbivorul', de: 'der Pflanzenfresser' }, { ro: 'sunt la fel', de: 'sie sind gleich' }], a: 1,
+      why: { ro: 'Hrana vegetală se digeră mai greu, deci intestinul subțire al erbivorului e mai lung.', de: 'Pflanzennahrung wird schwerer verdaut, deshalb ist der Dünndarm des Pflanzenfressers länger.' },
+      hint: { ro: 'Ce se digeră mai greu, carnea sau iarba?', de: 'Was wird schwerer verdaut, Fleisch oder Gras?' } },
+    { q: { ro: 'Un leopard și o capră: cine are nevoie de intestin mai lung și de ce?', de: 'Ein Leopard und eine Ziege: Wer braucht den längeren Darm und warum?' },
+      o: [{ ro: 'leopardul, pentru că vânează', de: 'der Leopard, weil er jagt' }, { ro: 'capra, pentru că hrana vegetală e greu de digerat', de: 'die Ziege, weil Pflanzennahrung schwer verdaulich ist' }, { ro: 'amândoi la fel', de: 'beide gleich' }], a: 1,
+      why: { ro: 'La plante, celuloza și fibrele fac digestia mai lentă; de aceea erbivorele au intestin lung.', de: 'Bei Pflanzen machen Zellulose und Fasern die Verdauung langsamer; darum haben Pflanzenfresser einen langen Darm.' } }
+  ]);
+})();
+
+/* ================= 6. Recapitulare ================= */
+(function () {
+  Sorter($('#trait'), $('#trait-score'), [
+    ['🦷', { ro: 'Canini foarte lungi și ascuțiți, care sfâșie prada', de: 'Sehr lange, scharfe Eckzähne, die die Beute zerreißen' }, 'carn', { ro: 'Caninii lungi sunt adaptarea carnivorelor.', de: 'Lange Eckzähne sind die Anpassung der Fleischfresser.' }],
+    ['🦷', { ro: 'Molari lați, crestați, fără canini (cu un gol în față)', de: 'Breite, gerillte Molaren, keine Eckzähne (Lücke vorn)' }, 'herb', { ro: 'Molarii lați macină plantele cu fibre.', de: 'Breite Molaren mahlen faserreiche Pflanzen.' }],
+    ['🦷', { ro: 'Toate tipurile de dinți, mai puțin specializate', de: 'Alle Zahntypen, wenig spezialisiert' }, 'omn', { ro: 'O dantură variată se potrivește cu hrana mixtă.', de: 'Ein vielseitiges Gebiss passt zur gemischten Kost.' }],
+    ['🐄', { ro: 'Stomac cu patru camere și fermentația celulozei', de: 'Magen mit vier Kammern und Gärung der Zellulose' }, 'herb', { ro: 'Rumegătoarele sunt erbivore.', de: 'Wiederkäuer sind Pflanzenfresser.' }],
+    ['📏', { ro: 'Intestin subțire relativ scurt', de: 'Relativ kurzer Dünndarm' }, 'carn', { ro: 'Carnea se digeră ușor: intestinul poate fi mai scurt.', de: 'Fleisch wird leicht verdaut: Der Darm kann kürzer sein.' }],
+    ['📏', { ro: 'Intestin subțire mult mai lung', de: 'Viel längerer Dünndarm' }, 'herb', { ro: 'Hrana vegetală se digeră greu: intestin lung.', de: 'Pflanzennahrung wird schwer verdaut: langer Darm.' }],
+    ['🍳', { ro: 'Se hrănește și cu plante, și cu animale, cu un intestin de lungime mijlocie', de: 'Frisst Pflanzen und Tiere, mit einem Darm mittlerer Länge' }, 'omn', { ro: 'Omnivorele au adaptări „la mijloc”.', de: 'Allesfresser haben Anpassungen „in der Mitte“.' }]
+  ], DIET_OPTS, { ro: 'Gândește-te la dinți, stomac sau intestin: cui folosește această adaptare?', de: 'Denk an Zähne, Magen oder Darm: Wem nützt diese Anpassung?' });
+})();
+
+/* ================= Dicționar ================= */
+(function () {
+  var G = [
+    ['vertebrate', 'die Wirbeltiere'], ['amfibieni', 'die Amphibien'], ['reptile', 'die Reptilien'], ['pești', 'die Fische'], ['păsări', 'die Vögel'], ['mamifere', 'die Säugetiere'],
+    ['erbivor', 'der Pflanzenfresser'], ['carnivor', 'der Fleischfresser'], ['omnivor', 'der Allesfresser'],
+    ['dentiție', 'das Gebiss'], ['incisivi', 'die Schneidezähne'], ['canini', 'die Eckzähne'], ['premolari și molari', 'Prämolaren und Molaren'], ['a tăia, a mușca', 'schneiden, beißen'], ['a sfâșia', 'zerreißen'], ['a măcina', 'zermalen'],
+    ['cocoașă (a dintelui)', 'der Höcker'], ['plante bogate în fibre', 'faserreiche Pflanzen'],
+    ['structura stomacului', 'der Aufbau des Magens'], ['rumegătoare', 'der Wiederkäuer'], ['nerumegătoare', 'der Nichtwiederkäuer'], ['stomac cu patru camere', 'der vierkammerige Magen'],
+    ['ierbar (burduf)', 'der Pansen'], ['ciur', 'der Netzmagen'], ['foios', 'der Blättermagen'], ['cheag', 'der Labmagen'],
+    ['celuloză', 'die Zellulose'], ['fermentație', 'die Gärung'], ['bacterie', 'das Bakterium'],
+    ['structura și lungimea intestinului subțire', 'der Aufbau und die Länge des Dünndarms'], ['vacă, oaie, capră', 'Kuh, Schaf, Ziege'], ['cal, iepure, koala', 'Pferd, Kaninchen, Koala']
+  ];
+  var d = $('#gloss');
+  G.forEach(function (g) { var r = h('div'); r.appendChild(h('dt', '', g[0])); r.appendChild(h('dd', '', g[1])); d.appendChild(r); });
+})();
+})();
+</script>
+</body>
+</html>

@@ -15,6 +15,7 @@ import { frunzaTest } from './content/frunza-test';
 import { fotosintezaTest } from './content/fotosinteza-test';
 import { sistemulDigestivTest } from './content/sistemul-digestiv-test';
 import { investigatiiDigestieTest } from './content/investigatii-digestie-test';
+import { adaptariDigestieTest } from './content/adaptari-digestie-test';
 import { descoperireaLumiiTest } from './content/descoperirea-lumii-test';
 import { vikingiiTest } from './content/vikingii-test';
 import { poliiSiOceaneleTest } from './content/polii-si-oceanele-test';
@@ -271,6 +272,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/biologie/investigatii-digestie.html',
         test: { questions: investigatiiDigestieTest, minutes: 10 },
+      },
+      {
+        slug: 'adaptari-digestie',
+        title: {
+          ro: 'Adaptări ale digestiei la vertebrate',
+          de: 'Anpassungen der Verdauung bei Wirbeltieren',
+        },
+        summary: {
+          ro: 'Erbivore, carnivore, omnivore: cum se adaptează dantura, stomacul cu patru camere al rumegătoarelor și lungimea intestinului subțire la felul de hrană.',
+          de: 'Pflanzenfresser, Fleischfresser, Allesfresser: wie sich Gebiss, der vierkammerige Magen der Wiederkäuer und die Länge des Dünndarms der Nahrung anpassen.',
+        },
+        src: 'lectii/clasa-6/biologie/adaptari-digestie.html',
+        test: { questions: adaptariDigestieTest, minutes: 10 },
       },
     ],
     alg: [
