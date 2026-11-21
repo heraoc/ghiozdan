@@ -3,6 +3,7 @@
 import { ceasulSiArceleTest } from './content/ceasul-si-arcele-test';
 import { unghiuriTest } from './content/unghiuri-test';
 import { paralelismTest } from './content/paralelism-test';
+import { mediatoareaTest } from './content/mediatoarea-test';
 import { adiacenteBisectoareaTest } from './content/adiacente-bisectoarea-test';
 import { ibnBattutaTest } from './content/ibn-battuta-test';
 import { inmultireaTest } from './content/inmultirea-test';
@@ -382,6 +383,19 @@ const LESSONS: Record<Grade, Partial<Record<SubjectKey, Lesson[]>>> = {
         },
         src: 'lectii/clasa-6/geometrie/paralelism.html',
         test: { questions: paralelismTest, minutes: 10 },
+      },
+      {
+        slug: 'mediatoarea',
+        title: {
+          ro: 'Drepte perpendiculare. Mediatoarea unui segment',
+          de: 'Senkrechte Geraden. Die Mittelsenkrechte einer Strecke',
+        },
+        summary: {
+          ro: 'Dreptele perpendiculare și distanța de la un punct la o dreaptă, definiția mediatoarei, construcția cu rigla și compasul, teorema directă și reciproca (locul geometric), aplicații (fântâna, cercul prin trei puncte) și exerciții.',
+          de: 'Senkrechte Geraden und der Abstand eines Punktes von einer Geraden, Definition der Mittelsenkrechten, Konstruktion mit Lineal und Zirkel, direkter Satz und Umkehrung (geometrischer Ort), Anwendungen (Brunnen, Kreis durch drei Punkte) und Übungen.',
+        },
+        src: 'lectii/clasa-6/geometrie/mediatoarea.html',
+        test: { questions: mediatoareaTest, minutes: 10 },
       },
     ],
     fiz: [

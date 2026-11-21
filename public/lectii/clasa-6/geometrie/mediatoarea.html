@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="ro" data-lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Drepte perpendiculare. Mediatoarea unui segment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<script>
+// Limba vine din adresă (?lang=de); implicit română. ?embed=1 = afișată în Ghiozdan.
+(function () {
+  var qs = new URLSearchParams(location.search), root = document.documentElement;
+  var lang = qs.get('lang') === 'de' ? 'de' : 'ro';
+  root.lang = lang;
+  root.dataset.lang = lang;
+  if (qs.has('embed')) root.classList.add('embed');
+  if (lang === 'de') document.title = 'Senkrechte Geraden. Die Mittelsenkrechte einer Strecke';
+})();
+</script>
+<style>
+:root{
+  --paper:#f7f6f2; --card:#ffffff; --ink:#1f2430; --muted:#5a6170; --rule:#e2e0d8; --sheet:#f1efe8;
+  --accent:#d64545; --accent-soft:#fbe8e8;
+  --a1:#2f6fd6; --a1s:#dfe9fb; --a2:#e8871e; --a2s:#fde7cc; --a3:#1f8a5b; --a3s:#dcf1e6; --a4:#8e44ad; --a4s:#efe2f6;
+  --good:#1f8a5b; --good-soft:#e3f5ec; --bad:#c23b3b; --bad-soft:#fbe4e4;
+  --display:"Alegreya", Georgia, serif;
+  --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+}
+html[data-lang="ro"] .de, html[data-lang="de"] .ro{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.eyebrow{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)} .hint{font-size:14.5px;color:var(--muted)}
+
+/* antet */
+.head{display:grid;gap:12px;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.head h1{font-size:clamp(34px,5.6vw,58px);font-weight:800}
+.head .lead{max-width:64ch;font-size:19px;color:var(--muted)}
+.think{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;max-width:720px}
+.think .q{font-family:var(--display);font-size:26px;line-height:1;color:var(--accent)}
+.think ul{margin:4px 0 0;padding-left:1.1em;display:grid;gap:2px}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--rule);border-radius:99px;padding:5px 14px 5px 6px;font-weight:700;font-size:15px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:800 14px/1 var(--display)}
+
+section.block{margin-top:52px}
+.section-title{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+.section-sub{color:var(--muted);max-width:68ch;margin:6px 0 18px}
+.step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font:800 16px/1 var(--display);margin-right:10px;vertical-align:4px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:7px 16px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.remember{margin-top:16px;background:#fff7e8;border:1px solid #f1dcb0;border-radius:10px;padding:14px 18px;display:grid;gap:6px}
+.remember h3{font-size:20px;color:#9a5b00}
+.remember ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.fx{font:800 20px/1.3 var(--display)}
+.fig{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.fig svg{display:block;width:100%;height:auto}
+.fig .cap{font-size:13.5px;color:var(--muted);padding:2px 6px 0}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.panel{display:grid;gap:10px}
+.slider{display:grid;gap:2px}
+.slider label{font-weight:700}
+.slider input{width:100%;accent-color:var(--accent)}
+.readout{background:var(--sheet);border-radius:10px;padding:10px 14px;display:grid;gap:4px}
+.readout .eq{font:800 21px/1.3 var(--display)}
+.readout .rule{font-size:15px;color:var(--muted)}
+.c1{color:var(--a1)} .c2{color:var(--a2)} .c3{color:var(--a3)} .c4{color:var(--a4)}
+.pick{border:1.5px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;cursor:pointer;min-height:38px}
+.pick:hover:not(:disabled){border-color:var(--muted)}
+.pick.right{border-color:var(--good);background:var(--good);color:#fff}
+.pick.wrong{border-color:var(--bad);color:#a12f2f;background:var(--bad-soft)}
+.albl{font:800 15px var(--body);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.plbl{font:800 19px var(--display);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.num{font:800 17px var(--body)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.chip{border:1.5px solid var(--rule);background:#fff;border-radius:99px;padding:5px 14px;cursor:pointer;font-weight:700}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.stps{margin:0;padding-left:1.3em;display:grid;gap:6px}
+.stps li{padding:6px 10px;border-radius:8px;border-left:4px solid transparent;color:var(--muted)}
+.stps li.on{background:#fff9d6;border-left-color:#e0a100;color:var(--ink);font-weight:500}
+.stps li.done{color:var(--ink)}
+
+/* exerciții */
+.ex{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:10px}
+.story{background:#fff9e6;border:1px solid #f1e2b0;border-radius:10px;padding:10px 14px;font-size:18px}
+.row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.ans{width:86px;font:800 20px/1 var(--display);text-align:center;padding:5px 6px;border:2px solid var(--rule);border-radius:10px;background:#fff}
+.ans.ok{border-color:var(--good);background:var(--good-soft)}
+.ans.bad{border-color:var(--bad);background:var(--bad-soft)}
+.result{border-radius:10px;padding:10px 14px;font-weight:700}
+.result:empty{display:none}
+.result.good{background:var(--good-soft);color:#17744d}
+.result.try{background:#fdf0d5;color:#8a5a00}
+.result.no{background:var(--bad-soft);color:#a12f2f}
+.sub3{margin:26px 0 8px;font-size:22px}
+
+/* verifică-te */
+.check{margin-top:18px;background:var(--card);border:1px dashed #d9b3b3;border-radius:10px;padding:12px 16px;display:grid;gap:12px}
+.check > h3{font:700 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.cq{display:grid;gap:6px}
+.cq .q{font-weight:700}
+.cq .opts{display:flex;flex-wrap:wrap;gap:6px}
+.cq .why{font-size:15px;color:var(--muted)}
+
+/* glosar */
+.gloss{columns:2 300px;column-gap:28px;margin:0}
+.gloss div{break-inside:avoid;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted)}
+.gloss-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);max-width:50%;margin-bottom:4px}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:820px){
+  .split{grid-template-columns:1fr}
+  .gloss-head{max-width:none}
+}
+@media (max-width:520px){ .albl{font-size:20px} .plbl{font-size:24px} .num{font-size:22px} }
+
+/* ?embed=1: afișată în Ghiozdan, care are deja titlul lecției deasupra */
+html.embed body{background:transparent}
+html.embed .wrap{padding:0 0 8px}
+html.embed .head > .eyebrow,html.embed .head h1,html.embed .head .lead{display:none}
+html.embed .head{padding-bottom:0;border-bottom:0}
+details{margin-top:10px;background:#fff;border:1px solid #f1dcb0;border-radius:8px;padding:8px 14px}
+details summary{cursor:pointer;font-weight:700;color:#9a5b00}
+details p{margin-top:8px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <p class="eyebrow"><span class="ro">Geometrie · Clasa a 6-a · Perpendicularitate</span><span class="de">Geometrie · Klasse 6 · Senkrechte Geraden</span></p>
+  <h1><span class="ro">Drepte perpendiculare. Mediatoarea unui segment</span><span class="de">Senkrechte Geraden. Die Mittelsenkrechte einer Strecke</span></h1>
+  <p class="lead">
+    <span class="ro">Începem cu dreptele perpendiculare și cu distanța de la un punct la o dreaptă. Apoi aflăm ce este mediatoarea unui segment, cum se construiește cu rigla și compasul, de ce toate punctele ei sunt la fel de departe de capetele segmentului (și numai ele) și la ce ne folosește. La final: exerciții.</span>
+    <span class="de">Wir beginnen mit senkrechten Geraden und dem Abstand eines Punktes von einer Geraden. Dann erfahren wir, was die Mittelsenkrechte einer Strecke ist, wie man sie mit Lineal und Zirkel konstruiert, warum alle ihre Punkte gleich weit von den Endpunkten der Strecke entfernt sind (und nur sie) und wozu das nützt. Am Ende: Übungen.</span>
+  </p>
+  <div class="think">
+    <span class="q">?</span>
+    <div>
+      <strong><span class="ro">Gândește-te</span><span class="de">Zum Nachdenken</span></strong>
+      <ul>
+        <li><span class="ro">Care e cel mai scurt drum de la un punct la o dreaptă?</span><span class="de">Was ist der kürzeste Weg von einem Punkt zu einer Geraden?</span></li>
+        <li><span class="ro">Cum găsești un punct aflat la aceeași distanță de două sate?</span><span class="de">Wie findest du einen Punkt, der von zwei Dörfern gleich weit entfernt ist?</span></li>
+        <li><span class="ro">Ce se întâmplă cu A, dacă plianți foaia pe mediatoarea segmentului AB?</span><span class="de">Was passiert mit A, wenn du das Blatt an der Mittelsenkrechten der Strecke AB faltest?</span></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Cuprins">
+    <a href="#s1"><b>1</b><span class="ro">Drepte perpendiculare</span><span class="de">Senkrechte Geraden</span></a>
+    <a href="#s2"><b>2</b><span class="ro">Mediatoarea: definiție</span><span class="de">Mittelsenkrechte: Definition</span></a>
+    <a href="#s3"><b>3</b><span class="ro">Construcția cu compasul</span><span class="de">Konstruktion mit dem Zirkel</span></a>
+    <a href="#s4"><b>4</b><span class="ro">Teorema directă</span><span class="de">Der Satz</span></a>
+    <a href="#s5"><b>5</b><span class="ro">Reciproca, locul geometric</span><span class="de">Umkehrung, geometrischer Ort</span></a>
+    <a href="#s6"><b>6</b><span class="ro">Aplicații</span><span class="de">Anwendungen</span></a>
+    <a href="#s7"><b>7</b><span class="ro">Exerciții</span><span class="de">Übungen</span></a>
+  </nav>
+</header>
+
+<!-- 1. Drepte perpendiculare -->
+<section class="block" id="s1" aria-labelledby="t1">
+  <h2 class="section-title" id="t1"><span class="step">1</span><span class="ro">Drepte perpendiculare și distanța de la un punct la o dreaptă</span><span class="de">Senkrechte Geraden und der Abstand eines Punktes von einer Geraden</span></h2>
+  <p class="section-sub"><span class="ro">Două drepte care se taie formează patru unghiuri. Rotește dreapta e și urmărește unghiurile: când sunt toate egale?</span><span class="de">Zwei Geraden, die sich schneiden, bilden vier Winkel. Drehe die Gerade e und beobachte die Winkel: Wann sind alle gleich?</span></p>
+  <div class="split">
+    <div class="fig"><svg id="pe-svg" viewBox="0 0 520 300" role="img"></svg></div>
+    <div class="panel">
+      <div class="chips"><button class="chip" type="button" id="pe-snap"></button></div>
+      <div class="slider"><label for="pe-a"><span class="ro">Unghiul dintre d și e</span><span class="de">Winkel zwischen d und e</span>: <span id="pe-av"></span>°</label><input type="range" id="pe-a" min="20" max="160" value="65"></div>
+      <div class="readout" id="pe-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține: dreptele perpendiculare</span><span class="de">Merke dir: senkrechte Geraden</span></h3>
+    <ul>
+      <li><span class="ro">Două drepte care se taie și formează un <b>unghi drept</b> (90°) sunt <b>perpendiculare</b>: <span class="fx">d ⊥ e</span>. Atunci toate cele patru unghiuri sunt drepte.</span><span class="de">Zwei Geraden, die sich schneiden und einen <b>rechten Winkel</b> (90°) bilden, sind <b>senkrecht</b> zueinander: <span class="fx">d ⊥ e</span>. Dann sind alle vier Winkel rechte Winkel.</span></li>
+      <li><span class="ro">Dacă un unghi dintre două drepte care se taie este de 90°, celelalte trei sunt tot de 90° (opuse la vârf și adiacente suplementare).</span><span class="de">Ist ein Winkel zwischen zwei sich schneidenden Geraden 90°, sind die anderen drei auch 90° (Scheitelwinkel und Nebenwinkel).</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c1"></div>
+
+  <h3 class="sub3"><span class="ro">Perpendiculara dintr-un punct pe o dreaptă</span><span class="de">Das Lot von einem Punkt auf eine Gerade</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Punctul A e în afara dreptei d. Mută punctul F pe dreapta d și urmărește lungimea segmentului AF. Când este cea mai mică?</span><span class="de">Der Punkt A liegt außerhalb der Geraden d. Verschiebe den Punkt F auf der Geraden d und beobachte die Länge der Strecke AF. Wann ist sie am kleinsten?</span></p>
+  <div class="split">
+    <div class="fig"><svg id="di-svg" viewBox="0 0 520 300" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="di-f"><span class="ro">Poziția lui F pe d</span><span class="de">Lage von F auf d</span></label><input type="range" id="di-f" min="60" max="460" step="10" value="380"></div>
+      <div class="readout" id="di-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul>
+      <li><span class="ro">Printr-un punct dat se poate duce <b>o singură perpendiculară</b> pe o dreaptă dată.</span><span class="de">Durch einen gegebenen Punkt gibt es <b>genau eine Senkrechte</b> zu einer gegebenen Geraden.</span></li>
+      <li><span class="ro">Piciorul perpendicularei din A pe d este punctul în care ea taie dreapta d. <b>Distanța de la punctul A la dreapta d</b> este lungimea segmentului dintre A și piciorul perpendicularei: <b>cel mai scurt</b> segment de la A la d.</span><span class="de">Der Fußpunkt des Lotes von A auf d ist der Punkt, in dem es d schneidet. Der <b>Abstand des Punktes A von der Geraden d</b> ist die Länge der Strecke zwischen A und dem Fußpunkt: die <b>kürzeste</b> Strecke von A zu d.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c1b"></div>
+</section>
+
+<!-- 2. Mediatoarea: definiție -->
+<section class="block" id="s2" aria-labelledby="t2">
+  <h2 class="section-title" id="t2"><span class="step">2</span><span class="ro">Mijlocul unui segment și mediatoarea</span><span class="de">Der Mittelpunkt einer Strecke und die Mittelsenkrechte</span></h2>
+  <p class="section-sub"><span class="ro">Mijlocul M al segmentului [AB] îl împarte în două părți egale: AM = MB. Mediatoarea are nevoie de <b>două condiții</b>. Mută dreapta d și vezi când le îndeplinește pe amândouă.</span><span class="de">Der Mittelpunkt M der Strecke [AB] teilt sie in zwei gleiche Teile: AM = MB. Die Mittelsenkrechte braucht <b>zwei Bedingungen</b>. Verschiebe die Gerade d und sieh, wann sie beide erfüllt.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="md-svg" viewBox="0 0 520 300" role="img"></svg></div>
+    <div class="panel">
+      <div class="chips" id="md-chips" role="group"></div>
+      <div class="slider"><label for="md-s"><span class="ro">Poziția dreptei d</span><span class="de">Lage der Geraden d</span></label><input type="range" id="md-s" min="-100" max="100" step="10" value="60"></div>
+      <div class="slider"><label for="md-t"><span class="ro">Înclinarea dreptei d</span><span class="de">Neigung der Geraden d</span>: <span id="md-tv"></span>°</label><input type="range" id="md-t" min="-40" max="40" value="15"></div>
+      <div class="readout" id="md-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Definiție: mediatoarea</span><span class="de">Definition: Mittelsenkrechte</span></h3>
+    <ul>
+      <li><span class="ro"><b>Mijlocul</b> segmentului [AB] este punctul M ∈ [AB] cu <span class="fx">AM = MB</span> (= AB : 2).</span><span class="de">Der <b>Mittelpunkt</b> der Strecke [AB] ist der Punkt M ∈ [AB] mit <span class="fx">AM = MB</span> (= AB : 2).</span></li>
+      <li><span class="ro"><b>Mediatoarea</b> unui segment este dreapta care este <b>perpendiculară pe segment</b> și trece prin <b>mijlocul</b> lui.</span><span class="de">Die <b>Mittelsenkrechte</b> einer Strecke ist die Gerade, die <b>senkrecht auf der Strecke</b> steht und durch ihren <b>Mittelpunkt</b> geht.</span></li>
+      <li><span class="ro">Fiecare segment are <b>o singură mediatoare</b>.</span><span class="de">Jede Strecke hat <b>genau eine Mittelsenkrechte</b>.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c2"></div>
+</section>
+
+<!-- 3. Construcția -->
+<section class="block" id="s3" aria-labelledby="t3">
+  <h2 class="section-title" id="t3"><span class="step">3</span><span class="ro">Construim mediatoarea cu rigla și compasul</span><span class="de">Die Mittelsenkrechte mit Lineal und Zirkel konstruieren</span></h2>
+  <p class="section-sub"><span class="ro">Apasă „Pasul următor” și urmărește construcția. Schimbă deschiderea compasului: ce rămâne la fel?</span><span class="de">Drücke „Nächster Schritt“ und verfolge die Konstruktion. Ändere die Zirkelöffnung: Was bleibt gleich?</span></p>
+  <div class="split">
+    <div class="fig"><svg id="cs-svg" viewBox="0 0 520 320" role="img"></svg></div>
+    <div class="panel">
+      <ol class="stps" id="cs-steps" aria-live="polite"></ol>
+      <div class="slider"><label for="cs-r"><span class="ro">Deschiderea compasului</span><span class="de">Zirkelöffnung</span>: r = <span id="cs-rv"></span> cm <span class="hint">(<span class="ro">mai mare decât jumătatea lui AB</span><span class="de">größer als die Hälfte von AB</span>)</span></label><input type="range" id="cs-r" min="120" max="150" value="130"></div>
+      <div class="actions" style="margin-top:0"><button class="btn ghost" type="button" id="cs-prev"></button><button class="btn" type="button" id="cs-next"></button></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține: construcția</span><span class="de">Merke dir: die Konstruktion</span></h3>
+    <ul>
+      <li><span class="ro">Deschidem compasul mai mult decât jumătate din AB și ducem un arc cu centrul în A, apoi unul cu <b>aceeași deschidere</b> cu centrul în B.</span><span class="de">Wir öffnen den Zirkel mehr als die Hälfte von AB und zeichnen einen Bogen um A, dann einen mit <b>derselben Öffnung</b> um B.</span></li>
+      <li><span class="ro">Arcele se taie în P și Q. Dreapta PQ este <b>mediatoarea</b> lui [AB]; ea taie segmentul în mijlocul I.</span><span class="de">Die Bögen schneiden sich in P und Q. Die Gerade PQ ist die <b>Mittelsenkrechte</b> von [AB]; sie schneidet die Strecke im Mittelpunkt I.</span></li>
+      <li><span class="ro">De ce merge? P este la distanța r de A și r de B: PA = PB. La fel Q. Vezi mai jos de ce asta înseamnă că P și Q sunt pe mediatoare.</span><span class="de">Warum funktioniert das? P ist r von A und r von B entfernt: PA = PB. Ebenso Q. Unten siehst du, warum P und Q deshalb auf der Mittelsenkrechten liegen.</span></li>
+    </ul>
+  </div>
+  <div class="check" id="c3"></div>
+</section>
+
+<!-- 4. Teorema directă -->
+<section class="block" id="s4" aria-labelledby="t4">
+  <h2 class="section-title" id="t4"><span class="step">4</span><span class="ro">Teorema mediatoarei: punctele ei sunt egal depărtate de capete</span><span class="de">Der Satz der Mittelsenkrechten: ihre Punkte sind von den Endpunkten gleich weit entfernt</span></h2>
+  <p class="section-sub"><span class="ro">Mută punctul M pe mediatoare și compară MA cu MB. Apoi pliază foaia pe mediatoare: unde ajunge A?</span><span class="de">Verschiebe den Punkt M auf der Mittelsenkrechten und vergleiche MA mit MB. Falte dann das Blatt an der Mittelsenkrechten: Wo landet A?</span></p>
+  <div class="split">
+    <div class="fig"><svg id="td-svg" viewBox="0 0 520 320" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="td-m"><span class="ro">Poziția lui M pe mediatoare</span><span class="de">Lage von M auf der Mittelsenkrechten</span></label><input type="range" id="td-m" min="30" max="310" step="10" value="80"></div>
+      <div class="slider"><label for="td-f"><span class="ro">Pliază foaia</span><span class="de">Blatt falten</span></label><input type="range" id="td-f" min="0" max="100" value="0"></div>
+      <div class="readout" id="td-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Teorema (directă)</span><span class="de">Satz (direkt)</span></h3>
+    <ul>
+      <li><span class="ro"><b>Ipoteza</b>: M se află pe mediatoarea segmentului [AB]. <b>Concluzia</b>: <span class="fx">MA = MB</span>.</span><span class="de"><b>Voraussetzung</b>: M liegt auf der Mittelsenkrechten der Strecke [AB]. <b>Behauptung</b>: <span class="fx">MA = MB</span>.</span></li>
+      <li><span class="ro">Cu alte cuvinte: orice punct de pe mediatoare este <b>egal depărtat</b> de capetele segmentului.</span><span class="de">Mit anderen Worten: Jeder Punkt der Mittelsenkrechten ist von den Endpunkten der Strecke <b>gleich weit entfernt</b>.</span></li>
+    </ul>
+    <details>
+      <summary><span class="ro">Pentru curioși: demonstrația</span><span class="de">Für Neugierige: der Beweis</span></summary>
+      <p><span class="ro">Fie I mijlocul lui [AB] și M un punct de pe mediatoare, diferit de I. Triunghiurile MIA și MIB au: <b>IA = IB</b> (I e mijloc), <b>∢MIA = ∢MIB = 90°</b> (mediatoarea e perpendiculară pe AB) și <b>MI</b> latură comună. Sunt congruente (cazul <b>latură–unghi–latură</b>), deci MA = MB. Dacă M = I, atunci MA = MB, fiindcă I este mijlocul.</span><span class="de">Sei I der Mittelpunkt von [AB] und M ein Punkt der Mittelsenkrechten, M ≠ I. Die Dreiecke MIA und MIB haben: <b>IA = IB</b> (I ist Mittelpunkt), <b>∢MIA = ∢MIB = 90°</b> (die Mittelsenkrechte steht senkrecht auf AB) und die gemeinsame Seite <b>MI</b>. Sie sind kongruent (Fall <b>Seite–Winkel–Seite</b>), also MA = MB. Ist M = I, gilt MA = MB, weil I der Mittelpunkt ist.</span></p>
+    </details>
+  </div>
+  <div class="check" id="c4"></div>
+</section>
+
+<!-- 5. Reciproca -->
+<section class="block" id="s5" aria-labelledby="t5">
+  <h2 class="section-title" id="t5"><span class="step">5</span><span class="ro">Reciproca: locul geometric al punctelor egal depărtate</span><span class="de">Die Umkehrung: der geometrische Ort der gleich weit entfernten Punkte</span></h2>
+  <p class="section-sub"><span class="ro">Punctele albastre sunt mai aproape de A, cele portocalii mai aproape de B. Linia dintre ele este mediatoarea. Mută punctul P și compară PA cu PB. Poți schimba și segmentul.</span><span class="de">Die blauen Punkte liegen näher an A, die orangen näher an B. Die Linie dazwischen ist die Mittelsenkrechte. Verschiebe den Punkt P und vergleiche PA mit PB. Du kannst auch die Strecke ändern.</span></p>
+  <div class="split">
+    <div class="fig"><svg id="lg-svg" viewBox="0 0 600 340" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="lg-px"><span class="ro">P: stânga – dreapta</span><span class="de">P: links – rechts</span></label><input type="range" id="lg-px" min="-270" max="270" value="-90"></div>
+      <div class="slider"><label for="lg-py"><span class="ro">P: sus – jos</span><span class="de">P: oben – unten</span></label><input type="range" id="lg-py" min="-150" max="150" value="-60"></div>
+      <div class="actions" style="margin-top:0"><button class="btn ghost" type="button" id="lg-on"></button></div>
+      <div class="slider"><label for="lg-ab"><span class="ro">Lungimea AB</span><span class="de">Länge AB</span>: <span id="lg-abv"></span> cm</label><input type="range" id="lg-ab" min="4" max="12" value="8"></div>
+      <div class="slider"><label for="lg-phi"><span class="ro">Înclinarea lui AB</span><span class="de">Neigung von AB</span>: <span id="lg-phv"></span>°</label><input type="range" id="lg-phi" min="0" max="175" step="5" value="0"></div>
+      <div class="readout" id="lg-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Teorema reciprocă</span><span class="de">Umkehrsatz</span></h3>
+    <ul>
+      <li><span class="ro"><b>Ipoteza</b>: punctul M este egal depărtat de A și de B (<span class="fx">MA = MB</span>). <b>Concluzia</b>: M se află pe <b>mediatoarea</b> segmentului [AB].</span><span class="de"><b>Voraussetzung</b>: Der Punkt M ist von A und B gleich weit entfernt (<span class="fx">MA = MB</span>). <b>Behauptung</b>: M liegt auf der <b>Mittelsenkrechten</b> der Strecke [AB].</span></li>
+      <li><span class="ro">Cele două teoreme, la un loc: <b>mediatoarea segmentului [AB] este mulțimea tuturor punctelor egal depărtate de A și de B</b> (locul geometric al acestor puncte).</span><span class="de">Beide Sätze zusammen: <b>Die Mittelsenkrechte der Strecke [AB] ist die Menge aller Punkte, die von A und B gleich weit entfernt sind</b> (der geometrische Ort dieser Punkte).</span></li>
+      <li><span class="ro">Dacă PA &lt; PB, punctul P este de partea lui A față de mediatoare; dacă PA &gt; PB, de partea lui B.</span><span class="de">Ist PA &lt; PB, liegt P auf der Seite von A der Mittelsenkrechten; ist PA &gt; PB, auf der Seite von B.</span></li>
+    </ul>
+    <details>
+      <summary><span class="ro">Pentru curioși: demonstrația reciprocei</span><span class="de">Für Neugierige: der Beweis der Umkehrung</span></summary>
+      <p><span class="ro">Fie I mijlocul lui [AB], iar M un punct cu MA = MB, care nu e pe dreapta AB. Triunghiurile MIA și MIB au: <b>MA = MB</b> (ipoteză), <b>IA = IB</b> și <b>MI</b> comună. Sunt congruente (cazul <b>latură–latură–latură</b>), deci ∢MIA = ∢MIB. Aceste unghiuri sunt adiacente suplementare (A, I, B sunt coliniare), deci fiecare are 90°. Atunci MI ⊥ AB, iar I e mijlocul: MI este mediatoarea. Dacă M e pe dreapta AB și MA = MB, atunci M = I.</span><span class="de">Sei I der Mittelpunkt von [AB] und M ein Punkt mit MA = MB, der nicht auf der Geraden AB liegt. Die Dreiecke MIA und MIB haben: <b>MA = MB</b> (Voraussetzung), <b>IA = IB</b> und die gemeinsame Seite <b>MI</b>. Sie sind kongruent (Fall <b>Seite–Seite–Seite</b>), also ∢MIA = ∢MIB. Diese Winkel sind Nebenwinkel (A, I, B liegen auf einer Geraden), also hat jeder 90°. Dann MI ⊥ AB, und I ist der Mittelpunkt: MI ist die Mittelsenkrechte. Liegt M auf der Geraden AB und MA = MB, dann M = I.</span></p>
+    </details>
+  </div>
+  <div class="check" id="c5"></div>
+</section>
+
+<!-- 6. Aplicații -->
+<section class="block" id="s6" aria-labelledby="t6">
+  <h2 class="section-title" id="t6"><span class="step">6</span><span class="ro">Aplicații: de unde folosim mediatoarea?</span><span class="de">Anwendungen: Wozu brauchen wir die Mittelsenkrechte?</span></h2>
+  <h3 class="sub3" style="margin-top:0"><span class="ro">Aplicația 1: fântâna dintre două case</span><span class="de">Anwendung 1: der Brunnen zwischen zwei Häusern</span></h3>
+  <p class="section-sub" style="margin-top:6px"><span class="ro">Casele A și B vor o fântână pe drum, la aceeași distanță de amândouă. Mută fântâna pe drum până când distanțele sunt egale. Unde e ea față de mediatoarea lui AB?</span><span class="de">Die Häuser A und B wollen einen Brunnen an der Straße, gleich weit von beiden entfernt. Verschiebe den Brunnen auf der Straße, bis die Entfernungen gleich sind. Wo liegt er im Verhältnis zur Mittelsenkrechten von AB?</span></p>
+  <div class="split">
+    <div class="fig"><svg id="fn-svg" viewBox="0 0 560 320" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="fn-u"><span class="ro">Poziția fântânii pe drum</span><span class="de">Lage des Brunnens auf der Straße</span></label><input type="range" id="fn-u" min="0" max="100" value="80"></div>
+      <div class="actions" style="margin-top:0"><button class="btn ghost" type="button" id="fn-show" aria-pressed="false"></button></div>
+      <div class="readout" id="fn-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul><li><span class="ro">Punctul de pe drum egal depărtat de A și de B este <b>intersecția dintre drum și mediatoarea lui [AB]</b>.</span><span class="de">Der Punkt auf der Straße, der von A und B gleich weit entfernt ist, ist der <b>Schnittpunkt der Straße mit der Mittelsenkrechten von [AB]</b>.</span></li></ul>
+  </div>
+  <div class="check" id="c6"></div>
+
+  <h3 class="sub3"><span class="ro">Aplicația 2: cercul care trece prin trei puncte</span><span class="de">Anwendung 2: der Kreis durch drei Punkte</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Prin trei puncte care nu sunt pe aceeași dreaptă trece un cerc. Centrul lui trebuie să fie egal depărtat de A, B și C. Mută punctul C și urmărește mediatoarele lui [AB] și [BC].</span><span class="de">Durch drei Punkte, die nicht auf einer Geraden liegen, geht ein Kreis. Sein Mittelpunkt muss von A, B und C gleich weit entfernt sein. Verschiebe den Punkt C und beobachte die Mittelsenkrechten von [AB] und [BC].</span></p>
+  <div class="split">
+    <div class="fig"><svg id="cc-svg" viewBox="0 0 600 340" role="img"></svg></div>
+    <div class="panel">
+      <div class="slider"><label for="cc-x"><span class="ro">C: stânga – dreapta</span><span class="de">C: links – rechts</span></label><input type="range" id="cc-x" min="90" max="520" value="470"></div>
+      <div class="slider"><label for="cc-y"><span class="ro">C: sus – jos</span><span class="de">C: oben – unten</span></label><input type="range" id="cc-y" min="50" max="200" value="90"></div>
+      <div class="readout" id="cc-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="remember">
+    <h3><span class="ro">Reține</span><span class="de">Merke dir</span></h3>
+    <ul><li><span class="ro">Punctul O în care se taie mediatoarele lui [AB] și [BC] are OA = OB și OB = OC, deci <b>OA = OB = OC</b>: este centrul cercului care trece prin A, B și C.</span><span class="de">Der Punkt O, in dem sich die Mittelsenkrechten von [AB] und [BC] schneiden, hat OA = OB und OB = OC, also <b>OA = OB = OC</b>: Er ist der Mittelpunkt des Kreises durch A, B und C.</span></li></ul>
+  </div>
+  <div class="check" id="c6b"></div>
+</section>
+
+<!-- 7. Exerciții -->
+<section class="block" id="s7" aria-labelledby="t7">
+  <h2 class="section-title" id="t7"><span class="step">7</span><span class="ro">Exerciții</span><span class="de">Übungen</span></h2>
+  <h3 class="sub3" style="margin-top:14px"><span class="ro">Găsește pe desen: care puncte sunt pe mediatoare?</span><span class="de">Finde in der Zeichnung: Welche Punkte liegen auf der Mittelsenkrechten?</span></h3>
+  <p class="section-sub" style="margin-top:0"><span class="ro">Pătrățelele au latura de 1 cm. Bifează toate punctele care sunt pe mediatoarea segmentului [AB], apoi verifică.</span><span class="de">Die Kästchen haben 1 cm Seitenlänge. Wähle alle Punkte aus, die auf der Mittelsenkrechten der Strecke [AB] liegen, und prüfe dann.</span></p>
+  <div class="fig"><svg id="fp-svg" viewBox="0 0 560 320" role="img"></svg></div>
+  <div class="chips" id="fp-chips" role="group" style="margin-top:10px"></div>
+  <div class="actions"><button class="btn" type="button" id="fp-check"></button><button class="btn ghost" type="button" id="fp-dist"></button><button class="btn ghost" type="button" id="fp-new"></button></div>
+  <div class="result" id="fp-res" aria-live="polite"></div>
+
+  <h3 class="sub3"><span class="ro">Probleme noi, cu răspuns numeric</span><span class="de">Neue Aufgaben mit Zahlenantwort</span></h3>
+  <div class="ex" id="nx"></div>
+</section>
+
+<section class="block" aria-labelledby="tg">
+  <h2 class="section-title" id="tg"><span class="ro">Mic dicționar</span><span class="de">Kleines Wörterbuch</span></h2>
+  <div class="gloss-head" style="margin-top:14px"><span>Română</span><span>Deutsch</span></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<p class="foot"><span class="ro">Lecție alcătuită după programa de matematică pentru clasa a 6-a (perpendicularitate, mediatoarea unui segment), fără poze din manual. Testul de mai jos verifică ce ai învățat.</span><span class="de">Stunde nach dem Mathematiklehrplan der 6. Klasse (Senkrechte, Mittelsenkrechte einer Strecke), ohne Fotos aus dem Buch. Der Test unten prüft, was du gelernt hast.</span></p>
+</div>
+
+<script>
+(function () {
+'use strict';
+var L = document.documentElement.dataset.lang;
+var NS = 'http://www.w3.org/2000/svg';
+function T(o) { return o[L]; }
+function tx(ro, de) { return L === 'de' ? de : ro; }
+function $(s, r) { return (r || document).querySelector(s); }
+function el(tag, a, parent, text) {
+  var e = document.createElementNS(NS, tag);
+  for (var k in a) e.setAttribute(k, a[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function h(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function btn(cls, html) { var b = h('button', cls, html); b.type = 'button'; return b; }
+function rint(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function pick(arr) { return arr[rint(0, arr.length - 1)]; }
+var COL = { 1: '#2f6fd6', 2: '#e8871e', 3: '#1f8a5b', 4: '#8e44ad' };
+var SOFT = { 1: '#dfe9fb', 2: '#fde7cc', 3: '#dcf1e6', 4: '#efe2f6' };
+var INK = '#1f2430';
+
+/* ---------- desen (grade în sens trigonometric; y crește în jos pe ecran) ---------- */
+function P(o, deg, r) { var a = deg * Math.PI / 180; return [o[0] + r * Math.cos(a), o[1] - r * Math.sin(a)]; }
+function lineAt(svg, o, deg, opt) {
+  opt = opt || {};
+  var a = P(o, deg, 900), b = P(o, deg + 180, 900);
+  return el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: opt.c || INK, 'stroke-width': opt.w || 2.5, 'stroke-dasharray': opt.dash || '', 'stroke-linecap': 'round' }, svg);
+}
+function rayAt(svg, o, deg, len, opt) {
+  opt = opt || {};
+  var p = P(o, deg, len);
+  el('line', { x1: o[0], y1: o[1], x2: p[0], y2: p[1], stroke: opt.c || INK, 'stroke-width': opt.w || 3, 'stroke-linecap': 'round' }, svg);
+  return p;
+}
+function lbl(svg, x, y, text, c) { el('text', { x: x, y: y, 'text-anchor': 'middle', class: 'plbl', fill: c || INK }, svg, text); }
+function dotAt(svg, p, c, r) { el('circle', { cx: p[0], cy: p[1], r: r || 4.5, fill: c || INK }, svg); }
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+/** Sector de la d1 la d2 (sens trigonometric); n = culoarea (1–4) sau 0 = gri. */
+function sec(svg, o, d1, d2, r, n, text, lr) {
+  var span = ((d2 - d1) % 360 + 360) % 360;
+  var a = P(o, d1, r), b = P(o, d1 + span, r);
+  el('path', { d: 'M' + o[0] + ' ' + o[1] + ' L' + a[0] + ' ' + a[1] + ' A' + r + ' ' + r + ' 0 ' + (span > 180 ? 1 : 0) + ' 0 ' + b[0] + ' ' + b[1] + ' Z',
+    fill: n ? SOFT[n] : '#f4f2ea', stroke: n ? COL[n] : '#cfcabd', 'stroke-width': n ? 2 : 1.2 }, svg);
+  if (text != null) { var m = P(o, d1 + span / 2, lr || r * .65); el('text', { x: m[0], y: m[1] + 6, 'text-anchor': 'middle', class: 'num', fill: n ? COL[n] : '#6b7280' }, svg, text); }
+}
+
+/** Întrebări scurte de verificare. */
+function Check(host, items) {
+  host.appendChild(h('h3', '', tx('Verifică-te', 'Prüfe dich')));
+  items.forEach(function (it) {
+    var box = h('div', 'cq'), opts = h('div', 'opts'), why = h('p', 'why');
+    why.setAttribute('aria-live', 'polite');
+    box.appendChild(h('p', 'q', T(it.q)));
+    var bs = it.o.map(function (o, i) {
+      var b = btn('pick', T(o));
+      b.onclick = function () {
+        bs.forEach(function (x) { x.classList.remove('right', 'wrong'); });
+        if (i === it.a) { b.classList.add('right'); bs.forEach(function (x) { x.disabled = true; }); why.textContent = '✓ ' + T(it.why); }
+        else { b.classList.add('wrong'); why.textContent = T(it.hint || { ro: 'Nu chiar. Mai încearcă.', de: 'Nicht ganz. Versuch es nochmal.' }); }
+      };
+      opts.appendChild(b); return b;
+    });
+    box.appendChild(opts); box.appendChild(why); host.appendChild(box);
+  });
+}
+
+/** Exercițiu cu răspuns numeric. gen() întoarce { html, answer, explain, hint, hint2 }. */
+function NumEx(host, gen, onNew) {
+  var cur, tries = 0;
+  var story = h('div', 'story'), row = h('div', 'row'), inp = h('input', 'ans'), res = h('div', 'result');
+  var ok = btn('btn', tx('Verifică', 'Prüfen')), nx = btn('btn ghost', tx('Problemă nouă', 'Neue Aufgabe'));
+  inp.type = 'text'; inp.setAttribute('inputmode', 'numeric'); inp.setAttribute('aria-label', tx('Răspunsul tău', 'Deine Antwort'));
+  res.setAttribute('aria-live', 'polite');
+  row.appendChild(inp); row.appendChild(ok); row.appendChild(nx);
+  host.appendChild(story); host.appendChild(row); host.appendChild(res);
+  function next() {
+    cur = gen(); tries = 0;
+    story.innerHTML = cur.html; inp.value = ''; inp.className = 'ans'; inp.disabled = false; ok.disabled = false;
+    res.className = 'result'; res.innerHTML = '';
+    if (onNew) onNew(cur);
+  }
+  function check() {
+    var v = parseInt(inp.value, 10);
+    if (isNaN(v) || ok.disabled) return;
+    inp.classList.remove('ok', 'bad');
+    if (v === cur.answer) { inp.classList.add('ok'); res.className = 'result good'; res.innerHTML = '✓ ' + cur.explain; inp.disabled = true; ok.disabled = true; }
+    else { inp.classList.add('bad'); tries++; res.className = 'result try'; res.innerHTML = tries > 1 && cur.hint2 ? cur.hint2 : cur.hint; }
+  }
+  ok.onclick = check; nx.onclick = next;
+  inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
+  next();
+}
+
+function dist(a, b) { return Math.sqrt((a[0] - b[0]) * (a[0] - b[0]) + (a[1] - b[1]) * (a[1] - b[1])); }
+function cm(px) { return (Math.round(px / 20 * 10) / 10).toString().replace('.', L === 'de' ? ',' : ','); }
+/** Semn de unghi drept în punctul o, între direcțiile d1 și d2 (grade, trigonometric). */
+function rightMark(svg, o, d1, d2, s) {
+  s = s || 16;
+  var a = P(o, d1, s), b = P(o, d2, s), c = P(a, d2, s);
+  el('path', { d: 'M' + a[0] + ' ' + a[1] + ' L' + c[0] + ' ' + c[1] + ' L' + b[0] + ' ' + b[1], fill: 'none', stroke: COL[3], 'stroke-width': 2.2 }, svg);
+}
+/** Liniuțe care arată segmente egale. */
+function tick(svg, p, deg, n, c) {
+  for (var i = 0; i < n; i++) {
+    var q = P(p, deg + 180, (i - (n - 1) / 2) * 7), a = P(q, deg + 90, 9), b = P(q, deg - 90, 9);
+    el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: c || INK, 'stroke-width': 2.2 }, svg);
+  }
+}
+function pick(arr) { return arr[rint(0, arr.length - 1)]; }
+
+/* ================= 1a. Drepte perpendiculare ================= */
+(function () {
+  var svg = $('#pe-svg'), ia = $('#pe-a'), out = $('#pe-out'), snap = $('#pe-snap');
+  snap.textContent = tx('Fă-le perpendiculare', 'Mach sie senkrecht');
+  snap.onclick = function () { ia.value = 90; draw(); };
+  function draw() {
+    var a = +ia.value, o = [260, 150]; $('#pe-av').textContent = a;
+    svg.innerHTML = '';
+    var perp = a === 90;
+    sec(svg, o, 0, a, 52, perp ? 3 : 1, a + '°', 33);
+    sec(svg, o, a, 180, 52, perp ? 3 : 2, (180 - a) + '°', 33);
+    sec(svg, o, 180, 180 + a, 52, perp ? 3 : 1, a + '°', 33);
+    sec(svg, o, 180 + a, 360, 52, perp ? 3 : 2, (180 - a) + '°', 33);
+    lineAt(svg, o, 0); lineAt(svg, o, a, { c: perp ? COL[3] : COL[2], w: 3.2 });
+    dotAt(svg, o);
+    lbl(svg, 40, 138, 'd'); var q = P(o, a, 136); lbl(svg, q[0] + (a < 90 ? 16 : -16), q[1] + 4, 'e');
+    if (perp) rightMark(svg, o, 0, 90, 20);
+    svg.setAttribute('aria-label', perp ? tx('Dreptele d și e sunt perpendiculare', 'Die Geraden d und e sind senkrecht') : tx('Două drepte care se taie sub un unghi de ' + a + '°', 'Zwei sich schneidende Geraden mit einem Winkel von ' + a + '°'));
+    out.innerHTML = perp
+      ? '<span class="eq c3">d ⊥ e</span><span class="rule">' + tx('Toate cele patru unghiuri sunt de <b>90°</b>: dreptele sunt <b>perpendiculare</b>.', 'Alle vier Winkel sind <b>90°</b>: Die Geraden sind <b>senkrecht</b> zueinander.') + '</span>'
+      : '<span class="eq">' + a + '° ' + tx('și', 'und') + ' ' + (180 - a) + '°</span><span class="rule">' + tx('Unghiurile opuse la vârf sunt egale, cele vecine au suma 180°. Nu sunt toate de 90°, deci dreptele <b>nu</b> sunt perpendiculare.', 'Scheitelwinkel sind gleich, Nachbarwinkel haben die Summe 180°. Nicht alle sind 90°, die Geraden sind also <b>nicht</b> senkrecht.') + '</span>';
+  }
+  ia.addEventListener('input', draw); draw();
+})();
+Check($('#c1'), [
+  { q: { ro: 'Două drepte se taie și unul dintre unghiurile formate are 90°. Cât au celelalte trei?', de: 'Zwei Geraden schneiden sich, und einer der Winkel hat 90°. Wie groß sind die anderen drei?' },
+    o: [{ ro: '90° fiecare', de: 'je 90°' }, { ro: '45° fiecare', de: 'je 45°' }, { ro: '90°, 90° și 180°', de: '90°, 90° und 180°' }], a: 0,
+    why: { ro: 'Unul e opus la vârf cu el (90°), iar celelalte două sunt adiacente suplementare cu el: 180° − 90° = 90°.', de: 'Einer ist Scheitelwinkel dazu (90°), die anderen beiden sind Nebenwinkel dazu: 180° − 90° = 90°.' },
+    hint: { ro: 'Folosește unghiurile opuse la vârf (egale) și adiacente suplementare (suma 180°).', de: 'Nutze Scheitelwinkel (gleich) und Nebenwinkel (Summe 180°).' } },
+  { q: { ro: 'Adevărat sau fals? „Dacă d ⊥ e, atunci unghiul dintre ele este de 180°.”', de: 'Wahr oder falsch? „Wenn d ⊥ e, dann ist der Winkel zwischen ihnen 180°.“' },
+    o: [{ ro: 'A (adevărat)', de: 'W (wahr)' }, { ro: 'F (fals)', de: 'F (falsch)' }], a: 1,
+    why: { ro: 'Dreptele perpendiculare formează unghiuri de 90°. 180° ar fi un unghi alungit.', de: 'Senkrechte Geraden bilden Winkel von 90°. 180° wäre ein gestreckter Winkel.' } }
+]);
+
+/* ================= 1b. Distanța de la un punct la o dreaptă ================= */
+(function () {
+  var svg = $('#di-svg'), inp = $('#di-f'), out = $('#di-out');
+  function draw() {
+    var fx = +inp.value, A = [260, 80], F0 = [260, 250], F = [fx, 250];
+    svg.innerHTML = '';
+    lineAt(svg, [260, 250], 0); lbl(svg, 36, 238, 'd');
+    el('line', { x1: A[0], y1: A[1], x2: F0[0], y2: F0[1], stroke: COL[3], 'stroke-width': 2, 'stroke-dasharray': '6 6' }, svg);
+    var perp = fx === 260;
+    el('line', { x1: A[0], y1: A[1], x2: F[0], y2: F[1], stroke: perp ? COL[3] : COL[2], 'stroke-width': 3.5, 'stroke-linecap': 'round' }, svg);
+    dotAt(svg, A); lbl(svg, A[0], A[1] - 12, 'A'); dotAt(svg, F, perp ? COL[3] : COL[2], 6); lbl(svg, F[0], F[1] + 28, 'F');
+    if (perp) rightMark(svg, F0, 90, 180, 16);
+    var l = dist(A, F), l0 = dist(A, F0);
+    svg.setAttribute('aria-label', tx('Punctul A, dreapta d și segmentul AF', 'Der Punkt A, die Gerade d und die Strecke AF'));
+    out.innerHTML = '<span class="eq ' + (perp ? 'c3' : 'c2') + '">AF = ' + cm(l) + ' cm</span>' +
+      '<span class="rule">' + (perp ? tx('AF ⊥ d: ai ajuns la <b>perpendiculară</b>. Aceasta este cea mai scurtă: <b>distanța de la A la d</b> este ' + cm(l0) + ' cm.', 'AF ⊥ d: Du bist beim <b>Lot</b>. Das ist die kürzeste Strecke: Der <b>Abstand von A zu d</b> beträgt ' + cm(l0) + ' cm.') : tx('Segment oblic: este mai lung decât perpendiculara (' + cm(l0) + ' cm).', 'Schräge Strecke: Sie ist länger als das Lot (' + cm(l0) + ' cm).')) + '</span>';
+  }
+  inp.addEventListener('input', draw); draw();
+})();
+Check($('#c1b'), [
+  { q: { ro: 'Care este distanța de la punctul A la dreapta d?', de: 'Was ist der Abstand des Punktes A von der Geraden d?' },
+    o: [{ ro: 'lungimea unui segment oarecare de la A la d', de: 'die Länge irgendeiner Strecke von A zu d' }, { ro: 'lungimea perpendicularei duse din A pe d', de: 'die Länge des Lotes von A auf d' }, { ro: 'lungimea dreptei d', de: 'die Länge der Geraden d' }], a: 1,
+    why: { ro: 'Distanța este lungimea perpendicularei din A pe d: cel mai scurt drum de la A la d.', de: 'Der Abstand ist die Länge des Lotes von A auf d: der kürzeste Weg von A zu d.' },
+    hint: { ro: 'Încearcă pe desen: pentru ce poziție a lui F e AF cel mai mic?', de: 'Probier es an der Zeichnung: Bei welcher Lage von F ist AF am kleinsten?' } },
+  { q: { ro: 'Câte perpendiculare pe o dreaptă d putem duce printr-un punct A?', de: 'Wie viele Senkrechte zu einer Geraden d kann man durch einen Punkt A zeichnen?' },
+    o: [{ ro: 'una singură', de: 'genau eine' }, { ro: 'două', de: 'zwei' }, { ro: 'oricâte', de: 'beliebig viele' }], a: 0,
+    why: { ro: 'Printr-un punct dat trece o singură perpendiculară pe o dreaptă dată.', de: 'Durch einen gegebenen Punkt geht genau eine Senkrechte zu einer gegebenen Geraden.' } }
+]);
+
+/* ================= 2. Mediatoarea: definiție ================= */
+(function () {
+  var svg = $('#md-svg'), is = $('#md-s'), it = $('#md-t'), out = $('#md-out'), chipsHost = $('#md-chips');
+  var presets = [[tx('Doar perpendiculară', 'Nur senkrecht'), 60, 0], [tx('Doar prin mijloc', 'Nur durch den Mittelpunkt'), 0, 25], [tx('Mediatoarea', 'Mittelsenkrechte'), 0, 0]];
+  var chips = presets.map(function (p) {
+    var b = btn('chip', p[0]); b.setAttribute('aria-pressed', 'false');
+    b.onclick = function () { is.value = p[1]; it.value = p[2]; draw(); };
+    chipsHost.appendChild(b); return b;
+  });
+  function draw() {
+    var s = +is.value, t = +it.value, A = [120, 170], B = [400, 170], M = [260, 170], X = [260 + s, 170];
+    $('#md-tv').textContent = t;
+    svg.innerHTML = '';
+    var mid = s === 0, perp = t === 0, med = mid && perp;
+    chips.forEach(function (c, i) { c.setAttribute('aria-pressed', (i === 0 && perp && !mid) || (i === 1 && mid && !perp) || (i === 2 && med) ? 'true' : 'false'); });
+    el('line', { x1: A[0], y1: A[1], x2: B[0], y2: B[1], stroke: INK, 'stroke-width': 3.5, 'stroke-linecap': 'round' }, svg);
+    lineAt(svg, X, 90 + t, { c: med ? COL[3] : COL[2], w: med ? 3.8 : 3 });
+    dotAt(svg, A); dotAt(svg, B); dotAt(svg, M, '#9aa0a6', 4);
+    lbl(svg, A[0], A[1] + 30, 'A'); lbl(svg, B[0], B[1] + 30, 'B'); lbl(svg, M[0], M[1] + 30, 'M', '#6b7280');
+    if (mid) { dotAt(svg, M, COL[3], 6); tick(svg, P(A, 0, 70), 0, 1, COL[1]); tick(svg, P(B, 180, 70), 0, 1, COL[1]); }
+    else { dotAt(svg, X, COL[2], 6); lbl(svg, X[0] + 16, X[1] - 12, 'X'); }
+    if (perp) rightMark(svg, X, 0, 90, 18);
+    lbl(svg, 260 + s + 40 * Math.sin(t * Math.PI / 180) * -1 + (t >= 0 ? -22 : 22), 36, 'd', med ? COL[3] : COL[2]);
+    var ax = (X[0] - A[0]) / 20, xb = (B[0] - X[0]) / 20, ang = 90 + t;
+    svg.setAttribute('aria-label', med ? tx('Dreapta d este mediatoarea lui AB', 'Die Gerade d ist die Mittelsenkrechte von AB') : tx('Dreapta d taie segmentul AB', 'Die Gerade d schneidet die Strecke AB'));
+    out.innerHTML =
+      '<span class="eq ' + (mid ? 'c3' : 'c2') + '">' + tx('Prin mijloc: ', 'Durch den Mittelpunkt: ') + (mid ? tx('da', 'ja') : tx('nu', 'nein')) + '</span>' +
+      '<span class="rule">' + (mid ? tx('d taie [AB] în mijlocul M: AM = MB = ' + cm(ax * 20) + ' cm.', 'd schneidet [AB] im Mittelpunkt M: AM = MB = ' + cm(ax * 20) + ' cm.') : tx('d taie [AB] în X: AX = ' + cm(ax * 20) + ' cm, XB = ' + cm(xb * 20) + ' cm (diferite).', 'd schneidet [AB] in X: AX = ' + cm(ax * 20) + ' cm, XB = ' + cm(xb * 20) + ' cm (verschieden).')) + '</span>' +
+      '<span class="eq ' + (perp ? 'c3' : 'c2') + '">' + tx('Perpendiculară: ', 'Senkrecht: ') + (perp ? tx('da', 'ja') : tx('nu', 'nein')) + '</span>' +
+      '<span class="rule">' + tx('Unghiul dintre d și AB: ' + ang + '°.', 'Winkel zwischen d und AB: ' + ang + '°.') + '</span>' +
+      (med ? '<span class="eq c3">' + tx('d este mediatoarea lui [AB] ✓', 'd ist die Mittelsenkrechte von [AB] ✓') + '</span>' : '<span class="rule"><b>' + tx('Nu e mediatoare: îi lipsește una dintre condiții.', 'Keine Mittelsenkrechte: Es fehlt eine Bedingung.') + '</b></span>');
+  }
+  is.addEventListener('input', draw); it.addEventListener('input', draw); draw();
+})();
+Check($('#c2'), [
+  { q: { ro: 'Dreapta d este perpendiculară pe [AB], dar îl taie într-un punct care nu e mijlocul lui. E d mediatoarea lui [AB]?', de: 'Die Gerade d steht senkrecht auf [AB], schneidet sie aber nicht im Mittelpunkt. Ist d die Mittelsenkrechte von [AB]?' },
+    o: [{ ro: 'da', de: 'ja' }, { ro: 'nu', de: 'nein' }], a: 1,
+    why: { ro: 'Mediatoarea trebuie să fie perpendiculară pe segment ȘI să treacă prin mijlocul lui.', de: 'Die Mittelsenkrechte muss senkrecht auf der Strecke stehen UND durch ihren Mittelpunkt gehen.' } },
+  { q: { ro: 'AB = 18 cm. Mediatoarea lui [AB] îl taie în I. Cât este AI?', de: 'AB = 18 cm. Die Mittelsenkrechte von [AB] schneidet in I. Wie groß ist AI?' },
+    o: [{ ro: '18 cm', de: '18 cm' }, { ro: '9 cm', de: '9 cm' }, { ro: '36 cm', de: '36 cm' }], a: 1,
+    why: { ro: 'I este mijlocul: AI = AB : 2 = 9 cm.', de: 'I ist der Mittelpunkt: AI = AB : 2 = 9 cm.' },
+    hint: { ro: 'I este mijlocul segmentului. Cum se împarte AB?', de: 'I ist der Mittelpunkt der Strecke. Wie wird AB geteilt?' } }
+]);
+
+/* ================= 3. Construcția cu compasul ================= */
+(function () {
+  var svg = $('#cs-svg'), ir = $('#cs-r'), steps = $('#cs-steps'), prev = $('#cs-prev'), next = $('#cs-next');
+  var step = 1;
+  var TXT = [
+    tx('Desenăm segmentul [AB] și marcăm capetele.', 'Wir zeichnen die Strecke [AB] und markieren die Endpunkte.'),
+    tx('Compasul, deschis mai mult decât jumătate din AB: arc cu centrul în A.', 'Der Zirkel, mehr als die Hälfte von AB geöffnet: Bogen um A.'),
+    tx('Aceeași deschidere, centrul în B: al doilea arc.', 'Dieselbe Öffnung, Mittelpunkt B: zweiter Bogen.'),
+    tx('Arcele se taie în P și Q. Ambele sunt la distanța r de A și de B.', 'Die Bögen schneiden sich in P und Q. Beide sind r von A und von B entfernt.'),
+    tx('Cu rigla trasăm dreapta PQ: mediatoarea. Ea taie [AB] în mijlocul I.', 'Mit dem Lineal zeichnen wir die Gerade PQ: die Mittelsenkrechte. Sie schneidet [AB] im Mittelpunkt I.')
+  ];
+  var lis = TXT.map(function (t) { var li = h('li', '', t); steps.appendChild(li); return li; });
+  prev.textContent = tx('Înapoi', 'Zurück'); next.textContent = tx('Pasul următor', 'Nächster Schritt');
+  prev.onclick = function () { if (step > 1) { step--; draw(); } };
+  next.onclick = function () { if (step < 5) { step++; draw(); } };
+  function arc(cx, cy, r, from, to) {
+    var a = P([cx, cy], from, r), b = P([cx, cy], to, r);
+    return 'M' + a[0] + ' ' + a[1] + ' A' + r + ' ' + r + ' 0 0 0 ' + b[0] + ' ' + b[1];
+  }
+  function draw() {
+    var r = +ir.value, A = [150, 200], B = [370, 200], d = Math.sqrt(r * r - 110 * 110), th = Math.atan2(d, 110) * 180 / Math.PI + 22;
+    $('#cs-rv').textContent = cm(r);
+    svg.innerHTML = '';
+    var Pp = [260, 200 - d], Q = [260, 200 + d];
+    if (step >= 2) el('path', { d: arc(A[0], A[1], r, -th, th), fill: 'none', stroke: COL[1], 'stroke-width': 2.6 }, svg);
+    if (step >= 3) el('path', { d: arc(B[0], B[1], r, 180 - th, 180 + th), fill: 'none', stroke: COL[2], 'stroke-width': 2.6 }, svg);
+    el('line', { x1: A[0], y1: A[1], x2: B[0], y2: B[1], stroke: INK, 'stroke-width': 3.5, 'stroke-linecap': 'round' }, svg);
+    if (step >= 4) {
+      [Pp, Q].forEach(function (p) {
+        el('line', { x1: A[0], y1: A[1], x2: p[0], y2: p[1], stroke: COL[1], 'stroke-width': 1.6, 'stroke-dasharray': '5 5' }, svg);
+        el('line', { x1: B[0], y1: B[1], x2: p[0], y2: p[1], stroke: COL[2], 'stroke-width': 1.6, 'stroke-dasharray': '5 5' }, svg);
+        dotAt(svg, p, COL[3], 5.5);
+      });
+      lbl(svg, Pp[0] + 20, Pp[1] - 4, 'P'); lbl(svg, Q[0] + 20, Q[1] + 16, 'Q');
+      var m1 = [(A[0] + 260) / 2 - 8, (A[1] + Pp[1]) / 2 - 8], m2 = [(B[0] + 260) / 2 + 8, (B[1] + Pp[1]) / 2 - 8];
+      lbl(svg, m1[0], m1[1], 'r', COL[1]); lbl(svg, m2[0], m2[1], 'r', COL[2]);
+    }
+    if (step >= 5) {
+      lineAt(svg, [260, 200], 90, { c: COL[3], w: 3.4 });
+      dotAt(svg, [260, 200], COL[3], 5.5); lbl(svg, 280, 222, 'I', COL[3]);
+      rightMark(svg, [260, 200], 0, 90, 16);
+      tick(svg, P(A, 0, 55), 0, 1, INK); tick(svg, P(B, 180, 55), 0, 1, INK);
+    }
+    dotAt(svg, A); dotAt(svg, B); lbl(svg, A[0] - 4, A[1] + 30, 'A'); lbl(svg, B[0] + 4, B[1] + 30, 'B');
+    lis.forEach(function (li, i) { li.className = i === step - 1 ? 'on' : (i < step - 1 ? 'done' : ''); });
+    prev.disabled = step === 1; next.disabled = step === 5;
+    svg.setAttribute('aria-label', tx('Construcția mediatoarei: pasul ' + step + ' din 5', 'Konstruktion der Mittelsenkrechten: Schritt ' + step + ' von 5'));
+  }
+  ir.addEventListener('input', draw); draw();
+})();
+Check($('#c3'), [
+  { q: { ro: 'De ce trebuie ca deschiderea compasului să fie mai mare decât jumătate din AB?', de: 'Warum muss die Zirkelöffnung größer als die Hälfte von AB sein?' },
+    o: [{ ro: 'altfel arcele nu se mai taie', de: 'sonst schneiden sich die Bögen nicht' }, { ro: 'altfel mediatoarea nu e perpendiculară', de: 'sonst ist die Mittelsenkrechte nicht senkrecht' }, { ro: 'pentru că așa spune regula, fără motiv', de: 'weil die Regel das sagt, ohne Grund' }], a: 0,
+    why: { ro: 'Dacă r ≤ AB : 2, cele două arce nu se întâlnesc, deci nu avem punctele P și Q.', de: 'Ist r ≤ AB : 2, treffen sich die beiden Bögen nicht, also haben wir keine Punkte P und Q.' },
+    hint: { ro: 'Pune r mai mic decât jumătatea lui AB: ajung arcele să se întâlnească?', de: 'Stell dir r kleiner als die Hälfte von AB vor: Treffen sich die Bögen?' } },
+  { q: { ro: 'Punctul P din construcție are PA = 6,5 cm. Cât este PB?', de: 'Der Punkt P aus der Konstruktion hat PA = 6,5 cm. Wie groß ist PB?' },
+    o: [{ ro: '3,25 cm', de: '3,25 cm' }, { ro: '6,5 cm', de: '6,5 cm' }, { ro: '13 cm', de: '13 cm' }], a: 1,
+    why: { ro: 'Ambele arce au aceeași rază r = 6,5 cm, deci PA = PB.', de: 'Beide Bögen haben denselben Radius r = 6,5 cm, also PA = PB.' } }
+]);
+
+/* ================= 4. Teorema directă + pliere ================= */
+(function () {
+  var svg = $('#td-svg'), im = $('#td-m'), iff = $('#td-f'), out = $('#td-out');
+  function draw() {
+    var my = +im.value, f = +iff.value / 100, A = [150, 170], B = [370, 170], M = [260, my];
+    svg.innerHTML = '';
+    var c = Math.cos(Math.PI * f), ax = 260 + (A[0] - 260) * c, left = 260 + (20 - 260) * c;
+    el('rect', { x: 260, y: 10, width: 250, height: 300, fill: '#f4f2ea', stroke: '#e2e0d8' }, svg);
+    el('polygon', { points: left + ',10 260,10 260,310 ' + left + ',310', fill: 'rgba(47,111,214,.12)', stroke: '#e2e0d8' }, svg);
+    el('line', { x1: 260, y1: 10, x2: 260, y2: 310, stroke: COL[3], 'stroke-width': 3.4 }, svg);
+    lbl(svg, 284, 30, 'd', COL[3]);
+    el('line', { x1: M[0], y1: M[1], x2: B[0], y2: B[1], stroke: COL[2], 'stroke-width': 3 }, svg);
+    el('line', { x1: M[0], y1: M[1], x2: ax, y2: A[1], stroke: COL[1], 'stroke-width': 3, 'stroke-dasharray': f > 0 ? '7 5' : '' }, svg);
+    dotAt(svg, B, COL[2], 5.5); lbl(svg, B[0] + 6, B[1] + 28, 'B', COL[2]);
+    dotAt(svg, [ax, A[1]], COL[1], 5.5); lbl(svg, ax - 6, A[1] + 28, f > 0 ? 'A′' : 'A', COL[1]);
+    dotAt(svg, M, COL[3], 6); lbl(svg, M[0] + 20, M[1] - 8, 'M');
+    var ma = dist(M, A), mb = dist(M, B);
+    svg.setAttribute('aria-label', tx('Punctul M pe mediatoarea segmentului AB', 'Der Punkt M auf der Mittelsenkrechten der Strecke AB'));
+    out.innerHTML = '<span class="eq"><span class="c1">MA = ' + cm(ma) + ' cm</span></span><span class="eq"><span class="c2">MB = ' + cm(mb) + ' cm</span></span>' +
+      '<span class="rule"><b>MA = MB</b> ' + tx('oriunde ai pune M pe mediatoare.', 'wo auch immer du M auf der Mittelsenkrechten setzt.') + (f === 1 ? ' ' + tx('Plianta pe mediatoare a dus punctul A exact peste B: segmentele MA și MB se suprapun, deci sunt egale.', 'Die Faltung an der Mittelsenkrechten hat A genau auf B gelegt: Die Strecken MA und MB decken sich, sind also gleich.') : '') + '</span>';
+  }
+  im.addEventListener('input', draw); iff.addEventListener('input', draw); draw();
+})();
+Check($('#c4'), [
+  { q: { ro: 'M se află pe mediatoarea lui [AB], MA = 7 cm. Cât este MB?', de: 'M liegt auf der Mittelsenkrechten von [AB], MA = 7 cm. Wie groß ist MB?' },
+    o: [{ ro: '3,5 cm', de: '3,5 cm' }, { ro: '14 cm', de: '14 cm' }, { ro: '7 cm', de: '7 cm' }, { ro: 'nu se poate ști', de: 'lässt sich nicht sagen' }], a: 2,
+    why: { ro: 'Orice punct de pe mediatoare este egal depărtat de A și B: MB = MA = 7 cm.', de: 'Jeder Punkt der Mittelsenkrechten ist von A und B gleich weit entfernt: MB = MA = 7 cm.' },
+    hint: { ro: 'Ce spune teorema despre punctele de pe mediatoare?', de: 'Was sagt der Satz über Punkte auf der Mittelsenkrechten?' } },
+  { q: { ro: 'În teorema directă, ce este ipoteza?', de: 'Was ist im direkten Satz die Voraussetzung?' },
+    o: [{ ro: 'MA = MB', de: 'MA = MB' }, { ro: 'M este pe mediatoarea lui [AB]', de: 'M liegt auf der Mittelsenkrechten von [AB]' }], a: 1,
+    why: { ro: 'Ipoteza este ce se dă: M e pe mediatoare. Concluzia (ce demonstrăm) este MA = MB.', de: 'Die Voraussetzung ist das Gegebene: M liegt auf der Mittelsenkrechten. Die Behauptung (was wir beweisen) ist MA = MB.' } }
+]);
+
+/* ================= 5. Reciproca, locul geometric ================= */
+(function () {
+  var svg = $('#lg-svg'), iab = $('#lg-ab'), iphi = $('#lg-phi'), ipx = $('#lg-px'), ipy = $('#lg-py'), out = $('#lg-out'), on = $('#lg-on');
+  on.textContent = tx('Pune P pe mediatoare', 'P auf die Mittelsenkrechte setzen');
+  on.onclick = function () {
+    var q = P([0, 0], +iphi.value + 90, 90);
+    ipx.value = Math.round(q[0]); ipy.value = Math.round(q[1]); draw();
+  };
+  function draw() {
+    var ab = +iab.value, phi = +iphi.value, C = [300, 170], hh = ab * 10, A = P(C, phi + 180, hh), B = P(C, phi, hh);
+    var Q = [C[0] + +ipx.value, C[1] + +ipy.value];
+    $('#lg-abv').textContent = ab; $('#lg-phv').textContent = phi;
+    svg.innerHTML = '';
+    for (var x = 10; x < 600; x += 20) for (var y = 10; y < 340; y += 20) {
+      var g = [x, y], closeA = dist(g, A) < dist(g, B);
+      el('circle', { cx: x, cy: y, r: 3, fill: closeA ? '#a9c1ee' : '#f5c799' }, svg);
+    }
+    lineAt(svg, C, phi + 90, { c: COL[3], w: 3.4 });
+    el('line', { x1: A[0], y1: A[1], x2: B[0], y2: B[1], stroke: INK, 'stroke-width': 3, 'stroke-linecap': 'round' }, svg);
+    var da = dist(Q, A), db = dist(Q, B), onm = Math.abs(da - db) < 2;
+    el('line', { x1: Q[0], y1: Q[1], x2: A[0], y2: A[1], stroke: COL[1], 'stroke-width': 2.4, 'stroke-dasharray': '7 5' }, svg);
+    el('line', { x1: Q[0], y1: Q[1], x2: B[0], y2: B[1], stroke: COL[2], 'stroke-width': 2.4, 'stroke-dasharray': '7 5' }, svg);
+    dotAt(svg, A, COL[1], 6); dotAt(svg, B, COL[2], 6); dotAt(svg, C, INK, 4);
+    var la = P(A, phi + 180, 20), lb = P(B, phi, 20);
+    lbl(svg, la[0], la[1] + 6, 'A', COL[1]); lbl(svg, lb[0], lb[1] + 6, 'B', COL[2]);
+    dotAt(svg, Q, onm ? COL[3] : INK, 8); lbl(svg, Q[0] + 16, Q[1] - 12, 'P');
+    svg.setAttribute('aria-label', onm ? tx('P este pe mediatoare: PA = PB', 'P liegt auf der Mittelsenkrechten: PA = PB') : (da < db ? tx('P este de partea lui A', 'P liegt auf der Seite von A') : tx('P este de partea lui B', 'P liegt auf der Seite von B')));
+    out.innerHTML = '<span class="eq"><span class="c1">PA = ' + cm(da) + ' cm</span>, <span class="c2">PB = ' + cm(db) + ' cm</span></span>' +
+      '<span class="rule">' + (onm ? '<b class="c3">PA = PB</b> ⇒ ' + tx('P este pe <b>mediatoare</b> (teorema reciprocă).', 'P liegt auf der <b>Mittelsenkrechten</b> (Umkehrsatz).')
+        : da < db ? tx('PA &lt; PB ⇒ P e de partea lui A (zona albastră), nu pe mediatoare.', 'PA &lt; PB ⇒ P liegt auf der Seite von A (blaue Zone), nicht auf der Mittelsenkrechten.')
+        : tx('PA &gt; PB ⇒ P e de partea lui B (zona portocalie), nu pe mediatoare.', 'PA &gt; PB ⇒ P liegt auf der Seite von B (orange Zone), nicht auf der Mittelsenkrechten.')) + '</span>';
+  }
+  [iab, iphi, ipx, ipy].forEach(function (i) { i.addEventListener('input', draw); }); draw();
+})();
+Check($('#c5'), [
+  { q: { ro: 'Punctul P are PA = 5 cm și PB = 5 cm. Unde se află P?', de: 'Der Punkt P hat PA = 5 cm und PB = 5 cm. Wo liegt P?' },
+    o: [{ ro: 'pe mediatoarea lui [AB]', de: 'auf der Mittelsenkrechten von [AB]' }, { ro: 'pe segmentul [AB]', de: 'auf der Strecke [AB]' }, { ro: 'oriunde', de: 'irgendwo' }], a: 0,
+    why: { ro: 'Reciproca: un punct egal depărtat de A și B este pe mediatoarea lui [AB].', de: 'Umkehrung: Ein Punkt, der von A und B gleich weit entfernt ist, liegt auf der Mittelsenkrechten von [AB].' },
+    hint: { ro: 'Mută P pe desen până când PA = PB. Pe ce linie ajungi?', de: 'Verschiebe P in der Zeichnung, bis PA = PB. Auf welcher Linie landest du?' } },
+  { q: { ro: 'PA = 4 cm și PB = 6 cm. De ce parte a mediatoarei e P?', de: 'PA = 4 cm und PB = 6 cm. Auf welcher Seite der Mittelsenkrechten liegt P?' },
+    o: [{ ro: 'de partea lui A', de: 'auf der Seite von A' }, { ro: 'de partea lui B', de: 'auf der Seite von B' }, { ro: 'chiar pe mediatoare', de: 'genau auf der Mittelsenkrechten' }], a: 0,
+    why: { ro: 'P e mai aproape de A, deci e în zona albastră, de partea lui A.', de: 'P ist näher an A, also in der blauen Zone, auf der Seite von A.' },
+    hint: { ro: 'De care capăt e mai aproape P?', de: 'Welchem Endpunkt ist P näher?' } }
+]);
+
+/* ================= 6a. Fântâna ================= */
+(function () {
+  var svg = $('#fn-svg'), iu = $('#fn-u'), out = $('#fn-out'), show = $('#fn-show');
+  var A = [110, 80], B = [250, 260], R0 = [40, 200], R1 = [540, 260], M = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
+  var ab = [B[0] - A[0], B[1] - A[1]], rd = [R1[0] - R0[0], R1[1] - R0[1]];
+  var ustar = ((M[0] - R0[0]) * ab[0] + (M[1] - R0[1]) * ab[1]) / (rd[0] * ab[0] + rd[1] * ab[1]);
+  var showM = false;
+  show.textContent = tx('Arată mediatoarea', 'Mittelsenkrechte zeigen');
+  show.onclick = function () { showM = !showM; show.setAttribute('aria-pressed', showM ? 'true' : 'false'); show.textContent = showM ? tx('Ascunde mediatoarea', 'Mittelsenkrechte verbergen') : tx('Arată mediatoarea', 'Mittelsenkrechte zeigen'); draw(); };
+  function draw() {
+    var u = +iu.value / 100, F = [R0[0] + u * rd[0], R0[1] + u * rd[1]];
+    svg.innerHTML = '';
+    el('line', { x1: R0[0], y1: R0[1], x2: R1[0], y2: R1[1], stroke: '#8d8576', 'stroke-width': 14, 'stroke-linecap': 'round' }, svg);
+    el('line', { x1: R0[0], y1: R0[1], x2: R1[0], y2: R1[1], stroke: '#f7f6f2', 'stroke-width': 2, 'stroke-dasharray': '10 10' }, svg);
+    if (showM) {
+      lineAt(svg, M, Math.atan2(-ab[1], ab[0]) * 180 / Math.PI + 90, { c: COL[3], w: 2.6, dash: '8 6' });
+      var X = [R0[0] + ustar * rd[0], R0[1] + ustar * rd[1]]; dotAt(svg, X, COL[3], 6);
+    }
+    el('line', { x1: A[0], y1: A[1], x2: F[0], y2: F[1], stroke: COL[1], 'stroke-width': 2.6, 'stroke-dasharray': '7 5' }, svg);
+    el('line', { x1: B[0], y1: B[1], x2: F[0], y2: F[1], stroke: COL[2], 'stroke-width': 2.6, 'stroke-dasharray': '7 5' }, svg);
+    el('text', { x: A[0], y: A[1] + 8, 'text-anchor': 'middle', 'font-size': 34 }, svg, '🏠'); lbl(svg, A[0], A[1] - 26, 'A', COL[1]);
+    el('text', { x: B[0], y: B[1] + 8, 'text-anchor': 'middle', 'font-size': 34 }, svg, '🏠'); lbl(svg, B[0], B[1] + 38, 'B', COL[2]);
+    el('text', { x: F[0], y: F[1] + 9, 'text-anchor': 'middle', 'font-size': 30 }, svg, '⛲');
+    var fa = dist(F, A), fb = dist(F, B), eqd = Math.abs(fa - fb) < 3;
+    svg.setAttribute('aria-label', tx('Două case și un drum cu o fântână', 'Zwei Häuser und eine Straße mit einem Brunnen'));
+    var w = 240, ba = Math.round(fa / 400 * w), bb = Math.round(fb / 400 * w);
+    out.innerHTML = '<span class="eq"><span class="c1">FA = ' + cm(fa) + ' cm</span>, <span class="c2">FB = ' + cm(fb) + ' cm</span></span>' +
+      '<div style="display:grid;gap:4px"><div style="height:12px;border-radius:6px;background:' + COL[1] + ';width:' + ba + 'px"></div><div style="height:12px;border-radius:6px;background:' + COL[2] + ';width:' + bb + 'px"></div></div>' +
+      '<span class="rule">' + (eqd ? '<b class="c3">FA = FB ✓</b> ' + tx('Fântâna e pe mediatoarea lui [AB], chiar în punctul unde drumul o taie.', 'Der Brunnen liegt auf der Mittelsenkrechten von [AB], genau dort, wo die Straße sie schneidet.') : fa < fb ? tx('Fântâna e mai aproape de A. Mut-o spre B.', 'Der Brunnen ist näher an A. Schieb ihn Richtung B.') : tx('Fântâna e mai aproape de B. Mut-o spre A.', 'Der Brunnen ist näher an B. Schieb ihn Richtung A.')) + '</span>';
+  }
+  iu.addEventListener('input', draw); draw();
+})();
+Check($('#c6'), [
+  { q: { ro: 'Care este punctul de pe drum la aceeași distanță de casele A și B?', de: 'Welcher Punkt der Straße ist von den Häusern A und B gleich weit entfernt?' },
+    o: [{ ro: 'mijlocul segmentului AB', de: 'der Mittelpunkt der Strecke AB' }, { ro: 'intersecția drumului cu mediatoarea lui [AB]', de: 'der Schnittpunkt der Straße mit der Mittelsenkrechten von [AB]' }, { ro: 'orice punct al drumului', de: 'jeder Punkt der Straße' }], a: 1,
+    why: { ro: 'Punctele egal depărtate de A și B sunt pe mediatoare; cel de pe drum e intersecția celor două linii.', de: 'Die von A und B gleich weit entfernten Punkte liegen auf der Mittelsenkrechten; der auf der Straße ist der Schnittpunkt beider Linien.' },
+    hint: { ro: 'Mijlocul lui AB nu e neapărat pe drum. Ce linie conține toate punctele egal depărtate?', de: 'Der Mittelpunkt von AB liegt nicht unbedingt auf der Straße. Welche Linie enthält alle gleich weit entfernten Punkte?' } }
+]);
+
+/* ================= 6b. Cercul prin trei puncte ================= */
+(function () {
+  var svg = $('#cc-svg'), ix = $('#cc-x'), iy = $('#cc-y'), out = $('#cc-out');
+  var A = [140, 250], B = [380, 270];
+  function circ(a, b, c) {
+    var d = 2 * (a[0] * (b[1] - c[1]) + b[0] * (c[1] - a[1]) + c[0] * (a[1] - b[1]));
+    if (Math.abs(d) < 1e-6) return null;
+    var a2 = a[0] * a[0] + a[1] * a[1], b2 = b[0] * b[0] + b[1] * b[1], c2 = c[0] * c[0] + c[1] * c[1];
+    return [(a2 * (b[1] - c[1]) + b2 * (c[1] - a[1]) + c2 * (a[1] - b[1])) / d, (a2 * (c[0] - b[0]) + b2 * (a[0] - c[0]) + c2 * (b[0] - a[0])) / d];
+  }
+  function med(svg, p, q, c) {
+    var m = [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2], ang = Math.atan2(-(q[1] - p[1]), q[0] - p[0]) * 180 / Math.PI + 90;
+    lineAt(svg, m, ang, { c: c, w: 2.4, dash: '8 6' }); dotAt(svg, m, c, 3.5);
+  }
+  function draw() {
+    var C = [+ix.value, +iy.value], O = circ(A, B, C);
+    svg.innerHTML = '';
+    if (O) {
+      var R = dist(O, A);
+      el('circle', { cx: O[0], cy: O[1], r: R, fill: 'rgba(31,138,91,.06)', stroke: COL[3], 'stroke-width': 2.6 }, svg);
+      med(svg, A, B, COL[1]); med(svg, B, C, COL[2]);
+      [A, B, C].forEach(function (p) { el('line', { x1: O[0], y1: O[1], x2: p[0], y2: p[1], stroke: '#9aa0a6', 'stroke-width': 1.6 }, svg); });
+      dotAt(svg, O, COL[3], 6); lbl(svg, O[0] + 14, O[1] - 10, 'O', COL[3]);
+    }
+    el('polygon', { points: A + ' ' + B + ' ' + C, fill: 'none', stroke: INK, 'stroke-width': 2.2 }, svg);
+    [[A, 'A'], [B, 'B'], [C, 'C']].forEach(function (p) { dotAt(svg, p[0], INK, 5.5); lbl(svg, p[0][0], p[0][1] + (p[1] === 'C' ? -12 : 28), p[1]); });
+    svg.setAttribute('aria-label', tx('Cercul care trece prin A, B și C', 'Der Kreis durch A, B und C'));
+    out.innerHTML = O ? '<span class="eq c3">OA = OB = OC = ' + cm(dist(O, A)) + ' cm</span><span class="rule">' + tx('Mediatoarea lui [AB] (albastră) și a lui [BC] (portocalie) se taie în <b>O</b>. Punctul O e pe ambele mediatoare: OA = OB și OB = OC. Deci e centrul cercului prin A, B, C.', 'Die Mittelsenkrechte von [AB] (blau) und von [BC] (orange) schneiden sich in <b>O</b>. O liegt auf beiden: OA = OB und OB = OC. Also ist O der Mittelpunkt des Kreises durch A, B, C.') + '</span>'
+      : '<span class="rule">' + tx('Punctele sunt coliniare: nu există cerc.', 'Die Punkte sind kollinear: Es gibt keinen Kreis.') + '</span>';
+  }
+  ix.addEventListener('input', draw); iy.addEventListener('input', draw); draw();
+})();
+Check($('#c6b'), [
+  { q: { ro: 'O este la distanța de 4 cm de A și 4 cm de B și 4 cm de C. Ce este O pentru cercul prin A, B, C?', de: 'O ist 4 cm von A, 4 cm von B und 4 cm von C entfernt. Was ist O für den Kreis durch A, B, C?' },
+    o: [{ ro: 'centrul lui', de: 'sein Mittelpunkt' }, { ro: 'un punct de pe cerc', de: 'ein Punkt auf dem Kreis' }, { ro: 'mijlocul lui AB', de: 'der Mittelpunkt von AB' }], a: 0,
+    why: { ro: 'Un punct la aceeași distanță (4 cm) de toate punctele cercului este centrul cercului; 4 cm este raza.', de: 'Ein Punkt, der von allen Kreispunkten gleich weit (4 cm) entfernt ist, ist der Kreismittelpunkt; 4 cm ist der Radius.' } }
+]);
+
+/* ================= 7a. Găsește pe desen ================= */
+(function () {
+  var svg = $('#fp-svg'), chipsHost = $('#fp-chips'), res = $('#fp-res'), bc = $('#fp-check'), bd = $('#fp-dist'), bn = $('#fp-new');
+  bc.textContent = tx('Verifică', 'Prüfen'); bd.textContent = tx('Arată distanțele', 'Abstände zeigen'); bn.textContent = tx('Desen nou', 'Neue Zeichnung');
+  var U = 40, q, sel, chips, checked;
+  function gen() {
+    var horiz = Math.random() < .5, k = rint(2, 3), pts = [], on = {};
+    var main = horiz ? rint(1, 12 - 2 * k) : rint(1, 6 - 2 * k), cross = horiz ? rint(1, 6) : rint(1, 12);
+    if (!horiz) { main = rint(1, 7 - 2 * k); }
+    var A = horiz ? [main, cross] : [cross, main], B = horiz ? [main + 2 * k, cross] : [cross, main + 2 * k], m = main + k;
+    var cnt = rint(3, 4), offs = [], names = 'CDEFGHIJ'.split(''), used = {};
+    function key(p) { return p[0] + ',' + p[1]; }
+    used[key(A)] = used[key(B)] = 1;
+    var tries = 0;
+    while (pts.length < 8 && tries++ < 400) {
+      var isOn = pts.filter(function (p) { return p.on; }).length < cnt, along = horiz ? rint(0, 7) : rint(0, 13), d = isOn ? 0 : pick([-2, -1, 1, 2]);
+      var mm = m + d, p = horiz ? [mm, along] : [along, mm];
+      if (mm < 0 || mm > (horiz ? 13 : 7) || used[key(p)]) continue;
+      used[key(p)] = 1; pts.push({ p: p, on: isOn, n: '' });
+    }
+    pts.sort(function () { return Math.random() - .5; });
+    pts.forEach(function (o, i) { o.n = names[i]; });
+    return { horiz: horiz, A: A, B: B, pts: pts, m: m };
+  }
+  function X(c) { return 40 + c * U; } function Y(r) { return 20 + r * U; }
+  function draw() {
+    svg.innerHTML = '';
+    for (var c = 0; c <= 13; c++) el('line', { x1: X(c), y1: Y(0), x2: X(c), y2: Y(7), stroke: '#e6e2d6', 'stroke-width': 1 }, svg);
+    for (var r = 0; r <= 7; r++) el('line', { x1: X(0), y1: Y(r), x2: X(13), y2: Y(r), stroke: '#e6e2d6', 'stroke-width': 1 }, svg);
+    if (checked) {
+      if (q.horiz) el('line', { x1: X(q.m), y1: Y(0) - 10, x2: X(q.m), y2: Y(7) + 10, stroke: COL[3], 'stroke-width': 3.2, 'stroke-dasharray': '8 6' }, svg);
+      else el('line', { x1: X(0) - 10, y1: Y(q.m), x2: X(13) + 10, y2: Y(q.m), stroke: COL[3], 'stroke-width': 3.2, 'stroke-dasharray': '8 6' }, svg);
+    }
+    el('line', { x1: X(q.A[0]), y1: Y(q.A[1]), x2: X(q.B[0]), y2: Y(q.B[1]), stroke: INK, 'stroke-width': 3.4 }, svg);
+    [[q.A, 'A'], [q.B, 'B']].forEach(function (o) { dotAt(svg, [X(o[0][0]), Y(o[0][1])], INK, 6); lbl(svg, X(o[0][0]), Y(o[0][1]) - 12, o[1]); });
+    q.pts.forEach(function (o) {
+      var s = sel[o.n], c = s ? COL[2] : '#5a6170';
+      el('circle', { cx: X(o.p[0]), cy: Y(o.p[1]), r: s ? 8 : 6, fill: s ? COL[2] : '#fff', stroke: c, 'stroke-width': 2.4 }, svg);
+      el('text', { x: X(o.p[0]) + 12, y: Y(o.p[1]) - 8, class: 'albl', fill: c, 'font-size': 17 }, svg, o.n);
+    });
+    svg.setAttribute('aria-label', tx('Segmentul AB și punctele ' + q.pts.map(function (o) { return o.n; }).join(', '), 'Die Strecke AB und die Punkte ' + q.pts.map(function (o) { return o.n; }).join(', ')));
+  }
+  function build() {
+    chipsHost.innerHTML = ''; chips = {};
+    q.pts.slice().sort(function (a, b) { return a.n < b.n ? -1 : 1; }).forEach(function (o) {
+      var b = btn('chip', o.n); b.setAttribute('aria-pressed', 'false');
+      b.onclick = function () { if (checked) return; sel[o.n] = !sel[o.n]; b.setAttribute('aria-pressed', sel[o.n] ? 'true' : 'false'); draw(); };
+      chipsHost.appendChild(b); chips[o.n] = b;
+    });
+  }
+  function fresh() { q = gen(); sel = {}; checked = false; res.className = 'result'; res.innerHTML = ''; build(); draw(); }
+  bc.onclick = function () {
+    if (checked) return;
+    var wrong = q.pts.filter(function (o) { return !!sel[o.n] !== o.on; });
+    checked = true; draw();
+    if (!wrong.length) { res.className = 'result good'; res.innerHTML = '✓ ' + tx('Corect! Punctele de pe mediatoare au PA = PB.', 'Richtig! Die Punkte auf der Mittelsenkrechten haben PA = PB.'); }
+    else { res.className = 'result try'; res.innerHTML = tx('Nu chiar: verifică ' + wrong.map(function (o) { return o.n; }).join(', ') + '. Un punct e pe mediatoare doar dacă e la aceeași distanță de A și de B. Mediatoarea e trasată verde.', 'Nicht ganz: Prüfe ' + wrong.map(function (o) { return o.n; }).join(', ') + '. Ein Punkt liegt nur dann auf der Mittelsenkrechten, wenn er von A und B gleich weit entfernt ist. Die Mittelsenkrechte ist grün eingezeichnet.'); }
+  };
+  bd.onclick = function () {
+    res.className = 'result try';
+    res.innerHTML = q.pts.slice().sort(function (a, b) { return a.n < b.n ? -1 : 1; }).map(function (o) {
+      var da = dist(o.p, q.A), db = dist(o.p, q.B);
+      return '<b>' + o.n + '</b>: PA ≈ ' + (Math.round(da * 10) / 10).toString().replace('.', ',') + ', PB ≈ ' + (Math.round(db * 10) / 10).toString().replace('.', ',');
+    }).join(' · ');
+  };
+  bn.onclick = fresh; fresh();
+})();
+
+/* ================= 7b. Probleme numerice ================= */
+NumEx($('#nx'), function () {
+  var t = rint(1, 5), r = {};
+  if (t === 1) {
+    var n = rint(4, 15);
+    r.html = tx('M este un punct de pe mediatoarea segmentului [AB] și <b>MA = ' + n + ' cm</b>. Cât este MB? (în cm)', 'M ist ein Punkt auf der Mittelsenkrechten der Strecke [AB] und <b>MA = ' + n + ' cm</b>. Wie groß ist MB? (in cm)');
+    r.answer = n; r.explain = tx('M e pe mediatoare ⇒ MB = MA = ' + n + ' cm.', 'M liegt auf der Mittelsenkrechten ⇒ MB = MA = ' + n + ' cm.');
+    r.hint = tx('Ce știi despre distanțele de la un punct al mediatoarei la capetele segmentului?', 'Was weißt du über die Abstände eines Punktes der Mittelsenkrechten zu den Endpunkten der Strecke?');
+  } else if (t === 2) {
+    var h2 = rint(3, 12);
+    r.html = tx('Mediatoarea segmentului [AB] îl taie în I, iar <b>AI = ' + h2 + ' cm</b>. Cât este AB? (în cm)', 'Die Mittelsenkrechte der Strecke [AB] schneidet in I, und <b>AI = ' + h2 + ' cm</b>. Wie groß ist AB? (in cm)');
+    r.answer = 2 * h2; r.explain = tx('I este mijlocul lui [AB], deci AB = 2 · AI = 2 · ' + h2 + ' = ' + 2 * h2 + ' cm.', 'I ist der Mittelpunkt von [AB], also AB = 2 · AI = 2 · ' + h2 + ' = ' + 2 * h2 + ' cm.');
+    r.hint = tx('Mediatoarea trece prin mijlocul segmentului. Cum e AI față de AB?', 'Die Mittelsenkrechte geht durch den Mittelpunkt. Wie verhält sich AI zu AB?');
+  } else if (t === 3) {
+    var x0 = rint(4, 14), c1 = pick([2, 4, 6, 8]), q2 = x0 + c1;
+    r.html = tx('M e pe mediatoarea lui [AB]. Știm că <b>MA = 3x + ' + c1 + '</b> și <b>MB = 2x + ' + q2 + '</b> (în cm). Află x.', 'M liegt auf der Mittelsenkrechten von [AB]. Es ist <b>MA = 3x + ' + c1 + '</b> und <b>MB = 2x + ' + q2 + '</b> (in cm). Bestimme x.');
+    r.answer = x0; r.explain = tx('MA = MB ⇒ 3x + ' + c1 + ' = 2x + ' + q2 + ' ⇒ x = ' + q2 + ' − ' + c1 + ' = ' + x0 + '.', 'MA = MB ⇒ 3x + ' + c1 + ' = 2x + ' + q2 + ' ⇒ x = ' + q2 + ' − ' + c1 + ' = ' + x0 + '.');
+    r.hint = tx('M e pe mediatoare, deci MA = MB. Scrie ecuația.', 'M liegt auf der Mittelsenkrechten, also MA = MB. Stelle die Gleichung auf.');
+    r.hint2 = tx('Ecuația: 3x + ' + c1 + ' = 2x + ' + q2 + '. Scade 2x din ambele părți.', 'Die Gleichung: 3x + ' + c1 + ' = 2x + ' + q2 + '. Ziehe auf beiden Seiten 2x ab.');
+  } else if (t === 4) {
+    var ab = 2 * rint(3, 8), ma = rint(5, 14);
+    r.html = tx('M e pe mediatoarea lui [AB], <b>AB = ' + ab + ' cm</b> și <b>MA = ' + ma + ' cm</b>. Care este perimetrul triunghiului MAB? (în cm)', 'M liegt auf der Mittelsenkrechten von [AB], <b>AB = ' + ab + ' cm</b> und <b>MA = ' + ma + ' cm</b>. Wie groß ist der Umfang des Dreiecks MAB? (in cm)');
+    r.answer = ab + 2 * ma; r.explain = tx('MB = MA = ' + ma + ' cm, deci perimetrul = ' + ma + ' + ' + ma + ' + ' + ab + ' = ' + (ab + 2 * ma) + ' cm.', 'MB = MA = ' + ma + ' cm, also Umfang = ' + ma + ' + ' + ma + ' + ' + ab + ' = ' + (ab + 2 * ma) + ' cm.');
+    r.hint = tx('Află mai întâi MB. Perimetrul = MA + MB + AB.', 'Bestimme zuerst MB. Umfang = MA + MB + AB.');
+  } else {
+    var k = rint(2, 5), x1 = rint(6, 15), a = 90 - k * x1;
+    if (a < 5) { k = 2; x1 = rint(6, 15); a = 90 - k * x1; }
+    r.html = tx('Dreptele d și e sunt perpendiculare, iar unul dintre unghiurile formate este <b>(' + k + 'x + ' + a + ')°</b>. Află x.', 'Die Geraden d und e sind senkrecht, und einer der entstandenen Winkel ist <b>(' + k + 'x + ' + a + ')°</b>. Bestimme x.');
+    r.answer = x1; r.explain = tx('Unghiul e drept: ' + k + 'x + ' + a + ' = 90 ⇒ ' + k + 'x = ' + (90 - a) + ' ⇒ x = ' + x1 + '.', 'Der Winkel ist ein rechter: ' + k + 'x + ' + a + ' = 90 ⇒ ' + k + 'x = ' + (90 - a) + ' ⇒ x = ' + x1 + '.');
+    r.hint = tx('Dreptele sunt perpendiculare: cât măsoară unghiul?', 'Die Geraden sind senkrecht: Wie groß ist der Winkel?');
+    r.hint2 = tx('Ecuația: ' + k + 'x + ' + a + ' = 90.', 'Die Gleichung: ' + k + 'x + ' + a + ' = 90.');
+  }
+  return r;
+});
+
+/* ---------- dicționar ---------- */
+(function () {
+  var G = [
+    ['segment', 'Strecke'], ['mijlocul segmentului', 'Mittelpunkt der Strecke'], ['mediatoarea', 'Mittelsenkrechte'],
+    ['drepte perpendiculare', 'senkrechte Geraden'], ['unghi drept', 'rechter Winkel'], ['perpendiculara dintr-un punct', 'Lot von einem Punkt'],
+    ['piciorul perpendicularei', 'Fußpunkt des Lotes'], ['distanța de la un punct la o dreaptă', 'Abstand eines Punktes von einer Geraden'],
+    ['egal depărtat', 'gleich weit entfernt'], ['locul geometric', 'geometrischer Ort'], ['teorema directă', 'direkter Satz'], ['teorema reciprocă', 'Umkehrsatz'],
+    ['ipoteză', 'Voraussetzung'], ['concluzie', 'Behauptung'], ['compas', 'Zirkel'], ['riglă', 'Lineal'], ['arc de cerc', 'Kreisbogen'],
+    ['deschiderea compasului', 'Zirkelöffnung'], ['cercul care trece prin trei puncte', 'Kreis durch drei Punkte'], ['centrul cercului', 'Mittelpunkt des Kreises']
+  ];
+  var host = $('#gloss');
+  G.forEach(function (g) { var d = h('div'); d.appendChild(h('dt', '', g[0])); d.appendChild(h('dd', '', g[1])); host.appendChild(d); });
+})();
+})();
+</script>
+</body>
+</html>
